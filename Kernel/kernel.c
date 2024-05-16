@@ -18,6 +18,13 @@ static void * const sampleDataModuleAddress = (void*)0x500000;
 
 typedef int (*EntryPoint)();
 
+#define INITIAL_STRING "TPE - Arquitectura de Computadoras - Grupo 9"
+
+void printHeader() {
+	for (size_t i = 0; INITIAL_STRING[i] != 0; i++) {
+		print_char(20 + 8*i, 20, INITIAL_STRING[i]);
+	}
+}
 
 void clearBSS(void * bssAddress, uint64_t bssSize)
 {
@@ -80,11 +87,8 @@ void * initializeKernelBinary()
 	return getStackBase();
 }
 
-int main()
-{	
-	print_char(20,20);
-	print_char(28,20);
-	print_char(20,36);
+int main() {	
+	printHeader();
 	ncPrint("[Kernel Main]");
 	ncNewline();
 	ncPrint("  Sample code module at 0x");

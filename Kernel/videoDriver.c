@@ -1,7 +1,6 @@
 #include <videoDriver.h>
 #include <defs.h>
-
-uint8_t font[]= {0x00,0x00,0x00,0x10,0x38,0x6C,0xC6,0xC6,0xFE,0xC6,0xC6,0xC6,0xC6,0x00,0x00,0x00};
+#include <fonts.h>
 
 void print_char_row(int x_offset, int y, unsigned char data);
 struct vbe_mode_info_structure {
@@ -55,9 +54,9 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
 }
 
 void print_char_row(int x_offset, int y, unsigned char data) {
-  for (int x = 0; x < CHAR_WIDTH; x++) {
+  for (int x = 0; x < FONT_WIDTH; x++) {
     // Check if the corresponding bit is set (1)
-    if (data & (1 << (CHAR_WIDTH - 1 - x))) {
+    if (data & (1 << (FONT_WIDTH - 1 - x))) {
       putPixel(0x00ffffff,x_offset + x, y); // foreground
     } else {
       putPixel(0x00000000,x_offset + x, y); // background
@@ -65,8 +64,8 @@ void print_char_row(int x_offset, int y, unsigned char data) {
   }
 }
 
-void print_char(int x, int y) {
-  for (int y_pos = 0; y_pos < CHAR_HEIGHT; y_pos++) {
-    print_char_row(x, y + y_pos, font[y_pos]);
+void print_char(int x, int y, unsigned char c) {
+  for (int y_pos = 0; y_pos < FONT_HEIGHT; y_pos++) {
+    print_char_row(x, y + y_pos, fontBitMap[y_pos + (c-31) * FONT_HEIGHT]);
   }
 }
