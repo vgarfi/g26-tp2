@@ -23,4 +23,8 @@
 #define CHAR_WIDTH 8
 #define CHAR_HEIGHT 16
 
+#define STDIN 0
+#define STDOUT 1
+#define STDERR 2
+
 #endif
