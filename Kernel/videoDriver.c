@@ -59,9 +59,9 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
 }
 
 void print_char_row(int x_offset, int y, unsigned char data) {
-  for (int x = 0; x < getCurrentFont(&global_font_manager).size.width; x++) {
+  for (int x = 0; x < BYTE_LENGHT; x++) {
     // Check if the corresponding bit is set (1)
-    if (data & (1 << (getCurrentFont(&global_font_manager).size.width - 1 - x))) {
+    if (data & (1 << (BYTE_LENGHT - 1 - x))) {
       putPixel(0x00ffffff,x_offset + x, y); // foreground
     } else {
       putPixel(0x00000000,x_offset + x, y); // background
@@ -83,16 +83,20 @@ void print_char_row_2_byte(int x_offset, int y, unsigned char data1, unsigned ch
 }
 
 void print_char(int x, int y, unsigned char c) {
-	unsigned char* fontBitMap = getCurrentFont(&global_font_manager).bitmap;
-	if (getCurrentFont(&global_font_manager).size.width == BYTE_LENGHT) {
-		for (int y_pos = 0; y_pos < getCurrentFont(&global_font_manager).size.height; y_pos++) {
-			print_char_row(x, y + y_pos, fontBitMap[y_pos + (c-31) * getCurrentFont(&global_font_manager).size.height]);
+	FontBitmap fontBitMap = getCurrentFont(&global_font_manager);
+	unsigned char* bitmap = fontBitMap.bitmap;
+	int width = fontBitMap.size.width;
+	int height = fontBitMap.size.height;
+
+	if (width == BYTE_LENGHT) {
+		for (int y_pos = 0; y_pos < height; y_pos++) {
+			print_char_row(x, y + y_pos, bitmap[y_pos + (c-31) * height]);
 		}
 	}
 	else {
-		for (int y_pos = 0, pY = 0; y_pos < getCurrentFont(&global_font_manager).size.height*2; y_pos+=2, pY++) {
-			unsigned char data1 = fontBitMap[y_pos + (c-31) * global_font_manager.fonts[global_font_manager.currentFontIndex].size.height*2];
-			unsigned char data2 = fontBitMap[y_pos + (c-31) * global_font_manager.fonts[global_font_manager.currentFontIndex].size.height*2 + 1];
+		for (int y_pos = 0, pY = 0; y_pos < height*2; y_pos+=2, pY++) {
+			unsigned char data1 = bitmap[y_pos + (c-31) * global_font_manager.fonts[global_font_manager.currentFontIndex].size.height*2];
+			unsigned char data2 = bitmap[y_pos + (c-31) * global_font_manager.fonts[global_font_manager.currentFontIndex].size.height*2 + 1];
 			print_char_row_2_byte(x, y + pY, data1, data2);
 		}
 	}

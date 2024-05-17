@@ -27,7 +27,10 @@ FontManager global_font_manager;
 
 void printHeader() {
 	for (size_t i = 0; INITIAL_STRING[i] != 0; i++) {
-		print_char(20 + global_font_manager.fonts[global_font_manager.currentFontIndex].size.width *i, 20, INITIAL_STRING[i]);
+		print_char(20 + 
+		global_font_manager.fonts[global_font_manager.currentFontIndex].size.width *i,
+		20,
+		INITIAL_STRING[i]);
 	}
 }
 
@@ -95,7 +98,7 @@ void * initializeKernelBinary()
 int main() {	
 	initFontManager(&global_font_manager);
 	// TODO: Imprime jeroglificos
-	setCurrentFont(&global_font_manager, M_FONT);
+	setCurrentFont(&global_font_manager, S_FONT);
 	printHeader();
 	ncPrint("[Kernel Main]");
 	ncNewline();

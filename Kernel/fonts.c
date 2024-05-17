@@ -3,7 +3,7 @@
 #include <globals.h>
 
 
-unsigned const char* fonts = {fontBitMap_8x12, fontBitMap_8x16, fontBitMap_16x32};
+unsigned const char* fonts[] = {fontBitMap_8x12, fontBitMap_8x16, fontBitMap_16x32};
 const Size size_16x32 = {16,32};
 const Size size_8x16 = {8,16};
 const Size size_8x12 = {8,12};
