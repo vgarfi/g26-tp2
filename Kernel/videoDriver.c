@@ -1,6 +1,8 @@
 #include <videoDriver.h>
 #include <defs.h>
 #include <fonts.h>
+#include <globals.h>
+
 
 void print_char_row_2_byte(int x_offset, int y, unsigned char data, unsigned char data2);
 void print_char_row_byte(int x_offset, int y, unsigned char data);
@@ -47,18 +49,19 @@ typedef struct vbe_mode_info_structure * VBEInfoPtr;
 
 VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
 
+
 void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
     uint8_t * framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
     uint64_t offset = (x * ((VBE_mode_info->bpp)/8)) + (y * VBE_mode_info->pitch);
     framebuffer[offset]     =  (hexColor) & 0xFF;
-    framebuffer[offset+1]   =  (hexColor >> 8) & 0xFF; 
-    framebuffer[offset+2]   =  (hexColor >> 16) & 0xFF;
+    framebuffer[offset+1]   =  (hexColor >> BYTE_LENGHT) & 0xFF; 
+    framebuffer[offset+2]   =  (hexColor >> TWO_BYTE_LENGHT) & 0xFF;
 }
 
 void print_char_row(int x_offset, int y, unsigned char data) {
-  for (int x = 0; x < FONT_WIDTH; x++) {
+  for (int x = 0; x < getCurrentFont(&global_font_manager).size.width; x++) {
     // Check if the corresponding bit is set (1)
-    if (data & (1 << (FONT_WIDTH - 1 - x))) {
+    if (data & (1 << (getCurrentFont(&global_font_manager).size.width - 1 - x))) {
       putPixel(0x00ffffff,x_offset + x, y); // foreground
     } else {
       putPixel(0x00000000,x_offset + x, y); // background
@@ -67,11 +70,11 @@ void print_char_row(int x_offset, int y, unsigned char data) {
 }
 
 void print_char_row_2_byte(int x_offset, int y, unsigned char data1, unsigned char data2) {
-  for (int x = 0; x < 16; x++) {
-    unsigned char data = x < 8 ? data1 : data2;
-    int bit = x < 8 ? x : x - 8;
+  for (int x = 0; x < TWO_BYTE_LENGHT; x++) {
+    unsigned char data = x < BYTE_LENGHT ? data1 : data2;
+    int bit = x < BYTE_LENGHT ? x : x - BYTE_LENGHT;
 
-    if (data & (1 << (8 - 1 - bit))) {
+    if (data & (1 << (BYTE_LENGHT - 1 - bit))) {
       putPixel(0x00ffffff,x_offset + x, y); // foreground
     } else {
       putPixel(0x00000000,x_offset + x, y); // background
@@ -80,15 +83,16 @@ void print_char_row_2_byte(int x_offset, int y, unsigned char data1, unsigned ch
 }
 
 void print_char(int x, int y, unsigned char c) {
-	if (FONT_WIDTH == 8) {
-		for (int y_pos = 0; y_pos < FONT_HEIGHT; y_pos++) {
-			print_char_row(x, y + y_pos, fontBitMap[y_pos + (c-31) * FONT_HEIGHT]);
+	unsigned char* fontBitMap = getCurrentFont(&global_font_manager).bitmap;
+	if (getCurrentFont(&global_font_manager).size.width == BYTE_LENGHT) {
+		for (int y_pos = 0; y_pos < getCurrentFont(&global_font_manager).size.height; y_pos++) {
+			print_char_row(x, y + y_pos, fontBitMap[y_pos + (c-31) * getCurrentFont(&global_font_manager).size.height]);
 		}
 	}
 	else {
-		for (int y_pos = 0, pY = 0; y_pos < FONT_HEIGHT*2; y_pos+=2, pY++) {
-			unsigned char data1 = fontBitMap[y_pos + (c-31) * FONT_HEIGHT*2];
-			unsigned char data2 = fontBitMap[y_pos + (c-31) * FONT_HEIGHT*2 + 1];
+		for (int y_pos = 0, pY = 0; y_pos < getCurrentFont(&global_font_manager).size.height*2; y_pos+=2, pY++) {
+			unsigned char data1 = fontBitMap[y_pos + (c-31) * global_font_manager.fonts[global_font_manager.currentFontIndex].size.height*2];
+			unsigned char data2 = fontBitMap[y_pos + (c-31) * global_font_manager.fonts[global_font_manager.currentFontIndex].size.height*2 + 1];
 			print_char_row_2_byte(x, y + pY, data1, data2);
 		}
 	}

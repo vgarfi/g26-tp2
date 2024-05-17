@@ -5,6 +5,8 @@
 #include <naiveConsole.h>
 #include <videoDriver.h>
 #include <fonts.h>
+#include "globals.h"
+
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -21,15 +23,16 @@ static void * const sampleDataModuleAddress = (void*)0x500000;
 typedef int (*EntryPoint)();
 
 #define INITIAL_STRING "TPE - Arquitectura de Computadoras - Grupo 9"
+FontManager global_font_manager;
 
 void printHeader() {
 	for (size_t i = 0; INITIAL_STRING[i] != 0; i++) {
-		print_char(20 + FONT_WIDTH*i, 20, INITIAL_STRING[i]);
+		print_char(20 + global_font_manager.fonts[global_font_manager.currentFontIndex].size.width *i, 20, INITIAL_STRING[i]);
 	}
 }
 
-void clearBSS(void * bssAddress, uint64_t bssSize)
-{
+
+void clearBSS(void * bssAddress, uint64_t bssSize) {
 	memset(bssAddress, 0, bssSize);
 }
 
@@ -90,6 +93,9 @@ void * initializeKernelBinary()
 }
 
 int main() {	
+	initFontManager(&global_font_manager);
+	// TODO: Imprime jeroglificos
+	setCurrentFont(&global_font_manager, M_FONT);
 	printHeader();
 	ncPrint("[Kernel Main]");
 	ncNewline();
