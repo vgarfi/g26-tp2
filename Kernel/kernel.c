@@ -4,6 +4,8 @@
 #include <moduleLoader.h>
 #include <naiveConsole.h>
 #include <videoDriver.h>
+#include <fonts.h>
+
 extern uint8_t text;
 extern uint8_t rodata;
 extern uint8_t data;
@@ -22,7 +24,7 @@ typedef int (*EntryPoint)();
 
 void printHeader() {
 	for (size_t i = 0; INITIAL_STRING[i] != 0; i++) {
-		print_char(20 + 8*i, 20, INITIAL_STRING[i]);
+		print_char(20 + FONT_WIDTH*i, 20, INITIAL_STRING[i]);
 	}
 }
 

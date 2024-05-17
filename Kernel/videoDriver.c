@@ -2,7 +2,9 @@
 #include <defs.h>
 #include <fonts.h>
 
-void print_char_row(int x_offset, int y, unsigned char data);
+void print_char_row_2_byte(int x_offset, int y, unsigned char data, unsigned char data2);
+void print_char_row_byte(int x_offset, int y, unsigned char data);
+
 struct vbe_mode_info_structure {
 	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
 	uint8_t window_a;			// deprecated
@@ -60,12 +62,34 @@ void print_char_row(int x_offset, int y, unsigned char data) {
       putPixel(0x00ffffff,x_offset + x, y); // foreground
     } else {
       putPixel(0x00000000,x_offset + x, y); // background
+	}
+  }
+}
+
+void print_char_row_2_byte(int x_offset, int y, unsigned char data1, unsigned char data2) {
+  for (int x = 0; x < 16; x++) {
+    unsigned char data = x < 8 ? data1 : data2;
+    int bit = x < 8 ? x : x - 8;
+
+    if (data & (1 << (8 - 1 - bit))) {
+      putPixel(0x00ffffff,x_offset + x, y); // foreground
+    } else {
+      putPixel(0x00000000,x_offset + x, y); // background
     }
   }
 }
 
 void print_char(int x, int y, unsigned char c) {
-  for (int y_pos = 0; y_pos < FONT_HEIGHT; y_pos++) {
-    print_char_row(x, y + y_pos, fontBitMap[y_pos + (c-31) * FONT_HEIGHT]);
-  }
+	if (FONT_WIDTH == 8) {
+		for (int y_pos = 0; y_pos < FONT_HEIGHT; y_pos++) {
+			print_char_row(x, y + y_pos, fontBitMap[y_pos + (c-31) * FONT_HEIGHT]);
+		}
+	}
+	else {
+		for (int y_pos = 0, pY = 0; y_pos < FONT_HEIGHT*2; y_pos+=2, pY++) {
+			unsigned char data1 = fontBitMap[y_pos + (c-31) * FONT_HEIGHT*2];
+			unsigned char data2 = fontBitMap[y_pos + (c-31) * FONT_HEIGHT*2 + 1];
+			print_char_row_2_byte(x, y + pY, data1, data2);
+		}
+	}
 }
