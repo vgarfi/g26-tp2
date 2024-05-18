@@ -7,6 +7,7 @@
 #include <fonts.h>
 #include "globals.h"
 
+void load_idt(void);
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -96,6 +97,8 @@ void * initializeKernelBinary()
 }
 
 int main() {	
+	load_idt();
+
 	initFontManager(&global_font_manager);
 	// TODO: Imprime jeroglificos
 	setCurrentFont(&global_font_manager, S_FONT);
@@ -118,5 +121,8 @@ int main() {
 	ncNewline();
 
 	ncPrint("[Finished]");
+	while(1)
+		_hlt();
+
 	return 0;
 }
