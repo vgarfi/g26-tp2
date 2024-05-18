@@ -150,7 +150,7 @@ _exception0Handler:
 _syscallHandler:
 	mov rcx, r10
 	mov r9, rax
-	call syscallDispatcher		; receives 
+	call syscallDispatcher
 	iretq
 
 haltcpu:
