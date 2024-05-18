@@ -1,18 +1,29 @@
 #include <time.h>
 #include <stdint.h>
 #include <naiveConsole.h>
+#include <defs.h>
 
-static void int_20();
+static void timer_tick_handler();
+static void kb_handler();
+
+static uint64_t (*irqHandlers[])(void)={
+	timer_tick_handler,
+	kb_handler
+};
+
+static int handlersSize = sizeof(irqHandlers)/sizeof(irqHandlers[0]);
+
 
 void irqDispatcher(uint64_t irq) {
-	switch (irq) {
-		case 0:
-			int_20();
-			break;
-	}
+	if(irq >=0 && irq < handlersSize && irqHandlers[irq]!=NULL)
+		irqHandlers[irq]();
 	return;
 }
 
-void int_20() {
+void kb_handler(){
+	// TODO: Handling para recepcion de teclas
+}
+
+void timer_tick_handler() {
 	timer_handler();
 }
