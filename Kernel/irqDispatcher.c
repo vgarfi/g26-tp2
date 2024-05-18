@@ -3,6 +3,9 @@
 #include <naiveConsole.h>
 #include <defs.h>
 
+void timer_handler();
+void updateBuffer();
+
 static void timer_tick_handler();
 static void kb_handler();
 
@@ -21,7 +24,7 @@ void irqDispatcher(uint64_t irq) {
 }
 
 void kb_handler(){
-	// TODO: Handling para recepcion de teclas
+	updateBuffer();
 }
 
 void timer_tick_handler() {
