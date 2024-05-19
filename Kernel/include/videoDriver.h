@@ -10,4 +10,5 @@ void putPixelAt(uint32_t hexColor, int x, int y);
 void printLine(uint8_t* framebuffer,uint64_t offset,uint32_t fgColor,uint32_t bgColor,uint8_t mask,int limit,int step);
 void printLineAt(int x,int y,uint32_t fgColor,uint32_t bgColor, uint8_t mask,int limit,int step);
 void printRectAt(int x1,int y1,int x2,int y2,uint32_t hexColor);
+void print(char *characters,int x, int y);
 #endif

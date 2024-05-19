@@ -9,7 +9,7 @@ void print_char_row_byte(int x_offset, int y, unsigned char data);
 
 struct vbe_mode_info_structure {
 	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
-	uint8_t window_a;			// deprecated
+	uint8_t window_a;			// deprecated 
 	uint8_t window_b;			// deprecated
 	uint16_t granularity;		// deprecated; used while calculating bank numbers
 	uint16_t window_size;
@@ -133,5 +133,12 @@ void print_char(int x, int y, unsigned char c) {
 			printLine(framebuffer,offset+(width*((VBE_mode_info->bpp)/8)/2),0x00ffffff,0x00000000,bitmap[y_pos + (c-31) * height*2 + 1],BYTE_LENGHT,((VBE_mode_info->bpp)/8));
 			//print_char_row_2_byte(x, y + pY, data1, data2);
 		}
+	}
+}
+
+void print(char *characters,int x, int y){
+	int widthChar = getCurrentFont(&global_font_manager).size.width;
+	for(int i=0,offset = 0;characters[i] != 0;i++,offset+=widthChar){
+		print_char(x+offset,y,characters[i]);
 	}
 }
