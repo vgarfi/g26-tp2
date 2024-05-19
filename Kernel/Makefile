@@ -27,6 +27,7 @@ $(LOADEROBJECT):
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
+	chmod 777 $(OBJDIR) 
 
 move_objects: $(OBJDIR)
 	mv *.o $(OBJDIR)
