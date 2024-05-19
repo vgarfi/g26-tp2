@@ -8,9 +8,10 @@ OBJECTS_ASM=$(SOURCES_ASM:.asm=.o)
 LOADERSRC=loader.asm
 
 LOADEROBJECT=$(LOADERSRC:.asm=.o)
+OBJDIR=obj
 STATICLIBS=
 
-all: $(KERNEL)
+all: $(KERNEL) move_objects
 
 $(KERNEL): $(LOADEROBJECT) $(OBJECTS) $(STATICLIBS) $(OBJECTS_ASM)
 	$(LD) $(LDFLAGS) -T kernel.ld -o $(KERNEL) $(LOADEROBJECT) $(OBJECTS) $(OBJECTS_ASM) $(STATICLIBS)
@@ -24,7 +25,13 @@ $(KERNEL): $(LOADEROBJECT) $(OBJECTS) $(STATICLIBS) $(OBJECTS_ASM)
 $(LOADEROBJECT):
 	$(ASM) $(ASMFLAGS) $(LOADERSRC) -o $(LOADEROBJECT)
 
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
+
+move_objects: $(OBJDIR)
+	mv *.o $(OBJDIR)
+	mv asm/*.o $(OBJDIR)
 clean:
-	rm -rf asm/*.o *.o *.bin
+	rm -rf $(OBJDIR) *.bin
 
 .PHONY: all clean
