@@ -129,11 +129,9 @@ void print_char(int x, int y, unsigned char c) {
 	}
 	else {
 		for (int y_pos = 0, pY = 0; y_pos < height*2; y_pos+=2, pY++,offset+=VBE_mode_info->pitch) {
-		//	printLine(framebuffer,offset,0x00FFFFFF,0x00000000,bitmap[y_pos + (c-31) * height*2],BYTE_LENGHT,((VBE_mode_info->bpp)/8));
-		//	printLine(framebuffer,offset+(width*((VBE_mode_info->bpp)/8)),0x00ffffff,0x00000000,bitmap[y_pos + (c-31) * height*2 + 1],BYTE_LENGHT,((VBE_mode_info->bpp)/8));
-			unsigned char data1 = bitmap[y_pos + (c-31) * global_font_manager.fonts[global_font_manager.currentFontIndex].size.height*2];
-			unsigned char data2 = bitmap[y_pos + (c-31) * global_font_manager.fonts[global_font_manager.currentFontIndex].size.height*2 + 1];
-			print_char_row_2_byte(x, y + pY, data1, data2);
+			printLine(framebuffer,offset,0x00FFFFFF,0x00000000,bitmap[y_pos + (c-31) * height*2],BYTE_LENGHT,((VBE_mode_info->bpp)/8));
+			printLine(framebuffer,offset+(width*((VBE_mode_info->bpp)/8)/2),0x00ffffff,0x00000000,bitmap[y_pos + (c-31) * height*2 + 1],BYTE_LENGHT,((VBE_mode_info->bpp)/8));
+			//print_char_row_2_byte(x, y + pY, data1, data2);
 		}
 	}
 }
