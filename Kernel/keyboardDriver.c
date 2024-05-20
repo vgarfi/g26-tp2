@@ -26,11 +26,6 @@ int isSpecialKey(char key){
             shift = !shift;
             return 1;
 
-        case SPACE_BAR:
-            //handle mov
-            bufferPos++;
-            return 1;
-
         case TAB:
             //handle mov
             bufferPos++;

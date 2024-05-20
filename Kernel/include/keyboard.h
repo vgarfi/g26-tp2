@@ -24,18 +24,17 @@ static unsigned char scanCodes[2][63] = {
 };
 
 enum SPECIALCHARS {
- ESCAPE            = '\x1B', 
- BACKSPACE         = '\b',
- TAB               = '\t', 
- ENTER             = '\n', 
- CONTROL           = '\x11',
- L_SHIFT_PRESS     = '\x12', 
- L_SHIFT_RELEASE   = '\xAA', 
- R_SHIFT_PRESS     = '\x14',
+ ESCAPE            = '\x01', 
+ BACKSPACE         = '\x0e',
+ TAB               = '\x0f', 
+ ENTER             = '\x1c', 
+ CONTROL           = '\x1d',
+ L_SHIFT_PRESS     = '\x2a', 
+ L_SHIFT_RELEASE   = '\xaa', 
+ R_SHIFT_PRESS     = '\x36',
  R_SHIFT_RELEASE   = '\xB6', 
- L_ALT             = '\x10', 
+ L_ALT             = '\x38', 
  CAPSLOCK          = '\x3A', 
- SPACE_BAR         = ' '
 };
 
 #endif
