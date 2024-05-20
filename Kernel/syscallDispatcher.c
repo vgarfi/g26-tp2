@@ -5,12 +5,6 @@
 
 int nanosleep(uint64_t rdi);     // rdi : seconds, rsi : miliseconds
 
-static uint64_t(*syscallHandlers[])(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8)={
-
-};         // Handlers for syscalls, e.g. read, write, etc
-
-static int handlersSize=sizeof(syscallHandlers)/sizeof(syscallHandlers[0]);
-
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
     switch(rax){
         case 162: return nanosleep(rdi);
