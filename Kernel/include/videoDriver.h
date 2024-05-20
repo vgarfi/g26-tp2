@@ -2,7 +2,7 @@
 #define VIDEO_H
 
 #include <stdint.h>
-#
+
 //void putPixel(uint32_t hexColor, uint64_t x, uint64_t y);
 void print_char(int x,int y, unsigned char c);
 void putPixel(uint8_t* framebuffer,uint64_t offset,uint32_t hexcolor);
