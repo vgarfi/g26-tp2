@@ -9,6 +9,7 @@ section .text
 
 %macro rtc_get 1
     cli
+    xor rax, rax
 
     ; Argumento: registro a leer (en AL)
     ; Lee el registro del RTC y devuelve el valor leído en AL

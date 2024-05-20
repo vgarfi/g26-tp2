@@ -1,19 +1,35 @@
 /* sampleCodeModule.c */
+#include <stdint.h>
 
-char * v = (char*)0xB8000 + 79 * 2;
+int waitNano(int seconds);
 
-static int var1 = 0;
-static int var2 = 0;
+static char buffer[64] = { '0' };
+static uint8_t * const video = (uint8_t*)0xB8000;
+static uint8_t * currentVideo = (uint8_t*)0xB8000;
+static const uint32_t width = 80;
+static const uint32_t height = 25 ;
 
+void ncPrintChar(char character)
+{
+	*currentVideo = character;
+	currentVideo += 2;
+}
+
+void ncPrint(const char * string)
+{
+	int i;
+
+	for (i = 0; string[i] != 0; i++)
+		ncPrintChar(string[i]);
+}
 
 int main() {
 	//All the following code may be removed 
-	*v = 'X';
-	*(v+1) = 0x74;
 
-	//Test if BSS is properly set up
-	if (var1 == 0 && var2 == 0)
-		return 0xDEADC0DE;
-
+/*
+	ncPrint("ESPERANDO 5 SEGUNDOS...");
+	waitNano(5);
+	ncPrint("FINALIZADO");		
+*/
 	return 0xDEADBEEF;
 }

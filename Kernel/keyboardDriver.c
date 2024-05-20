@@ -18,18 +18,24 @@ int isSpecialKey(char key){
 
         case L_SHIFT_PRESS:
         case R_SHIFT_PRESS:
-            shift = !shift;
+            shift = 1;
             return 1; 
 
         case L_SHIFT_RELEASE:
         case R_SHIFT_RELEASE:
-            shift = !shift;
+            shift = 0;
             return 1;
+
+    
+        case SPACE_BAR:
+            //handle mov
+            //bufferPos++;
+            return 0;
 
         case TAB:
             //handle mov
-            bufferPos++;
-            return 1;
+            //bufferPos++;
+            return 0;
 
         case ENTER:
             buffer[bufferPos] = 0;
@@ -51,15 +57,19 @@ int isSpecialKey(char key){
 void updateBuffer(){
     uint8_t scancode = getKey();
     
-    char c = scanCodes[shift][scancode];
-    
-    if(!isSpecialKey(c) == 1){  
-    buffer[bufferPos]=c;
-    ncPrintChar(buffer[bufferPos]);
-    bufferPos++;
-    if(bufferPos >= MAXSIZE)
-        bufferPos = 0;
+    if(scancode<MAX_SCANCODE){        
+        
+        char c = scanCodes[shift][scancode];
+
+        if(!isSpecialKey(scancode)){  
+            buffer[bufferPos]=c;
+            ncPrintChar(buffer[bufferPos]);
+            bufferPos++;
+            if(bufferPos >= MAXSIZE)
+                bufferPos = 0;
+        }
     }
+    
 }
 
 void cleanBuffer(){

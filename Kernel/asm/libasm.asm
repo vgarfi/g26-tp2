@@ -1,4 +1,5 @@
 GLOBAL cpuVendor
+GLOBAL divzero
 
 section .text
 	

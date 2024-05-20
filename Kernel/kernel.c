@@ -6,6 +6,7 @@
 #include <videoDriver.h>
 #include <fonts.h>
 #include "globals.h"
+#include <time.h>
 
 void load_idt(void);
 
@@ -18,8 +19,11 @@ extern uint8_t endOfKernel;
 
 static const uint64_t PageSize = 0x1000;
 
+
 static void * const sampleCodeModuleAddress = (void*)0x400000;
 static void * const sampleDataModuleAddress = (void*)0x500000;
+
+int nanosleep(uint64_t rdi);
 
 typedef int (*EntryPoint)();
 
@@ -98,9 +102,31 @@ void * initializeKernelBinary()
 
 int main() {	
 	load_idt();
-
+	ncPrint("ESPERANDO 5 SEGUNDOS...");
+	nanosleep(5);
+	ncPrint("LISTO!");
+	ncNewline();
+	/*
+	uint8_t seconds = rtc_get_seconds();
+	uint8_t minutes = rtc_get_minutes();
+	uint8_t hours = rtc_get_hour();
+	uint8_t days = rtc_get_day();
+	uint8_t month = rtc_get_month();
+	uint8_t year = rtc_get_year();
+	ncPrintDec(hours);
+	ncPrint(" ");
+	ncPrintDec(minutes);
+	ncPrint(" ");
+	ncPrintDec(seconds);
+	ncNewline();
+	ncPrintDec(days);
+	ncPrint(" ");
+	ncPrintDec(month);
+	ncPrint(" ");
+	ncPrintDec(year);
+	ncNewline();
+	*/
 	initFontManager(&global_font_manager);
-	// TODO: Imprime jeroglificos
 	setCurrentFont(&global_font_manager, S_FONT);
 	printHeader();
 	ncPrint("[Kernel Main]");

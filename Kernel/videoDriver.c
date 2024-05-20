@@ -142,6 +142,7 @@ void print(char *characters,int x, int y){
 		print_char(x+offset,y,characters[i]);
 	}
 }
+/*
 
 void ncPrintDec(uint64_t value)
 {
@@ -200,3 +201,4 @@ void clearScreen(){
 
 	return digits;
 }
+*/
