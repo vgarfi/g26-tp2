@@ -6,6 +6,7 @@
 void timer_handler();
 int ticks_elapsed();
 int seconds_elapsed();
+void sleep(int seconds);
 
 uint64_t rtc_get_seconds();
 uint64_t rtc_get_minutes();

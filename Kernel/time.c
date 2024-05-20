@@ -13,3 +13,8 @@ int ticks_elapsed() {
 int seconds_elapsed() {
 	return ticks / 18;
 }
+
+void sleep(int seconds){
+	int sleepTime = seconds * 18, sleepStart=ticks;
+	while((ticks-sleepStart) < sleepTime);
+}
