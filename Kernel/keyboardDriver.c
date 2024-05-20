@@ -26,16 +26,10 @@ int isSpecialKey(char key){
             shift = 0;
             return 1;
 
-    
-        case SPACE_BAR:
-            //handle mov
-            //bufferPos++;
-            return 0;
-
         case TAB:
             //handle mov
-            //bufferPos++;
-            return 0;
+            bufferPos++;
+            return 1;
 
         case ENTER:
             buffer[bufferPos] = 0;

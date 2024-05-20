@@ -15,17 +15,6 @@ section .text
     ; Lee el registro del RTC y devuelve el valor leído en AL
     ; Selecciona el registro a leer
 
-; hago un loop hasta que haya data available, eso esta en el registro 0A
-; en el bit 7 (por eso hago test al, 8) se compara el octavo bit si hay 
-; data available se prende el bit y sino se apaga
-
-    ;loop:
-    ;    mov al, 0xA
-    ;    out 0x70, al
-    ;    in al, 0x71
-    ;    test al, 0x80
-    ;    jne loop
-
     xor rax, rax
     mov al, 0xB
     out 0x70, al 
