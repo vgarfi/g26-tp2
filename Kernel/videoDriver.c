@@ -2,11 +2,11 @@
 #include <defs.h>
 #include <fonts.h>
 #include <globals.h>
-
+#include <lib.h>
 
 void print_char_row_2_byte(int x_offset, int y, unsigned char data, unsigned char data2);
 void print_char_row_byte(int x_offset, int y, unsigned char data);
-
+static char buffer[64] = { '0' };
 struct vbe_mode_info_structure {
 	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
 	uint8_t window_a;			// deprecated 
@@ -141,4 +141,62 @@ void print(char *characters,int x, int y){
 	for(int i=0,offset = 0;characters[i] != 0;i++,offset+=widthChar){
 		print_char(x+offset,y,characters[i]);
 	}
+}
+
+void ncPrintDec(uint64_t value)
+{
+	ncPrintBase(value, 10);
+}
+
+void ncPrintHex(uint64_t value)
+{
+	ncPrintBase(value, 16);
+}
+
+void ncPrintBin(uint64_t value)
+{
+	ncPrintBase(value, 2);
+}
+
+void ncPrintBase(uint64_t value, uint32_t base)
+{
+    uintToBase(value, buffer, base);
+    print(buffer,20,20);
+}
+
+void clearScreen(){
+	memset(VBE_mode_info->framebuffer,0,VBE_mode_info->height * VBE_mode_info->width);
+}
+
+
+ uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base){
+	char *p = buffer;
+	char *p1, *p2;
+	uint32_t digits = 0;
+
+	//Calculate characters for each digit
+	do
+	{
+		uint32_t remainder = value % base;
+		*p++ = (remainder < 10) ? remainder + '0' : remainder + 'A' - 10;
+		digits++;
+	}
+	while (value /= base);
+
+	// Terminate string in buffer.
+	*p = 0;
+
+	//Reverse string in buffer.
+	p1 = buffer;
+	p2 = p - 1;
+	while (p1 < p2)
+	{
+		char tmp = *p1;
+		*p1 = *p2;
+		*p2 = tmp;
+		p1++;
+		p2--;
+	}
+
+	return digits;
 }
