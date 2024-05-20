@@ -12,6 +12,7 @@ void printLineAt(int x,int y,uint32_t fgColor,uint32_t bgColor, uint8_t mask,int
 void printRectAt(int x1,int y1,int x2,int y2,uint32_t hexColor);
 void print(char *characters,int x, int y);
 void clearScreen();
+void scrol(int lines);
 /*
 uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
 void ncPrintDec(uint64_t value);

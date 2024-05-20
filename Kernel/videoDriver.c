@@ -143,7 +143,6 @@ void print(char *characters,int x, int y){
 	}
 }
 /*
-
 void ncPrintDec(uint64_t value)
 {
 	ncPrintBase(value, 10);
@@ -165,40 +164,14 @@ void ncPrintBase(uint64_t value, uint32_t base)
     print(buffer,20,20);
 }
 
-void clearScreen(){
-	memset(VBE_mode_info->framebuffer,0,VBE_mode_info->height * VBE_mode_info->width);
-}
 
-
- uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base){
-	char *p = buffer;
-	char *p1, *p2;
-	uint32_t digits = 0;
-
-	//Calculate characters for each digit
-	do
-	{
-		uint32_t remainder = value % base;
-		*p++ = (remainder < 10) ? remainder + '0' : remainder + 'A' - 10;
-		digits++;
-	}
-	while (value /= base);
-
-	// Terminate string in buffer.
-	*p = 0;
-
-	//Reverse string in buffer.
-	p1 = buffer;
-	p2 = p - 1;
-	while (p1 < p2)
-	{
-		char tmp = *p1;
-		*p1 = *p2;
-		*p2 = tmp;
-		p1++;
-		p2--;
-	}
-
-	return digits;
-}
 */
+void clearScreen(){
+	memset(VBE_mode_info->framebuffer,0,3*VBE_mode_info->height * VBE_mode_info->width);
+}
+
+void scrol(int lines){
+	int offset = lines * getCurrentFont(&global_font_manager).size.height * VBE_mode_info->width * 3;
+	memcpy(VBE_mode_info->framebuffer,(VBE_mode_info->framebuffer + offset),3* VBE_mode_info->width * (VBE_mode_info->height -lines * getCurrentFont(&global_font_manager).size.height));
+	memset(VBE_mode_info->framebuffer + 3*VBE_mode_info->height * VBE_mode_info->width - 3* VBE_mode_info->width * lines * getCurrentFont(&global_font_manager).size.height,0,3* VBE_mode_info->width * lines * getCurrentFont(&global_font_manager).size.height);
+}
