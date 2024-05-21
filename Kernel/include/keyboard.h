@@ -9,7 +9,8 @@ void updateBuffer(void);
 void cleanBuffer(void);
 uint8_t getKey(void);
 char readLastCharacter(void);
-
+int isBufferEmpty();
+unsigned char readBuf(void);
 
 static unsigned char scanCodes[SHIFT_VALUES][MAX_SCANCODE] = {
     {

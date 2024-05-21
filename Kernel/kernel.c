@@ -7,8 +7,11 @@
 #include <fonts.h>
 #include "globals.h"
 #include <time.h>
+#include <defs.h>
 
 void load_idt(void);
+
+uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax);
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -58,10 +61,11 @@ void * initializeKernelBinary()
 	ncPrint("[x64BareBones]");
 	ncNewline();
 
+/*
 	ncPrint("CPU Vendor:");
 	ncPrint(cpuVendor(buffer));
 	ncNewline();
-
+*/
 	ncPrint("[Loading modules]");
 	ncNewline();
 	void * moduleAddresses[] = {
@@ -100,6 +104,12 @@ void * initializeKernelBinary()
 
 int main() {	
 	load_idt();
+
+	char toRead[20]={0};
+	int size = syscallDispatcher(STDIN,toRead,10,0,0,0);
+	toRead[size]=0;
+	ncNewline();
+	ncPrint(toRead);
 	
 	initFontManager(&global_font_manager);
 	setCurrentFont(&global_font_manager, S_FONT);

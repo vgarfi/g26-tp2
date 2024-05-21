@@ -66,8 +66,22 @@ void updateBuffer(){
     
 }
 
+int isBufferEmpty(){
+    return bufferPos==0;
+}
+
 void cleanBuffer(){
     bufferPos=0;
+}
+
+unsigned char readBuf(){
+    if(isBufferEmpty())
+        return 0;
+    unsigned char ans = buffer[0];
+    for(int i=0; i<bufferPos-1; i++)
+        buffer[i]=buffer[i+1];
+    bufferPos--;
+    return ans;
 }
 
 char readLastCharacter(){
