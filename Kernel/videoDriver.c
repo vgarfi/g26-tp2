@@ -4,9 +4,9 @@
 #include <globals.h>
 #include <lib.h>
 
-void print_char_row_2_byte(int x_offset, int y, unsigned char data, unsigned char data2);
-void print_char_row_byte(int x_offset, int y, unsigned char data);
 static char buffer[64] = { '0' };
+
+
 struct vbe_mode_info_structure {
 	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
 	uint8_t window_a;			// deprecated 
@@ -49,6 +49,9 @@ typedef struct vbe_mode_info_structure * VBEInfoPtr;
 
 VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
 
+
+Cursor cursor = {0, 0}; 
+
 void putPixel(uint8_t* framebuffer,uint64_t offset,uint32_t hexColor){
 	framebuffer[offset]     =  (hexColor) & 0xFF;
     framebuffer[offset+1]   =  (hexColor >> BYTE_LENGHT) & 0xFF; 
@@ -88,40 +91,23 @@ void printRectAt(int x1,int y1,int x2,int y2,uint32_t hexColor){
 		printLine(framebuffer,offset,hexColor,hexColor,255,limit,((VBE_mode_info->bpp)/8));
 	}
 }
-void print_char_row(int x_offset, int y, unsigned char data) {
-  for (int x = 0; x < BYTE_LENGHT; x++) {
-    // Check if the corresponding bit is set (1)
-    if (data & (1 << (BYTE_LENGHT - 1 - x))) {
-      putPixelAt(0x00ffffff,x_offset + x, y); // foreground
-    } else {
-      putPixelAt(0x00000000,x_offset + x, y); // background
-	}
-  }
-}
 
-void print_char_row_2_byte(int x_offset, int y, unsigned char data1, unsigned char data2) {
-  for (int x = 0; x < TWO_BYTE_LENGHT; x++) {
-    unsigned char data = x < BYTE_LENGHT ? data1 : data2;
-    int bit = x < BYTE_LENGHT ? x : x - BYTE_LENGHT;
 
-    if (data & (1 << (BYTE_LENGHT - 1 - bit))) {
-      putPixelAt(0x00ffffff,x_offset + x, y); // foreground
-    } else {
-      putPixelAt(0x00000000,x_offset + x, y); // background
-    }
-  }
-}
-
-void print_char(int x, int y, unsigned char c) {
+void print_char(unsigned char c) {
 	FontBitmap fontBitMap = getCurrentFont(&global_font_manager);
 	unsigned char* bitmap = fontBitMap.bitmap;
 	int width = fontBitMap.size.width;
 	int height = fontBitMap.size.height;
 
 	uint8_t * framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
-	uint64_t offset = (x * ((VBE_mode_info->bpp)/8)) + (y * VBE_mode_info->pitch);
+	if(cursor.posX == (VBE_mode_info->width)*((VBE_mode_info->bpp)/8)){
+			cursor.posX = 0;
+			cursor.posY += height * VBE_mode_info->pitch;
+	}
+	uint64_t offset = cursor.posX + cursor.posY;
 
 	if (width == BYTE_LENGHT) {
+		
 		for (int y_pos = 0; y_pos < height; y_pos++,offset+=VBE_mode_info->pitch) {
 			printLine(framebuffer,offset,0x00ffffff,0x00000000,bitmap[y_pos + (c-31) * height],BYTE_LENGHT,((VBE_mode_info->bpp)/8));
 			//print_char_row(x, y + y_pos, bitmap[y_pos + (c-31) * height]);
@@ -134,12 +120,14 @@ void print_char(int x, int y, unsigned char c) {
 			//print_char_row_2_byte(x, y + pY, data1, data2);
 		}
 	}
+
+	cursor.posX += ((VBE_mode_info->bpp)/8)*width;
 }
 
-void print(char *characters,int x, int y){
+void print(char *characters){
 	int widthChar = getCurrentFont(&global_font_manager).size.width;
 	for(int i=0,offset = 0;characters[i] != 0;i++,offset+=widthChar){
-		print_char(x+offset,y,characters[i]);
+		print_char(characters[i]);
 	}
 }
 /*
@@ -175,3 +163,4 @@ void scrol(int lines){
 	memcpy(VBE_mode_info->framebuffer,(VBE_mode_info->framebuffer + offset),3* VBE_mode_info->width * (VBE_mode_info->height -lines * getCurrentFont(&global_font_manager).size.height));
 	memset(VBE_mode_info->framebuffer + 3*VBE_mode_info->height * VBE_mode_info->width - 3* VBE_mode_info->width * lines * getCurrentFont(&global_font_manager).size.height,0,3* VBE_mode_info->width * lines * getCurrentFont(&global_font_manager).size.height);
 }
+
