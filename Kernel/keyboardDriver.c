@@ -7,11 +7,7 @@ static unsigned char buffer[MAXSIZE]={0};
 static int bufferPos=0;                     // Indicates your current position in buffer
 static int shift = 0;
 
-
-int isSpecialKey(char key);
-
-
-int isSpecialKey(char key){
+int specialKeyHandler(uint8_t key){
     switch(key) {
         case ESCAPE:
             return 1;
@@ -19,8 +15,8 @@ int isSpecialKey(char key){
         case L_SHIFT_PRESS:
         case R_SHIFT_PRESS:
             shift = 1;
-            return 1; 
-
+            return 1;
+            
         case L_SHIFT_RELEASE:
         case R_SHIFT_RELEASE:
             shift = 0;
@@ -35,12 +31,12 @@ int isSpecialKey(char key){
             buffer[bufferPos] = 0;
             return 1;
     
-        case CAPSLOCK:
+        /*case CAPSLOCK:
             shift = !shift;
-            return 1;        
+            return 1;  */      
         
         case BACKSPACE:
-            // handle delete
+            // handle delete (imprime espacio periodic)
             bufferPos--;
             return 1;
         default:
@@ -50,18 +46,14 @@ int isSpecialKey(char key){
 
 void updateBuffer(){
     uint8_t scancode = getKey();
-    
-    if(scancode<MAX_SCANCODE){        
-        
-        char c = scanCodes[shift][scancode];
-
-        if(!isSpecialKey(scancode)){  
+          
+    if(!specialKeyHandler(scancode) && scancode < MAX_SCANCODE){  
+            char c = scanCodes[shift][scancode];
             buffer[bufferPos]=c;
             ncPrintChar(buffer[bufferPos]);
             bufferPos++;
             if(bufferPos >= MAXSIZE)
                 bufferPos = 0;
-        }
     }
     
 }
