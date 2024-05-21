@@ -1,4 +1,6 @@
 GLOBAL saveRegsInBuffer
+GLOBAL outb
+GLOBAL inb
 
 section .text
 
@@ -24,4 +26,28 @@ saveRegsInBuffer:
     mov [rdi + 104], r13
     mov [rdi + 112], r14
     mov [rdi + 120], r15
+    ret
+
+inb:
+    push rbp
+    mov rbp, rsp
+
+    mov rdx, rdi
+    mov rax, 0
+    in al, dx
+
+    mov rsp, rbp
+    pop rbp
+    ret
+
+outb:
+    push rbp
+    mov rbp, rsp
+
+    mov rax, rsi
+    mov rdx, rdi
+    out dx, al
+    
+    mov rsp, rbp
+    pop rbp
     ret

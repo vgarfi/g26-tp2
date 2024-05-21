@@ -9,6 +9,7 @@ int nanosleep(uint64_t rdi);     // rdi : seconds, rsi : miliseconds
 int saveregs(void);
 int read(uint64_t fd, char * buf, uint64_t count);
 int write(uint64_t fd, char * buf, uint64_t count);
+int sound(uint64_t secs);
 
 void saveRegsInBuffer(uint64_t* buf);
 
@@ -19,6 +20,7 @@ uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r1
         case 0: return read(rdi, (char *)rsi, rdx);
         case 1: return write(rdi, (char *)rsi, rdx);
         case 3: return saveregs();
+        case 128: return sound(rdi);
         case 162: return nanosleep(rdi);
         default: return -1;
     }
@@ -56,6 +58,11 @@ int write(uint64_t fd, char * buf, uint64_t count){
  */
 int saveregs(){
     saveRegsInBuffer(registers);
+    return 0;
+}
+
+int sound(uint64_t secs){
+    beep(secs);
     return 0;
 }
 
