@@ -24,14 +24,10 @@ void initializeVideoDriver(){
 
 
 void vdPrintRect(uint32_t hexColor){
-	FontBitmap fontBitMap = getCurrentFont(&global_font_manager);
-	unsigned char* bitmap = fontBitMap.bitmap;
-	int width = fontBitMap.size.width;
-	int height = fontBitMap.size.height;
-	int offset = cursor.posX + cursor.posY;
-	int y1 = cursor.posY / (VBE_mode_info->pitch*height);
-	int y2 = height;
-	for(;y1<y2;y1++,offset+=VBE_mode_info->pitch){
+	int y2 = getCurrentFont(&global_font_manager).size.height;
+	int width = getCurrentFont(&global_font_manager).size.width;
+	uint64_t offset = cursor.posX + cursor.posY;
+	for(int y1=0;y1 < y2;y1++,offset+=pitch){
 		vdPrintLine(offset,hexColor,hexColor,255,width,bytesPerPixel);
 	}
 }
@@ -44,13 +40,14 @@ void vdUpdateCursor(int x, int y){
 void vdPrintCursor(){
 	if(cursor.posX == widthScreen* bytesPerPixel){
 			cursor.posX = 0;
-			cursor.posY += 12 * pitch;
+			cursor.posY += getCurrentFont(&global_font_manager).size.height * pitch;
 	}
 	vdPrintRect(0x00FFFFFF);
 }
 
 void vdSetCursor(int x, int y){
-
+	cursor.posX = x * bytesPerPixel * getCurrentFont(&global_font_manager).size.width;
+	cursor.posY = y * pitch * getCurrentFont(&global_font_manager).size.height;
 }
 
 void vdPutPixel(uint64_t offset,uint32_t hexColor){
@@ -89,14 +86,12 @@ void vdPrintChar(unsigned char c) {
 		
 		for (int y_pos = 0; y_pos < height; y_pos++,offset+=pitch) {
 			vdPrintLine(offset,0x00ffffff,0x00000000,bitmap[y_pos + (c-31) * height],BYTE_LENGHT,bytesPerPixel);
-			//print_char_row(x, y + y_pos, bitmap[y_pos + (c-31) * height]);
 		}
 	}
 	else {
 		for (int y_pos = 0, pY = 0; y_pos < height*2; y_pos+=2, pY++,offset+=VBE_mode_info->pitch) {
-			vdPrintLine(offset,0x00FFFFFF,0x00000000,bitmap[y_pos + (c-31) * height*2],BYTE_LENGHT,((VBE_mode_info->bpp)/8));
+			vdPrintLine(offset,0x00FFFFFF,0x00000000,bitmap[y_pos + (c-31) * height*2],BYTE_LENGHT,bytesPerPixel);
 			vdPrintLine(offset+(width*bytesPerPixel/2),0x00ffffff,0x00000000,bitmap[y_pos + (c-31) * height*2 + 1],BYTE_LENGHT,bytesPerPixel);
-			//print_char_row_2_byte(x, y + pY, data1, data2);
 		}
 	}
 }
@@ -107,6 +102,17 @@ void vdPrint(char *characters){
 		vdUpdateCursor(1,0);
 		vdPrintCursor();
 	}
+}
+
+void vdDeleteChar(){
+	vdPrintChar(' ');
+	if(cursor.posX == 0){
+		vdUpdateCursor(widthScreen / getCurrentFont(&global_font_manager).size.width - 1,-1);
+	}
+	else{
+	vdUpdateCursor(-1,0);
+	}
+	vdPrintCursor();
 }
 
 
