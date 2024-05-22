@@ -4,10 +4,10 @@
 #include <globals.h>
 #include <lib.h>
 
-static char buffer[64] = { '0' };
+//static char buffer[64] = { '0' };
 typedef struct vbe_mode_info_structure * VBEInfoPtr;
 VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
-Cursor cursor = {0, 0};;
+Cursor cursor = {0, 0};
 uint8_t * framebuffer;
 uint16_t widthScreen;
 uint16_t heightScreen;
@@ -15,13 +15,16 @@ uint16_t pitch;
 uint8_t  bytesPerPixel;
 static uint32_t fgColor = 0x00FFFFFF;
 static uint32_t bgColor = 0x00000000;
-
+//static int maxCharsInScreen = 8192; // chars per row * chars per column 
+char charsInScreen[8192] = {' '};
+static int index = 0;
 void initializeVideoDriver(){
 	framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
 	widthScreen = 	VBE_mode_info->width;
 	heightScreen = VBE_mode_info->height;
 	pitch = VBE_mode_info->pitch;
 	bytesPerPixel = VBE_mode_info->bpp/8;
+
 }
 
 
@@ -108,6 +111,7 @@ void vdPrint(char *characters,uint32_t hexColor){
 	for(int i=0;characters[i] != 0;i++){
 		vdPrintChar(characters[i]);
 		vdUpdateCursor(1,0);
+		charsInScreen[index++] = characters[i];
 		vdPrintCursor();
 	}
 }
@@ -123,7 +127,20 @@ void vdDeleteChar(){
 	vdPrintCursor();
 }
 
-
+void resize(){
+	clearScreen();
+	for(int i = 0;i < index;i++){
+		if(cursor.posY != heightScreen * pitch && cursor.posX != widthScreen* bytesPerPixel)
+		vdPrintChar(charsInScreen[i]);
+	}
+	if(cursor.posY == heightScreen * pitch && cursor.posX == widthScreen* bytesPerPixel)
+		scroll(1);
+	else if(cursor.posX == widthScreen* bytesPerPixel)
+		vdUpdateCursor(-128,1);
+	else
+		vdUpdateCursor(1,0);
+	vdPrintCursor();
+}
 /*
 void ncPrintDec(uint64_t value)
 {
@@ -149,15 +166,24 @@ void ncPrintBase(uint64_t value, uint32_t base)
 
 */
 void clearScreen(){
-	memset(VBE_mode_info->framebuffer,0,3*VBE_mode_info->height * VBE_mode_info->width);
+	memset(framebuffer,0,bytesPerPixel * heightScreen * widthScreen);
+	vdSetCursor(0,0);
+	vdPrintCursor();
+}
+
+void updateCharsInScreen(int lines){
+	for(int i=lines * (widthScreen/getCurrentFont(&global_font_manager).size.width),j=0;i<maxCharsInScreen;i++)
+		charsInScreen[j++] = charsInScreen[i];
 }
 
 void scroll(int lines) {
     int fontHeight = getCurrentFont(&global_font_manager).size.height;
-    int offset = lines * fontHeight * VBE_mode_info->width * 3;
-    int frameSize = 3 * VBE_mode_info->width * (VBE_mode_info->height - lines * fontHeight);
-    int clearSize = 3 * VBE_mode_info->width * lines * fontHeight;
+    int offset = lines * fontHeight * widthScreen * bytesPerPixel;
+    int frameSize = bytesPerPixel * widthScreen * (heightScreen - lines * fontHeight);
+    int clearSize = bytesPerPixel * widthScreen * lines * fontHeight;
+    memcpy(framebuffer, framebuffer + offset, frameSize);
+    memset(framebuffer + frameSize, 0, clearSize);
+	vdUpdateCursor(0,lines);
+	updateCharsInScreen(lines);
 
-    memcpy(VBE_mode_info->framebuffer, VBE_mode_info->framebuffer + offset, frameSize);
-    memset(VBE_mode_info->framebuffer + frameSize, 0, clearSize);
 }
