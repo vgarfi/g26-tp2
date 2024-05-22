@@ -8,16 +8,57 @@ typedef struct{
 	int posY;
 }Cursor;
 
+struct vbe_mode_info_structure {
+	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
+	uint8_t window_a;			// deprecated 
+	uint8_t window_b;			// deprecated
+	uint16_t granularity;		// deprecated; used while calculating bank numbers
+	uint16_t window_size;
+	uint16_t segment_a;
+	uint16_t segment_b;
+	uint32_t win_func_ptr;		// deprecated; used to switch banks from protected mode without returning to real mode
+	uint16_t pitch;			// number of bytes per horizontal line
+	uint16_t width;			// width in pixels
+	uint16_t height;			// height in pixels
+	uint8_t w_char;			// unused...
+	uint8_t y_char;			// ...
+	uint8_t planes;
+	uint8_t bpp;			// bits per pixel in this mode
+	uint8_t banks;			// deprecated; total number of banks in this mode
+	uint8_t memory_model;
+	uint8_t bank_size;		// deprecated; size of a bank, almost always 64 KB but may be 16 KB...
+	uint8_t image_pages;
+	uint8_t reserved0;
+ 
+	uint8_t red_mask;
+	uint8_t red_position;
+	uint8_t green_mask;
+	uint8_t green_position;
+	uint8_t blue_mask;
+	uint8_t blue_position;
+	uint8_t reserved_mask;
+	uint8_t reserved_position;
+	uint8_t direct_color_attributes;
+ 
+	uint32_t framebuffer;		// physical address of the linear frame buffer; write here to draw to the screen
+	uint32_t off_screen_mem_off;
+	uint16_t off_screen_mem_size;	// size of memory in the framebuffer but not being displayed on the screen
+	uint8_t reserved1[206];
+} __attribute__ ((packed));
+
 //void putPixel(uint32_t hexColor, uint64_t x, uint64_t y);
-void print_char(unsigned char c);
-void putPixel(uint8_t* framebuffer,uint64_t offset,uint32_t hexcolor);
-void putPixelAt(uint32_t hexColor, int x, int y);
-void printLine(uint8_t* framebuffer,uint64_t offset,uint32_t fgColor,uint32_t bgColor,uint8_t mask,int limit,int step);
-void printLineAt(int x,int y,uint32_t fgColor,uint32_t bgColor, uint8_t mask,int limit,int step);
-void printRectAt(int x1,int y1,int x2,int y2,uint32_t hexColor);
-void print(char *characters);
-void clearScreen();
-void scrol(int lines);
+void vdPrintChar(unsigned char c);
+void vdPutPixel(uint64_t offset,uint32_t hexcolor);
+void vdPrintLine(uint64_t offset,uint32_t fgColor,uint32_t bgColor,uint8_t mask,int limit,int step);
+void vdPrint(char *characters);
+void vdClearScreen();
+void vdScrol(int lines);
+void initializeVideoDriver();
+void vdSetCursor(int x,int y);
+void vdPrintRect(uint32_t hexColor);
+void vdUpdateCursor(int x,int y);
+void vdDeleteChar();
+void vdNewLine();
 /*
 uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
 void ncPrintDec(uint64_t value);

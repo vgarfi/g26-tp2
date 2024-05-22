@@ -26,21 +26,21 @@ uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r1
     }
 }
 
-int read(uint64_t fd, char * buf, uint64_t count){
-    if(fd!=STDIN){   // Only can read from standard input
+int read(uint64_t fd, char * buf, uint64_t count) {
+    if(fd!=STDIN) {   // Only can read from standard input
         return 0;
     }
     uint64_t sizeRead=0;
     unsigned char lastRead='\0';
     while(sizeRead!=count && lastRead!='\n'){
-        if(!isBufferEmpty()){   // If there are chars in buffer, we read them
-            lastRead=readBuf();
-            buf[sizeRead++]=lastRead;
+        if(!isBufferEmpty()) {   // If there are chars in buffer, we read them
+            lastRead = readBuf();
+            buf[sizeRead++] = lastRead;
         }else{                  // If not, we halt until more data is inserted 
             _hlt();
         }
     }
-    return sizeRead==count?count:sizeRead-1;    // If we return sizeRead-1 it means we stopped at '\n'
+    return sizeRead == count? count : sizeRead-1;    // If we return sizeRead-1 it means we stopped at '\n'
 }
 
 int write(uint64_t fd, char * buf, uint64_t count){
@@ -48,7 +48,7 @@ int write(uint64_t fd, char * buf, uint64_t count){
         return 0;
     int i;
     for(i=0; i<count; i++){
-        print_char(buf[i]);
+        vdPrintChar(buf[i]);
     } 
     return i;
 }
@@ -72,4 +72,3 @@ int nanosleep(uint64_t rdi){
     sleep(rdi);
     return 0;
 }
-
