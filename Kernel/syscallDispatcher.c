@@ -5,7 +5,7 @@
 #include <keyboard.h>
 #include <interrupts.h>
 
-int nanosleep(uint64_t rdi);     // rdi : seconds, rsi : miliseconds
+int nanosleep(uint64_t rdi, uint64_t rsi);     // rdi : seconds, rsi : miliseconds
 int saveregs(void);
 int read(uint64_t fd, char * buf, uint64_t count);
 int write(uint64_t fd, char * buf, uint64_t count);
@@ -21,7 +21,7 @@ uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r1
         case 1: return write(rdi, (char *)rsi, rdx);
         case 3: return saveregs();
         case 128: return sound(rdi);
-        case 162: return nanosleep(rdi);
+        case 162: return nanosleep(rdi, rsi);
         default: return -1;
     }
 }
@@ -66,9 +66,11 @@ int sound(uint64_t secs){
     return 0;
 }
 
-int nanosleep(uint64_t rdi){
-    if(rdi<0)
+// rdi = seconds, rsi = miliseconds
+int nanosleep(uint64_t rdi, uint64_t rsi){
+    if(rdi<0 || rsi<0)
         return -1;
-    sleep(rdi);
+    int secondsToTicks = rdi*18, msToTicks=rsi;
+    sleep(rdi*18);
     return 0;
 }
