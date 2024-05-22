@@ -13,6 +13,8 @@ uint16_t widthScreen;
 uint16_t heightScreen;
 uint16_t pitch;
 uint8_t  bytesPerPixel;
+static uint32_t fgColor = 0x00FFFFFF;
+static uint32_t bgColor = 0x00000000;
 
 void initializeVideoDriver(){
 	framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
@@ -90,18 +92,19 @@ void vdPrintChar(unsigned char c) {
 	if (width == BYTE_LENGHT) {
 		
 		for (int y_pos = 0; y_pos < height; y_pos++,offset+=pitch) {
-			vdPrintLine(offset,0x00ffffff,0x00000000,bitmap[y_pos + (c-31) * height],BYTE_LENGHT,bytesPerPixel);
+			vdPrintLine(offset,fgColor,bgColor,bitmap[y_pos + (c-31) * height],BYTE_LENGHT,bytesPerPixel);
 		}
 	}
 	else {
 		for (int y_pos = 0, pY = 0; y_pos < height*2; y_pos+=2, pY++,offset+=VBE_mode_info->pitch) {
-			vdPrintLine(offset,0x00FFFFFF,0x00000000,bitmap[y_pos + (c-31) * height*2],BYTE_LENGHT,bytesPerPixel);
-			vdPrintLine(offset+(width*bytesPerPixel/2),0x00ffffff,0x00000000,bitmap[y_pos + (c-31) * height*2 + 1],BYTE_LENGHT,bytesPerPixel);
+			vdPrintLine(offset,fgColor,bgColor,bitmap[y_pos + (c-31) * height*2],BYTE_LENGHT,bytesPerPixel);
+			vdPrintLine(offset+(width*bytesPerPixel/2),fgColor,bgColor,bitmap[y_pos + (c-31) * height*2 + 1],BYTE_LENGHT,bytesPerPixel);
 		}
 	}
 }
 
-void vdPrint(char *characters){
+void vdPrint(char *characters,uint32_t hexColor){
+	fgColor = hexColor
 	for(int i=0;characters[i] != 0;i++){
 		vdPrintChar(characters[i]);
 		vdUpdateCursor(1,0);
