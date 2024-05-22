@@ -58,6 +58,7 @@ void vdSetCursor(int x,int y);
 void vdPrintRect(uint32_t hexColor);
 void vdUpdateCursor(int x,int y);
 void vdDeleteChar();
+void vdNewLine();
 /*
 uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
 void ncPrintDec(uint64_t value);

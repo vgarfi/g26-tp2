@@ -50,6 +50,11 @@ void vdSetCursor(int x, int y){
 	cursor.posY = y * pitch * getCurrentFont(&global_font_manager).size.height;
 }
 
+void vdNewLine(){
+	cursor.posX = 0;
+	cursor.posY += = pitch * getCurrentFont(&global_font_manager).size.height;
+}
+
 void vdPutPixel(uint64_t offset,uint32_t hexColor){
 	framebuffer[offset]     =  (hexColor) & 0xFF;
     framebuffer[offset+1]   =  (hexColor >> BYTE_LENGHT) & 0xFF; 
