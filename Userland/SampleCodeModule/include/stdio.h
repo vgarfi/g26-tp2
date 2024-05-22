@@ -1,6 +1,10 @@
 #ifndef __STDIO_H_
 #define __STDIO_H_
 
+#define STDIN 0
+#define STDOUT 1
+#define STDERR 2
+
 /**
  * Reads STDIN and returns the next char in it.
  * If STDIN buffer is empty, waits for input and returns it
