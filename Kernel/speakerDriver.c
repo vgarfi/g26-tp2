@@ -5,7 +5,7 @@ extern void outb(int memPos, int output);
 extern int inb(int memPos);
 
 //Play sound using built-in speaker
- static void play_sound(uint32_t nFrequence) {
+ static void playSound(uint32_t nFrequence) {
  	uint32_t Div;
  	uint8_t tmp;
  
@@ -31,7 +31,7 @@ extern int inb(int memPos);
  
  //Make a beep
  void beep(uint64_t secs) {
- 	 play_sound(500);
+ 	 playSound(500);
  	 sleep(secs);
  	 nosound();
  }
