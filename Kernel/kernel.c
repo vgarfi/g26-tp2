@@ -13,6 +13,7 @@ void load_idt(void);
 
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax);
 
+
 extern uint8_t text;
 extern uint8_t rodata;
 extern uint8_t data;
@@ -32,12 +33,11 @@ typedef int (*EntryPoint)();
 FontManager global_font_manager;
 
 void printHeader() {
-	for (size_t i = 0; INITIAL_STRING[i] != 0; i++) {
-		print_char(20 + 
-		global_font_manager.fonts[global_font_manager.currentFontIndex].size.width *i,
-		20,
-		INITIAL_STRING[i]);
-	}
+	// for (size_t i = 0; INITIAL_STRING[i] != 0; i++) {
+	// 	print_char(20 + global_font_manager.fonts[global_font_manager.currentFontIndex].size.width *i,
+	// 	20,
+	// 	INITIAL_STRING[i]);
+//	}
 }
 
 
@@ -104,10 +104,11 @@ void * initializeKernelBinary()
 
 int main() {	
 	load_idt();
-
-	char toRead[20]={0};
-	int size = syscallDispatcher(STDIN,toRead,10,0,0,0);
-	toRead[size]=0;
+	initializeVideoDriver();
+	char toRead[20] = {0};
+	// int size = syscallDispatcher(1,10,0,0,0,0);
+	// toRead[size] = 0;
+	
 	ncNewline();
 	ncPrint(toRead);
 	

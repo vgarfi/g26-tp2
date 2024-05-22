@@ -1,12 +1,13 @@
-
 #define ZERO_EXCEPTION_ID 0
 #include <naiveConsole.h>
 
 static void zero_division();
 
 void exceptionDispatcher(int exception) {
-	if (exception == ZERO_EXCEPTION_ID)
-		zero_division();
+	switch (exception)
+		case ZERO_EXCEPTION_ID:
+			zero_division();
+		return;
 }
 
 static void zero_division() {

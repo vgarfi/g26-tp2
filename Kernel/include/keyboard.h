@@ -12,7 +12,7 @@ char readLastCharacter(void);
 int isBufferEmpty();
 unsigned char readBuf(void);
 
-static unsigned char scanCodes[SHIFT_VALUES][MAX_SCANCODE] = {
+static unsigned char scancodesChars[SHIFT_VALUES][MAX_SCANCODE] = {
     {
     0,'\x1B', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',   
     '\t', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n',    
@@ -23,20 +23,24 @@ static unsigned char scanCodes[SHIFT_VALUES][MAX_SCANCODE] = {
     '\t', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', '\n',    
     '\x11', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '"', '~',        
     '\x12', '|', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', '\x14',      
-    '*', '\x10', ' ', '\x80', '\x81', '\x82', '\x83', '\x84', '\x85', '\x86', '\x87', '\x88', '\x89'}  
+    '*', '\x10', ' ', '\x80', '\x81', '\x82', '\x83', '\x84', '\x85', '\x86', '\x87', '\x88', '\x89'}
 };
 
 enum SPECIALCHARS {
- ESCAPE            = 0x01, 
- BACKSPACE         = 0x0e,
- TAB               = 0x0f, 
- ENTER             = 0x1c, 
- CONTROL           = 0x1d,
+//  ESCAPE            = 0x01,
+//  BACKSPACE         = 0x0e,
+//  TAB               = 0x0f, 
+//  ENTER             = 0x1c, 
+//  CONTROL           = 0x1d,
  L_SHIFT_PRESS     = 0x2a, 
  L_SHIFT_RELEASE   = 0xaa, 
  R_SHIFT_PRESS     = 0x36,
  R_SHIFT_RELEASE   = 0xB6, 
- L_ALT             = 0x38
+ L_ALT             = 0x38,
+ UP_ARROW          = 0x48,
+ LEFT_ARROW        = 0x4B,
+ DOWN_ARROW        = 0x50,
+ RIGHT_ARROW       = 0x4D,
  //CAPSLOCK          = 0x3A, 
 };
 
