@@ -15,7 +15,7 @@ uint16_t pitch;
 uint8_t  bytesPerPixel;
 static uint32_t fgColor = 0x00FFFFFF;
 static uint32_t bgColor = 0x00000000;
-//static int maxCharsInScreen = 8192; // chars per row * chars per column 
+static int maxCharsInScreen = 8192; // chars per row * chars per column 
 char charsInScreen[8192] = {' '};
 static int index = 0;
 void initializeVideoDriver(){
@@ -58,6 +58,7 @@ void vdSetCursor(int x, int y){
 void vdNewLine(){
 	cursor.posX = 0;
 	cursor.posY += pitch * getCurrentFont(&global_font_manager).size.height;
+	index += 128
 }
 
 void vdPutPixel(uint64_t offset,uint32_t hexColor){
