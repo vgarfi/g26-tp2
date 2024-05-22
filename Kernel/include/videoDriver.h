@@ -50,7 +50,7 @@ struct vbe_mode_info_structure {
 void vdPrintChar(unsigned char c);
 void vdPutPixel(uint64_t offset,uint32_t hexcolor);
 void vdPrintLine(uint64_t offset,uint32_t fgColor,uint32_t bgColor,uint8_t mask,int limit,int step);
-void vdPrint(char *characters);
+void vdPrint(char *characters,uint32_t hexColor);
 void vdClearScreen();
 void vdScrol(int lines);
 void initializeVideoDriver();
