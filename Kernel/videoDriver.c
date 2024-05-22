@@ -56,9 +56,9 @@ void vdSetCursor(int x, int y){
 }
 
 void vdNewLine(){
+	vdPrintRect(0x00000000);
 	cursor.posX = 0;
 	cursor.posY += pitch * getCurrentFont(&global_font_manager).size.height;
-	index += 128
 }
 
 void vdPutPixel(uint64_t offset,uint32_t hexColor){

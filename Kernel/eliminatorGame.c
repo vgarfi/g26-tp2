@@ -10,7 +10,8 @@
 static char board [PROV_WIDTH][PROV_HEIGHT] = {0};
 
 void eliminatorGame () {
-    printWall();
+    showMenu();
+    //printWall();
 }
 
 void printWall () {
