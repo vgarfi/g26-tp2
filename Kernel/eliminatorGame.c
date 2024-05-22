@@ -26,7 +26,8 @@ void printWall () {
         {
         }
         
-    }  
+    }
+
     for (int i = 0; i < PROV_HEIGHT ; i++) {
         vdSetCursor(0, i);
         vdPrintRect(RED);
@@ -39,7 +40,8 @@ void printWall () {
         }
         vdSetCursor(PROV_WIDTH/2 + i, 100);
         vdPrintChar('c');
-    }    
+    }
+
     for (int i = 0, k = PROV_WIDTH-1; i <= PROV_WIDTH/2 && k >= PROV_WIDTH/2 ; i++, k--) {
         vdSetCursor(i, PROV_HEIGHT-1);
         vdPrintRect(RED);
@@ -53,4 +55,13 @@ void printWall () {
         }
         
     }   
+}
+
+void showMenu(){
+    vdPrint("Eliminator", GREEN);
+    vdNewLine();
+    vdPrint("Indique la cantidad de jugadores", GREEN);
+    vdNewLine();
+    vdPrint("[1] (un jugador) [2] (2 jugadores)", GREEN);
+    
 }
