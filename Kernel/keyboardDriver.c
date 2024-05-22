@@ -84,8 +84,9 @@ char readLastCharacter() {
     if(dataStatus)
         if(bufferPos > 1){
             return buffer[bufferPos-1];
-        else
+        }
+        else {
             return buffer[MAX_SCANCODE-1];
-    }
+        }
     return 0;
 }
