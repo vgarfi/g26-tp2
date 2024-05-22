@@ -8,6 +8,8 @@
 #include "globals.h"
 #include <time.h>
 #include <defs.h>
+#include <eliminatorGame.h>
+
 
 void load_idt(void);
 
@@ -105,6 +107,8 @@ void * initializeKernelBinary()
 int main() {	
 	load_idt();
 	initializeVideoDriver();
+
+
 	char toRead[20] = {0};
 	// int size = syscallDispatcher(1,10,0,0,0,0);
 	// toRead[size] = 0;
@@ -133,6 +137,9 @@ int main() {
 	ncNewline();
 
 	ncPrint("[Finished]");
+
+	eliminatorGame();
+	
 	while(1)
 		_hlt();
 
