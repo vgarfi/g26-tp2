@@ -2,11 +2,16 @@
 #include <naiveConsole.h>
 
 #define MAXSIZE 128
+#define UP_ARROW_VAL        0xE0
+#define LEFT_ARROW_VAL      0xE1
+#define DOWN_ARROW_VAL      0xE2
+#define RIGHT_ARROW_VAL     0xE3
 
 static unsigned char buffer[MAXSIZE] = {0};
 static int bufferPos = 0;
 static int readPos = 0;
 static int shift = 0;
+
 
 int shiftHandler(uint8_t key){
     switch(key) {
@@ -25,20 +30,36 @@ int shiftHandler(uint8_t key){
     }
 }
 
-int isArrow (uint8_t key) {
-    return key == UP_ARROW || key == LEFT_ARROW || key == DOWN_ARROW || key == RIGHT_ARROW;
+uint8_t isArrow (uint8_t key) {
+    switch (key)
+    {
+    case UP_ARROW:
+        return UP_ARROW_VAL;
+    
+    case LEFT_ARROW:
+        return LEFT_ARROW_VAL;
+
+    case DOWN_ARROW:
+        return DOWN_ARROW_VAL;
+    
+    case RIGHT_ARROW:
+        return RIGHT_ARROW_VAL;
+
+    default:
+        return 0;
+    }    
 }
 
 void updateBuffer(){
     
     uint8_t scancode = getKey();
-     int isArrowValue = isArrow(scancode);
-     
-    if(isArrowValue || (!shiftHandler(scancode) && scancode < MAX_SCANCODE)) { // Agregamos los caracteres, con su modificación correspondiente ante un shift
-        char c =  isArrowValue? scancode : scancodesChars[shift][scancode];
+
+    uint8_t arrowValue = isArrow(scancode);
+    
+    if(arrowValue || (!shiftHandler(scancode) && scancode < MAX_SCANCODE)) { // Agregamos los caracteres, con su modificación correspondiente ante un shift
+        char c = (arrowValue != 0)? arrowValue : scancodesChars[shift][scancode];
         bufferPos = bufferPos % MAXSIZE;
         buffer[bufferPos++] = c;
-    
         ncPrintChar(c); // TODO simplemente eliminar esto
     }
 }
