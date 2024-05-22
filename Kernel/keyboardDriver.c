@@ -11,7 +11,7 @@ static unsigned char buffer[MAXSIZE] = {0};
 static int bufferPos = 0;
 static int readPos = 0;
 static int shift = 0;
-
+static int dataStatus = 0;
 
 int shiftHandler(uint8_t key){
     switch(key) {
@@ -57,6 +57,7 @@ void updateBuffer(){
     uint8_t arrowValue = isArrow(scancode);
     
     if(arrowValue || (!shiftHandler(scancode) && scancode < MAX_SCANCODE)) { // Agregamos los caracteres, con su modificación correspondiente ante un shift
+        dataStatus = 1;
         char c = (arrowValue != 0)? arrowValue : scancodesChars[shift][scancode];
         bufferPos = bufferPos % MAXSIZE;
         buffer[bufferPos++] = c;
@@ -80,8 +81,11 @@ unsigned char readBuf () {
 }
 
 char readLastCharacter() {
-    if(bufferPos > 1){
-        return buffer[bufferPos-1];
+    if(dataStatus)
+        if(bufferPos > 1){
+            return buffer[bufferPos-1];
+        else
+            return buffer[MAX_SCANCODE-1];
     }
     return 0;
 }
