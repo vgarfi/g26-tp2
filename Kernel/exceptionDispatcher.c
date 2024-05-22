@@ -11,4 +11,7 @@ void exceptionDispatcher(int exception) {
 
 static void zero_division() {
 	// TODO
+	ncPrint("Arithmetic exception: division by zero");
+	// imrpimir registros en pantalla
+	// volver a la shell (hacer una funcion que me ejecute la shell de vuelta asi la llamo)
 }
