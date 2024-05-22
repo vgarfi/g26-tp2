@@ -147,6 +147,10 @@ _exception0Handler:
 	exceptionHandler 0
 	
 ;Syscall Handling
+; _syscallHandler receives parameters in the next order: rax rdi rsi rdx r10 r8 r9
+; syscallDispatcher receives parameters via regs this way: rdi rsi rdx rcx r8 r9
+; rax is the last parameters -> r9 = rax
+; r10 is not a parameters -> rcx = r10
 _syscallHandler:
 	mov rcx, r10
 	mov r9, rax
