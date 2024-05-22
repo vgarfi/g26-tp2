@@ -2,6 +2,7 @@
 #include <naiveConsole.h>
 
 #define MAXSIZE 128
+
 #define UP_ARROW_VAL        0xE0
 #define LEFT_ARROW_VAL      0xE1
 #define DOWN_ARROW_VAL      0xE2
@@ -50,10 +51,8 @@ uint8_t isArrow (uint8_t key) {
     }    
 }
 
-void updateBuffer(){
-    
+void updateBuffer() {
     uint8_t scancode = getKey();
-
     uint8_t arrowValue = isArrow(scancode);
     
     if(arrowValue || (!shiftHandler(scancode) && scancode < MAX_SCANCODE)) { // Agregamos los caracteres, con su modificación correspondiente ante un shift

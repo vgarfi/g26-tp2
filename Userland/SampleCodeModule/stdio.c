@@ -12,7 +12,7 @@ int putchar(unsigned char c){
     return c;
 }
 
-int print(const char * str){
+int print(char * str){
     int i;
     for(i=0;str[i]!='\0';i++){
         putchar(str[i]);
