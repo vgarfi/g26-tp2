@@ -1,4 +1,6 @@
 #include <time.h>
+#include <interrupts.h>
+#include <stdint.h>
 
 static unsigned long ticks = 0;
 
@@ -15,6 +17,13 @@ int seconds_elapsed() {
 }
 
 void sleep(int seconds){
-	int sleepTime = seconds * 18, sleepStart=ticks;
-	while((ticks-sleepStart) < sleepTime);
+	uint64_t sleepStart=rtc_get_seconds(), secondsSlept=0, aux;
+	
+	while(secondsSlept!=seconds){
+		aux=rtc_get_seconds();
+		if(aux!=sleepStart){
+			sleepStart=aux;
+			secondsSlept++;
+		}
+	}
 }
