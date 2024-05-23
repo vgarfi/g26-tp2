@@ -35,7 +35,7 @@ int read(uint64_t fd, char * buf, uint64_t count) {
     uint64_t sizeRead=0;
     unsigned char lastRead='\0';
     int startTick = ticks_elapsed();
-    while(sizeRead!=count && lastRead!='\n' && ticks_elapsed() <= startTick){
+    while(sizeRead!=count && ticks_elapsed() <= startTick){
         if(!isBufferEmpty()) {   // If there are chars in buffer, we read them
             lastRead = readBuf();
             buf[sizeRead++] = lastRead;
@@ -43,7 +43,7 @@ int read(uint64_t fd, char * buf, uint64_t count) {
             _hlt();
         }
     }
-    return sizeRead == count? count : sizeRead-1;    // If we return sizeRead-1 it means we stopped at '\n'
+    return sizeRead == count? count : sizeRead;    // If we return sizeRead-1 it means we stopped at '\n'
 }
 
 int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor){
