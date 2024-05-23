@@ -62,12 +62,12 @@ void vdSetCursor(int x, int y){
 
 void vdNewLine(){
 	//vdPrintRect(0x00000000);
-	int spacesToFill = ((widthScreen*bytesPerPixel - cursor.posX) / bytesPerPixel) / getCurrentFont(&global_font_manager).size.width; //spaces to print
-	for(int i=0; i < spacesToFill; i++){
-		vdPrintChar(' ');
-	}
-	//cursor.posX = 0;
-	//cursor.posY += pitch * getCurrentFont(&global_font_manager).size.height;
+//	int spacesToFill = ((widthScreen*bytesPerPixel - cursor.posX) / bytesPerPixel) / getCurrentFont(&global_font_manager).size.width; //spaces to print
+//	for(int i=0; i < spacesToFill; i++){
+//		vdPrintChar(' ');
+//	}
+	cursor.posX = 0;
+	cursor.posY += pitch * getCurrentFont(&global_font_manager).size.height;
 }
 
 void vdPutPixel(uint64_t offset,uint32_t hexColor){
@@ -160,15 +160,19 @@ void vdDeleteChar(){
 	//vdPrintCursor();
 }
 
+
 void resize(){
+	clearScreen();
 	int limit = (widthScreen/getCurrentFont(&global_font_manager).size.width) * (heightScreen/getCurrentFont(&global_font_manager).size.height);
 	for(int i = 0,j=0;i < limit;i++,j++){
 		char c = charsInScreen[j];
 		if(cursor.posY != heightScreen * pitch && cursor.posX != widthScreen* bytesPerPixel)
 		if(c == '\n'){
 			i+= (((widthScreen*bytesPerPixel - cursor.posX) / bytesPerPixel) / getCurrentFont(&global_font_manager).size.width);
+			vdNewLine();
 		}
-		vdPrintChar(c);		
+		else	
+			vdPrintChar(c);		
 	}
 	if(cursor.posY == heightScreen * pitch && cursor.posX == widthScreen* bytesPerPixel)
 		scroll(1);
@@ -205,9 +209,13 @@ void ncPrintBase(uint64_t value, uint32_t base)
 void clearScreen(){
 	memset(framebuffer,0,bytesPerPixel * heightScreen * widthScreen);
 	vdSetCursor(0,0);
-	memset(charsInScreen,0,maxCharsInScreen);
-	//vdPrintCursor();
 }
+
+void clearBuffer(){
+	memset(charsInScreen,0,maxCharsInScreen);
+}
+
+
 
 void updateCharsInScreen(int lines){
 	for(int i=lines * (widthScreen/getCurrentFont(&global_font_manager).size.width),j=0;i<maxCharsInScreen;i++)
