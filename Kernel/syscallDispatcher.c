@@ -9,7 +9,7 @@ int nanosleep(uint64_t rdi, uint64_t rsi);     // rdi : seconds, rsi : milisecon
 int saveregs(void);
 int read(uint64_t fd, char * buf, uint64_t count);
 int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor);
-int sound(uint64_t secs);
+int sound(uint64_t ticks);
 
 void saveRegsInBuffer(uint64_t* buf);
 
@@ -63,8 +63,8 @@ int saveregs(){
     return 0;
 }
 
-int sound(uint64_t secs){
-    beep(secs);
+int sound(uint64_t ticks){
+    beep(ticks);
     return 0;
 }
 

@@ -30,8 +30,8 @@ extern int inb(int memPos);
  }
  
  //Make a beep
- void beep(uint64_t secs) {
+ void beep(uint64_t ticks) {
  	 playSound(500);
- 	 sleep(secs);
+ 	 sleep(ticks);
  	 nosound();
  }
