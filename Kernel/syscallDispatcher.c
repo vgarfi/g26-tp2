@@ -20,6 +20,8 @@ uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r1
         case 0: return read(rdi, (char *)rsi, rdx);
         case 1: return write(rdi, (char *)rsi, rdx, r10);
         case 3: return saveregs();
+        case 30: return printRect(rdi);
+        case 40: return setCursor(rdi, rsi);
         case 128: return sound(rdi);
         case 162: return nanosleep(rdi, rsi);
         default: return -1;
@@ -32,7 +34,8 @@ int read(uint64_t fd, char * buf, uint64_t count) {
     }
     uint64_t sizeRead=0;
     unsigned char lastRead='\0';
-    while(sizeRead!=count && lastRead!='\n'){
+    int startTick = ticks_elapsed();
+    while(sizeRead!=count && lastRead!='\n' && ticks_elapsed() <= startTick){
         if(!isBufferEmpty()) {   // If there are chars in buffer, we read them
             lastRead = readBuf();
             buf[sizeRead++] = lastRead;
@@ -55,6 +58,16 @@ int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor){
     return i;
 }
 
+int printRect(uint32_t hexColor) {
+    vdPrintRect(hexColor);
+    return 0;
+}
+
+int setCursor(uint64_t x, uint64_t y) {
+    vdSetCursor(x, y);
+    return 0;
+}
+
 /** registers is a buffer of 17 qwords to save registers in the next order:
  *  RAX RBX RCX RDX RSI RDI RBP RSP R8 R9 R10 R11 R12 R13 R14 R15 RIP
  */
@@ -73,6 +86,7 @@ int nanosleep(uint64_t rdi, uint64_t rsi){
     if(rdi<0 || rsi<0)
         return -1;
     int secondsToTicks = rdi*18, msToTicks=rsi;
-    sleep(rdi*18);
+    int totalTicks = secondsToTicks + msToTicks;
+    sleep(totalTicks);
     return 0;
 }
