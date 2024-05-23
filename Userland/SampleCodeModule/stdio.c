@@ -8,7 +8,7 @@ unsigned char getchar(void){
 }
 
 int putchar(unsigned char c){
-    writeScreen(STDOUT, &c, 1);
+    writeScreen(STDOUT, &c, 1, (uint64_t)0x00FFFFFF);
     return c;
 }
 

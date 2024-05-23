@@ -8,7 +8,7 @@
 int nanosleep(uint64_t rdi, uint64_t rsi);     // rdi : seconds, rsi : miliseconds
 int saveregs(void);
 int read(uint64_t fd, char * buf, uint64_t count);
-int write(uint64_t fd, char * buf, uint64_t count);
+int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor);
 int sound(uint64_t secs);
 
 void saveRegsInBuffer(uint64_t* buf);
@@ -18,7 +18,7 @@ uint64_t registers[17]={0};
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
     switch(rax){
         case 0: return read(rdi, (char *)rsi, rdx);
-        case 1: return write(rdi, (char *)rsi, rdx);
+        case 1: return write(rdi, (char *)rsi, rdx, r10);
         case 3: return saveregs();
         case 128: return sound(rdi);
         case 162: return nanosleep(rdi, rsi);
@@ -43,13 +43,15 @@ int read(uint64_t fd, char * buf, uint64_t count) {
     return sizeRead == count? count : sizeRead-1;    // If we return sizeRead-1 it means we stopped at '\n'
 }
 
-int write(uint64_t fd, char * buf, uint64_t count){
+int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor){
     if(fd!=STDOUT)  // Only can write in STDOUT
         return 0;
     int i;
+    char toPrint[2]={0,0};
     for(i=0; i<count; i++){
-        vdPrintChar(buf[i]);
-    } 
+        toPrint[0]=buf[i];
+        vdPrint(toPrint, hexColor);
+    }
     return i;
 }
 

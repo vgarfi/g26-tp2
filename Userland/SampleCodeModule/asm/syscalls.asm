@@ -10,6 +10,7 @@ readScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToRead
     ret
 
 writeScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToPrint
+    mov r10, rcx
     mov rax, 1
     int 80h
     ret
