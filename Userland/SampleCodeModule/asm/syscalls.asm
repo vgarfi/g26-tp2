@@ -9,7 +9,7 @@ readScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToRead
     int 80h
     ret
 
-writeScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToPrint
+writeScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToPrint, R10: colorHex
     mov r10, rcx
     mov rax, 1
     int 80h
