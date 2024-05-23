@@ -3,5 +3,5 @@
 #define __ELIMINATOR_GAME_H__
 
 void eliminatorGame(void);
-
+void printWall(void);
 #endif

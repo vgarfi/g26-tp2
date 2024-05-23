@@ -8,7 +8,6 @@
 #include "globals.h"
 #include <time.h>
 #include <defs.h>
-#include <eliminatorGame.h>
 
 
 void load_idt(void);
@@ -138,7 +137,6 @@ int main() {
 
 	ncPrint("[Finished]");
 
-	eliminatorGame();
 	
 	while(1)
 		_hlt();

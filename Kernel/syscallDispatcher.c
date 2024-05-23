@@ -20,7 +20,8 @@ uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r1
         case 0: return read(rdi, (char *)rsi, rdx);
         case 1: return write(rdi, (char *)rsi, rdx, r10);
         case 3: return saveregs();
-        case 30: return printRect(rdi);
+        case 30: return clearScreen();
+        case 31: return printRect(rdi);
         case 40: return setCursor(rdi, rsi);
         case 128: return sound(rdi);
         case 162: return nanosleep(rdi, rsi);
@@ -56,6 +57,11 @@ int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor){
         vdPrint(toPrint, hexColor);
     }
     return i;
+}
+
+int clearScreen() {
+    vdClearScreen();
+    return 0;
 }
 
 int printRect(uint32_t hexColor) {

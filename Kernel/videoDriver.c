@@ -206,7 +206,7 @@ void ncPrintBase(uint64_t value, uint32_t base)
 
 
 */
-void clearScreen(){
+void vdClearScreen(){
 	memset(framebuffer,0,bytesPerPixel * heightScreen * widthScreen);
 	vdSetCursor(0,0);
 }

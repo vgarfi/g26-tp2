@@ -25,7 +25,6 @@ extern int inb(int memPos);
  //make it shut up
  static void nosound() {
  	uint8_t tmp = inb(0x61) & 0xFC;
- 
  	outb(0x61, tmp);
  }
  
