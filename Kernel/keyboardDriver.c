@@ -58,9 +58,11 @@ void updateBuffer() {
     if(arrowValue || (!shiftHandler(scancode) && scancode < MAX_SCANCODE)) { // Agregamos los caracteres, con su modificación correspondiente ante un shift
         dataStatus = 1;
         char c = (arrowValue != 0)? arrowValue : scancodesChars[shift][scancode];
-        bufferPos = bufferPos % MAXSIZE;
         buffer[bufferPos++] = c;
         ncPrintChar(c); // TODO simplemente eliminar esto
+        if (bufferPos >= MAXSIZE) {
+            bufferPos = 0;
+        }
     }
 }
 
@@ -75,17 +77,18 @@ void cleanBuffer(){
 unsigned char readBuf () {
     if(isBufferEmpty())
         return 0;
-    readPos = readPos % MAXSIZE;
-    return buffer[readPos++];
-}
+    
+    unsigned char ans = buffer[0];
+    for(int i=0; i<bufferPos-1; i++)
+        buffer[i]=buffer[i+1];
+
+    bufferPos--;
+    return ans;
+}   
 
 char readLastCharacter() {
-    if(dataStatus)
-        if(bufferPos > 1){
-            return buffer[bufferPos-1];
-        }
-        else {
-            return buffer[MAX_SCANCODE-1];
-        }
+    if(bufferPos > 1){
+        return buffer[bufferPos-1];
+    }
     return 0;
 }
