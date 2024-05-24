@@ -1,6 +1,5 @@
 #include <defs.h>
 #include <fonts.h>
-#include <globals.h>
 
 
 unsigned const char* fonts[] = {fontBitMap_8x12, fontBitMap_8x16, fontBitMap_16x32};
@@ -14,27 +13,27 @@ const FontBitmap fb1 = {fontBitMap_16x32, {16,32}};
 const FontBitmap fb2 = {fontBitMap_8x16, {8,16}};
 const FontBitmap fb3 = {fontBitMap_8x12, {8,12}};
 
+static FontManager global_font_manager;
+
 // Función para inicializar el FontManager
-void initFontManager(FontManager *manager) {
+void initFontManager() {
     for (int i = 0; i < FONTS_QUANTITY; i++) {
-        manager->fonts[i].bitmap = fonts[i];
-        manager->fonts[i].size.width = sizes[i].width;
-        manager->fonts[i].size.height = sizes[i].height;
+        global_font_manager.fonts[i].bitmap = fonts[i];
+        global_font_manager.fonts[i].size.width = sizes[i].width;
+        global_font_manager.fonts[i].size.height = sizes[i].height;
     }
 	
-    manager->currentFontIndex = DEFAULT_FONT;
-	global_font_manager = *manager;
+    global_font_manager.currentFontIndex = DEFAULT_FONT;
 }
 
 // Función para seleccionar un font
-void setCurrentFont(FontManager *manager, int index) {
+void setCurrentFont(int index) {
     if (index >= 0 && index < FONTS_QUANTITY) {
-        manager->currentFontIndex = index;
-    }
-	global_font_manager = *manager;
+        global_font_manager.currentFontIndex = index;
+    } 
 }
 
 // Función para obtener el font actual
-FontBitmap getCurrentFont(FontManager *manager) {
+FontBitmap getCurrentFont() {
     return global_font_manager.fonts[global_font_manager.currentFontIndex];
 }

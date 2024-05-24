@@ -1,7 +1,6 @@
 #include <videoDriver.h>
 #include <defs.h>
 #include <fonts.h>
-#include <globals.h>
 #include <lib.h>
 
 //static char buffer[64] = { '0' };
@@ -34,8 +33,8 @@ void initializeVideoDriver(){
 
 
 void vdPrintRect(uint32_t hexColor){
-	int y2 = getCurrentFont(&global_font_manager).size.height;
-	int width = getCurrentFont(&global_font_manager).size.width;
+	int y2 = getCurrentFont().size.height;
+	int width = getCurrentFont().size.width;
 	uint64_t offset = cursor.posX + cursor.posY;
 	for(int y1=0;y1 < y2;y1++,offset+=pitch){
 		vdPrintLine(offset,hexColor,hexColor,255,width,bytesPerPixel);
@@ -43,21 +42,21 @@ void vdPrintRect(uint32_t hexColor){
 }
 
 void vdUpdateCursor(int x, int y){
-	cursor.posX += x * bytesPerPixel * getCurrentFont(&global_font_manager).size.width;
-	cursor.posY += y * pitch * getCurrentFont(&global_font_manager).size.height;
+	cursor.posX += x * bytesPerPixel * getCurrentFont().size.width;
+	cursor.posY += y * pitch * getCurrentFont().size.height;
 }
 
 void vdPrintCursor(){
 	if(cursor.posX == widthScreen* bytesPerPixel){
 			cursor.posX = 0;
-			cursor.posY += getCurrentFont(&global_font_manager).size.height * pitch;
+			cursor.posY += getCurrentFont().size.height * pitch;
 	}
 	vdPrintRect(0x00FFFFFF);
 }
 
 void vdSetCursor(int x, int y){
-	cursor.posX = x * bytesPerPixel * getCurrentFont(&global_font_manager).size.width;
-	cursor.posY = y * pitch * getCurrentFont(&global_font_manager).size.height;
+	cursor.posX = x * bytesPerPixel * getCurrentFont().size.width;
+	cursor.posY = y * pitch * getCurrentFont().size.height;
 }
 
 void vdNewLine(){
@@ -67,7 +66,7 @@ void vdNewLine(){
 //		vdPrintChar(' ');
 //	}
 	cursor.posX = 0;
-	cursor.posY += pitch * getCurrentFont(&global_font_manager).size.height;
+	cursor.posY += pitch * getCurrentFont().size.height;
 }
 
 void vdPutPixel(uint64_t offset,uint32_t hexColor){
@@ -91,7 +90,7 @@ void vdPrintLine(uint64_t offset,uint32_t fgColor,uint32_t bgColor ,uint8_t mask
 }
 
 void vdPrintChar(unsigned char c) {
-	FontBitmap fontBitMap = getCurrentFont(&global_font_manager);
+	FontBitmap fontBitMap = getCurrentFont();
 	unsigned char* bitmap = fontBitMap.bitmap;
 	int width = fontBitMap.size.width;
 	int height = fontBitMap.size.height;
@@ -150,7 +149,7 @@ void vdDeleteChar(){
 		vdSetCursor(0,0);
 	}
 	else if(cursor.posX == 0){
-		vdUpdateCursor(widthScreen / getCurrentFont(&global_font_manager).size.width - 1,-1);
+		vdUpdateCursor(widthScreen / getCurrentFont().size.width - 1,-1);
 	}
 	else{
 	vdUpdateCursor(-1,0);
@@ -163,12 +162,12 @@ void vdDeleteChar(){
 
 void resize(){
 	clearScreen();
-	int limit = (widthScreen/getCurrentFont(&global_font_manager).size.width) * (heightScreen/getCurrentFont(&global_font_manager).size.height);
+	int limit = (widthScreen/getCurrentFont().size.width) * (heightScreen/getCurrentFont().size.height);
 	for(int i = 0,j=0;i < limit;i++,j++){
 		char c = charsInScreen[j];
 		if(cursor.posY != heightScreen * pitch && cursor.posX != widthScreen* bytesPerPixel)
 		if(c == '\n'){
-			i+= (((widthScreen*bytesPerPixel - cursor.posX) / bytesPerPixel) / getCurrentFont(&global_font_manager).size.width);
+			i+= (((widthScreen*bytesPerPixel - cursor.posX) / bytesPerPixel) / getCurrentFont().size.width);
 			vdNewLine();
 		}
 		else	
@@ -218,12 +217,12 @@ void clearBuffer(){
 
 
 void updateCharsInScreen(int lines){
-	for(int i=lines * (widthScreen/getCurrentFont(&global_font_manager).size.width),j=0;i<maxCharsInScreen;i++)
+	for(int i=lines * (widthScreen/getCurrentFont().size.width),j=0;i<maxCharsInScreen;i++)
 		charsInScreen[j++] = charsInScreen[i];
 }
 
 void scroll(int lines) {
-    int fontHeight = getCurrentFont(&global_font_manager).size.height;
+    int fontHeight = getCurrentFont().size.height;
     int offset = lines * fontHeight * widthScreen * bytesPerPixel;
     int frameSize = bytesPerPixel * widthScreen * (heightScreen - lines * fontHeight);
     int clearSize = bytesPerPixel * widthScreen * lines * fontHeight;

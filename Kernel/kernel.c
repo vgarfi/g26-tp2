@@ -5,7 +5,6 @@
 #include <naiveConsole.h>
 #include <videoDriver.h>
 #include <fonts.h>
-#include "globals.h"
 #include "include/time.h"
 #include <defs.h>
 
@@ -31,7 +30,6 @@ static void * const sampleDataModuleAddress = (void*)0x500000;
 typedef int (*EntryPoint)();
 
 #define INITIAL_STRING "TPE - Arquitectura de Computadoras - Grupo 9"
-FontManager global_font_manager;
 
 void printHeader() {
 	// for (size_t i = 0; INITIAL_STRING[i] != 0; i++) {
@@ -115,8 +113,7 @@ int main() {
 	ncNewline();
 	ncPrint(toRead);
 	
-	initFontManager(&global_font_manager);
-	setCurrentFont(&global_font_manager, S_FONT);
+	initFontManager();
 	printHeader();
 	ncPrint("[Kernel Main]");
 	ncNewline();

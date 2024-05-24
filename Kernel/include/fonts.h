@@ -3,7 +3,6 @@
 ****************************************************/
 
 #include <bytes.h>
-#include "globals.h"
 
 #ifndef FONT_H
 #define FONT_H
@@ -14,7 +13,7 @@
 #define M_FONT			1
 #define B_FONT			2
 
-#define DEFAULT_FONT	M_FONT
+#define DEFAULT_FONT	B_FONT
 
 typedef struct {
 	int width;
@@ -46285,8 +46284,8 @@ static const unsigned char fontBitMap_8x12[] = {
 };
 
 
-void initFontManager(FontManager *manager);
-void setCurrentFont(FontManager *manager, int index);
-FontBitmap getCurrentFont(FontManager *manager);
+void initFontManager();
+void setCurrentFont(int index);
+FontBitmap getCurrentFont();
 
 #endif
