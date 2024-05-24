@@ -2,11 +2,7 @@
 #include "include/syscalls.h"
 #include "include/eliminatorGame.h"
 #include "include/string.h"
-
-
-#define RED 0xFF0000
-#define GREEN 0x00FF00
-#define BLUE 0x0000FF
+#include "include/colors.h"
 
 #define PROV_WIDTH          128
 #define PROV_HEIGHT         64
@@ -69,7 +65,7 @@ void playground(){
             lastDirectionP1 = LEFT;
         } else if (keyPressed == 'd') {
             lastDirectionP1 = RIGHT;
-        }
+        } 
 
         updateSnakeHead(&snakeHeadP1, lastDirectionP1);
     }
