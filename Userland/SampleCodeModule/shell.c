@@ -3,18 +3,20 @@
 #include "include/stdio.h"
 #include "include/string.h"
 #include "include/colors.h"
+#include "include/syscalls.h"
 
-#define HELPLENGTH 7
+#define HELPLENGTH 8
 
 static char* helpText[]={"Command information is displayed below:\n",
-"HELP                ->      Shows a description on each available command.\n\n"
-"DIVBYZERO           ->      Shows handling in case of division by zero.\n\n",
-"INVALIDOPCODE       ->      Shows handling in case of an invalid operation code.\n\n"
-"ZOOMIN              ->      Enlarges text size on screen. In case maximum size is reached,\n                            it is properly indicated without making any changes.\n\n", // See if it can also be accesed via keyboard
-"ZOOMOUT             ->      Reduces text size on screen. In case minimum size is reached,\n                            it is properly indicated without making any changes.\n\n", 
-"TIME                ->      Shows current time in HH:MM:SS format.\n\n",
-"DATE                ->      Shows current date in DD/MM/YY format.\n\n", // Check whether to show it in this format or DD/MM/YYYY
-"ELIMINATOR          ->      Opens ELIMINATOR game.\n\n"
+"HELP                ->      Shows a description on each available command.\n"
+"DIVBYZERO           ->      Shows handling in case of division by zero.\n",
+"INVALIDOPCODE       ->      Shows handling in case of an invalid operation code.\n"
+"ZOOMIN              ->      Enlarges text size on screen. In case maximum size is reached,\n                            it is properly indicated without making any changes.\n", // See if it can also be accesed via keyboard
+"ZOOMOUT             ->      Reduces text size on screen. In case minimum size is reached,\n                            it is properly indicated without making any changes.\n", 
+"TIME                ->      Shows current time in HH:MM:SS format.\n",
+"DATE                ->      Shows current date in DD/MM/YY format.\n", // Check whether to show it in this format or DD/MM/YYYY
+"ELIMINATOR          ->      Opens ELIMINATOR game.\n",
+"CLEAR               ->      Clears the screen\n" 
 };    
 
 int init(){
@@ -33,6 +35,9 @@ int init(){
             print("\nLoading eliminator...");
             sleep(2,0);
             eliminatorGame();
+        }
+        else if(strcasecmp(commandPrompt, "clear")==0){
+            clearScreen();
         }
         else{
             print(commandPrompt); 
