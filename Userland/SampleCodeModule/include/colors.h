@@ -9,6 +9,6 @@
 #define BLUE 0x000000FF
 #define YELLOW 0x00FFFF00
 
-#define DEFAULT WHITE
+#define DEFAULT GREY
 
 #endif
