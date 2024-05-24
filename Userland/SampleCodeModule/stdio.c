@@ -42,7 +42,7 @@ int scanf(char * buffer, int size){
     if(size==0)
         return 0;
     unsigned char read=0;
-    int readSize=0;
+    int readSize=0, printedSize=0;
     while(read!='\n'){
         read=getchar();
         if(!readSizeFlag)
@@ -60,14 +60,17 @@ int scanf(char * buffer, int size){
             putchar(read);  // Newline
         }
         else if(read=='\b' && readSize!=0){
-            readSize--;
-            buffer[readSize]=0;
+            if(readSize>=printedSize)
+                readSize--;
+                buffer[readSize]=0;
             putchar(read);  // Backspace
+            printedSize--;
         }
         else if(isPrintable(read)){       // Printable Character
             if(readSize!=size)
                 buffer[readSize++]=read;
             putchar(read);
+            printedSize++;
         }
     }
     return readSize;
