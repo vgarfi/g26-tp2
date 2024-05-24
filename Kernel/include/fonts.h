@@ -13,7 +13,7 @@
 #define M_FONT			1
 #define B_FONT			2
 
-#define DEFAULT_FONT	B_FONT
+#define DEFAULT_FONT	S_FONT
 
 typedef struct {
 	int width;
