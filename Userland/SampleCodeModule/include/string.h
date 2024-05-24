@@ -1,7 +1,7 @@
 #ifndef __STRING_H_
 #define __STRING_H_
 
-#define LOWERCASEDIFF 20
+#define LOWERCASEDIFF 32
 
 /**
  * Returns length of the received string

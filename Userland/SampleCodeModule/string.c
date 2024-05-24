@@ -1,4 +1,5 @@
 #include "include/string.h"
+#include "include/stdio.h"
 
 static void toLower(char * str);
 
@@ -43,7 +44,7 @@ int strcasecmp(const char * str1, const char * str2){
 static void toLower(char * str){
     for(int i=0; str[i]!='\0'; i++){
         if(str[i]>='A' && str[i]<='Z'){
-            str[i]-=LOWERCASEDIFF;
+            str[i]+=LOWERCASEDIFF;
         }
     }
 }
