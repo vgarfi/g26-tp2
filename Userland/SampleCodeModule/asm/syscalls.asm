@@ -4,7 +4,8 @@ GLOBAL sleep
 GLOBAL clearScreen
 GLOBAL printRectangle
 GLOBAL setCursorPosition
-
+GLOBAL getTime
+GLOBAL getDate
 GLOBAL beepSound
 
 section .text
@@ -41,5 +42,15 @@ setCursorPosition:
 
 beepSound:
     mov rax, 128
+    int 80h
+    ret
+
+getTime:
+    mov rax, 5
+    int 80h
+    ret
+
+getDate:
+    mov rax, 6
     int 80h
     ret

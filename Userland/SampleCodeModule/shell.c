@@ -7,7 +7,7 @@
 
 #define HELPLENGTH 8
 
-static char* helpText[]={"Command information is displayed below:\n",
+static char* helpText[]={"Command information is displayed below:\n\n",
 "HELP                ->      Shows a description on each available command.\n"
 "DIVBYZERO           ->      Shows handling in case of division by zero.\n",
 "INVALIDOPCODE       ->      Shows handling in case of an invalid operation code.\n"
@@ -17,11 +17,12 @@ static char* helpText[]={"Command information is displayed below:\n",
 "DATE                ->      Shows current date in DD/MM/YY format.\n", // Check whether to show it in this format or DD/MM/YYYY
 "ELIMINATOR          ->      Opens ELIMINATOR game.\n",
 "CLEAR               ->      Clears the screen\n" 
-};    
+};
 
 int init(){
     printColor("Welcome to Shell! Type HELP for command information.\n\n", YELLOW);
     char commandPrompt[32]={0};
+    char* aux;
     while(1){
         printColor("$", GREEN);
         print("> ");
@@ -38,6 +39,16 @@ int init(){
         }
         else if(strcasecmp(commandPrompt, "clear")==0){
             clearScreen();
+        }
+        else if(strcasecmp(commandPrompt, "time")==0){
+            aux=getTime();
+            print(aux);
+            putchar('\n');
+        }
+        else if(strcasecmp(commandPrompt, "date")==0){
+            aux=getDate();
+            print(aux);
+            putchar('\n');
         }
         else{
             print(commandPrompt); 
