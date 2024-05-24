@@ -6,7 +6,7 @@
 #include <videoDriver.h>
 #include <fonts.h>
 #include "globals.h"
-#include <time.h>
+#include "include/time.h"
 #include <defs.h>
 
 

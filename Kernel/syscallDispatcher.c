@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <defs.h>
 #include <videoDriver.h>
-#include <time.h>
+#include "include/time.h"
 #include <keyboard.h>
 #include <interrupts.h>
 
@@ -10,6 +10,8 @@ int saveregs(void);
 int read(uint64_t fd, char * buf, uint64_t count);
 int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor);
 int sound(uint64_t ticks);
+char * time(void);
+char * date(void);
 
 void saveRegsInBuffer(uint64_t* buf);
 
@@ -20,6 +22,8 @@ uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r1
         case 0: return read(rdi, (char *)rsi, rdx);
         case 1: return write(rdi, (char *)rsi, rdx, r10);
         case 3: return saveregs();
+        case 5: return time();
+        case 6: return date();
         case 30: return clearScreen();
         case 31: return printRect(rdi);
         case 40: return setCursor(rdi, rsi);
@@ -87,7 +91,7 @@ int sound(uint64_t ticks){
     return 0;
 }
 
-// rdi = seconds, rsi = miliseconds
+// rdi = seconds, rsi = ticks
 int nanosleep(uint64_t rdi, uint64_t rsi){
     if(rdi<0 || rsi<0)
         return -1;
@@ -95,4 +99,12 @@ int nanosleep(uint64_t rdi, uint64_t rsi){
     int totalTicks = secondsToTicks + msToTicks;
     sleep(totalTicks);
     return 0;
+}
+
+char * time(void){
+    return getCurrentTime();
+}
+
+char * date(void){
+    return getCurrentDate();
 }
