@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "include/syscalls.h"
 #include "include/eliminatorGame.h"
+#include "include/string.h"
 
 
 #define RED 0xFF0000
@@ -30,6 +31,8 @@ SnakeHead snakeHeadP1;
 SnakeHead snakeHeadP2;
 
 void eliminatorGame () {
+    clearScreen();
+    
     snakeHeadP1.x = PROV_WIDTH/2;
     snakeHeadP1.y = PROV_HEIGHT/2 - PROV_HEIGHT/4;
     snakeHeadP1.color = GREEN;
