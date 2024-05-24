@@ -1,6 +1,8 @@
 #ifndef __STDIO_H_
 #define __STDIO_H_
 
+#include <stdint.h>
+
 #define STDIN 0
 #define STDOUT 1
 #define STDERR 2
@@ -18,10 +20,18 @@ unsigned char getchar(void);
 int putchar(unsigned char c);
 
 /**
- * Receives a string as a parameter 
- * Writes the string on STDOUT
+ * Receives a string and a hexcode as parameters
+ * Writes the string on STDOUT in the received hexColor
  * Returns the length of the written string
 */
+
+int printColor(char* str, uint64_t hexColor);
+
+/**
+ * Receives a string as a parameter 
+ * Similar to printColor but uses DEFAULT as hexColor (defined in color.h)
+*/
+
 int print(char * str);
 
 /**
@@ -31,5 +41,7 @@ int print(char * str);
  * Returns the number of chars read.
 */
 int scanf(char * buffer, int size);
+
+
 
 #endif

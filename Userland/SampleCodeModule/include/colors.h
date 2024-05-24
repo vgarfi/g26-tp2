@@ -7,5 +7,8 @@
 #define WHITE 0x00FFFFFF
 #define BLACK 0x00000000
 #define BLUE 0x000000FF
+#define YELLOW 0x00FFFF00
+
+#define DEFAULT WHITE
 
 #endif

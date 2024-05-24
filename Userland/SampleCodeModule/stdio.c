@@ -1,5 +1,6 @@
 #include "include/stdio.h"
 #include "include/syscalls.h"
+#include "include/colors.h"
 
 /**
  * readSizeFlag is used as a way of identifying whether
@@ -7,6 +8,8 @@
  * or not
 */
 static int readSizeFlag=0;
+
+static uint64_t hexcol=DEFAULT;   // default shell color
 
 static int isPrintable(unsigned char c);
 
@@ -17,16 +20,22 @@ unsigned char getchar(void){
 }
 
 int putchar(unsigned char c){
-    writeScreen(STDOUT, &c, 1, (uint64_t)0x00FFFFFF);
+    writeScreen(STDOUT, &c, 1, hexcol);
     return c;
 }
 
-int print(char * str){
+int printColor(char* str, uint64_t hexColor){
+    hexcol=hexColor;
     int i;
     for(i=0;str[i]!='\0';i++){
         putchar(str[i]);
     }
+    hexcol=DEFAULT;
     return i;
+}
+
+int print(char * str){
+    printColor(str, DEFAULT);
 }
 
 int scanf(char * buffer, int size){
