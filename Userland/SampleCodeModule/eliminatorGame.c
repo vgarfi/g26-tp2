@@ -315,10 +315,10 @@ void printEliminatorTitle() {
         "10001\n"
     };
 
-    int startX = PROV_WIDTH / 2 - 4 * 9 / 2; // Centra la palabra en la pantalla
+    int startX = PROV_WIDTH / 2 - (4 + 3) * 10 / 2; // Centra la palabra en la pantalla, 4 = anchp de letra, 3 = espacio entre letras
     int startY = PROV_HEIGHT / 2 - 5 / 2;
 
-    for (int l = 0; l < 9; l++) {
+    for (int l = 0; l <= 9; l++) {
         int x = startX + l * 7; // 6 permite un espacio entre las letras
         int y = startY;
 
@@ -368,6 +368,8 @@ void showMenu(){
         clearScreen();
         printWall();
         play2();
+    } else if (option == 27){
+        clearScreen();
     }
 
 }
