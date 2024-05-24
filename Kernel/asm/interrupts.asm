@@ -16,11 +16,11 @@ GLOBAL _irq05Handler
 GLOBAL _exception0Handler
 
 GLOBAL _syscallHandler
-
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 EXTERN syscallDispatcher
 
+EXTERN vdClearScreen
 SECTION .text
 
 %macro pushState 0
@@ -73,15 +73,36 @@ SECTION .text
 	iretq
 %endmacro
 
-
-
+   
+   
 %macro exceptionHandler 1
 	pushState
+	push rbp
+	mov rbp,rsp
 
 	mov rdi, %1 ; pasaje de parametro
 	call exceptionDispatcher
+	push rax
+	xor rax ,rax
+loop: in al,0x64
+	mov cl,al
+	and al,0x01
+	cmp al,0
+	je loop
+	mov al, 20h
+	out 20h, al
+	pop rax
+	call vdClearScreen
+	mov rsp,rbp
+	pop rbp
 
+	
 	popState
+	push rax 
+	mov rax,[rsp+8]
+	add al,3
+	mov [rsp +8],rax
+	pop rax
 	iretq
 %endmacro
 
