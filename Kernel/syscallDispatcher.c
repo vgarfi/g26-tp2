@@ -28,8 +28,13 @@ uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r1
         case 6: return date();
         case 7: return incSize();
         case 8: return decSize();
+        case 20: return upArrowValue();
+        case 21: return leftArrowValue();
+        case 22: return downArrowValue();
+        case 23: return rightArrowValue();
         case 30: return clearScreen();
         case 31: return printRect(rdi);
+        case 32: return printSquare(rdi, rsi);
         case 40: return setCursor(rdi, rsi);
         case 128: return sound(rdi);
         case 162: return nanosleep(rdi, rsi);
@@ -67,6 +72,22 @@ int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor){
     return i;
 }
 
+int upArrowValue() {    
+    return kbUpArrowValue();
+}
+
+int leftArrowValue() {
+    return kbLeftArrowValue();
+}
+
+int downArrowValue() {
+    return kbDownArrowValue();
+}
+
+int rightArrowValue() {
+    return kbRightArrowValue();
+}
+
 int clearScreen() {
     vdClearScreen();
     return 0;
@@ -74,6 +95,11 @@ int clearScreen() {
 
 int printRect(uint32_t hexColor) {
     vdPrintRect(hexColor);
+    return 0;
+}
+
+int printSquare (int side, uint32_t hexColor){
+    vdPrintSquare(side, hexColor);
     return 0;
 }
 

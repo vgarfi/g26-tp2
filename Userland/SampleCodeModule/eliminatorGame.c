@@ -8,10 +8,12 @@
 #define PROV_HEIGHT         64
 
 #define TICKS_PER_FRAME     1
-#define MS_PER_FRAME        2800000
+#define MS_PER_FRAME        1500000
 
 #define BLOCKED 1
-#define FREE 0
+#define FREE 
+
+#define CRASHED 1
 
 enum Direction {UP, DOWN, LEFT, RIGHT};
 
@@ -25,6 +27,14 @@ typedef struct {
 
 SnakeHead snakeHeadP1;
 SnakeHead snakeHeadP2;
+
+int didCrashed = 0;
+int lastDirectionP1 = RIGHT;
+
+int scoreP1 = 0;
+int scoreP2 = 0;
+
+int decideSnakeDirection (int lastDirection, int upArrowValue, int downArrowValue, int leftArrowValue, int rightArrowValue, unsigned char keyPressed);
 
 void eliminatorGame () {
     clearScreen();
@@ -40,47 +50,120 @@ void eliminatorGame () {
     showMenu();
 }
 
-void playground(){
-     int crashed = 0;
-    int lastDirectionP1 = RIGHT;
+void playAlone() {
+    unsigned char finishKey;
+    while (finishKey != 27) {
+        printWall();
+        while (didCrashed != CRASHED) {
+            setCursorPosition(snakeHeadP1.x, snakeHeadP1.y);
+            //printSquare(8, snakeHeadP1.color);
+            printRectangle(snakeHeadP1.color);
 
-    while (!crashed) {
-        setCursorPosition(snakeHeadP1.x, snakeHeadP1.y);
-        printRectangle(snakeHeadP1.color);
+            if (board[snakeHeadP1.x][snakeHeadP1.y] == BLOCKED) {
+                didCrashed = CRASHED;
+            }
 
-        
-        if (board[snakeHeadP1.x][snakeHeadP1.y] == BLOCKED) {
-            crashed = 1;
+            board[snakeHeadP1.x][snakeHeadP1.y] = BLOCKED;
+
+            unsigned char keyPressed = getchar();
+            
+            lastDirectionP1 = decideSnakeDirection(lastDirectionP1, 'w', 's', 'a', 'd', keyPressed);
+            // TODO ver por qué se acelera
+            updateSnakeHead(&snakeHeadP1, lastDirectionP1);
         }
 
-        board[snakeHeadP1.x][snakeHeadP1.y] = BLOCKED;
-
-        unsigned char keyPressed = getchar();
-
-        if (keyPressed == 'w') {
-            lastDirectionP1 = UP;
-        } else if (keyPressed == 's') {
-            lastDirectionP1 = DOWN;
-        } else if (keyPressed == 'a') {
-            lastDirectionP1 = LEFT;
-        } else if (keyPressed == 'd') {
-            lastDirectionP1 = RIGHT;
-        } 
-
-        updateSnakeHead(&snakeHeadP1, lastDirectionP1);
-    }
-
-    if (crashed) {
         beepSound(3);
+        p1Died();
+        didCrashed = 0;
+
+
+        for (size_t i = 0; i < 30 && (finishKey != 27 && finishKey != 'r'); i++) { // TODO se debe manejar con nanosleep o ticksElapsed
+            finishKey = getchar();
+            wait();
+        }
+
+        if (finishKey == 27) {
+            scoreP1 = 0;
+            clearScreen();
+            showMenu();
+        }
+        else {
+            scoreP1 = finishKey == 'r' ? 0 : scoreP1;
+            cleanBoard();
+            snakeHeadP1.x = PROV_WIDTH/2;
+            snakeHeadP1.y = PROV_HEIGHT/2 - PROV_HEIGHT/4;
+            setCursorPosition(snakeHeadP1.x, snakeHeadP1.y);
+            finishKey = 0;
+        }
     }
 }
+void p1Died() {
+    printRectangleProvParam(
+        PROV_WIDTH / 2 - 10, 
+        PROV_HEIGHT / 2 - 5, 
+        20, 
+        10, 
+        GREY
+    );
+    scoreP1++;
+    setCursorPosition(PROV_WIDTH / 2 - 5, PROV_HEIGHT / 2 - 3);
+    print("YOU DIED!");
+    setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2 - 1);
+    print("Press R to restart");
+    setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2);
+    print("Press ESC to exit");
+    setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2+1);
+    print("Your SCORE is ");
+    char score[10];
+    itoa(scoreP1, score);
+    print(score);
+    // TODO cambiar a texto tipo ELIMINTARO con la palabra YOU DIED!
+    
+}
+
+void cleanBoard() {
+    for (int i = 1; i < PROV_WIDTH; i++) {
+        for (int j = 1; j < PROV_HEIGHT; j++) {
+            board[i][j] = 0;
+        }
+    }
+    clearScreen();
+}
+
+void printRectangleProvParam(int startX, int startY, int width, int height, uint32_t color) {
+    for (int i = startX; i < startX + width; i++) {
+        for (int j = startY; j < startY + height; j++) {
+            setCursorPosition(i, j);
+            printRectangle(color);
+        }
+    }
+}
+
+int decideSnakeDirection (int lastDirection, int upArrowValue, int downArrowValue, int leftArrowValue, int rightArrowValue, unsigned char keyPressed) {
+    if (directionIsHorizontal(lastDirection)) {
+        if (keyPressed == upArrowValue) {
+            return UP;
+        } else if (keyPressed == downArrowValue) {
+            return DOWN;
+        }
+        else return lastDirection;
+    } else {
+        if (keyPressed == leftArrowValue) {
+            return LEFT;
+        } else if (keyPressed == rightArrowValue) {
+            return RIGHT;
+        }
+        else return lastDirection;
+    }
+}
+
 void play () {
-    int crashed = 0;
+    int didCrashed = 0;
     int lastDirectionP1 = RIGHT;
     int lastDirectionP2 = UP;
     int laps = 0;
 
-    while (!crashed) {
+    while (!didCrashed) {
         setCursorPosition(snakeHeadP1.x, snakeHeadP1.y);
         printRectangle(snakeHeadP1.color);
 
@@ -88,16 +171,17 @@ void play () {
         printRectangle(snakeHeadP2.color);
         
         if (board[snakeHeadP1.x][snakeHeadP1.y] == BLOCKED) {
-            crashed = 1;
+            didCrashed = 1;
         }
         if (board[snakeHeadP2.x][snakeHeadP2.y] == BLOCKED) {
-            crashed = 1;
+            didCrashed = 1;
         }
 
         board[snakeHeadP1.x][snakeHeadP1.y] = BLOCKED;
         board[snakeHeadP2.x][snakeHeadP2.y] = BLOCKED;
 
         unsigned char keyPressed = getchar();
+        
 
         if (keyPressed == 'w') {
             lastDirectionP1 = UP;
@@ -114,80 +198,80 @@ void play () {
         laps++;
     }
 
-    if (crashed) {
+    if (didCrashed) {
         beepSound(3);
     }
 }
 
-void play2(){
+// void play2(){
 
-    int crashed = 0;
-    int lastDirectionP1 = RIGHT;
-    int lastDirectionP2 = DOWN;
-    int laps = 0;
+//     int didCrashed = 0;
+//     int lastDirectionP1 = RIGHT;
+//     int lastDirectionP2 = DOWN;
+//     int laps = 0;
 
-    while (!crashed) {
-        setCursorPosition(snakeHeadP1.x, snakeHeadP1.y);
-        printRectangle(snakeHeadP1.color);
+//     while (!didCrashed) {
+//         setCursorPosition(snakeHeadP1.x, snakeHeadP1.y);
+//         printRectangle(snakeHeadP1.color);
 
-        setCursorPosition(snakeHeadP2.x, snakeHeadP2.y);
-        printRectangle(snakeHeadP2.color);
-        sleep(0, TICKS_PER_FRAME);
+//         setCursorPosition(snakeHeadP2.x, snakeHeadP2.y);
+//         printRectangle(snakeHeadP2.color);
+//         sleep(0, TICKS_PER_FRAME);
 
 
-        if (board[snakeHeadP1.x][snakeHeadP1.y] == BLOCKED) {
-            crashed = 1;
-        }
-        if (board[snakeHeadP2.x][snakeHeadP2.y] == BLOCKED) {
-            crashed = 1;
-        }
+//         if (board[snakeHeadP1.x][snakeHeadP1.y] == BLOCKED) {
+//             didCrashed = 1;
+//         }
+//         if (board[snakeHeadP2.x][snakeHeadP2.y] == BLOCKED) {
+//             didCrashed = 1;
+//         }
 
-        board[snakeHeadP1.x][snakeHeadP1.y] = BLOCKED;
-        board[snakeHeadP2.x][snakeHeadP2.y] = BLOCKED;
+//         board[snakeHeadP1.x][snakeHeadP1.y] = BLOCKED;
+//         board[snakeHeadP2.x][snakeHeadP2.y] = BLOCKED;
 
-        if (laps % 8 == 0) { // Cada 4 cambio la direc per codere
-            int ranDirect =  generateRandom(21, snakeHeadP1.x * snakeHeadP1.y);
-            if (directionIsHorizontal(lastDirectionP1)) {
-                if (ranDirect % 2) {
-                    lastDirectionP1 = UP;
-                } else {
-                    lastDirectionP1 = DOWN;
-                }
-            } else {
-                if (ranDirect % 2) {
-                    lastDirectionP1 = LEFT;
-                } else {
-                    lastDirectionP1 = RIGHT;
-                }
-            }
+//         if (laps % 8 == 0) { // Cada 4 cambio la direc per codere
+//             int ranDirect =  generateRandom(21, snakeHeadP1.x * snakeHeadP1.y);
+//             if (directionIsHorizontal(lastDirectionP1)) {
+//                 if (ranDirect % 2) {
+//                     lastDirectionP1 = UP;
+//                 } else {
+//                     lastDirectionP1 = DOWN;
+//                 }
+//             } else {
+//                 if (ranDirect % 2) {
+//                     lastDirectionP1 = LEFT;
+//                 } else {
+//                     lastDirectionP1 = RIGHT;
+//                 }
+//             }
 
-            ranDirect =  generateRandom(888, snakeHeadP2.x * snakeHeadP2.y);
-            if (directionIsHorizontal(lastDirectionP2)) {
-                if (ranDirect % 3) {
-                    lastDirectionP2 = UP;
-                } else {
-                    lastDirectionP2 = DOWN;
-                }
-            } else {
-                if (ranDirect % 3) {
-                    lastDirectionP2 = LEFT;
-                } else {
-                    lastDirectionP2 = RIGHT;
-                }
-            }
-        }
-        updateSnakeHead(&snakeHeadP1, lastDirectionP1);
-        updateSnakeHead(&snakeHeadP2, lastDirectionP2);
-        laps++;
-    }
+//             ranDirect =  generateRandom(888, snakeHeadP2.x * snakeHeadP2.y);
+//             if (directionIsHorizontal(lastDirectionP2)) {
+//                 if (ranDirect % 3) {
+//                     lastDirectionP2 = UP;
+//                 } else {
+//                     lastDirectionP2 = DOWN;
+//                 }
+//             } else {
+//                 if (ranDirect % 3) {
+//                     lastDirectionP2 = LEFT;
+//                 } else {
+//                     lastDirectionP2 = RIGHT;
+//                 }
+//             }
+//         }
+//         updateSnakeHead(&snakeHeadP1, lastDirectionP1);
+//         updateSnakeHead(&snakeHeadP2, lastDirectionP2);
+//         laps++;
+//     }
 
-    if (crashed) {
-        beepSound(3);
-    }
-}
-int generateRandom (int a, int b) {
-    return a * b + 1;
-}
+//     if (didCrashed) {
+//         beepSound(3);
+//     }
+// }
+// int generateRandom (int a, int b) {
+//     return a * b + 1;
+// }
 int directionIsHorizontal (int direction) {
     return direction == LEFT || direction == RIGHT;
 }
@@ -362,12 +446,10 @@ void showMenu(){
     
     if (option == '1') {
         clearScreen();
-        printWall();
-        playground();
+        playAlone();
     } else if (option == '2') {
         clearScreen();
-        printWall();
-        play2();
+        //play2();
     } else if (option == 27){
         clearScreen();
     }

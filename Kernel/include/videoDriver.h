@@ -61,6 +61,8 @@ void vdDeleteChar();
 void vdNewLine();
 void clearBuffer();
 void resize();
+
+void vdPrintSquare(int side, uint32_t hexColor);
 /*
 uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
 void ncPrintDec(uint64_t value);

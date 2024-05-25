@@ -38,6 +38,24 @@ int strcasecmp(const char * str1, const char * str2){
     return strcmp(s1,s2);
 }
 
+void itoa (int value, char* result) {
+    result[0] = value%10 + '0';
+    int i;
+    for (i = 1; value/10 != 0 ; i++) {
+        value /= 10;
+        result[i] = value%10 + '0';
+    }
+    result[i] = '\0';
+    int len = strlen(result);
+    for (int j = len-1, i = 0; i < len/2; i++, j--) {
+        char aux = result[i];
+        result[i] = result[j];
+        result[j] = aux;
+    }
+    result[len] = '\0';
+    return;
+}
+
 /**
  * Turns str received as a parameter to lowerCase
 */

@@ -8,6 +8,11 @@
 void updateBuffer(void);
 void cleanBuffer(void);
 uint8_t getKey(void);
+uint8_t kbUpArrowValue(void);
+uint8_t kbLeftArrowValue(void);
+uint8_t kbDownArrowValue(void);
+uint8_t kbRightArrowValue(void);
+
 char readLastCharacter(void);
 int isBufferEmpty();
 unsigned char readBuf(void);

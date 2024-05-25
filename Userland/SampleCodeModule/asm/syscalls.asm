@@ -2,7 +2,13 @@ GLOBAL writeScreen
 GLOBAL readScreen
 GLOBAL sleep
 GLOBAL clearScreen
+
+GLOBAL upArrowValue
+GLOBAL leftArrowValue
+GLOBAL downArrowValue
+GLOBAL rightArrowValue
 GLOBAL printRectangle
+GLOBAL printSquare
 GLOBAL setCursorPosition
 GLOBAL getTime
 GLOBAL getDate
@@ -32,8 +38,32 @@ clearScreen:
     mov rax, 30
     int 80h
     ret
+upArrowValue:
+    mov rax, 20
+    int 80h
+    ret
+
+leftArrowValue:
+    mov rax, 21
+    int 80h
+    ret
+
+downArrowValue:
+    mov rax, 22
+    int 80h
+    ret
+
+rightArrowValue:
+    mov rax, 23
+    int 80h
+    ret
 printRectangle:
     mov rax, 31
+    int 80h
+    ret
+
+printSquare:
+    mov rax, 32
     int 80h
     ret
 

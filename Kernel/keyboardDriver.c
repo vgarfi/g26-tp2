@@ -51,6 +51,22 @@ uint8_t isArrow (uint8_t key) {
     }    
 }
 
+uint8_t kbUpArrowValue() {
+    return UP_ARROW_VAL;
+}
+
+uint8_t kbLeftArrowValue() {
+    return LEFT_ARROW_VAL;
+}
+
+uint8_t kbDownArrowValue() {
+    return DOWN_ARROW_VAL;
+}
+
+uint8_t kbRightArrowValue() {
+    return RIGHT_ARROW_VAL;
+}
+
 void updateBuffer() {
     uint8_t scancode = getKey();
     uint8_t arrowValue = isArrow(scancode);
