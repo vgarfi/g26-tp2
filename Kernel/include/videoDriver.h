@@ -59,11 +59,12 @@ void vdPrintRect(uint32_t hexColor);
 void vdUpdateCursor(int x,int y);
 void vdDeleteChar();
 void vdNewLine();
-void clearBuffer();
-void resize();
-
-void vdPrintSquare(int side, uint32_t hexColor);
-/*
+void vdClearBuffer();
+void vdResize();
+void vdPrintRectParam(int x,int y,int base,int height,uint32_t hexcolor);
+void vdPrintSquare(int x, int y,int side,uint32_t hexcolor);
+void vdSetCursorByPixel(int x, int y);
+/*void vdSetCursorByPixel(int x, int y)
 uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
 void ncPrintDec(uint64_t value);
 void ncPrintHex(uint64_t value);

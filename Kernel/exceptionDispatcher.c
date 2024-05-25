@@ -11,30 +11,35 @@ static void zero_division();
 static void invalid_opcode();
 
 void exceptionDispatcher(int exception) {
+	vdClearScreen();
 	switch (exception){
 		case ZERO_EXCEPTION_ID:
 			zero_division();
+			break;
 		case INVALID_OPCODE_ID:
 			invalid_opcode();
+			break;
 	}
+	vdPrint("Press any key to recover...\n",0x00FFFFFF);
+	nanosleep(2,0);
+	return;
 }
 
 static void zero_division() {
 	// TODO
-	vdClearScreen();
 	vdPrint("Arithmetic exception: division by zero\n",0x00FFFFFF);
-	nanosleep(2,0);
-	vdPrint("Press any key to recover...\n",0x00FFFFFF);
+	//nanosleep(2,0);
+	
 
-	while(1) _hlt();	// Loops infinitely at least for now.
+	//while(1) _hlt();	// Loops infinitely at least for now.
 	// imrpimir registros en pantalla
 	// volver a la shell (hacer una funcion que me ejecute la shell de vuelta asi la llamo)
 }
 
 static void invalid_opcode(){
-	vdClearScreen();
+	//vdClearScreen();
 	vdPrint("Invalid Opcode exception: command not recognised\n",0x00FFFFFF);
-	nanosleep(2,0);
-	vdPrint("Press any key to recover...\n",0x00FFFFFF);
+	//nanosleep(2,0);
+	//vdPrint("Press any key to recover...\n",0x00FFFFFF);
 
 }
