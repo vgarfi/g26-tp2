@@ -5,7 +5,7 @@
 #include <keyboard.h>
 #include <interrupts.h>
 
-int nanosleep(uint64_t rdi, uint64_t rsi);     // rdi : seconds, rsi : miliseconds
+int nanosleep(uint64_t secs, uint64_t ticks);     // rdi : seconds, rsi : miliseconds
 int saveregs(void);
 int read(uint64_t fd, char * buf, uint64_t count);
 int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor);
@@ -96,10 +96,10 @@ int sound(uint64_t ticks){
 }
 
 // rdi = seconds, rsi = ticks
-int nanosleep(uint64_t rdi, uint64_t rsi){
-    if(rdi<0 || rsi<0)
+int nanosleep(uint64_t secs, uint64_t ticks){
+    if(secs<0 || ticks<0)
         return -1;
-    int secondsToTicks = rdi*18, msToTicks=rsi;
+    int secondsToTicks = secs*18, msToTicks=ticks;
     int totalTicks = secondsToTicks + msToTicks;
     sleep(totalTicks);
     return 0;
