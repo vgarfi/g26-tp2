@@ -3,7 +3,6 @@
 #include <fonts.h>
 #include <lib.h>
 
-//static char buffer[64] = { '0' };
 typedef struct vbe_mode_info_structure * VBEInfoPtr;
 VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
 Cursor cursor = {0, 0};
@@ -12,7 +11,7 @@ uint16_t widthScreen;
 uint16_t heightScreen;
 uint16_t pitch;
 uint8_t  bytesPerPixel;
-static uint32_t fgColor = 0x00FFFFFF;
+static uint32_t fgColor = 0x00F0F0F0;
 static uint32_t bgColor = 0x00000000;
 static int maxCharsInScreen = 8192; // chars per row * chars per column 
 char charsInScreen[8192] = {' '};
@@ -43,12 +42,12 @@ void vdPrintRect(uint32_t hexColor){
 
 void vdUpdateCursor(int x, int y){
 	int offsetX = x * bytesPerPixel * getCurrentFont().size.width;
-	int offsetY = y * pitch * (getCurrentFont().size.height +1 ); 
+	int offsetY = y * pitch * (getCurrentFont().size.height); 
 
 	if(cursor.posY + offsetY >= 0){
 		if (cursor.posX + offsetX >= widthScreen*bytesPerPixel)
 		{
-			offsetX = 0;
+			offsetX = 1;
 			cursor.posX = 0;
 			offsetY += pitch * getCurrentFont().size.height;
 		}
@@ -61,7 +60,7 @@ void vdUpdateCursor(int x, int y){
 		if (cursor.posY + offsetY >= heightScreen * pitch)
 		{
 			scroll(1);
-			offsetY = -pitch * getCurrentFont().size.height;
+			offsetY += -pitch * getCurrentFont().size.height;
 			
 		}
 		else if (cursor.posY + offsetY < 0)
@@ -101,11 +100,6 @@ void vdSetCursor(int x, int y){
 }
 
 void vdNewLine(){
-	//vdPrintRect(0x00000000);
-//	int spacesToFill = ((widthScreen*bytesPerPixel - cursor.posX) / bytesPerPixel) / getCurrentFont().size.width; //spaces to print
-//	for(int i=0; i < spacesToFill; i++){
-//		vdPrintChar(' ');
-//	}
 	cursor.posX = 0;
 	vdUpdateCursor(0,1);
 }
@@ -150,7 +144,6 @@ void vdPrintChar(unsigned char c) {
 			vdPrintLine(offset+(width*bytesPerPixel/2),fgColor,bgColor,bitmap[y_pos + (c-31) * height*2 + 1],BYTE_LENGHT,bytesPerPixel);
 		}
 	}
-	//vdUpdateCursor(1,0);
 	vdUpdateCursor(1,0);
 }
 
@@ -162,7 +155,6 @@ void vdPrint(char *characters,uint32_t hexColor){
 		if(c == '\n'){
 			charsInScreen[index++] = '\n';
 			vdNewLine();
-			// actualizar charsInScreen
 		}
 
 		else if(c == '\b'){
@@ -170,12 +162,10 @@ void vdPrint(char *characters,uint32_t hexColor){
 			if(index != 0)
 				--index;
 			charsInScreen[index] = ' ';
-			// actualizar charsInScreen
 		}
 		else{
 		vdPrintChar(c);
 		charsInScreen[index++] = characters[i];
-		//vdPrintCursor();
 		}
 	}
 }
@@ -191,9 +181,10 @@ void vdDeleteChar(){
 
 
 void resize(){
-	clearScreen();
+	vdClearScreen();
+	int i,j = 0;
 	int limit = (widthScreen/getCurrentFont().size.width) * (heightScreen/getCurrentFont().size.height);
-	for(int i = 0,j=0;i < limit;i++,j++){
+	for(i = 0, j=0;i < limit && j<index;i++,j++){
 		char c = charsInScreen[j];
 		if(cursor.posY != heightScreen * pitch && cursor.posX != widthScreen* bytesPerPixel)
 		if(c == '\n'){
@@ -203,7 +194,6 @@ void resize(){
 		else	
 			vdPrintChar(c);		
 	}
-	//vdPrintCursor();
 }
 /*
 void ncPrintDec(uint64_t value)
@@ -235,7 +225,7 @@ void vdClearScreen(){
 }
 
 void clearBuffer(){
-	memset(charsInScreen,0,maxCharsInScreen);
+	memset(charsInScreen,' ',maxCharsInScreen);
 }
 
 
@@ -248,25 +238,28 @@ void updateCharsInScreen(int lines){
 void scroll(int lines) {
     int fontHeight = getCurrentFont().size.height;
     int offset = lines * fontHeight * widthScreen * bytesPerPixel;
-    int frameSize = bytesPerPixel * widthScreen * (heightScreen - lines * fontHeight);
+    int frameSize = bytesPerPixel * widthScreen * (heightScreen - lines * (fontHeight +1));
     int clearSize = bytesPerPixel * widthScreen * lines * fontHeight;
     memcpy(framebuffer, framebuffer + offset, frameSize);
     memset(framebuffer + frameSize, 0, clearSize);
 //	vdUpdateCursor(0,lines);
 //	vdSetCursor(0,cursor.posY);
 //	vdUpdateCursor(0,lines);
-//	updateCharsInScreen(lines);
+	if(index - lines * (widthScreen/getCurrentFont().size.width) >=0){
+		index -= lines * (widthScreen/getCurrentFont().size.width);
+	}
+	updateCharsInScreen(lines);
 }
 
-void vdPrintRectParam(int base, int height, uint32_t hexColor){
-	uint64_t offsetX = cursor.posX;
-	uint64_t offsetY = cursor.posY;
+void vdPrintRectParam(int x,int y,int base, int height, uint32_t hexColor){
+	uint64_t offsetX = x * bytesPerPixel;
+	uint64_t offsetY = y * pitch;
 	for(int y=0;y < height;y++,offsetY += pitch){
 		for(int x = 0,offsetX = 0; x < base;x++, offsetX += bytesPerPixel)
 			vdPutPixel(offsetX + offsetY,hexColor);
 	}
 }
 
-void vdPrintSquare(int side,uint32_t hexColor){
-	vdPrintRectParam(side,side,hexColor);
+void vdPrintSquare(int x, int y,int side,uint32_t hexColor){
+	vdPrintRectParam(x,y,side,side,hexColor);
 }
