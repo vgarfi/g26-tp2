@@ -4,6 +4,7 @@
 #include "include/string.h"
 #include "include/colors.h"
 #include "include/syscalls.h"
+#include "include/lib.h"
 
 #define HELPLENGTH 8
 
@@ -52,12 +53,12 @@ int init(){
             putchar('\n');
         }
         else if(strcasecmp(commandPrompt, "zoomin")==0){
-            zoomAux = zoomIn();
+            zoomAux = incTextSize();
             if(zoomAux)
                 print("Maximum size reached.\n");
         }
         else if(strcasecmp(commandPrompt, "zoomout")==0){
-            zoomAux = zoomOut();
+            zoomAux = decTextSize();
             if(zoomOut)
                 print("Minimum size reached.\n");
         }
