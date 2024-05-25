@@ -35,7 +35,6 @@ uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r1
         case 30: return clearScreen();
         case 32: return printSquare(rdi, rsi,rdx,r10);
         case 31: return printRect(rdi,rsi,rdx,r10,r8);
-        case 31: return printRect(rdi,rsi,rdx,r10,r8);
         case 40: return setCursor(rdi, rsi);
         case 128: return sound(rdi);
         case 162: return nanosleep(rdi, rsi);
