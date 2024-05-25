@@ -7,6 +7,8 @@ GLOBAL setCursorPosition
 GLOBAL getTime
 GLOBAL getDate
 GLOBAL beepSound
+GLOBAL zoomIn
+GLOBAL zoomOut
 
 section .text
 
@@ -52,5 +54,15 @@ getTime:
 
 getDate:
     mov rax, 6
+    int 80h
+    ret
+
+zoomIn:
+    mov rax, 7
+    int 80h
+    ret
+
+zoomOut:
+    mov rax, 8
     int 80h
     ret

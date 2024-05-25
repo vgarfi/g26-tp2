@@ -12,5 +12,7 @@ int setCursorPosition(uint64_t x, uint64_t y);
 int beepSound(uint64_t secs);
 char* getTime(void);
 char* getDate(void);
+int zoomIn(void);
+int zoomOut(void);
 
 #endif

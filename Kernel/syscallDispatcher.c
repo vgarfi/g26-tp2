@@ -12,6 +12,8 @@ int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor);
 int sound(uint64_t ticks);
 char * time(void);
 char * date(void);
+int incSize();
+int decSize();
 
 void saveRegsInBuffer(uint64_t* buf);
 
@@ -24,6 +26,8 @@ uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r1
         case 3: return saveregs();
         case 5: return time();
         case 6: return date();
+        case 7: return incSize();
+        case 8: return decSize();
         case 30: return clearScreen();
         case 31: return printRect(rdi);
         case 40: return setCursor(rdi, rsi);
@@ -107,4 +111,19 @@ char * time(void){
 
 char * date(void){
     return getCurrentDate();
+}
+
+
+int incSize(){
+    int zoomFail = sizeUp();
+    if(!zoomFail)
+        resize();
+    return zoomFail;
+}
+
+int decSize(){
+    int zoomFail = sizeDown();
+    if(!zoomFail)
+        resize();
+    return zoomFail;
 }

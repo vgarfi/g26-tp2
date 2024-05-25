@@ -1,5 +1,6 @@
 #include <defs.h>
 #include <fonts.h>
+#include <bitmaps.h>
 
 
 unsigned const char* fonts[] = {fontBitMap_8x12, fontBitMap_8x16, fontBitMap_16x32};
@@ -27,13 +28,23 @@ void initFontManager() {
 }
 
 // Función para seleccionar un font
-void setCurrentFont(int index) {
+int setCurrentFont(int index) {
     if (index >= 0 && index < FONTS_QUANTITY) {
         global_font_manager.currentFontIndex = index;
-    } 
+        return 0;
+    }
+    return 1; 
 }
 
 // Función para obtener el font actual
 FontBitmap getCurrentFont() {
     return global_font_manager.fonts[global_font_manager.currentFontIndex];
+}
+
+int sizeUp(){
+    return setCurrentFont(global_font_manager.currentFontIndex+1);
+}
+
+int sizeDown(){
+    return setCurrentFont(global_font_manager.currentFontIndex-1);
 }

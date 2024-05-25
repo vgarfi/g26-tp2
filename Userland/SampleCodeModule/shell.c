@@ -22,7 +22,8 @@ static char* helpText[]={"Command information is displayed below:\n\n",
 int init(){
     printColor("Welcome to Shell! Type HELP for command information.\n\n", YELLOW);
     char commandPrompt[32]={0};
-    char* aux;
+    char* dateTimeAux;
+    int zoomAux;
     while(1){
         printColor("$", GREEN);
         print("> ");
@@ -41,14 +42,24 @@ int init(){
             clearScreen();
         }
         else if(strcasecmp(commandPrompt, "time")==0){
-            aux=getTime();
-            print(aux);
+            dateTimeAux=getTime();
+            print(dateTimeAux);
             putchar('\n');
         }
         else if(strcasecmp(commandPrompt, "date")==0){
-            aux=getDate();
-            print(aux);
+            dateTimeAux=getDate();
+            print(dateTimeAux);
             putchar('\n');
+        }
+        else if(strcasecmp(commandPrompt, "zoomin")==0){
+            zoomAux = zoomIn();
+            if(zoomAux)
+                print("Maximum size reached.\n");
+        }
+        else if(strcasecmp(commandPrompt, "zoomout")==0){
+            zoomAux = zoomOut();
+            if(zoomOut)
+                print("Minimum size reached.\n");
         }
         else{
             print(commandPrompt); 
