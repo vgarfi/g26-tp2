@@ -5,6 +5,7 @@
 #include "include/colors.h"
 #include "include/syscalls.h"
 #include "include/lib.h"
+#include "include/exceptions.h"
 
 #define HELPLENGTH 8
 
@@ -61,6 +62,12 @@ int init(){
             zoomAux = decTextSize();
             if(zoomOut)
                 print("Minimum size reached.\n");
+        }
+        else if(strcasecmp(commandPrompt, "divbyzero")==0){
+            divZero();
+        }
+        else if(strcasecmp(commandPrompt, "invalidopcode")==0){
+            invalidOpcode();
         }
         else{
             print(commandPrompt); 

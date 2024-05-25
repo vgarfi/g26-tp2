@@ -14,6 +14,7 @@ GLOBAL _irq04Handler
 GLOBAL _irq05Handler
 
 GLOBAL _exception0Handler
+GLOBAL _exception6Handler
 
 GLOBAL _syscallHandler
 EXTERN irqDispatcher
@@ -84,11 +85,11 @@ SECTION .text
 	call exceptionDispatcher
 	push rax
 	xor rax ,rax
-loop: in al,0x64
+.loop: in al,0x64
 	mov cl,al
 	and al,0x01
 	cmp al,0
-	je loop
+	je .loop
 	mov al, 20h
 	out 20h, al
 	pop rax
@@ -166,6 +167,10 @@ _irq05Handler:
 ;Zero Division Exception
 _exception0Handler:
 	exceptionHandler 0
+
+;Invalid OpCode Exception
+_exception6Handler:
+	exceptionHandler 6
 	
 ;Syscall Handling
 ; _syscallHandler receives parameters in the next order: rax rdi rsi rdx r10 r8 r9
