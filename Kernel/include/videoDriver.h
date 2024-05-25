@@ -55,13 +55,12 @@ void vdClearScreen();
 void vdScrol(int lines);
 void initializeVideoDriver();
 void vdSetCursor(int x,int y);
-void vdPrintRect(uint32_t hexColor);
 void vdUpdateCursor(int x,int y);
 void vdDeleteChar();
 void vdNewLine();
 void vdClearBuffer();
 void vdResize();
-void vdPrintRectParam(int x,int y,int base,int height,uint32_t hexcolor);
+void vdPrintRect(int x,int y,int base,int height,uint32_t hexcolor);
 void vdPrintSquare(int x, int y,int side,uint32_t hexcolor);
 void vdSetCursorByPixel(int x, int y);
 /*void vdSetCursorByPixel(int x, int y)

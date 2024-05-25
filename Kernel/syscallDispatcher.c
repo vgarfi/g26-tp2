@@ -33,8 +33,7 @@ uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r1
         case 22: return downArrowValue();
         case 23: return rightArrowValue();
         case 30: return clearScreen();
-        case 31: return printRect(rdi);
-        case 32: return printSquare(rdi, rsi);
+        case 31: return printRect(rdi,rsi,rdx,r10,r8);
         case 40: return setCursor(rdi, rsi);
         case 128: return sound(rdi);
         case 162: return nanosleep(rdi, rsi);
@@ -93,8 +92,8 @@ int clearScreen() {
     return 0;
 }
 
-int printRect(uint32_t hexColor) {
-    vdPrintRect(hexColor);
+int printRect(int x,int y,int base,int height,uint32_t hexColor) {
+    vdPrintRect(x,y,base,height,hexColor);
     return 0;
 }
 
