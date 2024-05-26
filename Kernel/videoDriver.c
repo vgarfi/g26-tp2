@@ -38,13 +38,13 @@ void vdUpdateCursor(int x, int y){
 	if(cursor.posY + offsetY >= 0){
 		if (cursor.posX + offsetX >= widthScreen*bytesPerPixel)
 		{
-			offsetX = 1;
+			offsetX = 0;
 			cursor.posX = 0;
 			offsetY += pitch * getCurrentFont().size.height;
 		}
 		else if(cursor.posX + offsetX < 0){
 			offsetX = 0;
-			cursor.posX = 0;
+			cursor.posX = (widthScreen - getCurrentFont().size.width) * bytesPerPixel;
 			offsetY -= pitch * getCurrentFont().size.height;
 		}
 
@@ -165,11 +165,10 @@ void vdPrint(char *characters,uint32_t hexColor){
 }
 
 void vdDeleteChar(){
-	vdPrintChar(' '); // deletes cursor if it was there
+	vdPrintRect(cursor.posX/bytesPerPixel,cursor.posY/pitch,getCurrentFont().size.width,getCurrentFont().size.height,0x00000000);
 	vdUpdateCursor(-1,0);
-	vdUpdateCursor(-1,0);
-	vdPrintChar(' ');
-	vdUpdateCursor(-1,0); // prints space = nothing in the last character
+	vdPrintRect(cursor.posX/bytesPerPixel,cursor.posY/pitch,getCurrentFont().size.width,getCurrentFont().size.height,0x00000000);
+
 	//vdPrintCursor();
 }
 
@@ -249,9 +248,10 @@ void vdScrol(int lines) {
 
 void vdPrintRect(int x,int y,int base, int height, uint32_t hexColor){
 	uint64_t offsetX = x * bytesPerPixel;
+	uint64_t posX = offsetX;
 	uint64_t offsetY = y * pitch;
 	for(int y=0;y < height;y++,offsetY += pitch){
-		for(int x = 0,offsetX = 0; x < base;x++, offsetX += bytesPerPixel)
+		for(int x = 0,offsetX = posX; x < base;x++, offsetX += bytesPerPixel)
 			vdPutPixel(offsetX + offsetY,hexColor);
 	}
 }
