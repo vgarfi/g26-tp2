@@ -3,6 +3,8 @@
 #include <fonts.h>
 #include <lib.h>
 
+#define MAXCHARSINSCREEN 8192	// chars per row * chars per column 
+
 typedef struct vbe_mode_info_structure * VBEInfoPtr;
 VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
 Cursor cursor = {0, 0};
@@ -13,8 +15,8 @@ uint16_t pitch;
 uint8_t  bytesPerPixel;
 static uint32_t fgColor = 0x00F0F0F0;
 static uint32_t bgColor = 0x00000000;
-static int maxCharsInScreen = 8192; // chars per row * chars per column 
-char charsInScreen[8192] = {' '};
+
+char charsInScreen[MAXCHARSINSCREEN] = {' '};
 static int index = 0;
 void initializeVideoDriver(){
 	framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
@@ -215,15 +217,15 @@ void vdClearScreen(){
 	vdSetCursor(0,0);
 }
 
-void clearBuffer(){
-	memset(charsInScreen,' ',maxCharsInScreen);
+void vdClearBuffer(){
+	memset(charsInScreen,' ',MAXCHARSINSCREEN);
 	index = 0;
 }
 
 
 
 void updateCharsInScreen(int lines){
-	for(int i=lines * (widthScreen/getCurrentFont().size.width),j=0;i<maxCharsInScreen;i++)
+	for(int i=lines * (widthScreen/getCurrentFont().size.width),j=0;i<MAXCHARSINSCREEN;i++)
 		charsInScreen[j++] = charsInScreen[i];
 }
 

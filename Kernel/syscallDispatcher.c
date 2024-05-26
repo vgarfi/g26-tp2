@@ -90,6 +90,7 @@ int rightArrowValue() {
 
 int clearScreen() {
     vdClearScreen();
+    vdClearBuffer();
     return 0;
 }
 
