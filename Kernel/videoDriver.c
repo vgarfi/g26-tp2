@@ -162,11 +162,10 @@ void vdPrint(char *characters,uint32_t hexColor){
 }
 
 void vdDeleteChar(){
-	vdPrintChar(' '); // deletes cursor if it was there
+	vdPrintRect(cursor.posX/bytesPerPixel,cursor.posY/pitch,getCurrentFont().size.width,getCurrentFont().size.height,0x00000000);
 	vdUpdateCursor(-1,0);
-	vdUpdateCursor(-1,0);
-	vdPrintChar(' ');
-	vdUpdateCursor(-1,0); // prints space = nothing in the last character
+	vdPrintRect(cursor.posX/bytesPerPixel,cursor.posY/pitch,getCurrentFont().size.width,getCurrentFont().size.height,0x00000000);
+
 	//vdPrintCursor();
 }
 
