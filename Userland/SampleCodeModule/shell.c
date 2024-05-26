@@ -7,25 +7,32 @@
 #include "include/lib.h"
 #include "include/exceptions.h"
 
-#define HELPLENGTH 8
+#define HELPLENGTH 14
+
+void saveRegs(void);
+int printRegs(void);
 
 static char* helpText[]={"Command information is displayed below:\n\n",
 "HELP                ->      Shows a description on each available command.\n"
 "DIVBYZERO           ->      Shows handling in case of division by zero.\n",
 "INVALIDOPCODE       ->      Shows handling in case of an invalid operation code.\n"
-"ZOOMIN              ->      Enlarges text size on screen. In case maximum size is reached,\n                            it is properly indicated without making any changes.\n", // See if it can also be accesed via keyboard
-"ZOOMOUT             ->      Reduces text size on screen. In case minimum size is reached,\n                            it is properly indicated without making any changes.\n", 
+"ZOOMIN              ->      Enlarges text size on screen. In case maximum size is reached,\n",
+"                            it is properly indicated without making any changes.\n", // See if it can also be accesed via keyboard
+"ZOOMOUT             ->      Reduces text size on screen. In case minimum size is reached,\n",
+"                            it is properly indicated without making any changes.\n", 
 "TIME                ->      Shows current time in HH:MM:SS format.\n",
 "DATE                ->      Shows current date in DD/MM/YY format.\n",
 "ELIMINATOR          ->      Opens ELIMINATOR game.\n",
-"CLEAR               ->      Clears the screen\n" 
+"CLEAR               ->      Clears the screen\n",
+"REGISTERS           ->      Prints registers values. To do this, first you need to save\n",
+"                            your registers by pressing ALT.\n" 
 };
 
 int init(){
     printColor("Welcome to Shell! Type HELP for command information.\n\n", YELLOW);
     char commandPrompt[32]={0};
     char* dateTimeAux;
-    int zoomAux;
+    int zoomAux, regAux;
     while(1){
         printColor("$", GREEN);
         print("> ");
@@ -68,6 +75,12 @@ int init(){
         }
         else if(strcasecmp(commandPrompt, "invalidopcode")==0){
             invalidOpcode();
+        }
+        else if(strcasecmp(commandPrompt, "registers")==0){
+            regAux = printRegs();
+            if(regAux){
+                print("You need to save registers first by pressing ALT\n");
+            }
         }
         else{
             print(commandPrompt); 

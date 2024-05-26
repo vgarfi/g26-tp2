@@ -19,6 +19,7 @@ char* getTime(void);
 char* getDate(void);
 int zoomIn(void);
 int zoomOut(void);
+int printRegs(void);
 int printCursor();
 int hideCursor();
 int showCursor();
