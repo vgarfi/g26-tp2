@@ -1,9 +1,6 @@
 #include <time.h>
 #include <speaker.h>
 
-extern void outb(int memPos, int output);
-extern int inb(int memPos);
-
 //Play sound using built-in speaker
  static void playSound(uint32_t nFrequence) {
  	uint32_t Div;
