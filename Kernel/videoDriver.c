@@ -38,13 +38,13 @@ void vdUpdateCursor(int x, int y){
 	if(cursor.posY + offsetY >= 0){
 		if (cursor.posX + offsetX >= widthScreen*bytesPerPixel)
 		{
-			offsetX = 1;
+			offsetX = 0;
 			cursor.posX = 0;
 			offsetY += pitch * getCurrentFont().size.height;
 		}
 		else if(cursor.posX + offsetX < 0){
 			offsetX = 0;
-			cursor.posX = 0;
+			cursor.posX = (widthScreen - getCurrentFont().size.width) * bytesPerPixel;
 			offsetY -= pitch * getCurrentFont().size.height;
 		}
 
