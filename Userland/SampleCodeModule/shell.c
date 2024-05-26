@@ -16,7 +16,7 @@ static char* helpText[]={"Command information is displayed below:\n\n",
 "ZOOMIN              ->      Enlarges text size on screen. In case maximum size is reached,\n                            it is properly indicated without making any changes.\n", // See if it can also be accesed via keyboard
 "ZOOMOUT             ->      Reduces text size on screen. In case minimum size is reached,\n                            it is properly indicated without making any changes.\n", 
 "TIME                ->      Shows current time in HH:MM:SS format.\n",
-"DATE                ->      Shows current date in DD/MM/YY format.\n", // Check whether to show it in this format or DD/MM/YYYY
+"DATE                ->      Shows current date in DD/MM/YY format.\n",
 "ELIMINATOR          ->      Opens ELIMINATOR game.\n",
 "CLEAR               ->      Clears the screen\n" 
 };
@@ -60,7 +60,7 @@ int init(){
         }
         else if(strcasecmp(commandPrompt, "zoomout")==0){
             zoomAux = decTextSize();
-            if(zoomOut)
+            if(zoomAux)
                 print("Minimum size reached.\n");
         }
         else if(strcasecmp(commandPrompt, "divbyzero")==0){
