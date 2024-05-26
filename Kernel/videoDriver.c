@@ -243,9 +243,10 @@ void vdScrol(int lines) {
 
 void vdPrintRect(int x,int y,int base, int height, uint32_t hexColor){
 	uint64_t offsetX = x * bytesPerPixel;
+	uint64_t posX = offsetX;
 	uint64_t offsetY = y * pitch;
 	for(int y=0;y < height;y++,offsetY += pitch){
-		for(int x = 0,offsetX = 0; x < base;x++, offsetX += bytesPerPixel)
+		for(int x = 0,offsetX = posX; x < base;x++, offsetX += bytesPerPixel)
 			vdPutPixel(offsetX + offsetY,hexColor);
 	}
 }
