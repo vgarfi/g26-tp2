@@ -15,6 +15,9 @@ GLOBAL getDate
 GLOBAL beepSound
 GLOBAL zoomIn
 GLOBAL zoomOut
+GLOBAL printCursor
+GLOBAL hideCursor
+GLOBAL showCursor
 
 section .text
 
@@ -94,5 +97,20 @@ zoomIn:
 
 zoomOut:
     mov rax, 8
+    int 80h
+    ret
+
+hideCursor:
+    mov rax,170
+    int 80h
+    ret
+
+showCursor:
+    mov rax,171
+    int 80h
+    ret
+
+printCursor:
+    mov rax,172
     int 80h
     ret

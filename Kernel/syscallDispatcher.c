@@ -14,7 +14,9 @@ char * time(void);
 char * date(void);
 int incSize();
 int decSize();
-
+int hideCursor();
+int showCursor();
+int printCursor();
 void saveRegsInBuffer(uint64_t* buf);
 
 uint64_t registers[17]={0};
@@ -38,6 +40,9 @@ uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r1
         case 40: return setCursor(rdi, rsi);
         case 128: return sound(rdi);
         case 162: return nanosleep(rdi, rsi);
+        case 170: return hideCursor();
+        case 171: return showCursor();
+        case 172: return printCursor();
         default: return -1;
     }
 }
@@ -153,4 +158,16 @@ int decSize(){
     if(!zoomFail)
         resize();
     return zoomFail;
+}
+
+int hideCursor(){
+    vdSetCursorColor(0x00000000);
+}
+
+int showCursor(){
+    vdSetCursorColor(0x00F0F0F0);
+}
+
+int printCursor(){
+    vdPrintCursor();
 }

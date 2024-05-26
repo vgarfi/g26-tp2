@@ -7,7 +7,7 @@
 
 typedef struct vbe_mode_info_structure * VBEInfoPtr;
 VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
-Cursor cursor = {0, 0};
+Cursor cursor = {0, 0,0x00F0F0F0};
 uint8_t * framebuffer;
 uint16_t widthScreen;
 uint16_t heightScreen;
@@ -28,10 +28,12 @@ void initializeVideoDriver(){
 	{
 		charsInScreen[i] = ' ';
 	}
-	
-
 }
 
+
+void vdSetCursorColor(uint32_t hexcolor){
+	cursor.color = hexcolor;
+}
 
 void vdUpdateCursor(int x, int y){
 	int offsetX = x * bytesPerPixel * getCurrentFont().size.width;
@@ -67,11 +69,7 @@ void vdUpdateCursor(int x, int y){
 }
 
 void vdPrintCursor(){
-	if(cursor.posX == widthScreen* bytesPerPixel){
-			cursor.posX = 0;
-			cursor.posY += getCurrentFont().size.height * pitch;
-	}
-	vdPrintRect(cursor.posX,cursor.posY,getCurrentFont().size.width,getCurrentFont().size.height,0x00F0F0F0);
+	vdPrintRect(cursor.posX/bytesPerPixel,cursor.posY/pitch,getCurrentFont().size.width,getCurrentFont().size.height,cursor.color);
 }
 
 void vdSetCursorByPixel(int x, int y){
@@ -93,8 +91,10 @@ void vdSetCursor(int x, int y){
 }
 
 void vdNewLine(){
+	vdPrintRect(cursor.posX/bytesPerPixel,cursor.posY/pitch,getCurrentFont().size.width,getCurrentFont().size.height,0x00000000);
 	cursor.posX = 0;
 	vdUpdateCursor(0,1);
+	vdPrintCursor();
 }
 
 void vdPutPixel(uint64_t offset,uint32_t hexColor){
@@ -138,6 +138,7 @@ void vdPrintChar(unsigned char c) {
 		}
 	}
 	vdUpdateCursor(1,0);
+	vdPrintCursor();
 }
 
 void vdPrint(char *characters,uint32_t hexColor){
@@ -167,8 +168,7 @@ void vdDeleteChar(){
 	vdPrintRect(cursor.posX/bytesPerPixel,cursor.posY/pitch,getCurrentFont().size.width,getCurrentFont().size.height,0x00000000);
 	vdUpdateCursor(-1,0);
 	vdPrintRect(cursor.posX/bytesPerPixel,cursor.posY/pitch,getCurrentFont().size.width,getCurrentFont().size.height,0x00000000);
-
-	//vdPrintCursor();
+	vdPrintCursor();
 }
 
 
