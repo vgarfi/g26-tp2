@@ -218,6 +218,7 @@ void vdClearScreen(){
 
 void clearBuffer(){
 	memset(charsInScreen,' ',maxCharsInScreen);
+	index = 0;
 }
 
 
