@@ -80,7 +80,6 @@ void updateBuffer() {
         dataStatus = 1;
         char c = (arrowValue != 0)? arrowValue : scancodesChars[shift][scancode];
         buffer[bufferPos++] = c;
-        ncPrintChar(c); // TODO simplemente eliminar esto
         if (bufferPos >= MAXSIZE) {
             bufferPos = 0;
         }
