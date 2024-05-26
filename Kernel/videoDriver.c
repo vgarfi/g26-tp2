@@ -24,14 +24,9 @@ void initializeVideoDriver(){
 	pitch = VBE_mode_info->pitch;
 	bytesPerPixel = VBE_mode_info->bpp/8;
 	//memset(charsInScreen,)
-	for (int i = 0; i < 8192; i++)
-	{
-		charsInScreen[i] = ' ';
-	}
-	for (int i = 0; i < 8192; i++)
-	{
-		colorsInScreen[i] = 0x00000000;
-	}
+	memset(charsInScreen,' ',maxCharsInScreen);
+	memset(colorsInScreen,0,4*maxCharsInScreen);
+	
 
 }
 
