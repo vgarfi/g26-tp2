@@ -15,6 +15,7 @@ static uint32_t fgColor = 0x00F0F0F0;
 static uint32_t bgColor = 0x00000000;
 static int maxCharsInScreen = 8192; // chars per row * chars per column 
 char charsInScreen[8192] = {' '};
+uint32_t colorsInScreen[8192];
 static int index = 0;
 void initializeVideoDriver(){
 	framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
@@ -22,11 +23,15 @@ void initializeVideoDriver(){
 	heightScreen = VBE_mode_info->height;
 	pitch = VBE_mode_info->pitch;
 	bytesPerPixel = VBE_mode_info->bpp/8;
+	//memset(charsInScreen,)
 	for (int i = 0; i < 8192; i++)
 	{
 		charsInScreen[i] = ' ';
 	}
-	
+	for (int i = 0; i < 8192; i++)
+	{
+		colorsInScreen[i] = 0x00000000;
+	}
 
 }
 
@@ -144,6 +149,7 @@ void vdPrint(char *characters,uint32_t hexColor){
 		char c = characters[i];
 
 		if(c == '\n'){
+			colorsInScreen[index] = 0x00000000;
 			charsInScreen[index++] = '\n';
 			vdNewLine();
 		}
@@ -152,11 +158,13 @@ void vdPrint(char *characters,uint32_t hexColor){
 			vdDeleteChar();
 			if(index != 0)
 				--index;
+			colorsInScreen[index] = 0x00000000;
 			charsInScreen[index] = ' ';
 		}
 		else{
 		vdPrintChar(c);
-		charsInScreen[index++] = characters[i];
+		colorsInScreen[index] = hexColor;
+		charsInScreen[index++] = c;
 		}
 	}
 }
@@ -182,8 +190,11 @@ void resize(){
 			i+= (((widthScreen*bytesPerPixel - cursor.posX) / bytesPerPixel) / getCurrentFont().size.width);
 			vdNewLine();
 		}
-		else	
+		else{
+			fgColor = colorsInScreen[j];	
 			vdPrintChar(c);
+			}
+
 		}		
 	}
 }
