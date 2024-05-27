@@ -4,9 +4,10 @@
 #include "include/time.h"
 #include <keyboard.h>
 #include <interrupts.h>
+#include <lib.h>
 
 int nanosleep(uint64_t secs, uint64_t ticks);     // rdi : seconds, rsi : miliseconds
-int saveregs(void);
+int printRegs(void);
 int read(uint64_t fd, char * buf, uint64_t count);
 int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor);
 int sound(uint64_t ticks);
@@ -14,16 +15,15 @@ char * time(void);
 char * date(void);
 int incSize();
 int decSize();
-
-void saveRegsInBuffer(uint64_t* buf);
-
-uint64_t registers[17]={0};
+int hideCursor();
+int showCursor();
+int printCursor();
 
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
     switch(rax){
         case 0: return read(rdi, (char *)rsi, rdx);
         case 1: return write(rdi, (char *)rsi, rdx, r10);
-        case 3: return saveregs();
+        case 2: return printRegs();
         case 5: return time();
         case 6: return date();
         case 7: return incSize();
@@ -38,6 +38,9 @@ uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r1
         case 40: return setCursor(rdi, rsi);
         case 128: return sound(rdi);
         case 162: return nanosleep(rdi, rsi);
+        case 170: return hideCursor();
+        case 171: return showCursor();
+        case 172: return printCursor();
         default: return -1;
     }
 }
@@ -90,6 +93,7 @@ int rightArrowValue() {
 
 int clearScreen() {
     vdClearScreen();
+    vdClearBuffer();
     return 0;
 }
 
@@ -109,11 +113,10 @@ int setCursor(uint64_t x, uint64_t y) {
 }
 
 /** registers is a buffer of 17 qwords to save registers in the next order:
- *  RAX RBX RCX RDX RSI RDI RBP RSP R8 R9 R10 R11 R12 R13 R14 R15 RIP
+ *  RIP RAX RBX RCX RDX RSI RDI RBP RSP R8 R9 R10 R11 R12 R13 R14 R15
  */
-int saveregs(){
-    saveRegsInBuffer(registers);
-    return 0;
+int printRegs(){
+    return regPrinting();
 }
 
 int sound(uint64_t ticks){
@@ -152,4 +155,16 @@ int decSize(){
     if(!zoomFail)
         resize();
     return zoomFail;
+}
+
+int hideCursor(){
+    vdSetCursorColor(0x00000000);
+}
+
+int showCursor(){
+    vdSetCursorColor(0x00F0F0F0);
+}
+
+int printCursor(){
+    vdPrintCursor();
 }

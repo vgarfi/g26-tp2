@@ -3,9 +3,11 @@
 #include <fonts.h>
 #include <lib.h>
 
+#define MAXCHARSINSCREEN 8192	// chars per row * chars per column 
+
 typedef struct vbe_mode_info_structure * VBEInfoPtr;
 VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
-Cursor cursor = {0, 0};
+Cursor cursor = {0, 0,0x00F0F0F0};
 uint8_t * framebuffer;
 uint16_t widthScreen;
 uint16_t heightScreen;
@@ -16,6 +18,8 @@ static uint32_t bgColor = 0x00000000;
 static int maxCharsInScreen = 8192; // chars per row * chars per column 
 char charsInScreen[8192] = {' '};
 uint32_t colorsInScreen[8192];
+
+char charsInScreen[MAXCHARSINSCREEN] = {' '};
 static int index = 0;
 void initializeVideoDriver(){
 	framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
@@ -30,6 +34,10 @@ void initializeVideoDriver(){
 
 }
 
+
+void vdSetCursorColor(uint32_t hexcolor){
+	cursor.color = hexcolor;
+}
 
 void vdUpdateCursor(int x, int y){
 	int offsetX = x * bytesPerPixel * getCurrentFont().size.width;
@@ -65,11 +73,7 @@ void vdUpdateCursor(int x, int y){
 }
 
 void vdPrintCursor(){
-	if(cursor.posX == widthScreen* bytesPerPixel){
-			cursor.posX = 0;
-			cursor.posY += getCurrentFont().size.height * pitch;
-	}
-	vdPrintRect(cursor.posX,cursor.posY,getCurrentFont().size.width,getCurrentFont().size.height,0x00F0F0F0);
+	vdPrintRect(cursor.posX/bytesPerPixel,cursor.posY/pitch,getCurrentFont().size.width,getCurrentFont().size.height,cursor.color);
 }
 
 void vdSetCursorByPixel(int x, int y){
@@ -91,8 +95,10 @@ void vdSetCursor(int x, int y){
 }
 
 void vdNewLine(){
+	vdPrintRect(cursor.posX/bytesPerPixel,cursor.posY/pitch,getCurrentFont().size.width,getCurrentFont().size.height,0x00000000);
 	cursor.posX = 0;
 	vdUpdateCursor(0,1);
+	vdPrintCursor();
 }
 
 void vdPutPixel(uint64_t offset,uint32_t hexColor){
@@ -136,6 +142,7 @@ void vdPrintChar(unsigned char c) {
 		}
 	}
 	vdUpdateCursor(1,0);
+	vdPrintCursor();
 }
 
 void vdPrint(char *characters,uint32_t hexColor){
@@ -168,17 +175,17 @@ void vdDeleteChar(){
 	vdPrintRect(cursor.posX/bytesPerPixel,cursor.posY/pitch,getCurrentFont().size.width,getCurrentFont().size.height,0x00000000);
 	vdUpdateCursor(-1,0);
 	vdPrintRect(cursor.posX/bytesPerPixel,cursor.posY/pitch,getCurrentFont().size.width,getCurrentFont().size.height,0x00000000);
-
-	//vdPrintCursor();
+	vdPrintCursor();
 }
 
 
 void resize(){
 	vdClearScreen();
 	int i,j = 0;
+	char c;
 	int limit = (widthScreen/getCurrentFont().size.width) * (heightScreen/getCurrentFont().size.height);
 	for(i = 0, j=0;i < limit && j<index;i++,j++){
-		char c = charsInScreen[j];
+		c = charsInScreen[j];
 		if(cursor.posY != heightScreen * pitch && cursor.posX != widthScreen* bytesPerPixel){
 		if(c == '\n'){
 			i+= (((widthScreen*bytesPerPixel - cursor.posX) / bytesPerPixel) / getCurrentFont().size.width);
@@ -190,6 +197,9 @@ void resize(){
 			}
 
 		}		
+	}
+	if(c != '\n'){
+		vdNewLine();
 	}
 }
 /*
@@ -221,15 +231,15 @@ void vdClearScreen(){
 	vdSetCursor(0,0);
 }
 
-void clearBuffer(){
-	memset(charsInScreen,' ',maxCharsInScreen);
+void vdClearBuffer(){
+	memset(charsInScreen,' ',MAXCHARSINSCREEN);
 	index = 0;
 }
 
 
 
 void updateCharsInScreen(int lines){
-	for(int i=lines * (widthScreen/getCurrentFont().size.width),j=0;i<maxCharsInScreen;i++)
+	for(int i=lines * (widthScreen/getCurrentFont().size.width),j=0;i<MAXCHARSINSCREEN;i++)
 		charsInScreen[j++] = charsInScreen[i];
 }
 

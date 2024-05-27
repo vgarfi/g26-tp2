@@ -6,6 +6,7 @@
 typedef struct{
 	int posX;
 	int posY;
+	uint32_t color;
 }Cursor;
 
 struct vbe_mode_info_structure {
@@ -63,6 +64,8 @@ void vdResize();
 void vdPrintRect(int x,int y,int base,int height,uint32_t hexcolor);
 void vdPrintSquare(int x, int y,int side,uint32_t hexcolor);
 void vdSetCursorByPixel(int x, int y);
+void vdSetCursorColor(uint32_t color);
+void vdPrintCursor();
 /*void vdSetCursorByPixel(int x, int y)
 uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
 void ncPrintDec(uint64_t value);

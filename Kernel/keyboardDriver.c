@@ -1,5 +1,7 @@
 #include <keyboard.h>
 #include <naiveConsole.h>
+#include <lib.h>
+#include <videoDriver.h>
 
 #define MAXSIZE 128
 
@@ -71,11 +73,13 @@ void updateBuffer() {
     uint8_t scancode = getKey();
     uint8_t arrowValue = isArrow(scancode);
     
-    if(arrowValue || (!shiftHandler(scancode) && scancode < MAX_SCANCODE)) { // Agregamos los caracteres, con su modificación correspondiente ante un shift
+    if(scancode==L_ALT){
+        saveRegs();
+    }
+    else if(arrowValue || (!shiftHandler(scancode) && scancode < MAX_SCANCODE)) { // Agregamos los caracteres, con su modificación correspondiente ante un shift
         dataStatus = 1;
         char c = (arrowValue != 0)? arrowValue : scancodesChars[shift][scancode];
         buffer[bufferPos++] = c;
-        ncPrintChar(c); // TODO simplemente eliminar esto
         if (bufferPos >= MAXSIZE) {
             bufferPos = 0;
         }
