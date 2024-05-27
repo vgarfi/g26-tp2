@@ -175,9 +175,10 @@ void vdDeleteChar(){
 void resize(){
 	vdClearScreen();
 	int i,j = 0;
+	char c;
 	int limit = (widthScreen/getCurrentFont().size.width) * (heightScreen/getCurrentFont().size.height);
 	for(i = 0, j=0;i < limit && j<index;i++,j++){
-		char c = charsInScreen[j];
+		c = charsInScreen[j];
 		if(cursor.posY != heightScreen * pitch && cursor.posX != widthScreen* bytesPerPixel){
 		if(c == '\n'){
 			i+= (((widthScreen*bytesPerPixel - cursor.posX) / bytesPerPixel) / getCurrentFont().size.width);
@@ -186,6 +187,9 @@ void resize(){
 		else	
 			vdPrintChar(c);
 		}		
+	}
+	if(c != '\n'){
+		vdNewLine();
 	}
 }
 /*
