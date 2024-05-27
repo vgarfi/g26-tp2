@@ -17,6 +17,8 @@
 
 enum Direction {UP, DOWN, LEFT, RIGHT};
 
+enum Player {CPU, HUMAN};
+
 static char board [PROV_WIDTH][PROV_HEIGHT] = {0};
 
 typedef struct {
@@ -28,8 +30,11 @@ typedef struct {
 SnakeHead snakeHeadP1;
 SnakeHead snakeHeadP2;
 
-int didCrashed = 0;
-int lastDirectionP1 = RIGHT;
+int didP1Crashed = 0;
+int didP2Crashed = 0;
+
+int lastDirectionP1 = UP;
+int lastDirectionP2 = DOWN;
 
 int scoreP1 = 0;
 int scoreP2 = 0;
@@ -38,48 +43,48 @@ int decideSnakeDirection (int lastDirection, int upArrowValue, int downArrowValu
 
 void eliminatorGame () {
     clearScreen();
-    
-    snakeHeadP1.x = PROV_WIDTH/2;
-    snakeHeadP1.y = PROV_HEIGHT/2 - PROV_HEIGHT/4;
     snakeHeadP1.color = GREEN;
-
-    snakeHeadP2.x = PROV_WIDTH/2;
-    snakeHeadP2.y = PROV_HEIGHT/2 + PROV_HEIGHT/4;
     snakeHeadP2.color = BLUE;
-
     showMenu();
 }
 
 void playAlone() {
     unsigned char finishKey;
+    unsigned char lastKeyPressed;
     while (finishKey != 27) {
+        cleanBoard();
         printWall();
-        while (didCrashed != CRASHED) {
+        lastDirectionP1 = UP;
+        snakeHeadP1.x = PROV_WIDTH/2;
+        snakeHeadP1.y = PROV_HEIGHT/2 - PROV_HEIGHT/4;
+        setCursorPosition(snakeHeadP1.x, snakeHeadP1.y);
+        while (didP1Crashed != CRASHED) {
             setCursorPosition(snakeHeadP1.x, snakeHeadP1.y);
-            //printSquare(8, snakeHeadP1.color);
             printRectangle(snakeHeadP1.color);
 
             if (board[snakeHeadP1.x][snakeHeadP1.y] == BLOCKED) {
-                didCrashed = CRASHED;
+                didP1Crashed = CRASHED;
             }
 
             board[snakeHeadP1.x][snakeHeadP1.y] = BLOCKED;
-
-            unsigned char keyPressed = getchar();
             
-            lastDirectionP1 = decideSnakeDirection(lastDirectionP1, 'w', 's', 'a', 'd', keyPressed);
+            unsigned char keyPressed = getchar();
+            // if (keyPressed != 0 && lastKeyPressed == keyPressed) {
+            //     sleep(0, 1);
+            // }
+            lastDirectionP1 = decideSnakeDirection(lastDirectionP1, upArrowValue(), downArrowValue(), leftArrowValue(), rightArrowValue(), keyPressed);
             // TODO ver por qué se acelera
             updateSnakeHead(&snakeHeadP1, lastDirectionP1);
+
+            lastKeyPressed = keyPressed;
         }
 
         beepSound(3);
-        p1Died();
-        didCrashed = 0;
+        userDied();
 
-
-        for (size_t i = 0; i < 30 && (finishKey != 27 && finishKey != 'r'); i++) { // TODO se debe manejar con nanosleep o ticksElapsed
+        for (size_t i = 0; i < 30 && (finishKey != 27 && finishKey != 'r'); i++) {
             finishKey = getchar();
-            wait();
+            sleep(0,1);
         }
 
         if (finishKey == 27) {
@@ -89,15 +94,56 @@ void playAlone() {
         }
         else {
             scoreP1 = finishKey == 'r' ? 0 : scoreP1;
-            cleanBoard();
-            snakeHeadP1.x = PROV_WIDTH/2;
-            snakeHeadP1.y = PROV_HEIGHT/2 - PROV_HEIGHT/4;
-            setCursorPosition(snakeHeadP1.x, snakeHeadP1.y);
             finishKey = 0;
         }
     }
 }
-void p1Died() {
+
+
+void playerDied(int P1Crashed, int P2Crashed) {
+    printRectangleProvParam(
+        PROV_WIDTH / 2 - 10, 
+        PROV_HEIGHT / 2 - 5, 
+        20, 
+        10, 
+        GREY
+    );
+    if (P1Crashed == CRASHED && P2Crashed == CRASHED) {
+        setCursorPosition(PROV_WIDTH / 2 - 5, PROV_HEIGHT / 2 - 3);
+        print("DRAW!");
+    } else if (P1Crashed == CRASHED) {
+        setCursorPosition(PROV_WIDTH / 2 - 5, PROV_HEIGHT / 2 - 3);
+        print("PLAYER 2 WINS!");
+        scoreP2++;
+    } else {
+        setCursorPosition(PROV_WIDTH / 2 - 5, PROV_HEIGHT / 2 - 3);
+        print("PLAYER 1 WINS!");
+        scoreP1++;
+    }
+
+
+    setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2-1);
+    print("P1 SCORE is: ");
+    char score[10];
+    itoa(scoreP1, score);
+    print(score);
+    print(" P2 SCORE is: ");
+    itoa(scoreP2, score);
+    print(score);
+
+    didP1Crashed = !CRASHED;
+    didP2Crashed = !CRASHED;
+    
+    setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2);
+    print("Press R to restart");
+    setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2+1);
+    print("Press ESC to exit");
+    
+    // TODO cambiar a texto tipo ELIMINTARO con la palabra YOU DIED!
+    
+}
+
+void userDied() {
     printRectangleProvParam(
         PROV_WIDTH / 2 - 10, 
         PROV_HEIGHT / 2 - 5, 
@@ -106,17 +152,21 @@ void p1Died() {
         GREY
     );
     scoreP1++;
-    setCursorPosition(PROV_WIDTH / 2 - 5, PROV_HEIGHT / 2 - 3);
+    didP1Crashed = !CRASHED;
+    setCursorPosition(PROV_WIDTH / 2 - 5, PROV_HEIGHT / 2 - 2);
     print("YOU DIED!");
-    setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2 - 1);
-    print("Press R to restart");
+    
     setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2);
-    print("Press ESC to exit");
-    setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2+1);
-    print("Your SCORE is ");
+    print("Your DEATHS are: ");
     char score[10];
     itoa(scoreP1, score);
     print(score);
+
+    setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2+1);
+    print("Press R to restart");
+    setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2+2);
+    print("Press ESC to exit");
+    
     // TODO cambiar a texto tipo ELIMINTARO con la palabra YOU DIED!
     
 }
@@ -157,121 +207,97 @@ int decideSnakeDirection (int lastDirection, int upArrowValue, int downArrowValu
     }
 }
 
-void play () {
-    int didCrashed = 0;
-    int lastDirectionP1 = RIGHT;
-    int lastDirectionP2 = UP;
-    int laps = 0;
+void playTwoPlayers(int player2){
+    unsigned char finishKey;
+    while (finishKey != 27) {
+        cleanBoard();
+        printWall();
+        lastDirectionP1 = UP;
+        lastDirectionP2 = DOWN;
+        snakeHeadP1.x = PROV_WIDTH/2;
+        snakeHeadP1.y = PROV_HEIGHT/2 - PROV_HEIGHT/4;
+        snakeHeadP2.x = PROV_WIDTH/2;
+        snakeHeadP2.y = PROV_HEIGHT/2 + PROV_HEIGHT/4;
+        while (didP1Crashed != CRASHED && didP2Crashed != CRASHED) {
+            setCursorPosition(snakeHeadP1.x, snakeHeadP1.y);
+            printRectangle(snakeHeadP1.color);
 
-    while (!didCrashed) {
-        setCursorPosition(snakeHeadP1.x, snakeHeadP1.y);
-        printRectangle(snakeHeadP1.color);
+            setCursorPosition(snakeHeadP2.x, snakeHeadP2.y);
+            printRectangle(snakeHeadP2.color);
 
-        setCursorPosition(snakeHeadP2.x, snakeHeadP2.y);
-        printRectangle(snakeHeadP2.color);
-        
-        if (board[snakeHeadP1.x][snakeHeadP1.y] == BLOCKED) {
-            didCrashed = 1;
+            if (board[snakeHeadP1.x][snakeHeadP1.y] == BLOCKED) {
+                didP1Crashed = CRASHED;
+            }
+
+            if (board[snakeHeadP2.x][snakeHeadP2.y] == BLOCKED) {
+                didP2Crashed = CRASHED;
+            }
+
+            board[snakeHeadP1.x][snakeHeadP1.y] = BLOCKED;
+            board[snakeHeadP2.x][snakeHeadP2.y] = BLOCKED;
+
+            unsigned char keyPressed = getchar();
+            
+            lastDirectionP1 = decideSnakeDirection(lastDirectionP1, upArrowValue(), downArrowValue(), leftArrowValue(), rightArrowValue(), keyPressed);
+            lastDirectionP2 = (player2 == CPU) ? decideSnakeDirectionCPU(lastDirectionP2) : decideSnakeDirection(lastDirectionP2, 'w', 's', 'a', 'd', keyPressed);
+            
+            updateSnakeHead(&snakeHeadP1, lastDirectionP1);
+            updateSnakeHead(&snakeHeadP2, lastDirectionP2);
         }
-        if (board[snakeHeadP2.x][snakeHeadP2.y] == BLOCKED) {
-            didCrashed = 1;
-        }
 
-        board[snakeHeadP1.x][snakeHeadP1.y] = BLOCKED;
-        board[snakeHeadP2.x][snakeHeadP2.y] = BLOCKED;
-
-        unsigned char keyPressed = getchar();
-        
-
-        if (keyPressed == 'w') {
-            lastDirectionP1 = UP;
-        } else if (keyPressed == 's') {
-            lastDirectionP1 = DOWN;
-        } else if (keyPressed == 'a') {
-            lastDirectionP1 = LEFT;
-        } else if (keyPressed == 'd') {
-            lastDirectionP1 = RIGHT;
-        }
-
-        updateSnakeHead(&snakeHeadP1, lastDirectionP1);
-        updateSnakeHead(&snakeHeadP2, lastDirectionP2);
-        laps++;
-    }
-
-    if (didCrashed) {
         beepSound(3);
+        playerDied(didP1Crashed, didP2Crashed);
+        
+
+        for (size_t i = 0; i < 30 && (finishKey != 27 && finishKey != 'r'); i++) {
+            finishKey = getchar();
+            sleep(0,1);
+        }
+
+        if (finishKey == 27) {
+            scoreP1 = 0;
+            scoreP2 = 0;
+            cleanBoard();
+            showMenu();
+        }
+        else {
+            if (finishKey == 'r') {
+                scoreP1 = 0;
+                scoreP2 = 0;
+            }
+            cleanBoard();
+
+            finishKey = 0;
+        }
     }
 }
 
-// void play2(){
+int decideSnakeDirectionCPU(int lastDirectionP2) {
+    
+    switch (lastDirectionP2) {
+    case UP: 
+        if (board[snakeHeadP2.x-1][snakeHeadP2.y] == BLOCKED)
+            return LEFT;
+        break;
+    case DOWN:
+        if (board[snakeHeadP2.x+1][snakeHeadP2.y] == BLOCKED)
+            return RIGHT;
+        break;
+    case LEFT:
+        if (board[snakeHeadP2.x][snakeHeadP2.y-1] == BLOCKED)
+            return DOWN;
+        break;
+    case RIGHT:
+        if (board[snakeHeadP2.x][snakeHeadP2.y+1] == BLOCKED)
+            return UP;
+        break;
+    default:
+        return lastDirectionP2;
+        break;
+    }
+}
 
-//     int didCrashed = 0;
-//     int lastDirectionP1 = RIGHT;
-//     int lastDirectionP2 = DOWN;
-//     int laps = 0;
 
-//     while (!didCrashed) {
-//         setCursorPosition(snakeHeadP1.x, snakeHeadP1.y);
-//         printRectangle(snakeHeadP1.color);
-
-//         setCursorPosition(snakeHeadP2.x, snakeHeadP2.y);
-//         printRectangle(snakeHeadP2.color);
-//         sleep(0, TICKS_PER_FRAME);
-
-
-//         if (board[snakeHeadP1.x][snakeHeadP1.y] == BLOCKED) {
-//             didCrashed = 1;
-//         }
-//         if (board[snakeHeadP2.x][snakeHeadP2.y] == BLOCKED) {
-//             didCrashed = 1;
-//         }
-
-//         board[snakeHeadP1.x][snakeHeadP1.y] = BLOCKED;
-//         board[snakeHeadP2.x][snakeHeadP2.y] = BLOCKED;
-
-//         if (laps % 8 == 0) { // Cada 4 cambio la direc per codere
-//             int ranDirect =  generateRandom(21, snakeHeadP1.x * snakeHeadP1.y);
-//             if (directionIsHorizontal(lastDirectionP1)) {
-//                 if (ranDirect % 2) {
-//                     lastDirectionP1 = UP;
-//                 } else {
-//                     lastDirectionP1 = DOWN;
-//                 }
-//             } else {
-//                 if (ranDirect % 2) {
-//                     lastDirectionP1 = LEFT;
-//                 } else {
-//                     lastDirectionP1 = RIGHT;
-//                 }
-//             }
-
-//             ranDirect =  generateRandom(888, snakeHeadP2.x * snakeHeadP2.y);
-//             if (directionIsHorizontal(lastDirectionP2)) {
-//                 if (ranDirect % 3) {
-//                     lastDirectionP2 = UP;
-//                 } else {
-//                     lastDirectionP2 = DOWN;
-//                 }
-//             } else {
-//                 if (ranDirect % 3) {
-//                     lastDirectionP2 = LEFT;
-//                 } else {
-//                     lastDirectionP2 = RIGHT;
-//                 }
-//             }
-//         }
-//         updateSnakeHead(&snakeHeadP1, lastDirectionP1);
-//         updateSnakeHead(&snakeHeadP2, lastDirectionP2);
-//         laps++;
-//     }
-
-//     if (didCrashed) {
-//         beepSound(3);
-//     }
-// }
-// int generateRandom (int a, int b) {
-//     return a * b + 1;
-// }
 int directionIsHorizontal (int direction) {
     return direction == LEFT || direction == RIGHT;
 }
@@ -449,7 +475,10 @@ void showMenu(){
         playAlone();
     } else if (option == '2') {
         clearScreen();
-        //play2();
+        playTwoPlayers(HUMAN);
+    } else if (option == '3') {
+        clearScreen();
+        playTwoPlayers(CPU);
     } else if (option == 27){
         clearScreen();
     }
