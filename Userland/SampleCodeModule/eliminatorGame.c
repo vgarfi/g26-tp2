@@ -4,16 +4,21 @@
 #include "include/string.h"
 #include "include/colors.h"
 
-#define PROV_WIDTH          128
-#define PROV_HEIGHT         64
 
 #define TICKS_PER_FRAME     1
-#define MS_PER_FRAME        1500000
+#define MS_PER_FRAME        180000
 
-#define BLOCKED 1
-#define FREE 
+#define BLOCKED             1
+#define FREE                0
 
-#define CRASHED 1
+#define SNAKE_HEAD_SIZE     8
+#define WALL_SIZE           8
+
+
+#define PROV_WIDTH          1024
+#define PROV_HEIGHT         768
+
+#define CRASHED             1
 
 enum Direction {UP, DOWN, LEFT, RIGHT};
 
@@ -57,11 +62,11 @@ void playAlone() {
         lastDirectionP1 = UP;
         snakeHeadP1.x = PROV_WIDTH/2;
         snakeHeadP1.y = PROV_HEIGHT/2 - PROV_HEIGHT/4;
-        setCursorPosition(snakeHeadP1.x, snakeHeadP1.y);
-        while (didP1Crashed != CRASHED) {
-            setCursorPosition(snakeHeadP1.x, snakeHeadP1.y);
-            printRectangle(snakeHeadP1.color);
 
+        while (didP1Crashed != CRASHED) {
+
+            printSquare(snakeHeadP1.x*SNAKE_HEAD_SIZE, snakeHeadP1.y*SNAKE_HEAD_SIZE, SNAKE_HEAD_SIZE, snakeHeadP1.color);
+            
             if (board[snakeHeadP1.x][snakeHeadP1.y] == BLOCKED) {
                 didP1Crashed = CRASHED;
             }
@@ -69,11 +74,7 @@ void playAlone() {
             board[snakeHeadP1.x][snakeHeadP1.y] = BLOCKED;
             
             unsigned char keyPressed = getchar();
-            // if (keyPressed != 0 && lastKeyPressed == keyPressed) {
-            //     sleep(0, 1);
-            // }
             lastDirectionP1 = decideSnakeDirection(lastDirectionP1, upArrowValue(), downArrowValue(), leftArrowValue(), rightArrowValue(), keyPressed);
-            // TODO ver por qué se acelera
             updateSnakeHead(&snakeHeadP1, lastDirectionP1);
 
             lastKeyPressed = keyPressed;
@@ -101,11 +102,11 @@ void playAlone() {
 
 
 void playerDied(int P1Crashed, int P2Crashed) {
-    printRectangleProvParam(
+    printRectangle(
         PROV_WIDTH / 2 - 10, 
         PROV_HEIGHT / 2 - 5, 
-        20, 
-        10, 
+        20*WALL_SIZE, 
+        10*WALL_SIZE, 
         GREY
     );
     if (P1Crashed == CRASHED && P2Crashed == CRASHED) {
@@ -120,7 +121,6 @@ void playerDied(int P1Crashed, int P2Crashed) {
         print("PLAYER 1 WINS!");
         scoreP1++;
     }
-
 
     setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2-1);
     print("P1 SCORE is: ");
@@ -144,11 +144,11 @@ void playerDied(int P1Crashed, int P2Crashed) {
 }
 
 void userDied() {
-    printRectangleProvParam(
+    printRectangle(
         PROV_WIDTH / 2 - 10, 
         PROV_HEIGHT / 2 - 5, 
-        20, 
-        10, 
+        20*WALL_SIZE, 
+        10*WALL_SIZE, 
         GREY
     );
     scoreP1++;
@@ -178,15 +178,6 @@ void cleanBoard() {
         }
     }
     clearScreen();
-}
-
-void printRectangleProvParam(int startX, int startY, int width, int height, uint32_t color) {
-    for (int i = startX; i < startX + width; i++) {
-        for (int j = startY; j < startY + height; j++) {
-            setCursorPosition(i, j);
-            printRectangle(color);
-        }
-    }
 }
 
 int decideSnakeDirection (int lastDirection, int upArrowValue, int downArrowValue, int leftArrowValue, int rightArrowValue, unsigned char keyPressed) {
@@ -219,11 +210,9 @@ void playTwoPlayers(int player2){
         snakeHeadP2.x = PROV_WIDTH/2;
         snakeHeadP2.y = PROV_HEIGHT/2 + PROV_HEIGHT/4;
         while (didP1Crashed != CRASHED && didP2Crashed != CRASHED) {
-            setCursorPosition(snakeHeadP1.x, snakeHeadP1.y);
-            printRectangle(snakeHeadP1.color);
+            printSquare(snakeHeadP1.x*SNAKE_HEAD_SIZE, snakeHeadP1.y*SNAKE_HEAD_SIZE, SNAKE_HEAD_SIZE, snakeHeadP1.color);
+            printSquare(snakeHeadP2.x*SNAKE_HEAD_SIZE, snakeHeadP2.y*SNAKE_HEAD_SIZE, SNAKE_HEAD_SIZE, snakeHeadP2.color);
 
-            setCursorPosition(snakeHeadP2.x, snakeHeadP2.y);
-            printRectangle(snakeHeadP2.color);
 
             if (board[snakeHeadP1.x][snakeHeadP1.y] == BLOCKED) {
                 didP1Crashed = CRASHED;
@@ -325,11 +314,8 @@ void updateSnakeHead (SnakeHead * head, int direction) {
 void printWall () {
     
     for (int i = PROV_WIDTH/2, k = PROV_WIDTH/2; i >= 0 && k < PROV_WIDTH ; i--, k++) {
-        setCursorPosition(i, 0);
-        printRectangle(RED);
-        setCursorPosition(k, 0);
-        printRectangle(RED);
-
+        printSquare(i*WALL_SIZE, 0, WALL_SIZE, RED);
+        printSquare(k*WALL_SIZE, 0, WALL_SIZE, RED);
         board[i][0] = BLOCKED;
         board[k][0] = BLOCKED;
         wait();
@@ -337,28 +323,22 @@ void printWall () {
     }
 
     for (int i = 0; i < PROV_HEIGHT ; i++) {
-        setCursorPosition(0, i);
-        printRectangle(RED);
-        setCursorPosition(PROV_WIDTH-1, i);
-        printRectangle(RED);
+        printSquare(0, i*WALL_SIZE, WALL_SIZE, RED);
+        printSquare((PROV_WIDTH-1)*WALL_SIZE, i*WALL_SIZE, WALL_SIZE, RED);
         board[0][i] = BLOCKED;
         board[PROV_WIDTH-1][i] = BLOCKED;
         wait();
     }
 
     for (int i = 0, k = PROV_WIDTH-1; i <= PROV_WIDTH/2 && k >= PROV_WIDTH/2 ; i++, k--) {
-        setCursorPosition(i, PROV_HEIGHT-1);
-        printRectangle(RED);
-        setCursorPosition(k, PROV_HEIGHT-1);
-        printRectangle(RED);
+        printSquare(i*WALL_SIZE, (PROV_HEIGHT-1)*WALL_SIZE, WALL_SIZE, RED);
+        printSquare(k*WALL_SIZE, (PROV_HEIGHT-1)*WALL_SIZE, WALL_SIZE, RED);
 
         board[i][PROV_HEIGHT-1] = BLOCKED;
         board[k][PROV_HEIGHT-1] = BLOCKED;
         wait();
     }   
 }
-
-
 
 void printEliminatorTitle() {
     // Representación de cada letra en píxeles
@@ -433,19 +413,15 @@ void printEliminatorTitle() {
         int y = startY;
 
         sleep(0, 2*TICKS_PER_FRAME);
-        // Recorre cada píxel de la letra
         for (int i = 0; letters[l][i] != '\0'; i++) {
             if (letters[l][i] == '1') {
-                setCursorPosition(x, y);
-                printRectangle(RED);
+                printSquare(x+SNAKE_HEAD_SIZE, y+SNAKE_HEAD_SIZE, SNAKE_HEAD_SIZE, RED);
             }
 
             if (letters[l][i] == '\n') {
-                // Al final de una línea, mueve el cursor a la siguiente línea
                 x = startX + l * 7;
                 y++;
             } else {
-                // En medio de una línea, mueve el cursor a la derecha
                 x++;
             }
         }
@@ -454,17 +430,16 @@ void printEliminatorTitle() {
 
 void showMenu(){
     printEliminatorTitle();
-
     setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2 + 5);
     print("Welcome to the Eliminator Game\n");
     setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2 + 6);
     print("Press 1 to play alone\n");
     setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2 + 7);
-    print("Press 2 to play against a friend\n"); // TODO
+    print("Press 2 to play against a friend\n");
     setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2 + 8);
     print("Press 3 to play against a computer\n");
     setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2 + 9);
-    print("Press ESC to exit\n"); // TODO
+    print("Press ESC to exit\n");
     char option = getchar();
     while (option != '1' && option != '2' && option != '3' && option != 27) {
         option = getchar();

@@ -24,7 +24,7 @@ void initializeVideoDriver(){
 	widthScreen = 	VBE_mode_info->width;
 	heightScreen = VBE_mode_info->height;
 	pitch = VBE_mode_info->pitch;
-	bytesPerPixel = VBE_mode_info->bpp/8;
+	bytesPerPixel = VBE_mode_info->bpp/BYTE_LENGHT;
 	//memset(charsInScreen,)
 	memset(charsInScreen,' ',maxCharsInScreen);
 	memset(colorsInScreen,0,4*maxCharsInScreen);
@@ -238,7 +238,7 @@ void vdPrintRect(int x,int y,int base, int height, uint32_t hexColor){
 	uint64_t offsetX = x * bytesPerPixel;
 	uint64_t posX = offsetX;
 	uint64_t offsetY = y * pitch;
-	for(int y=0;y < height;y++,offsetY += pitch){
+	for(int y=0;y < height;y++,offsetY += pitch) {
 		for(int x = 0,offsetX = posX; x < base;x++, offsetX += bytesPerPixel)
 			vdPutPixel(offsetX + offsetY,hexColor);
 	}

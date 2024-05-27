@@ -45,6 +45,7 @@ int init(){
         else if(strcasecmp(commandPrompt, "eliminator")==0){
             print("\nLoading eliminator...");
             sleep(2,0);
+            hideCursor();
             eliminatorGame();
         }
         else if(strcasecmp(commandPrompt, "clear")==0){
