@@ -62,11 +62,13 @@ rightArrowValue:
     int 80h
     ret
 printRectangle:
+    mov r10, rcx
     mov rax, 31
     int 80h
     ret
 
 printSquare:
+    mov r10, rcx
     mov rax, 32
     int 80h
     ret

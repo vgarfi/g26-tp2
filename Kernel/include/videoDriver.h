@@ -47,7 +47,7 @@ struct vbe_mode_info_structure {
 	uint8_t reserved1[206];
 } __attribute__ ((packed));
 
-//void putPixel(uint32_t hexColor, uint64_t x, uint64_t y);
+
 void vdPrintChar(unsigned char c);
 void vdPutPixel(uint64_t offset,uint32_t hexcolor);
 void vdPrintLine(uint64_t offset,uint32_t fgColor,uint32_t bgColor,uint8_t mask,int limit,int step);
@@ -66,11 +66,6 @@ void vdPrintSquare(int x, int y,int side,uint32_t hexcolor);
 void vdSetCursorByPixel(int x, int y);
 void vdSetCursorColor(uint32_t color);
 void vdPrintCursor();
-/*void vdSetCursorByPixel(int x, int y)
-uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
-void ncPrintDec(uint64_t value);
-void ncPrintHex(uint64_t value);
-void ncPrintBin(uint64_t value);
-void ncPrintBase(uint64_t value, uint32_t base);
-*/
+
+
 #endif
