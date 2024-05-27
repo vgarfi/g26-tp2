@@ -18,8 +18,6 @@ static uint32_t bgColor = 0x00000000;
 static int maxCharsInScreen = 8192; // chars per row * chars per column 
 char charsInScreen[8192] = {' '};
 uint32_t colorsInScreen[8192];
-
-char charsInScreen[MAXCHARSINSCREEN] = {' '};
 static int index = 0;
 void initializeVideoDriver(){
 	framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
@@ -233,14 +231,17 @@ void vdClearScreen(){
 
 void vdClearBuffer(){
 	memset(charsInScreen,' ',MAXCHARSINSCREEN);
+	memset(colorsInScreen,0,4*maxCharsInScreen);
 	index = 0;
 }
 
 
 
 void updateCharsInScreen(int lines){
-	for(int i=lines * (widthScreen/getCurrentFont().size.width),j=0;i<MAXCHARSINSCREEN;i++)
+	for(int i=lines * (widthScreen/getCurrentFont().size.width),j=0;i<MAXCHARSINSCREEN;i++){
+		colorsInScreen[j] = colorsInScreen[i];
 		charsInScreen[j++] = charsInScreen[i];
+	}
 }
 
 void vdScrol(int lines) {
