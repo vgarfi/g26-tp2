@@ -15,8 +15,9 @@ uint16_t pitch;
 uint8_t  bytesPerPixel;
 static uint32_t fgColor = 0x00F0F0F0;
 static uint32_t bgColor = 0x00000000;
-
-char charsInScreen[MAXCHARSINSCREEN] = {' '};
+static int maxCharsInScreen = 8192; // chars per row * chars per column 
+char charsInScreen[8192] = {' '};
+uint32_t colorsInScreen[8192];
 static int index = 0;
 void initializeVideoDriver(){
 	framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
@@ -24,10 +25,11 @@ void initializeVideoDriver(){
 	heightScreen = VBE_mode_info->height;
 	pitch = VBE_mode_info->pitch;
 	bytesPerPixel = VBE_mode_info->bpp/8;
-	for (int i = 0; i < 8192; i++)
-	{
-		charsInScreen[i] = ' ';
-	}
+	//memset(charsInScreen,)
+	memset(charsInScreen,' ',maxCharsInScreen);
+	memset(colorsInScreen,0,4*maxCharsInScreen);
+	
+
 }
 
 
@@ -147,6 +149,7 @@ void vdPrint(char *characters,uint32_t hexColor){
 		char c = characters[i];
 
 		if(c == '\n'){
+			colorsInScreen[index] = 0x00000000;
 			charsInScreen[index++] = '\n';
 			vdNewLine();
 		}
@@ -155,11 +158,13 @@ void vdPrint(char *characters,uint32_t hexColor){
 			vdDeleteChar();
 			if(index != 0)
 				--index;
+			colorsInScreen[index] = 0x00000000;
 			charsInScreen[index] = ' ';
 		}
 		else{
 		vdPrintChar(c);
-		charsInScreen[index++] = characters[i];
+		colorsInScreen[index] = hexColor;
+		charsInScreen[index++] = c;
 		}
 	}
 }
@@ -184,8 +189,11 @@ void resize(){
 			i+= (((widthScreen*bytesPerPixel - cursor.posX) / bytesPerPixel) / getCurrentFont().size.width);
 			vdNewLine();
 		}
-		else	
+		else{
+			fgColor = colorsInScreen[j];	
 			vdPrintChar(c);
+			}
+
 		}		
 	}
 	if(c != '\n'){
@@ -223,14 +231,17 @@ void vdClearScreen(){
 
 void vdClearBuffer(){
 	memset(charsInScreen,' ',MAXCHARSINSCREEN);
+	memset(colorsInScreen,0,4*maxCharsInScreen);
 	index = 0;
 }
 
 
 
 void updateCharsInScreen(int lines){
-	for(int i=lines * (widthScreen/getCurrentFont().size.width),j=0;i<MAXCHARSINSCREEN;i++)
+	for(int i=lines * (widthScreen/getCurrentFont().size.width),j=0;i<MAXCHARSINSCREEN;i++){
+		colorsInScreen[j] = colorsInScreen[i];
 		charsInScreen[j++] = charsInScreen[i];
+	}
 }
 
 void vdScrol(int lines) {
