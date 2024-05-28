@@ -7,7 +7,7 @@
 #include "include/lib.h"
 #include "include/exceptions.h"
 
-#define HELPLENGTH 14
+#define HELPLENGTH 13
 
 void saveRegs(void);
 int printRegs(void);
