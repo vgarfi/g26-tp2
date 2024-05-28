@@ -13,10 +13,13 @@
 
 #define SNAKE_HEAD_SIZE     8
 #define WALL_SIZE           8
+#define LETTERS_THICK       8
 
 
-#define PROV_WIDTH          1024
-#define PROV_HEIGHT         768
+#define WIDTH               128 // x 8 = 1024
+#define HEIGHT              96 // x 8 = 768
+#define PIXELS_WIDTH        1024
+#define PIXELS_HEIGHT       768
 
 #define CRASHED             1
 
@@ -24,7 +27,7 @@ enum Direction {UP, DOWN, LEFT, RIGHT};
 
 enum Player {CPU, HUMAN};
 
-static char board [PROV_WIDTH][PROV_HEIGHT] = {0};
+static char board [WIDTH][HEIGHT] = {0};
 
 typedef struct {
     uint8_t x;
@@ -60,8 +63,8 @@ void playAlone() {
         cleanBoard();
         printWall();
         lastDirectionP1 = UP;
-        snakeHeadP1.x = PROV_WIDTH/2;
-        snakeHeadP1.y = PROV_HEIGHT/2 - PROV_HEIGHT/4;
+        snakeHeadP1.x = WIDTH/2;
+        snakeHeadP1.y = HEIGHT/2 - HEIGHT/4;
 
         while (didP1Crashed != CRASHED) {
 
@@ -102,27 +105,28 @@ void playAlone() {
 
 
 void playerDied(int P1Crashed, int P2Crashed) {
+    // TODO: imprimir centradas las cosas, tengo noni
     printRectangle(
-        PROV_WIDTH / 2 - 10, 
-        PROV_HEIGHT / 2 - 5, 
-        20*WALL_SIZE, 
+        PIXELS_WIDTH / 2 - 120, 
+        PIXELS_HEIGHT / 2 - 40, 
+        30*WALL_SIZE, 
         10*WALL_SIZE, 
         GREY
     );
     if (P1Crashed == CRASHED && P2Crashed == CRASHED) {
-        setCursorPosition(PROV_WIDTH / 2 - 5, PROV_HEIGHT / 2 - 3);
+        setCursorPosition((PIXELS_WIDTH / 8) / 2 - 5, (PIXELS_HEIGHT / 12) / 2 - 3);
         print("DRAW!");
     } else if (P1Crashed == CRASHED) {
-        setCursorPosition(PROV_WIDTH / 2 - 5, PROV_HEIGHT / 2 - 3);
+        setCursorPosition((PIXELS_WIDTH / 8) / 2 - 5, (PIXELS_HEIGHT / 12) / 2 - 3);
         print("PLAYER 2 WINS!");
         scoreP2++;
     } else {
-        setCursorPosition(PROV_WIDTH / 2 - 5, PROV_HEIGHT / 2 - 3);
+        setCursorPosition((PIXELS_WIDTH / 8) / 2 - 5, (PIXELS_HEIGHT / 12) / 2 - 3);
         print("PLAYER 1 WINS!");
         scoreP1++;
     }
 
-    setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2-1);
+    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2-1);
     print("P1 SCORE is: ");
     char score[10];
     itoa(scoreP1, score);
@@ -134,9 +138,9 @@ void playerDied(int P1Crashed, int P2Crashed) {
     didP1Crashed = !CRASHED;
     didP2Crashed = !CRASHED;
     
-    setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2);
+    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2);
     print("Press R to restart");
-    setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2+1);
+    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2+1);
     print("Press ESC to exit");
     
     // TODO cambiar a texto tipo ELIMINTARO con la palabra YOU DIED!
@@ -145,26 +149,26 @@ void playerDied(int P1Crashed, int P2Crashed) {
 
 void userDied() {
     printRectangle(
-        PROV_WIDTH / 2 - 10, 
-        PROV_HEIGHT / 2 - 5, 
+        PIXELS_WIDTH / 2 - 80, 
+        PIXELS_HEIGHT / 2 - 40, 
         20*WALL_SIZE, 
         10*WALL_SIZE, 
         GREY
     );
     scoreP1++;
     didP1Crashed = !CRASHED;
-    setCursorPosition(PROV_WIDTH / 2 - 5, PROV_HEIGHT / 2 - 2);
+    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 5, (PIXELS_HEIGHT / 12) / 2 - 2);
     print("YOU DIED!");
     
-    setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2);
+    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2);
     print("Your DEATHS are: ");
     char score[10];
     itoa(scoreP1, score);
     print(score);
 
-    setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2+1);
+    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2+1);
     print("Press R to restart");
-    setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2+2);
+    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2+2);
     print("Press ESC to exit");
     
     // TODO cambiar a texto tipo ELIMINTARO con la palabra YOU DIED!
@@ -172,8 +176,8 @@ void userDied() {
 }
 
 void cleanBoard() {
-    for (int i = 1; i < PROV_WIDTH; i++) {
-        for (int j = 1; j < PROV_HEIGHT; j++) {
+    for (int i = 1; i < WIDTH; i++) {
+        for (int j = 1; j < HEIGHT; j++) {
             board[i][j] = 0;
         }
     }
@@ -205,10 +209,10 @@ void playTwoPlayers(int player2){
         printWall();
         lastDirectionP1 = UP;
         lastDirectionP2 = DOWN;
-        snakeHeadP1.x = PROV_WIDTH/2;
-        snakeHeadP1.y = PROV_HEIGHT/2 - PROV_HEIGHT/4;
-        snakeHeadP2.x = PROV_WIDTH/2;
-        snakeHeadP2.y = PROV_HEIGHT/2 + PROV_HEIGHT/4;
+        snakeHeadP1.x = WIDTH/2;
+        snakeHeadP1.y = HEIGHT/2 - HEIGHT/4;
+        snakeHeadP2.x = WIDTH/2;
+        snakeHeadP2.y = HEIGHT/2 + HEIGHT/4;
         while (didP1Crashed != CRASHED && didP2Crashed != CRASHED) {
             printSquare(snakeHeadP1.x*SNAKE_HEAD_SIZE, snakeHeadP1.y*SNAKE_HEAD_SIZE, SNAKE_HEAD_SIZE, snakeHeadP1.color);
             printSquare(snakeHeadP2.x*SNAKE_HEAD_SIZE, snakeHeadP2.y*SNAKE_HEAD_SIZE, SNAKE_HEAD_SIZE, snakeHeadP2.color);
@@ -313,29 +317,28 @@ void updateSnakeHead (SnakeHead * head, int direction) {
 
 void printWall () {
     
-    for (int i = PROV_WIDTH/2, k = PROV_WIDTH/2; i >= 0 && k < PROV_WIDTH ; i--, k++) {
+    for (int i = WIDTH/2, k = WIDTH/2; i >= 0 && k < WIDTH ; i--, k++) {
         printSquare(i*WALL_SIZE, 0, WALL_SIZE, RED);
         printSquare(k*WALL_SIZE, 0, WALL_SIZE, RED);
         board[i][0] = BLOCKED;
         board[k][0] = BLOCKED;
         wait();
-        
     }
 
-    for (int i = 0; i < PROV_HEIGHT ; i++) {
+    for (int i = 0; i < HEIGHT ; i++) {
         printSquare(0, i*WALL_SIZE, WALL_SIZE, RED);
-        printSquare((PROV_WIDTH-1)*WALL_SIZE, i*WALL_SIZE, WALL_SIZE, RED);
+        printSquare((WIDTH-1)*WALL_SIZE, i*WALL_SIZE, WALL_SIZE, RED);
         board[0][i] = BLOCKED;
-        board[PROV_WIDTH-1][i] = BLOCKED;
+        board[WIDTH-1][i] = BLOCKED;
         wait();
     }
 
-    for (int i = 0, k = PROV_WIDTH-1; i <= PROV_WIDTH/2 && k >= PROV_WIDTH/2 ; i++, k--) {
-        printSquare(i*WALL_SIZE, (PROV_HEIGHT-1)*WALL_SIZE, WALL_SIZE, RED);
-        printSquare(k*WALL_SIZE, (PROV_HEIGHT-1)*WALL_SIZE, WALL_SIZE, RED);
+    for (int i = 0, k = WIDTH-1; i <= WIDTH/2 && k >= WIDTH/2 ; i++, k--) {
+        printSquare(i*WALL_SIZE, (HEIGHT-1)*WALL_SIZE, WALL_SIZE, RED);
+        printSquare(k*WALL_SIZE, (HEIGHT-1)*WALL_SIZE, WALL_SIZE, RED);
 
-        board[i][PROV_HEIGHT-1] = BLOCKED;
-        board[k][PROV_HEIGHT-1] = BLOCKED;
+        board[i][HEIGHT-1] = BLOCKED;
+        board[k][HEIGHT-1] = BLOCKED;
         wait();
     }   
 }
@@ -405,8 +408,8 @@ void printEliminatorTitle() {
         "10001\n"
     };
 
-    int startX = PROV_WIDTH / 2 - (4 + 3) * 10 / 2; // Centra la palabra en la pantalla, 4 = anchp de letra, 3 = espacio entre letras
-    int startY = PROV_HEIGHT / 2 - 5 / 2;
+    int startX = WIDTH / 2 - (4 + 3) * 10 / 2; // Centra la palabra en la pantalla, 4 = ancho de letra, 3 = espacio entre letras
+    int startY = HEIGHT / 2 - 5 / 2;
 
     for (int l = 0; l <= 9; l++) {
         int x = startX + l * 7; // 6 permite un espacio entre las letras
@@ -415,7 +418,7 @@ void printEliminatorTitle() {
         sleep(0, 2*TICKS_PER_FRAME);
         for (int i = 0; letters[l][i] != '\0'; i++) {
             if (letters[l][i] == '1') {
-                printSquare(x+SNAKE_HEAD_SIZE, y+SNAKE_HEAD_SIZE, SNAKE_HEAD_SIZE, RED);
+                printSquare(x*LETTERS_THICK, y*LETTERS_THICK, LETTERS_THICK, RED);
             }
 
             if (letters[l][i] == '\n') {
@@ -430,15 +433,15 @@ void printEliminatorTitle() {
 
 void showMenu(){
     printEliminatorTitle();
-    setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2 + 5);
+    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 15, (PIXELS_HEIGHT / 12) / 2 + 5);
     print("Welcome to the Eliminator Game\n");
-    setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2 + 6);
+    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 11, (PIXELS_HEIGHT / 12) / 2 + 6);
     print("Press 1 to play alone\n");
-    setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2 + 7);
+    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 16, (PIXELS_HEIGHT / 12) / 2 + 7);
     print("Press 2 to play against a friend\n");
-    setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2 + 8);
+    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 17, (PIXELS_HEIGHT / 12) / 2 + 8);
     print("Press 3 to play against a computer\n");
-    setCursorPosition(PROV_WIDTH / 2 - 10, PROV_HEIGHT / 2 + 9);
+    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 9, (PIXELS_HEIGHT / 12) / 2 + 9);
     print("Press ESC to exit\n");
     char option = getchar();
     while (option != '1' && option != '2' && option != '3' && option != 27) {
