@@ -9,13 +9,14 @@
 
 
 static int (*syscallHandlers[])()={
-    read, write, printRegs, time, date, incSize, decSize, upArrowValue, leftArrowValue, downArrowValue,
+    read, write, printRegs, incSize, decSize, upArrowValue, leftArrowValue, downArrowValue,
     rightArrowValue, clearScreen, printSquare, printRect, setCursor, sound, ticksleep, hideCursor,
-    showCursor, printCursor
+    showCursor, printCursor, getCurrentSeconds, getCurrentMinutes, getCurrentHours, getCurrentDay,
+    getCurrentMonth, getCurrentYear
 };
 
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){       
-    int handlerSize = 20;//(syscallHandlers)/sizeof(syscallHandlers[0]);
+    int handlerSize = 23;//(syscallHandlers)/sizeof(syscallHandlers[0]);
 
     if(rax < 0 || rax > handlerSize)
         return -1;
@@ -112,15 +113,6 @@ int ticksleep(uint64_t secs, uint64_t ticks){
     return 0;
 }
 
-char * time(void){
-    return getCurrentTime();
-}
-
-char * date(void){
-    return getCurrentDate();
-}
-
-
 int incSize(){
     int zoomFail = sizeUp();
     if(!zoomFail)
@@ -145,4 +137,28 @@ int showCursor(){
 
 int printCursor(){
     vdPrintCursor();
+}
+
+int getCurrentSeconds(void){
+    return rtc_get_seconds();
+}
+
+int getCurrentMinutes(void){
+    return rtc_get_minutes();
+}
+
+int getCurrentHours(void){
+    return rtc_get_hour();
+}
+
+int getCurrentDay(void){
+    return rtc_get_day();
+}
+
+int getCurrentMonth(void){
+    return rtc_get_month();
+}
+
+int getCurrentYear(void){
+    return rtc_get_year();
 }
