@@ -35,6 +35,18 @@ int printColor(char* str, uint64_t hexColor);
 int print(char * str);
 
 /**
+ * Modified printf. Similar to print, writes the given string on the screen 
+ * but can receive up to 3 integers which will be appended to the string
+ * where %d appears.
+ * 
+ * NOTE: This version of printf only works with integers lower than 100 in order
+ * to format it correctly.
+ * 
+ * Returns length print 
+*/
+int printf(char * str, int first, int sec, int third);
+
+/**
  * Receives a buffer and size as parameters
  * Reads STDIN and fills the buffer with its content
  * until size is reached or '\n' is read.

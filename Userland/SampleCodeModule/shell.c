@@ -6,8 +6,9 @@
 #include "include/syscalls.h"
 #include "include/lib.h"
 #include "include/exceptions.h"
+#include "include/dateTime.h"
 
-#define HELPLENGTH 14
+#define HELPLENGTH 13
 
 void saveRegs(void);
 int printRegs(void);
@@ -52,14 +53,10 @@ int init(){
             clearScreen();
         }
         else if(strcasecmp(commandPrompt, "time")==0){
-            dateTimeAux=getTime();
-            print(dateTimeAux);
-            putchar('\n');
+            printTime();
         }
         else if(strcasecmp(commandPrompt, "date")==0){
-            dateTimeAux=getDate();
-            print(dateTimeAux);
-            putchar('\n');
+            printDate();
         }
         else if(strcasecmp(commandPrompt, "zoomin")==0){
             zoomAux = incTextSize();
