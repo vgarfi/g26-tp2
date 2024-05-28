@@ -5,44 +5,22 @@
 #include <keyboard.h>
 #include <interrupts.h>
 #include <lib.h>
+#include <syscallHandle.h>
 
-int nanosleep(uint64_t secs, uint64_t ticks);     // rdi : seconds, rsi : miliseconds
-int printRegs(void);
-int read(uint64_t fd, char * buf, uint64_t count);
-int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor);
-int sound(uint64_t ticks);
-char * time(void);
-char * date(void);
-int incSize();
-int decSize();
-int hideCursor();
-int showCursor();
-int printCursor();
 
-uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
-    switch(rax){
-        case 0: return read(rdi, (char *)rsi, rdx);
-        case 1: return write(rdi, (char *)rsi, rdx, r10);
-        case 2: return printRegs();
-        case 5: return time();
-        case 6: return date();
-        case 7: return incSize();
-        case 8: return decSize();
-        case 20: return upArrowValue();
-        case 21: return leftArrowValue();
-        case 22: return downArrowValue();
-        case 23: return rightArrowValue();
-        case 30: return clearScreen();
-        case 32: return printSquare(rdi, rsi,rdx,r10);
-        case 31: return printRect(rdi,rsi,rdx,r10,r8);
-        case 40: return setCursor(rdi, rsi);
-        case 128: return sound(rdi);
-        case 162: return nanosleep(rdi, rsi);
-        case 170: return hideCursor();
-        case 171: return showCursor();
-        case 172: return printCursor();
-        default: return -1;
-    }
+static int (*syscallHandlers[])()={
+    read, write, printRegs, time, date, incSize, decSize, upArrowValue, leftArrowValue, downArrowValue,
+    rightArrowValue, clearScreen, printSquare, printRect, setCursor, sound, ticksleep, hideCursor,
+    showCursor, printCursor
+};
+
+uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){       
+    int handlerSize = 20;//(syscallHandlers)/sizeof(syscallHandlers[0]);
+
+    if(rax < 0 || rax > handlerSize)
+        return -1;
+
+    return syscallHandlers[rax](rdi,rsi,rdx,r10,r8);
 }
 
 int read(uint64_t fd, char * buf, uint64_t count) {
@@ -125,7 +103,7 @@ int sound(uint64_t ticks){
 }
 
 // rdi = seconds, rsi = ticks
-int nanosleep(uint64_t secs, uint64_t ticks){
+int ticksleep(uint64_t secs, uint64_t ticks){
     if(secs<0 || ticks<0)
         return -1;
     int secondsToTicks = secs*18, msToTicks=ticks;

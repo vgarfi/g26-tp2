@@ -34,87 +34,87 @@ writeScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToPrint, R10: 
     ret
 
 sleep:
-    mov rax, 162
+    mov rax, 16
     int 80h
     ret
 
 clearScreen:
-    mov rax, 30
+    mov rax, 11
     int 80h
     ret
 upArrowValue:
-    mov rax, 20
+    mov rax, 7
     int 80h
     ret
 
 leftArrowValue:
-    mov rax, 21
+    mov rax, 8
     int 80h
     ret
 
 downArrowValue:
-    mov rax, 22
+    mov rax, 9
     int 80h
     ret
 
 rightArrowValue:
-    mov rax, 23
+    mov rax, 10
     int 80h
     ret
 printRectangle:
     mov r10, rcx
-    mov rax, 31
+    mov rax, 13
     int 80h
     ret
 
 printSquare:
     mov r10, rcx
-    mov rax, 32
+    mov rax, 12
     int 80h
     ret
 
 setCursorPosition:
-    mov rax, 40
+    mov rax, 14
     int 80h
     ret
 
 beepSound:
-    mov rax, 128
+    mov rax, 15
     int 80h
     ret
 
 getTime:
-    mov rax, 5
+    mov rax, 3
     int 80h
     ret
 
 getDate:
-    mov rax, 6
+    mov rax, 4
     int 80h
     ret
 
 zoomIn:
-    mov rax, 7
+    mov rax, 5
     int 80h
     ret
 
 zoomOut:
-    mov rax, 8
+    mov rax, 6
     int 80h
     ret
 
 hideCursor:
-    mov rax,170
+    mov rax,17
     int 80h
     ret
 
 showCursor:
-    mov rax,171
+    mov rax,18
     int 80h
     ret
 
 printCursor:
-    mov rax,172
+    mov rax,19
     int 80h
     ret
     

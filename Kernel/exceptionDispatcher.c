@@ -10,7 +10,7 @@
 #define ERRORCOL 0x00FF0000
 #define COMMENTCOL 0x00FFFFFF
 
-int nanosleep(uint64_t rdi, uint64_t rsi);
+int ticksleep(uint64_t rdi, uint64_t rsi);
 int read(uint64_t fd, char * buf, uint64_t count);
 
 static void zero_division();
@@ -38,7 +38,7 @@ void exceptionDispatcher(int exception) {
 	}
 	regPrinting();
 	vdPrint("\n", COMMENTCOL);
-	nanosleep(3,5);
+	ticksleep(3,5);
 	vdPrint("Press any key to recover...\n",COMMENTCOL);
 	int flag=0;
 	char key;
