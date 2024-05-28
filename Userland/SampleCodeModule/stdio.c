@@ -1,6 +1,11 @@
 #include "include/stdio.h"
 #include "include/syscalls.h"
 #include "include/colors.h"
+#include "include/string.h"
+#include "include/lib.h"
+
+#define MAXBUFLEN 100
+#define MINLEN 2
 
 /**
  * readSizeFlag is used as a way of identifying whether
@@ -36,6 +41,37 @@ int printColor(char* str, uint64_t hexColor){
 
 int print(char * str){
     printColor(str, DEFAULT);
+}
+
+
+int printf(char *str, int first, int sec, int third) {
+    char buffer[MAXBUFLEN], numStr[MAXBUFLEN];;
+    int bufferIndex = 0;
+    int numIndex = 0;
+
+    for (int i = 0; str[i] != '\0'; ++i) {
+        if (str[i] == '%' && str[i + 1] == 'd') {
+            i++;
+            if (numIndex == 0){
+                intToString(first, numStr, MINLEN);
+            }
+            else if (numIndex == 1){
+                intToString(sec, numStr, MINLEN);
+            }
+            else if (numIndex == 2){
+                intToString(third, numStr, MINLEN);
+            }
+            
+            for (int j = 0; numStr[j] != '\0'; ++j) {
+                buffer[bufferIndex++] = numStr[j];
+            }
+            numIndex++;
+        } else {
+            buffer[bufferIndex++] = str[i];
+        }
+    }
+    buffer[bufferIndex] = '\0';
+    return print(buffer);
 }
 
 int scanf(char * buffer, int size){

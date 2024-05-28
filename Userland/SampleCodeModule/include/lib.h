@@ -22,4 +22,20 @@ int incTextSize(void);
 */
 int decTextSize(void);
 
+/**
+ * Receives a num and a minLen. 
+ * Returns the length of the num
+ * If the calculated length is lower than minLen, returns minLen.
+ *
+*/
+int intLength(int num, int minLen);
+
+/**
+ * Receives a num, buffer and minLen. Copies the number in the buffer. 
+ * If the number of digits is lower than minLen, then completes it with
+ * 0's up to minLen
+ * */
+
+void intToString(int num, char *buf, int minLen); 
+
 #endif
