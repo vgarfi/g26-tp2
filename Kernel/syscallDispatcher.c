@@ -30,14 +30,10 @@ int read(uint64_t fd, char * buf, uint64_t count) {
     }
     uint64_t sizeRead=0;
     unsigned char lastRead='\0';
-    int startTick = ticks_elapsed();
-    while(sizeRead!=count && ticks_elapsed() <= startTick){
-        if(!isBufferEmpty()) {   // If there are chars in buffer, we read them
+    //int startTick = ticks_elapsed();
+    while(sizeRead!=count && !isBufferEmpty()/* && ticks_elapsed() <= startTick*/){
             lastRead = readBuf();
             buf[sizeRead++] = lastRead;
-        }else{                  // If not, we halt until more data is inserted 
-            _hlt();
-        }
     }
     return sizeRead == count? count : sizeRead;    // If we return sizeRead-1 it means we stopped at '\n'
 }

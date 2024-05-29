@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "include/stdio.h"
 #include "include/syscalls.h"
 #include "include/eliminatorGame.h"
 #include "include/string.h"
@@ -58,7 +58,9 @@ void eliminatorGame () {
 
 void playAlone() {
     unsigned char finishKey;
-    unsigned char lastKeyPressed;
+    unsigned char lastKeyPressed=UP;
+    unsigned char keyPressed=lastKeyPressed;
+    unsigned char aux;
     while (finishKey != 27) {
         cleanBoard();
         printWall();
@@ -76,7 +78,13 @@ void playAlone() {
 
             board[snakeHeadP1.x][snakeHeadP1.y] = BLOCKED;
             
-            unsigned char keyPressed = getchar();
+            for(int i=0; i<100000; i++){
+                if(keyPressed==lastKeyPressed){
+                    aux=getchar();
+                    if(aux!=0)
+                        keyPressed=aux;
+                }
+            }
             lastDirectionP1 = decideSnakeDirection(lastDirectionP1, upArrowValue(), downArrowValue(), leftArrowValue(), rightArrowValue(), keyPressed);
             updateSnakeHead(&snakeHeadP1, lastDirectionP1);
 
@@ -200,6 +208,8 @@ int decideSnakeDirection (int lastDirection, int upArrowValue, int downArrowValu
 
 void playTwoPlayers(int player2){
     unsigned char finishKey;
+    unsigned char keyPressed;
+    unsigned char lastDirection, lastKeyPressed, aux;
     while (finishKey != 27) {
         cleanBoard();
         printWall();
@@ -225,13 +235,20 @@ void playTwoPlayers(int player2){
             board[snakeHeadP1.x][snakeHeadP1.y] = BLOCKED;
             board[snakeHeadP2.x][snakeHeadP2.y] = BLOCKED;
 
-            unsigned char keyPressed = getchar();
-            
+            for(int i=0; i<100000; i++){
+                if(keyPressed==lastKeyPressed){
+                    aux=getchar();
+                    if(aux!=0){
+                        keyPressed=aux;
+                    }
+                }
+            }            
             lastDirectionP1 = decideSnakeDirection(lastDirectionP1, upArrowValue(), downArrowValue(), leftArrowValue(), rightArrowValue(), keyPressed);
             lastDirectionP2 = (player2 == CPU) ? decideSnakeDirectionCPU(lastDirectionP2) : decideSnakeDirection(lastDirectionP2, 'w', 's', 'a', 'd', keyPressed);
             
             updateSnakeHead(&snakeHeadP1, lastDirectionP1);
             updateSnakeHead(&snakeHeadP2, lastDirectionP2);
+            lastKeyPressed=keyPressed;
         }
 
         beepSound(3);
@@ -285,7 +302,6 @@ int decideSnakeDirectionCPU(int lastDirectionP2) {
         break;
     }
 }
-
 
 int directionIsHorizontal (int direction) {
     return direction == LEFT || direction == RIGHT;
