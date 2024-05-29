@@ -49,3 +49,11 @@ int sizeUp(){
 int sizeDown(){
     return setCurrentFont(global_font_manager.currentFontIndex-1);
 }
+
+int getZoom(){
+    return global_font_manager.currentFontIndex;
+}
+
+int setZoom(int zoomLevel){
+    return setCurrentFont(zoomLevel);
+}

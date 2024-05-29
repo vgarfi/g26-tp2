@@ -14,7 +14,7 @@ uint8_t rightArrowValue();
 int printRectangle(int x,int y,int base,int height,uint32_t hexColor);
 int printSquare(int x,int y , int side, uint32_t hexColor);
 int setCursorPosition(uint64_t x, uint64_t y);
-int beepSound(uint64_t secs);
+int beepSound(uint64_t secs, uint64_t freq);
 
 int getSecs(void);
 int getMins(void);
@@ -26,6 +26,9 @@ int getYear(void);
 
 int zoomIn(void);
 int zoomOut(void);
+int getZoomLevel(void);
+int setZoomLevel(int zoomLevel);
+
 int printRegs(void);
 int printCursor();
 int hideCursor();

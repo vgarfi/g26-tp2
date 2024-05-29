@@ -7,18 +7,19 @@
 #include <lib.h>
 #include <syscallHandle.h>
 
+#define HANDLER_SIZE 25
 
 static int (*syscallHandlers[])()={
-    read, write, printRegs, incSize, decSize, upArrowValue, leftArrowValue, downArrowValue,
+    read, write, printRegs, incSize, decSize, getZoomLevel, setZoomLevel, upArrowValue, leftArrowValue, downArrowValue,
     rightArrowValue, clearScreen, printSquare, printRect, setCursor, sound, ticksleep, hideCursor,
     showCursor, printCursor, getCurrentSeconds, getCurrentMinutes, getCurrentHours, getCurrentDay,
     getCurrentMonth, getCurrentYear
 };
 
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){       
-    int handlerSize = 23;//(syscallHandlers)/sizeof(syscallHandlers[0]);
+    // int handlerSize = 23;//(syscallHandlers)/sizeof(syscallHandlers[0]);
 
-    if(rax < 0 || rax > handlerSize)
+    if(rax < 0 || rax > HANDLER_SIZE)
         return -1;
 
     return syscallHandlers[rax](rdi,rsi,rdx,r10,r8);
@@ -39,7 +40,7 @@ int read(uint64_t fd, char * buf, uint64_t count) {
 }
 
 int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor){
-    if(fd!=STDOUT)  // Only can write in STDOUT
+    if(fd != STDOUT)  // Only can write in STDOUT
         return 0;
     int i;
     char toPrint[2]={0,0};
@@ -48,6 +49,28 @@ int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor){
         vdPrint(toPrint, hexColor);
     }
     return i;
+}
+
+int incSize(){
+    int zoomFail = sizeUp();
+    if(!zoomFail)
+        resize();
+    return zoomFail;
+}
+
+int decSize(){
+    int zoomFail = sizeDown();
+    if(!zoomFail)
+        resize();
+    return zoomFail;
+}
+
+int getZoomLevel(){
+    return getZoom();
+}
+
+int setZoomLevel(int zoomLevel) {
+    return setZoom(zoomLevel);
 }
 
 int upArrowValue() {    
@@ -107,20 +130,6 @@ int ticksleep(uint64_t secs, uint64_t ticks){
     int totalTicks = secondsToTicks + msToTicks;
     sleep(totalTicks);
     return 0;
-}
-
-int incSize(){
-    int zoomFail = sizeUp();
-    if(!zoomFail)
-        resize();
-    return zoomFail;
-}
-
-int decSize(){
-    int zoomFail = sizeDown();
-    if(!zoomFail)
-        resize();
-    return zoomFail;
 }
 
 int hideCursor(){

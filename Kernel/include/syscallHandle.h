@@ -32,6 +32,8 @@ int getCurrentYear(void);
 
 int incSize();
 int decSize();
+int getZoomLevel();
+int setZoomLevel(int zoomLevel);
 
 int read(uint64_t fd, char * buf, uint64_t count);
 int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor);

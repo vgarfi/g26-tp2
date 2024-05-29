@@ -26,8 +26,8 @@
  }
  
  //Make a beep
- void beep(uint64_t ticks) {
- 	 playSound(500);
+ void beep(uint64_t ticks, uint64_t freq) {
+ 	 playSound(freq);
  	 sleep(ticks);
  	 nosound();
  }

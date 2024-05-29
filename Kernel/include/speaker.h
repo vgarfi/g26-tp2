@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-void beep(uint64_t secs);
+void beep(uint64_t secs, uint64_t freq);
 
 void outb(int memPos, int output);
 int inb(int memPos);

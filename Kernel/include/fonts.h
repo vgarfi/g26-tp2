@@ -20,7 +20,7 @@
 #define I_FONT			8
 
 
-#define DEFAULT_FONT	S_FONT
+#define DEFAULT_FONT	E_FONT
 
 typedef struct {
   int realWidth;

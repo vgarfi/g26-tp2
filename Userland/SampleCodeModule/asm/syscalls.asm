@@ -23,7 +23,8 @@ GLOBAL getYear
 GLOBAL beepSound
 GLOBAL zoomIn
 GLOBAL zoomOut
-
+GLOBAL getZoomLevel
+GLOBAL setZoomLevel
 GLOBAL printCursor
 GLOBAL hideCursor
 GLOBAL showCursor
@@ -57,99 +58,109 @@ zoomOut:
     int 80h
     ret
 
-upArrowValue:
+getZoomLevel:
     mov rax, 5
     int 80h
     ret
 
-leftArrowValue:
+setZoomLevel:
     mov rax, 6
     int 80h
     ret
 
-downArrowValue:
+upArrowValue:
     mov rax, 7
     int 80h
     ret
 
-rightArrowValue:
+leftArrowValue:
     mov rax, 8
     int 80h
     ret
 
-clearScreen:
+downArrowValue:
     mov rax, 9
+    int 80h
+    ret
+
+rightArrowValue:
+    mov rax, 10
+    int 80h
+    ret
+
+clearScreen:
+    mov rax, 11
     int 80h
     ret
 
 printSquare:
     mov r10, rcx
-    mov rax, 10
+    mov rax, 12
     int 80h
     ret
 
 printRectangle:
     mov r10, rcx
-    mov rax, 11
-    int 80h
-    ret
-
-setCursorPosition:
-    mov rax, 12
-    int 80h
-    ret
-
-beepSound:
     mov rax, 13
     int 80h
     ret
 
-sleep:
+setCursorPosition:
     mov rax, 14
     int 80h
     ret
 
+beepSound:
+    mov rax, 15
+    int 80h
+    ret
+
+sleep:
+    mov rax, 16
+    int 80h
+    ret
+
 hideCursor:
-    mov rax,15
+    mov rax, 17
     int 80h
     ret
 
 showCursor:
-    mov rax,16
-    int 80h
-    ret
-
-printCursor:
-    mov rax,17
-    int 80h
-    ret
-
-getSecs:
     mov rax, 18
     int 80h
     ret
 
-getMins:
+printCursor:
     mov rax, 19
     int 80h
     ret
 
-getHour:
+getSecs:
     mov rax, 20
     int 80h
     ret
 
-getDay:
+getMins:
     mov rax, 21
     int 80h
     ret
 
-getMonth:
+getHour:
     mov rax, 22
     int 80h
     ret
 
-getYear:
+getDay:
     mov rax, 23
+    int 80h
+    ret
+
+getMonth:
+    mov rax, 24
+    int 80h
+    ret
+
+getYear:
+    mov rax, 25
     int 80h
     ret

@@ -18,9 +18,9 @@ void help (void) {
 }
 
 void eliminator() {
+    hideCursor();
     print("\nLoading eliminator...");
     sleep(2,0);
-    hideCursor();
     eliminatorGame();
 }
 
