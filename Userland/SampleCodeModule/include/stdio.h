@@ -20,7 +20,7 @@ unsigned char getchar(void);
  * Receives a char and prints it on STDOUT
  * Returns the character written.
 */
-int putchar(unsigned char c);
+unsigned char putchar(unsigned char c);
 
 /**
  * Receives a string and a hexcode as parameters

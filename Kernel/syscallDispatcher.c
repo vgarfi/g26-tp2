@@ -6,6 +6,8 @@
 #include <interrupts.h>
 #include <lib.h>
 #include <syscallHandle.h>
+#include "speaker.h"
+#include "fonts.h"
 
 
 static int (*syscallHandlers[])()={
@@ -15,7 +17,7 @@ static int (*syscallHandlers[])()={
     getCurrentMonth, getCurrentYear
 };
 
-uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){       
+uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
     int handlerSize = 23;//(syscallHandlers)/sizeof(syscallHandlers[0]);
 
     if(rax < 0 || rax > handlerSize)

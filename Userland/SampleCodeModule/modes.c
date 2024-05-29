@@ -14,7 +14,9 @@ int zoomAux, regAux;
 
 
 void help (void) {
-    printColor("Command information is displayed below:\n\n", YELLOW);
+    for(int i = 0; i < HELP_TEXTS; i++){
+        printColor(helpText[i], YELLOW);
+    }
 }
 
 void eliminator() {

@@ -24,7 +24,7 @@ unsigned char getchar(void){
     return read;
 }
 
-int putchar(unsigned char c){
+unsigned char putchar(unsigned char c){
     writeScreen(STDOUT, &c, 1, hexcol);
     return c;
 }
@@ -40,7 +40,7 @@ int printColor(char* str, uint64_t hexColor){
 }
 
 int print(char * str){
-    printColor(str, DEFAULT);
+    return printColor(str, DEFAULT);
 }
 
 
