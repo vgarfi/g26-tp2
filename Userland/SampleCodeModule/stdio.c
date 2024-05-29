@@ -6,6 +6,7 @@
 
 #define MAXBUFLEN 100
 #define MINLEN 2
+#define MAX_INPUTS_STORE    10
 
 /**
  * readSizeFlag is used as a way of identifying whether
@@ -17,6 +18,10 @@ static int readSizeFlag=0;
 static uint64_t hexcol=DEFAULT;   // default shell color
 
 static int isPrintable(unsigned char c);
+static int isVerticalArrow(unsigned char c);
+
+static char inputs[MAX_INPUTS_STORE][MAXBUFLEN];
+static int inputIndex = 0;
 
 unsigned char getchar(void){
     unsigned char read=0;
@@ -83,16 +88,9 @@ int scanf(char * buffer, int size){
         read=getchar();
         if(!readSizeFlag)
             continue;
-
         if(read=='\n'){
-            // TODO: check if this is necessary
-            /**
-             * if(readSize==size)
-             *  buffer[--readSize]=0;
-             * else
-             *  buffer[readSize]=0;
-            */
             buffer[readSize]=0;
+            if (readSize > 0) strcpy(inputs[inputIndex++ % MAX_INPUTS_STORE], buffer);
             putchar(read);  // Newline
         }
         else if(read=='\b' && readSize!=0){
@@ -101,6 +99,24 @@ int scanf(char * buffer, int size){
                 buffer[readSize]=0;
             putchar(read);  // Backspace
             printedSize--;
+        }
+        else if (isVerticalArrow(read)) {
+            if (read == upArrowValue()) {
+                if (inputIndex > 0) {
+                    inputIndex--;
+                }
+            } else {
+                if (inputIndex < MAX_INPUTS_STORE) {
+                    inputIndex++;
+                }
+            }
+            strcpy(buffer, inputs[inputIndex % MAX_INPUTS_STORE]);
+            int commandLen = strlen(buffer);
+            for(int i=0; i<printedSize; i++)
+                putchar('\b');
+            printedSize = commandLen;
+            readSize = commandLen;
+            print(buffer);
         }
         else if(isPrintable(read)){       // Printable Character
             if(readSize!=size)
@@ -114,4 +130,8 @@ int scanf(char * buffer, int size){
 
 static int isPrintable(unsigned char c){
     return (c>=' ' && c<='~');
+}
+
+static int isVerticalArrow(unsigned char c) {
+    return c == upArrowValue() || c == downArrowValue();
 }

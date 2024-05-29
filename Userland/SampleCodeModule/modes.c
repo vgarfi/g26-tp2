@@ -55,7 +55,7 @@ void divByZero() {
 }
 
 void invalidOp(){
-    invalidOp();
+    invalidOpcode();
 }
 
 void registers()  {

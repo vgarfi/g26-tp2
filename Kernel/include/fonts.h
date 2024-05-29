@@ -7,7 +7,7 @@
 #ifndef FONT_H
 #define FONT_H
 
-#define FONTS_QUANTITY	9
+#define FONTS_QUANTITY	7
 
 #define S_FONT			0
 #define M_FONT			1
@@ -20,7 +20,7 @@
 #define I_FONT			8
 
 
-#define DEFAULT_FONT	S_FONT
+#define DEFAULT_FONT	D_FONT
 
 typedef struct {
   int realWidth;
