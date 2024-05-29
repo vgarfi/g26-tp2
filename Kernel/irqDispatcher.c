@@ -9,7 +9,7 @@ void updateBuffer();
 static void timer_tick_handler();
 static void kb_handler();
 
-static uint64_t (*irqHandlers[])(void)={
+static void (*irqHandlers[])(void)={
 	timer_tick_handler,
 	kb_handler
 };

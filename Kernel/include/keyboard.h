@@ -1,7 +1,7 @@
 #ifndef _KEYBOARD_H_
 #define _KEYBOARD_H_
 #define SHIFT_VALUES 2
-#define MAX_SCANCODE 63
+#define MAX_SCANCODE 69
 
 #include <stdint.h>
 
