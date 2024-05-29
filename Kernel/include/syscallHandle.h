@@ -4,9 +4,9 @@
 #include <stdint.h>
 
 int setCursor(uint64_t x, uint64_t y);
-int hideCursor();
-int showCursor();
-int printCursor();
+void hideCursor();
+void showCursor();
+void printCursor();
 
 int upArrowValue();
 int leftArrowValue();

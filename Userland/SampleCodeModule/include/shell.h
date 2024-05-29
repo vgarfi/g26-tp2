@@ -19,15 +19,17 @@
 #define CLEAR_MODE          10
 #define REGISTERS_MODE      11
 
+#define HELP_TEXTS          14
+
 
 static const char* modes[] = {
     "shell", "idle", "help", "divbyzero", "invalidopcode", "zoomin", "zoomout", "time", "date", "eliminator", "clear", "registers"
 };
 
 static char* helpText[] = { "Command information is displayed below:\n\n",
-"HELP                ->      Shows a description on each available command.\n"
+"HELP                ->      Shows a description on each available command.\n",
 "DIVBYZERO           ->      Shows handling in case of division by zero.\n",
-"INVALIDOPCODE       ->      Shows handling in case of an invalid operation code.\n"
+"INVALIDOPCODE       ->      Shows handling in case of an invalid operation code.\n",
 "ZOOMIN              ->      Enlarges text size on screen. In case maximum size is reached,\n",
 "                            it is properly indicated without making any changes.\n", // See if it can also be accesed via keyboard
 "ZOOMOUT             ->      Reduces text size on screen. In case minimum size is reached,\n",

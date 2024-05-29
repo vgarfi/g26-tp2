@@ -6,6 +6,8 @@
 #include <interrupts.h>
 #include <lib.h>
 #include <syscallHandle.h>
+#include "speaker.h"
+#include "fonts.h"
 
 #define HANDLER_SIZE 25
 
@@ -16,8 +18,13 @@ static int (*syscallHandlers[])()={
     getCurrentMonth, getCurrentYear
 };
 
+<<<<<<< HEAD
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){       
     // int handlerSize = 23;//(syscallHandlers)/sizeof(syscallHandlers[0]);
+=======
+uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
+    int handlerSize = 23;//(syscallHandlers)/sizeof(syscallHandlers[0]);
+>>>>>>> 2fb609cdb1188f9b99584a4b4989f4de25a96a07
 
     if(rax < 0 || rax > HANDLER_SIZE)
         return -1;
@@ -132,15 +139,33 @@ int ticksleep(uint64_t secs, uint64_t ticks){
     return 0;
 }
 
+<<<<<<< HEAD
 int hideCursor(){
+=======
+int incSize(){
+    int zoomFail = sizeUp();
+    if(!zoomFail)
+        vdResize();
+    return zoomFail;
+}
+
+int decSize(){
+    int zoomFail = sizeDown();
+    if(!zoomFail)
+        vdResize();
+    return zoomFail;
+}
+
+void hideCursor(){
+>>>>>>> 2fb609cdb1188f9b99584a4b4989f4de25a96a07
     vdSetCursorColor(0x00000000);
 }
 
-int showCursor(){
+void showCursor(){
     vdSetCursorColor(0x00F0F0F0);
 }
 
-int printCursor(){
+void printCursor(){
     vdPrintCursor();
 }
 

@@ -6,7 +6,7 @@
 /**
  * Returns length of the received string
 */
-int strlen(char * str);
+int strlen(const char * str);
 
 /**
  * Receives two strings and compares them.

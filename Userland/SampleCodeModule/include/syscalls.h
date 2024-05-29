@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-int writeScreen(uint64_t fd, char* buffer, uint64_t len, uint64_t hexColor);
-int readScreen(uint64_t fd, char* buffer, uint64_t len);
+int writeScreen(uint64_t fd, unsigned char* buffer, uint64_t len, uint64_t hexColor);
+int readScreen(uint64_t fd, unsigned char* buffer, uint64_t len);
 void sleep(uint64_t secs, uint64_t ms);
 int clearScreen();
 uint8_t upArrowValue();

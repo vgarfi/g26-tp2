@@ -3,6 +3,7 @@
 #include "include/colors.h"
 #include "include/syscalls.h"
 #include "include/stdio.h"
+#include "include/string.h"
 
 int init(){
     printColor("Welcome to Shell! Type HELP for command information.\n\n", YELLOW);

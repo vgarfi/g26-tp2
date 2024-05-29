@@ -17,15 +17,12 @@ static void zero_division();
 static void invalid_opcode();
 int hideCursor();
 
-void * getStackBase();
-void reset();
-
 void exceptionDispatcher(int exception) {
 	saveRegs();
 	vdClearScreen();
 	hideCursor();
-	setCurrentFont(M_FONT);
-	for(int i=0; i<14; i++) vdPrint("\n", COMMENTCOL);
+	setCurrentFont(DEFAULT_FONT);
+	for(int i=0; i<10; i++) vdPrint("\n", COMMENTCOL);
 	vdPrint("ERROR: An exception has occurred during runtime. More information:\n\n", ERRORCOL);
 
 	switch (exception){
@@ -43,15 +40,11 @@ void exceptionDispatcher(int exception) {
 	int flag=0;
 	char key;
 	cleanBuffer();
+	
 	while(!flag){
 		flag=read(STDIN, &key, 1);
 	}
-	vdClearBuffer();
 	vdClearScreen();
-	_cli();
-	getStackBase();
-	reset();
-	return;
 }
 
 static void zero_division() {

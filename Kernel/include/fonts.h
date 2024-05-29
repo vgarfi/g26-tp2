@@ -7,7 +7,7 @@
 #ifndef FONT_H
 #define FONT_H
 
-#define FONTS_QUANTITY	9
+#define FONTS_QUANTITY	7
 
 #define S_FONT			0
 #define M_FONT			1
@@ -20,7 +20,11 @@
 #define I_FONT			8
 
 
+<<<<<<< HEAD
 #define DEFAULT_FONT	E_FONT
+=======
+#define DEFAULT_FONT	D_FONT
+>>>>>>> 2fb609cdb1188f9b99584a4b4989f4de25a96a07
 
 typedef struct {
   int realWidth;
@@ -29,7 +33,7 @@ typedef struct {
 } Size;
 
 typedef struct {
-    unsigned char *bitmap;
+    unsigned const char *bitmap;
     Size size;
 } FontBitmap;
 
