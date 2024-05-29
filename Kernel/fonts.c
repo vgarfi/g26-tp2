@@ -2,13 +2,19 @@
 #include <fonts.h>
 #include <bitmaps.h>
 
+/*
+8 x 16
+16x20
 
-unsigned const char* fonts[] = {fontBitMap_8x12,fontBitMap_8x14, fontBitMap_8x16,fontBitMap_16x18,fontBitMap_16x20,fontBitMap_16x22,fontBitMap_16x24,fontBitMap_16x28, fontBitMap_16x32};
+
+*/
+
+unsigned const char* fonts[] = {fontBitMap_8x12,fontBitMap_8x14,fontBitMap_16x18,fontBitMap_16x22,fontBitMap_16x24,fontBitMap_16x28, fontBitMap_16x32};
 //const Size size_16x32 = {16,32};
 //const Size size_8x16 = {8,16};
 //const Size size_8x12 = {8,12};
 
-Size sizes[9] = {{6,8,12},{8,8,14}, {8,8,16},{10,16,18},{10,16,20},{11,16,22},{12,16,24},{14,16,28}, {16,16,32}};
+Size sizes[9] = {{6,8,12},{8,8,14},{10,16,18},{11,16,22},{12,16,24},{14,16,28}, {16,16,32}};
 
 //const FontBitmap fb1 = {fontBitMap_16x32, {16,32}};
 //const FontBitmap fb2 = {fontBitMap_8x16, {8,16}};
