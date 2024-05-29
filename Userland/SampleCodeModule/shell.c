@@ -1,6 +1,7 @@
 #include "include/shell.h"
 #include "include/modes.h"
 #include "include/colors.h"
+#include "include/syscalls.h"
 #include "include/stdio.h"
 
 int init(){
@@ -9,6 +10,7 @@ int init(){
     while(IDLE_MODE) {
         printColor("$", GREEN);
         print("> ");
+        showCursor();
         scanf(commandPrompt, 32);
         if(strcasecmp(commandPrompt, modes[HELP_MODE]) == SELECTED_MODE) help();
         else if(strcasecmp(commandPrompt, modes[ELIMINATOR_MODE]) == SELECTED_MODE) eliminator();

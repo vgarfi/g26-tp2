@@ -54,6 +54,4 @@ int printf(char * str, int first, int sec, int third);
 */
 int scanf(char * buffer, int size);
 
-
-
 #endif
