@@ -29,7 +29,7 @@ typedef struct {
 } Size;
 
 typedef struct {
-    unsigned char *bitmap;
+    unsigned const char *bitmap;
     Size size;
 } FontBitmap;
 

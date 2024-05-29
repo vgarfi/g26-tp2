@@ -114,26 +114,26 @@ int ticksleep(uint64_t secs, uint64_t ticks){
 int incSize(){
     int zoomFail = sizeUp();
     if(!zoomFail)
-        resize();
+        vdResize();
     return zoomFail;
 }
 
 int decSize(){
     int zoomFail = sizeDown();
     if(!zoomFail)
-        resize();
+        vdResize();
     return zoomFail;
 }
 
-int hideCursor(){
+void hideCursor(){
     vdSetCursorColor(0x00000000);
 }
 
-int showCursor(){
+void showCursor(){
     vdSetCursorColor(0x00F0F0F0);
 }
 
-int printCursor(){
+void printCursor(){
     vdPrintCursor();
 }
 

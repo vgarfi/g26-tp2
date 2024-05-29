@@ -130,7 +130,7 @@ void vdPrintLine(uint64_t offset,uint32_t fgColor,uint32_t bgColor ,uint8_t mask
 
 void vdPrintChar(unsigned char c) {
 	FontBitmap fontBitMap = getCurrentFont();
-	unsigned char* bitmap = fontBitMap.bitmap;
+	unsigned const char* bitmap = fontBitMap.bitmap;
 	int width = fontBitMap.size.width;
 	int height = fontBitMap.size.height;
 
@@ -186,7 +186,7 @@ void vdDeleteChar(){
 }
 
 
-void resize(){
+void vdResize(){
 	vdClearScreen();
 	int i,j = 0;
 	char c;

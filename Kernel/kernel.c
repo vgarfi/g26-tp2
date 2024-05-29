@@ -7,6 +7,7 @@
 #include <fonts.h>
 #include "include/time.h"
 #include <defs.h>
+#include "interrupts.h"
 
 
 void load_idt(void);
@@ -55,16 +56,9 @@ void * getStackBase()
 
 void * initializeKernelBinary()
 {
-	char buffer[10];
-
 	ncPrint("[x64BareBones]");
 	ncNewline();
 
-/*
-	ncPrint("CPU Vendor:");
-	ncPrint(cpuVendor(buffer));
-	ncNewline();
-*/
 	ncPrint("[Loading modules]");
 	ncNewline();
 	void * moduleAddresses[] = {
