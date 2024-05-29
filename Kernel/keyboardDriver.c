@@ -12,7 +12,6 @@
 
 static unsigned char buffer[MAXSIZE] = {0};
 static int bufferPos = 0;
-static int readPos = 0;
 static int shift = 0;
 static int dataStatus = 0;
 

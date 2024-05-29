@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "include/stdio.h"
 #include "include/syscalls.h"
 #include "include/eliminatorGame.h"
 #include "include/string.h"
@@ -58,7 +58,9 @@ void eliminatorGame () {
 
 void playAlone() {
     unsigned char finishKey;
-    unsigned char lastKeyPressed;
+    unsigned char lastKeyPressed=UP;
+    unsigned char keyPressed=lastKeyPressed;
+    unsigned char aux;
     while (finishKey != 27) {
         cleanBoard();
         printWall();
@@ -76,7 +78,13 @@ void playAlone() {
 
             board[snakeHeadP1.x][snakeHeadP1.y] = BLOCKED;
             
-            unsigned char keyPressed = getchar();
+            for(int i=0; i<100000; i++){
+                if(keyPressed==lastKeyPressed){
+                    aux=getchar();
+                    if(aux!=0)
+                        keyPressed=aux;
+                }
+            }
             lastDirectionP1 = decideSnakeDirection(lastDirectionP1, upArrowValue(), downArrowValue(), leftArrowValue(), rightArrowValue(), keyPressed);
             updateSnakeHead(&snakeHeadP1, lastDirectionP1);
 
@@ -105,28 +113,27 @@ void playAlone() {
 
 
 void playerDied(int P1Crashed, int P2Crashed) {
-    // TODO: imprimir centradas las cosas, tengo noni
     printRectangle(
-        PIXELS_WIDTH / 2 - 120, 
+        PIXELS_WIDTH / 2 - 140, 
         PIXELS_HEIGHT / 2 - 40, 
-        30*WALL_SIZE, 
+        35*WALL_SIZE, 
         10*WALL_SIZE, 
         GREY
     );
     if (P1Crashed == CRASHED && P2Crashed == CRASHED) {
-        setCursorPosition((PIXELS_WIDTH / 8) / 2 - 5, (PIXELS_HEIGHT / 12) / 2 - 3);
+        setCursorPosition((PIXELS_WIDTH / 8) / 2 - 2, (PIXELS_HEIGHT / 12) / 2 - 3);
         print("DRAW!");
     } else if (P1Crashed == CRASHED) {
-        setCursorPosition((PIXELS_WIDTH / 8) / 2 - 5, (PIXELS_HEIGHT / 12) / 2 - 3);
+        setCursorPosition((PIXELS_WIDTH / 8) / 2 - 7, (PIXELS_HEIGHT / 12) / 2 - 3);
         print("PLAYER 2 WINS!");
         scoreP2++;
     } else {
-        setCursorPosition((PIXELS_WIDTH / 8) / 2 - 5, (PIXELS_HEIGHT / 12) / 2 - 3);
+        setCursorPosition((PIXELS_WIDTH / 8) / 2 - 7, (PIXELS_HEIGHT / 12) / 2 - 3);
         print("PLAYER 1 WINS!");
         scoreP1++;
     }
 
-    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2-1);
+    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 15, (PIXELS_HEIGHT / 12) / 2-1);
     print("P1 SCORE is: ");
     char score[10];
     itoa(scoreP1, score);
@@ -141,10 +148,7 @@ void playerDied(int P1Crashed, int P2Crashed) {
     setCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2);
     print("Press R to restart");
     setCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2+1);
-    print("Press ESC to exit");
-    
-    // TODO cambiar a texto tipo ELIMINTARO con la palabra YOU DIED!
-    
+    print("Press ESC to exit");    
 }
 
 void userDied() {
@@ -204,6 +208,8 @@ int decideSnakeDirection (int lastDirection, int upArrowValue, int downArrowValu
 
 void playTwoPlayers(int player2){
     unsigned char finishKey;
+    unsigned char keyPressed;
+    unsigned char lastDirection, lastKeyPressed, aux;
     while (finishKey != 27) {
         cleanBoard();
         printWall();
@@ -229,13 +235,20 @@ void playTwoPlayers(int player2){
             board[snakeHeadP1.x][snakeHeadP1.y] = BLOCKED;
             board[snakeHeadP2.x][snakeHeadP2.y] = BLOCKED;
 
-            unsigned char keyPressed = getchar();
-            
+            for(int i=0; i<100000; i++){
+                if(keyPressed==lastKeyPressed){
+                    aux=getchar();
+                    if(aux!=0){
+                        keyPressed=aux;
+                    }
+                }
+            }            
             lastDirectionP1 = decideSnakeDirection(lastDirectionP1, upArrowValue(), downArrowValue(), leftArrowValue(), rightArrowValue(), keyPressed);
             lastDirectionP2 = (player2 == CPU) ? decideSnakeDirectionCPU(lastDirectionP2) : decideSnakeDirection(lastDirectionP2, 'w', 's', 'a', 'd', keyPressed);
             
             updateSnakeHead(&snakeHeadP1, lastDirectionP1);
             updateSnakeHead(&snakeHeadP2, lastDirectionP2);
+            lastKeyPressed=keyPressed;
         }
 
         beepSound(3);
@@ -269,27 +282,34 @@ int decideSnakeDirectionCPU(int lastDirectionP2) {
     
     switch (lastDirectionP2) {
     case UP: 
-        if (board[snakeHeadP2.x-1][snakeHeadP2.y] == BLOCKED)
+        if (board[snakeHeadP2.x][snakeHeadP2.y-2] == BLOCKED)
             return LEFT;
+        else
+            return lastDirectionP2;
         break;
     case DOWN:
-        if (board[snakeHeadP2.x+1][snakeHeadP2.y] == BLOCKED)
+        if (board[snakeHeadP2.x][snakeHeadP2.y+2] == BLOCKED)
             return RIGHT;
+        else
+            return lastDirectionP2;
         break;
     case LEFT:
-        if (board[snakeHeadP2.x][snakeHeadP2.y-1] == BLOCKED)
+        if (board[snakeHeadP2.x-2][snakeHeadP2.y] == BLOCKED)
             return DOWN;
+        else
+            return lastDirectionP2;
         break;
     case RIGHT:
-        if (board[snakeHeadP2.x][snakeHeadP2.y+1] == BLOCKED)
+        if (board[snakeHeadP2.x+2][snakeHeadP2.y] == BLOCKED)
             return UP;
+        else
+            return lastDirectionP2;
         break;
     default:
         return lastDirectionP2;
         break;
     }
 }
-
 
 int directionIsHorizontal (int direction) {
     return direction == LEFT || direction == RIGHT;
@@ -359,11 +379,11 @@ void printEliminatorTitle() {
         "1000\n"
         "1111\n",
         // I
-        "0110\n"
-        "0110\n"
-        "0110\n"
-        "0110\n"
-        "0110\n",
+        "010\n"
+        "010\n"
+        "010\n"
+        "010\n"
+        "010\n",
         // M
         "10001\n"
         "11011\n"
@@ -371,11 +391,11 @@ void printEliminatorTitle() {
         "10001\n"
         "10001\n",
         // I
-        "0110\n"
-        "0110\n"
-        "0110\n"
-        "0110\n"
-        "0110\n",
+        "010\n"
+        "010\n"
+        "010\n"
+        "010\n"
+        "010\n",
         // N
         "10001\n"
         "11001\n"
@@ -412,7 +432,9 @@ void printEliminatorTitle() {
     int startY = HEIGHT / 2 - 5 / 2;
 
     for (int l = 0; l <= 9; l++) {
-        int x = startX + l * 7; // 6 permite un espacio entre las letras
+        int increment = /*(l == 2 || l == 4)? l*6 :*/ l*7;
+        int x = startX + increment;
+
         int y = startY;
 
         sleep(0, 2*TICKS_PER_FRAME);
@@ -422,7 +444,7 @@ void printEliminatorTitle() {
             }
 
             if (letters[l][i] == '\n') {
-                x = startX + l * 7;
+                x = startX + increment;
                 y++;
             } else {
                 x++;
