@@ -282,20 +282,28 @@ int decideSnakeDirectionCPU(int lastDirectionP2) {
     
     switch (lastDirectionP2) {
     case UP: 
-        if (board[snakeHeadP2.x-1][snakeHeadP2.y] == BLOCKED)
+        if (board[snakeHeadP2.x][snakeHeadP2.y-2] == BLOCKED)
             return LEFT;
+        else
+            return lastDirectionP2;
         break;
     case DOWN:
-        if (board[snakeHeadP2.x+1][snakeHeadP2.y] == BLOCKED)
+        if (board[snakeHeadP2.x][snakeHeadP2.y+2] == BLOCKED)
             return RIGHT;
+        else
+            return lastDirectionP2;
         break;
     case LEFT:
-        if (board[snakeHeadP2.x][snakeHeadP2.y-1] == BLOCKED)
+        if (board[snakeHeadP2.x-2][snakeHeadP2.y] == BLOCKED)
             return DOWN;
+        else
+            return lastDirectionP2;
         break;
     case RIGHT:
-        if (board[snakeHeadP2.x][snakeHeadP2.y+1] == BLOCKED)
+        if (board[snakeHeadP2.x+2][snakeHeadP2.y] == BLOCKED)
             return UP;
+        else
+            return lastDirectionP2;
         break;
     default:
         return lastDirectionP2;
