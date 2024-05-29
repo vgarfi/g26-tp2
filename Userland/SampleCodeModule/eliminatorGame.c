@@ -105,28 +105,27 @@ void playAlone() {
 
 
 void playerDied(int P1Crashed, int P2Crashed) {
-    // TODO: imprimir centradas las cosas, tengo noni
     printRectangle(
-        PIXELS_WIDTH / 2 - 120, 
+        PIXELS_WIDTH / 2 - 140, 
         PIXELS_HEIGHT / 2 - 40, 
-        30*WALL_SIZE, 
+        35*WALL_SIZE, 
         10*WALL_SIZE, 
         GREY
     );
     if (P1Crashed == CRASHED && P2Crashed == CRASHED) {
-        setCursorPosition((PIXELS_WIDTH / 8) / 2 - 5, (PIXELS_HEIGHT / 12) / 2 - 3);
+        setCursorPosition((PIXELS_WIDTH / 8) / 2 - 2, (PIXELS_HEIGHT / 12) / 2 - 3);
         print("DRAW!");
     } else if (P1Crashed == CRASHED) {
-        setCursorPosition((PIXELS_WIDTH / 8) / 2 - 5, (PIXELS_HEIGHT / 12) / 2 - 3);
+        setCursorPosition((PIXELS_WIDTH / 8) / 2 - 7, (PIXELS_HEIGHT / 12) / 2 - 3);
         print("PLAYER 2 WINS!");
         scoreP2++;
     } else {
-        setCursorPosition((PIXELS_WIDTH / 8) / 2 - 5, (PIXELS_HEIGHT / 12) / 2 - 3);
+        setCursorPosition((PIXELS_WIDTH / 8) / 2 - 7, (PIXELS_HEIGHT / 12) / 2 - 3);
         print("PLAYER 1 WINS!");
         scoreP1++;
     }
 
-    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2-1);
+    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 15, (PIXELS_HEIGHT / 12) / 2-1);
     print("P1 SCORE is: ");
     char score[10];
     itoa(scoreP1, score);
@@ -141,10 +140,7 @@ void playerDied(int P1Crashed, int P2Crashed) {
     setCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2);
     print("Press R to restart");
     setCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2+1);
-    print("Press ESC to exit");
-    
-    // TODO cambiar a texto tipo ELIMINTARO con la palabra YOU DIED!
-    
+    print("Press ESC to exit");    
 }
 
 void userDied() {
@@ -359,11 +355,11 @@ void printEliminatorTitle() {
         "1000\n"
         "1111\n",
         // I
-        "0110\n"
-        "0110\n"
-        "0110\n"
-        "0110\n"
-        "0110\n",
+        "010\n"
+        "010\n"
+        "010\n"
+        "010\n"
+        "010\n",
         // M
         "10001\n"
         "11011\n"
@@ -371,11 +367,11 @@ void printEliminatorTitle() {
         "10001\n"
         "10001\n",
         // I
-        "0110\n"
-        "0110\n"
-        "0110\n"
-        "0110\n"
-        "0110\n",
+        "010\n"
+        "010\n"
+        "010\n"
+        "010\n"
+        "010\n",
         // N
         "10001\n"
         "11001\n"
@@ -412,7 +408,9 @@ void printEliminatorTitle() {
     int startY = HEIGHT / 2 - 5 / 2;
 
     for (int l = 0; l <= 9; l++) {
-        int x = startX + l * 7; // 6 permite un espacio entre las letras
+        int increment = /*(l == 2 || l == 4)? l*6 :*/ l*7;
+        int x = startX + increment;
+
         int y = startY;
 
         sleep(0, 2*TICKS_PER_FRAME);
@@ -422,7 +420,7 @@ void printEliminatorTitle() {
             }
 
             if (letters[l][i] == '\n') {
-                x = startX + l * 7;
+                x = startX + increment;
                 y++;
             } else {
                 x++;
