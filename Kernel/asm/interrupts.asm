@@ -17,11 +17,15 @@ GLOBAL _exception0Handler
 GLOBAL _exception6Handler
 
 GLOBAL _syscallHandler
+
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 EXTERN syscallDispatcher
+EXTERN getStackBase
 
-EXTERN vdClearScreen
+GLOBAL saveRegsInBuffer
+
+
 SECTION .text
 
 %macro pushState 0
@@ -74,36 +78,33 @@ SECTION .text
 	iretq
 %endmacro
 
-   
+%macro saveIntRegs 0
+
+push rax
+mov rax, [rsp + 8]	; RIP Contexto anterior
+mov [regs], rax
+
+mov rax, [rsp + 8*3] ; RFLAGS Contexto anterior
+mov [regs + 8*1], rax
+
+mov rax, [rsp + 8*4] ; RSP Contexto anterior
+mov [regs + 8*2], rax
+
+pop rax
+
+%endmacro
    
 %macro exceptionHandler 1
-	pushState
-	push rbp
-	mov rbp,rsp
-
 	mov rdi, %1 ; pasaje de parametro
 	call exceptionDispatcher
-	push rax
-	xor rax ,rax
-.loop: in al,0x64
-	mov cl,al
-	and al,0x01
-	cmp al,0
-	je .loop
-	mov al, 20h
-	out 20h, al
-	pop rax
-	call vdClearScreen
-	mov rsp,rbp
-	pop rbp
-
 	
-	popState
-	push rax 
-	mov rax,[rsp+8]
-	add al,3
-	mov [rsp +8],rax
-	pop rax
+	call getStackBase
+
+	mov [rsp+8*3], rax	;; Piso el RFLAGS
+
+	mov rax, userland
+	mov [rsp],rax		;; Piso la direccion de retorno 
+
 	iretq
 %endmacro
 
@@ -145,6 +146,7 @@ _irq00Handler:
 
 ;Keyboard
 _irq01Handler:
+	saveIntRegs
 	irqHandlerMaster 1
 
 ;Cascade pic never called
@@ -171,6 +173,25 @@ _exception0Handler:
 ;Invalid OpCode Exception
 _exception6Handler:
 	exceptionHandler 6
+
+saveRegsInBuffer:	;; Once you enter here, regs[0]=RIP, regs[1]=RFLAGS, regs[2]=RSP
+    mov [regs + 8*3], rax
+    mov [regs + 8*4], rbx
+    mov [regs + 8*5], rcx
+    mov [regs + 8*6], rdx
+    mov [regs + 8*7], rsi
+    mov [regs + 8*8], rdi
+    mov [regs + 8*9], rbp
+    mov [regs + 8*10], r8
+    mov [regs + 8*11], r9
+    mov [regs + 8*12], r10
+    mov [regs + 8*13], r11
+    mov [regs + 8*14], r12
+    mov [regs + 8*15], r13
+    mov [regs + 8*16], r14
+    mov [regs + 8*17], r15
+    mov rax, regs
+    ret
 	
 ;Syscall Handling
 ; _syscallHandler receives parameters in the next order: rax rdi rsi rdx r10 r8 r9
@@ -178,6 +199,7 @@ _exception6Handler:
 ; rax is the last parameters -> r9 = rax
 ; r10 is not a parameters -> rcx = r10
 _syscallHandler:
+	saveIntRegs
 	mov rcx, r10
 	mov r9, rax
 	call syscallDispatcher
@@ -188,7 +210,6 @@ haltcpu:
 	hlt
 	ret
 
-
-
-SECTION .bss
-	aux resq 1
+section .data
+regs dq 18
+userland equ 0x400000

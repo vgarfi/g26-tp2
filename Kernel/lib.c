@@ -82,15 +82,15 @@ int regPrinting(void){
 		return 1;
 	int count=0;
     char * value;
-    char * regFormat[]={"RIP:    ","RAX:    ", "RBX:    ", "RCX:    ", "RDX:    ", "RSI:    ", "RDI:    ", "RBP:    ", "R8:     ", "R9:     ",
-        "R10:    ", "R11:    ", "R12:    ", "R13:    ", "R14:    ", "R15:    ", "RSP:    "};
-    for(int i=0; i<17; i++){
+    char * regFormat[]={"RIP:    ","RFLAGS:    ", "RSP:    ", "RAX:       ", "RBX:    ", "RCX:       ", "RDX:    ", "RSI:       ", "RDI:    ", "RBP:       ", "R8:     ", "R9:        ",
+        "R10:    ", "R11:       ", "R12:    ", "R13:       ", "R14:    ", "R15:       "};
+    for(int i=0; i<18; i++){
         value=hexToString(registers[i]);
         vdPrint(regFormat[i], 0x00FFFFFF);
         vdPrint("0x", 0x00FFFFFF);
         vdPrint(value, 0x00FFFFFF);
         count++;
-        if(count==2 || i==0){
+        if(count==2){
             vdPrint("\n", 0x00FFFFFF);
             count=0;
         }
