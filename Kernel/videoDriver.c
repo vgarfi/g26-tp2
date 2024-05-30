@@ -219,9 +219,6 @@ void vdResize(){
 
 		//}		
 	}
-	if(c != '\n'){
-		vdNewLine();
-	}
 	scrollUpdateBuffer = 1;
 }
 
