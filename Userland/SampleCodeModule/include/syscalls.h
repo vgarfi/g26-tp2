@@ -3,36 +3,36 @@
 
 #include <stdint.h>
 
-int writeScreen(uint64_t fd, unsigned char* buffer, uint64_t len, uint64_t hexColor);
-int readScreen(uint64_t fd, unsigned char* buffer, uint64_t len);
-void sleep(uint64_t secs, uint64_t ms);
-int clearScreen();
-uint8_t upArrowValue();
-uint8_t leftArrowValue();
-uint8_t downArrowValue();
-uint8_t rightArrowValue();
-int printRectangle(int x,int y,int base,int height,uint32_t hexColor);
-int printSquare(int x,int y , int side, uint32_t hexColor);
-int setCursorPosition(uint64_t x, uint64_t y);
-int beepSound(uint64_t secs, uint64_t freq);
-int easterEgg();
+int syswriteScreen(uint64_t fd, unsigned char* buffer, uint64_t len, uint64_t hexColor);
+int sysreadScreen(uint64_t fd, unsigned char* buffer, uint64_t len);
+void syssleep(uint64_t secs, uint64_t ms);
+int sysclearScreen();
+uint8_t sysupArrowValue();
+uint8_t sysleftArrowValue();
+uint8_t sysdownArrowValue();
+uint8_t sysrightArrowValue();
+int sysprintRectangle(int x,int y,int base,int height,uint32_t hexColor);
+int sysprintSquare(int x,int y , int side, uint32_t hexColor);
+int syssetCursorPosition(uint64_t x, uint64_t y);
+int sysbeepSound(uint64_t secs, uint64_t freq);
+int syseasterEgg();
 
-int getSecs(void);
-int getMins(void);
-int getHour(void);
+int sysgetSecs(void);
+int sysgetMins(void);
+int sysgetHour(void);
 
-int getDay(void);
-int getMonth(void);
-int getYear(void);
+int sysgetDay(void);
+int sysgetMonth(void);
+int sysgetYear(void);
 
-int zoomIn(void);
-int zoomOut(void);
-int getZoomLevel(void);
-int setZoomLevel(int zoomLevel);
+int syszoomIn(void);
+int syszoomOut(void);
+int sysgetZoomLevel(void);
+int syssetZoomLevel(int zoomLevel);
 
-int printRegs(void);
-int printCursor();
-int hideCursor();
-int showCursor();
+int sysprintRegs(void);
+int sysprintCursor();
+int syshideCursor();
+int sysshowCursor();
 
 #endif

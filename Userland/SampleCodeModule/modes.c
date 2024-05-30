@@ -20,14 +20,14 @@ void help (void) {
 }
 
 void eliminator() {
-    hideCursor();
+    syshideCursor();
     print("\nLoading eliminator...");
-    sleep(2,0);
+    syssleep(2,0);
     eliminatorGame();
 }
 
 void clear (void) {
-    clearScreen();
+    sysclearScreen();
 }
 
 void time(void) {
@@ -59,7 +59,7 @@ void invalidOp(){
 }
 
 void registers()  {
-    regAux = printRegs();
+    regAux = sysprintRegs();
     if(regAux){
         print("You need to save registers first by pressing ALT\n");
     }
@@ -77,5 +77,5 @@ void playEasterEgg(){
     printColor("ter ", BLUE);
     printColor("egg", WHITE);
     printColor("!\n", YELLOW);
-    easterEgg();
+    syseasterEgg();
 }

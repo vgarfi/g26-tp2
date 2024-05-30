@@ -25,12 +25,12 @@ static int inputIndex = 0;
 
 unsigned char getchar(void){
     unsigned char read=0;
-    readSizeFlag=readScreen(STDIN, &read, 1);
+    readSizeFlag=sysreadScreen(STDIN, &read, 1);
     return read;
 }
 
 unsigned char putchar(unsigned char c){
-    writeScreen(STDOUT, &c, 1, hexcol);
+    syswriteScreen(STDOUT, &c, 1, hexcol);
     return c;
 }
 
@@ -101,7 +101,7 @@ int scanf(char * buffer, int size){
             printedSize--;
         }
         else if (isVerticalArrow(read)) {
-            if (read == upArrowValue()) {
+            if (read == sysupArrowValue()) {
                 if (inputIndex > 0) {
                     inputIndex--;
                 }
@@ -133,5 +133,5 @@ static int isPrintable(unsigned char c){
 }
 
 static int isVerticalArrow(unsigned char c) {
-    return c == upArrowValue() || c == downArrowValue();
+    return c == sysupArrowValue() || c == sysdownArrowValue();
 }

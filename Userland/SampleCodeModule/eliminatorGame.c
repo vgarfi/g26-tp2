@@ -39,7 +39,7 @@ void eliminatorGame () {
             break;
         
         case ESC:
-            clearScreen();
+            sysclearScreen();
             eliminatorMode = !ELIMINATOR_EXEC;
             break;
         } 
@@ -64,7 +64,7 @@ void playAlone(void) {
 
         while (didP1Crashed != CRASHED) {
 
-            printSquare(snakeHeadP1.x*SNAKE_HEAD_SIZE, snakeHeadP1.y*SNAKE_HEAD_SIZE, SNAKE_HEAD_SIZE, snakeHeadP1.color);
+            sysprintSquare(snakeHeadP1.x*SNAKE_HEAD_SIZE, snakeHeadP1.y*SNAKE_HEAD_SIZE, SNAKE_HEAD_SIZE, snakeHeadP1.color);
             
             if (board[snakeHeadP1.x][snakeHeadP1.y] == BLOCKED) {
                 didP1Crashed = CRASHED;
@@ -84,14 +84,14 @@ void playAlone(void) {
             lastKeyPressed = keyPressed;
         }
 
-        beepSound(3, 200);
-        beepSound(2, 500);
+        sysbeepSound(3, 200);
+        sysbeepSound(2, 500);
         userDied(&scoreP1);
         didP1Crashed = !CRASHED;
 
         for (int i = 0; i < DIED_TIME && (finishKey != ESC && finishKey != RESET); i++) {
             finishKey = getchar();
-            sleep(0,1);
+            syssleep(0,1);
         }
 
         if (finishKey == ESC){
@@ -124,8 +124,8 @@ void playTwoPlayers(int player2) {
         snakeHeadP2.y = HEIGHT/2 + HEIGHT/4;
         
         while (didP1Crashed != CRASHED && didP2Crashed != CRASHED) {
-            printSquare(snakeHeadP1.x*SNAKE_HEAD_SIZE, snakeHeadP1.y*SNAKE_HEAD_SIZE, SNAKE_HEAD_SIZE, snakeHeadP1.color);
-            printSquare(snakeHeadP2.x*SNAKE_HEAD_SIZE, snakeHeadP2.y*SNAKE_HEAD_SIZE, SNAKE_HEAD_SIZE, snakeHeadP2.color);
+            sysprintSquare(snakeHeadP1.x*SNAKE_HEAD_SIZE, snakeHeadP1.y*SNAKE_HEAD_SIZE, SNAKE_HEAD_SIZE, snakeHeadP1.color);
+            sysprintSquare(snakeHeadP2.x*SNAKE_HEAD_SIZE, snakeHeadP2.y*SNAKE_HEAD_SIZE, SNAKE_HEAD_SIZE, snakeHeadP2.color);
 
             if (board[snakeHeadP1.x][snakeHeadP1.y] == BLOCKED) {
                 didP1Crashed = CRASHED;
@@ -154,10 +154,10 @@ void playTwoPlayers(int player2) {
             lastKeyPressed=keyPressed;
         }
 
-        beepSound(2, 200);
-        beepSound(1, 500);
-        beepSound(1, 570);
-        beepSound(2, 320);
+        sysbeepSound(2, 200);
+        sysbeepSound(1, 500);
+        sysbeepSound(1, 570);
+        sysbeepSound(2, 320);
 
 
         playerDied(didP1Crashed, didP2Crashed, &scoreP1, &scoreP2);
@@ -168,7 +168,7 @@ void playTwoPlayers(int player2) {
 
         for (int i = 0; i < DIED_TIME && (finishKey != ESC && finishKey != RESET); i++) {
             finishKey = getchar();
-            sleep(0,1);
+            syssleep(0,1);
         }
 
         if (finishKey == ESC) {
@@ -193,29 +193,29 @@ void cleanBoard(void) {
             board[i][j] = 0;
         }
     }
-    clearScreen();
+    sysclearScreen();
 }
 
 void printWall(void) {
     for (int i = WIDTH/2, k = WIDTH/2; i >= 0 && k < WIDTH ; i--, k++) {
-        printSquare(i*WALL_SIZE, 0, WALL_SIZE, RED);
-        printSquare(k*WALL_SIZE, 0, WALL_SIZE, RED);
+        sysprintSquare(i*WALL_SIZE, 0, WALL_SIZE, RED);
+        sysprintSquare(k*WALL_SIZE, 0, WALL_SIZE, RED);
         board[i][0] = BLOCKED;
         board[k][0] = BLOCKED;
         wait();
     }
 
     for (int i = 0; i < HEIGHT ; i++) {
-        printSquare(0, i*WALL_SIZE, WALL_SIZE, RED);
-        printSquare((WIDTH-1)*WALL_SIZE, i*WALL_SIZE, WALL_SIZE, RED);
+        sysprintSquare(0, i*WALL_SIZE, WALL_SIZE, RED);
+        sysprintSquare((WIDTH-1)*WALL_SIZE, i*WALL_SIZE, WALL_SIZE, RED);
         board[0][i] = BLOCKED;
         board[WIDTH-1][i] = BLOCKED;
         wait();
     }
 
     for (int i = 0, k = WIDTH-1; i <= WIDTH/2 && k >= WIDTH/2 ; i++, k--) {
-        printSquare(i*WALL_SIZE, (HEIGHT-1)*WALL_SIZE, WALL_SIZE, RED);
-        printSquare(k*WALL_SIZE, (HEIGHT-1)*WALL_SIZE, WALL_SIZE, RED);
+        sysprintSquare(i*WALL_SIZE, (HEIGHT-1)*WALL_SIZE, WALL_SIZE, RED);
+        sysprintSquare(k*WALL_SIZE, (HEIGHT-1)*WALL_SIZE, WALL_SIZE, RED);
 
         board[i][HEIGHT-1] = BLOCKED;
         board[k][HEIGHT-1] = BLOCKED;

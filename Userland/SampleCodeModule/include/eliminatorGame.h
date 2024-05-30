@@ -24,10 +24,10 @@
 
 #define CRASHED                 1
 
-#define P1_UP_KEY           upArrowValue()
-#define P1_DOWN_KEY         downArrowValue()
-#define P1_LEFT_KEY         leftArrowValue()
-#define P1_RIGHT_KEY        rightArrowValue()
+#define P1_UP_KEY           sysupArrowValue()
+#define P1_DOWN_KEY         sysdownArrowValue()
+#define P1_LEFT_KEY         sysleftArrowValue()
+#define P1_RIGHT_KEY        sysrightArrowValue()
 
 #define P2_UP_KEY           'w'
 #define P2_DOWN_KEY         's'

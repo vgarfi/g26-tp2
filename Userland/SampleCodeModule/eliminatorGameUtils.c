@@ -6,15 +6,15 @@
 static int shellFontLevel;
 
 void initializeEliminator(void){
-    clearScreen();
-    shellFontLevel = getZoomLevel();
-    setZoomLevel(ELIMINATOR_FONT_LEVEL);
+    sysclearScreen();
+    shellFontLevel = sysgetZoomLevel();
+    syssetZoomLevel(ELIMINATOR_FONT_LEVEL);
 }
 
 void eliminatorReturn(void) {
-    setZoomLevel(shellFontLevel);
-    clearScreen();
-    showCursor();
+    syssetZoomLevel(shellFontLevel);
+    sysclearScreen();
+    sysshowCursor();
 }
 void printEliminatorTitle(void) {
     
@@ -103,10 +103,10 @@ void printEliminatorTitle(void) {
 
         int y = startY;
 
-        sleep(0, TICKS_PER_FRAME);
+        syssleep(0, TICKS_PER_FRAME);
         for (int i = 0; letters[l][i] != '\0'; i++) {
             if (letters[l][i] == '1') {
-                printSquare(x*LETTERS_THICK, y*LETTERS_THICK, LETTERS_THICK, RED);
+                sysprintSquare(x*LETTERS_THICK, y*LETTERS_THICK, LETTERS_THICK, RED);
             }
 
             if (letters[l][i] == '\n') {
@@ -117,20 +117,20 @@ void printEliminatorTitle(void) {
             }
         }
     
-        beepSound(beepParameters[l][1], beepParameters[l][0]);
+        sysbeepSound(beepParameters[l][1], beepParameters[l][0]);
     }
 }
 unsigned char menuOption(void){
     printEliminatorTitle();
-    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 15, (PIXELS_HEIGHT / 12) / 2 + 5);
+    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 15, (PIXELS_HEIGHT / 12) / 2 + 5);
     print("Welcome to the Eliminator Game\n");
-    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 11, (PIXELS_HEIGHT / 12) / 2 + 6);
+    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 11, (PIXELS_HEIGHT / 12) / 2 + 6);
     print("Press 1 to play alone\n");
-    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 16, (PIXELS_HEIGHT / 12) / 2 + 7);
+    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 16, (PIXELS_HEIGHT / 12) / 2 + 7);
     print("Press 2 to play against a friend\n");
-    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 17, (PIXELS_HEIGHT / 12) / 2 + 8);
+    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 17, (PIXELS_HEIGHT / 12) / 2 + 8);
     print("Press 3 to play against a computer\n");
-    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 9, (PIXELS_HEIGHT / 12) / 2 + 9);
+    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 9, (PIXELS_HEIGHT / 12) / 2 + 9);
     print("Press ESC to exit\n");
     unsigned char option = getchar();
     while (option != ONE_PLAYER && option != TWO_PLAYERS && option != COMPUTER && option != ESC) {
@@ -140,7 +140,7 @@ unsigned char menuOption(void){
 }
 
 void playerDied(int P1Crashed, int P2Crashed, int *scoreP1, int *scoreP2) {
-    printRectangle(
+    sysprintRectangle(
         PIXELS_WIDTH / 2 - 140, 
         PIXELS_HEIGHT / 2 - 40, 
         35*WALL_SIZE, 
@@ -148,19 +148,19 @@ void playerDied(int P1Crashed, int P2Crashed, int *scoreP1, int *scoreP2) {
         GREY
     );
     if (P1Crashed == CRASHED && P2Crashed == CRASHED) {
-        setCursorPosition((PIXELS_WIDTH / 8) / 2 - 2, (PIXELS_HEIGHT / 12) / 2 - 3);
+        syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 2, (PIXELS_HEIGHT / 12) / 2 - 3);
         print("DRAW!\n");
     } else if (P1Crashed == CRASHED) {
-        setCursorPosition((PIXELS_WIDTH / 8) / 2 - 7, (PIXELS_HEIGHT / 12) / 2 - 3);
+        syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 7, (PIXELS_HEIGHT / 12) / 2 - 3);
         print("PLAYER 2 WINS!\n");
         (*scoreP2)++;
     } else {
-        setCursorPosition((PIXELS_WIDTH / 8) / 2 - 7, (PIXELS_HEIGHT / 12) / 2 - 3);
+        syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 7, (PIXELS_HEIGHT / 12) / 2 - 3);
         print("PLAYER 1 WINS!\n");
         (*scoreP1)++;
     }
 
-    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 15, (PIXELS_HEIGHT / 12) / 2-1);
+    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 15, (PIXELS_HEIGHT / 12) / 2-1);
     print("P1 SCORE is: ");
     char score[10];
     itoa((*scoreP1), score);
@@ -169,14 +169,14 @@ void playerDied(int P1Crashed, int P2Crashed, int *scoreP1, int *scoreP2) {
     itoa((*scoreP2), score);
     print(score);
     
-    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2);
+    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2);
     print("\nPress R to restart");
-    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2+1);
+    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2+1);
     print("\nPress ESC to exit");    
 }
 
 void userDied(int* scoreP1) {
-    printRectangle(
+    sysprintRectangle(
         PIXELS_WIDTH / 2 - 80, 
         PIXELS_HEIGHT / 2 - 40, 
         20*WALL_SIZE, 
@@ -184,18 +184,18 @@ void userDied(int* scoreP1) {
         GREY
     );
     (*scoreP1)++;
-    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 5, (PIXELS_HEIGHT / 12) / 2 - 2);
+    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 5, (PIXELS_HEIGHT / 12) / 2 - 2);
     print("YOU DIED!");
     
-    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2);
+    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2);
     print("Your DEATHS are: ");
     char score[10];
     itoa((*scoreP1), score);
     print(score);
 
-    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2+1);
+    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2+1);
     print("Press R to restart");
-    setCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2+2);
+    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2+2);
     print("Press ESC to exit");
 }
 
@@ -222,7 +222,7 @@ int decideSnakeDirection (int lastDirection, int upArrowValue, int downArrowValu
     }
 }
 
-int decideSnakeDirectionCPU(int lastDirectionP2, SnakeHead snakeHeadCPU, int** board) {
+int decideSnakeDirectionCPU(int lastDirectionP2, SnakeHead snakeHeadCPU, char** board) {
     switch (lastDirectionP2) {
         
     case UP: 

@@ -1,172 +1,172 @@
-GLOBAL writeScreen
-GLOBAL readScreen
-GLOBAL clearScreen
+GLOBAL syswriteScreen
+GLOBAL sysreadScreen
+GLOBAL sysclearScreen
 
-GLOBAL upArrowValue
-GLOBAL leftArrowValue
-GLOBAL downArrowValue
-GLOBAL rightArrowValue
+GLOBAL sysupArrowValue
+GLOBAL sysleftArrowValue
+GLOBAL sysdownArrowValue
+GLOBAL sysrightArrowValue
 
-GLOBAL printRectangle
-GLOBAL printSquare
+GLOBAL sysprintRectangle
+GLOBAL sysprintSquare
 
-GLOBAL printRegs
-GLOBAL sleep
+GLOBAL sysprintRegs
+GLOBAL syssleep
 
-GLOBAL getSecs
-GLOBAL getMins
-GLOBAL getHour
-GLOBAL getDay
-GLOBAL getMonth
-GLOBAL getYear
+GLOBAL sysgetSecs
+GLOBAL sysgetMins
+GLOBAL sysgetHour
+GLOBAL sysgetDay
+GLOBAL sysgetMonth
+GLOBAL sysgetYear
 
-GLOBAL easterEgg
-GLOBAL beepSound
-GLOBAL zoomIn
-GLOBAL zoomOut
-GLOBAL getZoomLevel
-GLOBAL setZoomLevel
-GLOBAL printCursor
-GLOBAL hideCursor
-GLOBAL showCursor
-GLOBAL setCursorPosition
+GLOBAL syseasterEgg
+GLOBAL sysbeepSound
+GLOBAL syszoomIn
+GLOBAL syszoomOut
+GLOBAL sysgetZoomLevel
+GLOBAL syssetZoomLevel
+GLOBAL sysprintCursor
+GLOBAL syshideCursor
+GLOBAL sysshowCursor
+GLOBAL syssetCursorPosition
 
 section .text
 
-readScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToRead
+sysreadScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToRead
     mov rax, 0
     int 80h
     ret
 
-writeScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToPrint, R10: colorHex
+syswriteScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToPrint, R10: colorHex
     mov r10, rcx
     mov rax, 1
     int 80h
     ret
 
-printRegs:
+sysprintRegs:
     mov rax, 2
     int 80h
     ret
 
-zoomIn:
+syszoomIn:
     mov rax, 3
     int 80h
     ret
 
-zoomOut:
+syszoomOut:
     mov rax, 4
     int 80h
     ret
 
-getZoomLevel:
+sysgetZoomLevel:
     mov rax, 5
     int 80h
     ret
 
-setZoomLevel:
+syssetZoomLevel:
     mov rax, 6
     int 80h
     ret
 
-upArrowValue:
+sysupArrowValue:
     mov rax, 7
     int 80h
     ret
 
-leftArrowValue:
+sysleftArrowValue:
     mov rax, 8
     int 80h
     ret
 
-downArrowValue:
+sysdownArrowValue:
     mov rax, 9
     int 80h
     ret
 
-rightArrowValue:
+sysrightArrowValue:
     mov rax, 10
     int 80h
     ret
 
-clearScreen:
+sysclearScreen:
     mov rax, 11
     int 80h
     ret
 
-printSquare:
+sysprintSquare:
     mov r10, rcx
     mov rax, 12
     int 80h
     ret
 
-printRectangle:
+sysprintRectangle:
     mov r10, rcx
     mov rax, 13
     int 80h
     ret
 
-setCursorPosition:
+syssetCursorPosition:
     mov rax, 14
     int 80h
     ret
 
-beepSound:
+sysbeepSound:
     mov rax, 15
     int 80h
     ret
 
-sleep:
+syssleep:
     mov rax, 16
     int 80h
     ret
 
-hideCursor:
+syshideCursor:
     mov rax, 17
     int 80h
     ret
 
-showCursor:
+sysshowCursor:
     mov rax, 18
     int 80h
     ret
 
-printCursor:
+sysprintCursor:
     mov rax, 19
     int 80h
     ret
 
-getSecs:
+sysgetSecs:
     mov rax, 20
     int 80h
     ret
 
-getMins:
+sysgetMins:
     mov rax, 21
     int 80h
     ret
 
-getHour:
+sysgetHour:
     mov rax, 22
     int 80h
     ret
 
-getDay:
+sysgetDay:
     mov rax, 23
     int 80h
     ret
 
-getMonth:
+sysgetMonth:
     mov rax, 24
     int 80h
     ret
 
-getYear:
+sysgetYear:
     mov rax, 25
     int 80h
     ret
 
-easterEgg:
+syseasterEgg:
     mov rax, 26
     int 80h
     ret
