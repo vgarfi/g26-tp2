@@ -7,6 +7,10 @@ int syswriteScreen(uint64_t fd, unsigned char* buffer, uint64_t len, uint64_t he
 int sysreadScreen(uint64_t fd, unsigned char* buffer, uint64_t len);
 void syssleep(uint64_t secs, uint64_t ms);
 int sysclearScreen();
+int sysclearKbEntry();
+
+int sysctrlPressed();
+
 uint8_t sysupArrowValue();
 uint8_t sysleftArrowValue();
 uint8_t sysdownArrowValue();

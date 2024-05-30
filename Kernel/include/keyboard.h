@@ -16,6 +16,7 @@ uint8_t kbRightArrowValue(void);
 char readLastCharacter(void);
 int kbisBufferEmpty();
 unsigned char kbreadBuf(void);
+int kbctrlPressed(void);
 
 static unsigned char scancodesChars[SHIFT_VALUES][MAX_SCANCODE] = {
     {
@@ -36,7 +37,8 @@ enum SPECIALCHARS {
 //  BACKSPACE         = 0x0e,
 //  TAB               = 0x0f, 
 //  ENTER             = 0x1c, 
-//  CONTROL           = 0x1d,
+ CONTROL           = 0x1d,
+ CONTROL_RELEASED = 0x9D,
  L_SHIFT_PRESS     = 0x2a, 
  L_SHIFT_RELEASE   = 0xaa, 
  R_SHIFT_PRESS     = 0x36,

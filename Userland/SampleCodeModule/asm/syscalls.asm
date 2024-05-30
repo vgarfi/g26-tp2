@@ -1,6 +1,7 @@
 GLOBAL syswriteScreen
 GLOBAL sysreadScreen
 GLOBAL sysclearScreen
+GLOBAL sysclearKbEntry
 
 GLOBAL sysupArrowValue
 GLOBAL sysleftArrowValue
@@ -30,6 +31,8 @@ GLOBAL sysprintCursor
 GLOBAL syshideCursor
 GLOBAL sysshowCursor
 GLOBAL syssetCursorPosition
+
+GLOBAL sysctrlPressed
 
 section .text
 
@@ -168,5 +171,15 @@ sysgetYear:
 
 syseasterEgg:
     mov rax, 26
+    int 80h
+    ret
+
+sysctrlPressed:
+    mov rax, 27
+    int 80h
+    ret
+
+sysclearKbEntry:
+    mov rax, 28
     int 80h
     ret

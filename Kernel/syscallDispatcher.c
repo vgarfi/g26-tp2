@@ -9,13 +9,13 @@
 #include "speaker.h"
 #include "fonts.h"
 
-#define HANDLER_SIZE 27
+#define HANDLER_SIZE 29
 
 static int (*syscallHandlers[])()={
     read, write, printRegs, incSize, decSize, getZoomLevel, setZoomLevel, upArrowValue, leftArrowValue, downArrowValue,
     rightArrowValue, clearScreen, printSquare, printRect, setCursor, sound, ticksleep, hideCursor,
     showCursor, printCursor, getCurrentSeconds, getCurrentMinutes, getCurrentHours, getCurrentDay,
-    getCurrentMonth, getCurrentYear, easterEggSong
+    getCurrentMonth, getCurrentYear, easterEggSong, isctrlPressed, cleanKbBuffer
 };
 
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
@@ -172,5 +172,14 @@ int getCurrentYear(void){
 
 int easterEggSong(){
     playEasterEggSong();
+    return 0;
+}
+
+int isctrlPressed(){
+    return kbctrlPressed();
+}
+
+int cleanKbBuffer(){
+    kbcleanBuffer();
     return 0;
 }

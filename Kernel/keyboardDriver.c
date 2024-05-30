@@ -14,6 +14,7 @@ static unsigned char buffer[MAXSIZE] = {0};
 static int bufferPos = 0;
 static int shift = 0;
 static int dataStatus = 0;
+static int ctrlPressed=0;
 
 int shiftHandler(uint8_t key){
     switch(key) {
@@ -71,9 +72,15 @@ uint8_t kbRightArrowValue() {
 void updateBuffer() {
     uint8_t scancode = getKey();
     uint8_t arrowValue = isArrow(scancode);
-    
+
     if(scancode==L_ALT){
         saveRegs();
+    }
+    else if(scancode==CONTROL){
+        ctrlPressed=1;
+    }
+    else if(scancode==CONTROL_RELEASED){
+        ctrlPressed=0;
     }
     else if(arrowValue || (!shiftHandler(scancode) && scancode < MAX_SCANCODE)) { // Agregamos los caracteres, con su modificación correspondiente ante un shift
         dataStatus = 1;
@@ -83,6 +90,10 @@ void updateBuffer() {
             bufferPos = 0;
         }
     }
+}
+
+int kbctrlPressed(){
+    return ctrlPressed;
 }
 
 int kbisBufferEmpty(){
