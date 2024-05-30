@@ -168,10 +168,12 @@ _irq05Handler:
 
 ;Zero Division Exception
 _exception0Handler:
+	saveIntRegs
 	exceptionHandler 0
 
 ;Invalid OpCode Exception
 _exception6Handler:
+	saveIntRegs
 	exceptionHandler 6
 
 saveRegsInBuffer:	;; Once you enter here, regs[0]=RIP, regs[1]=RFLAGS, regs[2]=RSP

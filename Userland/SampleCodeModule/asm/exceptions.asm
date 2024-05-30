@@ -9,5 +9,5 @@ divZero:
     ret
 
 invalidOpcode:
-    db 0x0F, 0x00
+    db 0xFF, 0xFF
     ret
