@@ -19,6 +19,7 @@ static int maxCharsInScreen = 10880; // chars per row * chars per column
 char charsInScreen[10880] = {' '};
 uint32_t colorsInScreen[10880];
 static int index = 0;
+static int scrollUpdateBuffer = 1;
 void initializeVideoDriver(){
 	framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
 	widthScreen = 	VBE_mode_info->width;
@@ -28,7 +29,7 @@ void initializeVideoDriver(){
 	//memset(charsInScreen,)
 	memset(charsInScreen,' ',maxCharsInScreen);
 	memset(colorsInScreen,0,4*maxCharsInScreen);
-	
+	scrollUpdateBuffer = 1;
 
 }
 
@@ -56,7 +57,7 @@ void vdUpdateCursor(int x, int y){
 
 		if (cursor.posY + offsetY >= heightScreen * pitch)
 		{
-			vdScrol(1);
+			vdScroll(1);
 			offsetY += -pitch * getCurrentFont().size.height;
 			
 		}
@@ -77,7 +78,7 @@ void vdPrintCursor(){
 	}
 	if (cursor.posY + (getCurrentFont().size.height*pitch) >= heightScreen*pitch)
 	{
-		vdScrol(1);
+		vdScroll(1);
 		cursor.posY -= pitch *getCurrentFont().size.height;
 	}
 	vdPrintRect(cursor.posX/bytesPerPixel,cursor.posY/pitch,getCurrentFont().size.realWidth,getCurrentFont().size.height,cursor.color);
@@ -188,12 +189,25 @@ void vdDeleteChar(){
 
 void vdResize(){
 	vdClearScreen();
-	int i,j = 0;
+	scrollUpdateBuffer = 0;
+	int i,j,z,r,q = 0;
 	char c;
+	char b;
 	int limit = (widthScreen/getCurrentFont().size.realWidth) * (heightScreen/getCurrentFont().size.height);
-	for(i = 0, j=0;i < limit && j<index;i++,j++){
+	/*while(z < index){
+		b = charsInScreen[z++];
+		if(b == '\n'){
+			q += (((widthScreen*bytesPerPixel - cursor.posX) / bytesPerPixel) / getCurrentFont().size.realWidth);
+		}
+		else
+			q++;
+
+		
+	}
+	*/
+	for(i = 0, j=0;j<index;i++,j++){
 		c = charsInScreen[j];
-		if(cursor.posY != heightScreen * pitch && cursor.posX != widthScreen* bytesPerPixel){
+		//if(cursor.posY != heightScreen * pitch && cursor.posX != widthScreen* bytesPerPixel){
 		if(c == '\n'){
 			i+= (((widthScreen*bytesPerPixel - cursor.posX) / bytesPerPixel) / getCurrentFont().size.realWidth);
 			vdNewLine();
@@ -203,11 +217,12 @@ void vdResize(){
 			vdPrintChar(c);
 			}
 
-		}		
+		//}		
 	}
 	if(c != '\n'){
 		vdNewLine();
 	}
+	scrollUpdateBuffer = 1;
 }
 
 void vdClearScreen(){
@@ -230,17 +245,19 @@ void updateCharsInScreen(int lines){
 	}
 }
 
-void vdScrol(int lines) {
+void vdScroll(int lines) {
     int fontHeight = getCurrentFont().size.height;
     int offset = lines * fontHeight * widthScreen * bytesPerPixel;
     int frameSize = bytesPerPixel * widthScreen * (heightScreen - lines * (fontHeight));
     int clearSize = bytesPerPixel * widthScreen * lines * fontHeight;
     memcpy(framebuffer, framebuffer + offset, frameSize);
     memset(framebuffer + frameSize, 0, clearSize);
-	if(index - lines * (widthScreen/getCurrentFont().size.realWidth) >=0){
-		index -= lines * (widthScreen/getCurrentFont().size.realWidth);
+	if(scrollUpdateBuffer == 1 && index >= MAXCHARSINSCREEN){
+		if(index - lines * (widthScreen/getCurrentFont().size.realWidth) >=0){
+			index -= lines * (widthScreen/getCurrentFont().size.realWidth);
+		}
+		updateCharsInScreen(lines);
 	}
-	updateCharsInScreen(lines);
 }
 
 void vdPrintRect(int x,int y,int base, int height, uint32_t hexColor){
