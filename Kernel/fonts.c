@@ -14,7 +14,7 @@ unsigned const char* fonts[] = {fontBitMap_8x12,fontBitMap_8x14,fontBitMap_16x18
 //const Size size_8x16 = {8,16};
 //const Size size_8x12 = {8,12};
 
-Size sizes[9] = {{6,8,12},{8,8,14},{10,16,18},{11,16,22},{12,16,24},{14,16,28}, {16,16,32}};
+Size sizes[7] = {{6,8,12},{8,8,14},{10,16,18},{11,16,22},{12,16,24},{14,16,28}, {16,16,32}};
 
 //const FontBitmap fb1 = {fontBitMap_16x32, {16,32}};
 //const FontBitmap fb2 = {fontBitMap_8x16, {8,16}};
