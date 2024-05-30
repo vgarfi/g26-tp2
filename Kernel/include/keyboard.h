@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 void updateBuffer(void);
-void cleanBuffer(void);
+void kbcleanBuffer(void);
 uint8_t getKey(void);
 uint8_t kbUpArrowValue(void);
 uint8_t kbLeftArrowValue(void);
@@ -14,8 +14,8 @@ uint8_t kbDownArrowValue(void);
 uint8_t kbRightArrowValue(void);
 
 char readLastCharacter(void);
-int isBufferEmpty();
-unsigned char readBuf(void);
+int kbisBufferEmpty();
+unsigned char kbreadBuf(void);
 
 static unsigned char scancodesChars[SHIFT_VALUES][MAX_SCANCODE] = {
     {

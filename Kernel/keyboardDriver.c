@@ -85,16 +85,16 @@ void updateBuffer() {
     }
 }
 
-int isBufferEmpty(){
+int kbisBufferEmpty(){
     return bufferPos == 0;
 }
 
-void cleanBuffer(){
+void kbcleanBuffer(){
     bufferPos = 0;
 }
 
-unsigned char readBuf () {
-    if(isBufferEmpty())
+unsigned char kbreadBuf () {
+    if(kbisBufferEmpty())
         return 0;
     
     unsigned char ans = buffer[0];
@@ -105,6 +105,7 @@ unsigned char readBuf () {
     return ans;
 }   
 
+// TODO: Check if this is necessary
 char readLastCharacter() {
     if(bufferPos > 1){
         return buffer[bufferPos-1];

@@ -39,7 +39,7 @@ void exceptionDispatcher(int exception) {
 	vdPrint("Press any key to recover...\n",COMMENTCOL);
 	int flag=0;
 	char key;
-	cleanBuffer();
+	kbcleanBuffer();
 	
 	while(!flag){
 		flag=read(STDIN, &key, 1);
