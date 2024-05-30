@@ -18,12 +18,13 @@
 #define ELIMINATOR_MODE     9
 #define CLEAR_MODE          10
 #define REGISTERS_MODE      11
+#define EASTEREGG_MODE      12
 
 #define HELP_TEXTS          14
 
 
 static const char* modes[] = {
-    "shell", "idle", "help", "divbyzero", "invalidopcode", "zoomin", "zoomout", "time", "date", "eliminator", "clear", "registers"
+    "shell", "idle", "help", "divbyzero", "invalidopcode", "zoomin", "zoomout", "time", "date", "eliminator", "clear", "registers", "easteregg"
 };
 
 static char* helpText[] = { "Command information is displayed below:\n\n",

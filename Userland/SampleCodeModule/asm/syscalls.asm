@@ -20,6 +20,7 @@ GLOBAL getDay
 GLOBAL getMonth
 GLOBAL getYear
 
+GLOBAL easterEgg
 GLOBAL beepSound
 GLOBAL zoomIn
 GLOBAL zoomOut
@@ -162,5 +163,10 @@ getMonth:
 
 getYear:
     mov rax, 25
+    int 80h
+    ret
+
+easterEgg:
+    mov rax, 26
     int 80h
     ret

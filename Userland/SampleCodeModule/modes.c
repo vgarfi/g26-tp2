@@ -69,3 +69,13 @@ void notFound(char* commandNotFound){
     print(commandNotFound); 
     print(": command not found.\n");
 }
+
+void playEasterEgg(){
+    printColor("I'm", RED);
+    printColor(" an", YELLOW);
+    printColor(" eas", GREEN);
+    printColor("ter ", BLUE);
+    printColor("egg", WHITE);
+    printColor("!\n", YELLOW);
+    easterEgg();
+}

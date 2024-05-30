@@ -18,6 +18,7 @@ int init(){
         else if(strcasecmp(commandPrompt, modes[CLEAR_MODE]) == SELECTED_MODE) clear();
         else if(strcasecmp(commandPrompt, modes[TIME_MODE]) == SELECTED_MODE) time();
         else if(strcasecmp(commandPrompt, modes[DATE_MODE]) == SELECTED_MODE) date();
+        else if(strcasecmp(commandPrompt, modes[EASTEREGG_MODE])==0) playEasterEgg();
         else if(strcasecmp(commandPrompt, modes[ZOOMIN_MODE]) == SELECTED_MODE ) zoomin();
         else if(strcasecmp(commandPrompt, modes[ZOOMOUT_MODE]) == SELECTED_MODE) zoomout();
         else if(strcasecmp(commandPrompt, modes[DIVBYZERO_MODE]) == SELECTED_MODE) divByZero();

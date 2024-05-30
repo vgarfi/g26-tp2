@@ -31,3 +31,34 @@
  	 sleep(ticks);
  	 nosound();
  }
+
+ void playEasterEggSong(){
+	beep(4, DOFREQ);
+	beep(4, DOSOSTFREQ);
+	beep(4, SOLFREQ);
+	beep(4, MIFREQ);
+	beep(4, SOLFREQ);
+	beep(4, MIFREQ);
+	
+	beep(4, DOSOSTFREQ);
+	beep(4, DOFREQ);
+	beep(4, SOLSOSTFREQ);
+	beep(4, FAFREQ);
+	beep(4, SOLSOSTFREQ);
+	beep(4, FAFREQ);
+
+	beep(4, DOFREQ);
+	beep(4, DOSOSTFREQ);
+	beep(4, SOLFREQ);
+	beep(4, MIFREQ);
+	beep(4, SOLFREQ);
+	beep(4, MIFREQ);
+
+	beep(2, FAFREQ);
+	beep(3, FASOSTFREQ);
+	beep(2, SOLFREQ);
+	beep(3, SOLSOSTFREQ);
+	beep(2, LAFREQ);
+	beep(3, SIFREQ);
+	beep(2, DOMENFREQ);
+ }

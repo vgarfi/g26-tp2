@@ -20,7 +20,8 @@ int clearScreen();
 int ticksleep(uint64_t secs, uint64_t ticks);     // rdi : seconds, rsi : miliseconds
 int printRegs(void);
 
-int sound(uint64_t ticks);
+int sound(uint64_t ticks, uint64_t freq);
+int easterEggSong(void);
 
 int getCurrentSeconds(void);
 int getCurrentMinutes(void);

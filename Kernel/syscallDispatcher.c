@@ -9,22 +9,17 @@
 #include "speaker.h"
 #include "fonts.h"
 
-#define HANDLER_SIZE 25
+#define HANDLER_SIZE 27
 
 static int (*syscallHandlers[])()={
     read, write, printRegs, incSize, decSize, getZoomLevel, setZoomLevel, upArrowValue, leftArrowValue, downArrowValue,
     rightArrowValue, clearScreen, printSquare, printRect, setCursor, sound, ticksleep, hideCursor,
     showCursor, printCursor, getCurrentSeconds, getCurrentMinutes, getCurrentHours, getCurrentDay,
-    getCurrentMonth, getCurrentYear
+    getCurrentMonth, getCurrentYear, easterEggSong
 };
 
-<<<<<<< HEAD
-uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){       
-    // int handlerSize = 23;//(syscallHandlers)/sizeof(syscallHandlers[0]);
-=======
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
-    int handlerSize = 23;//(syscallHandlers)/sizeof(syscallHandlers[0]);
->>>>>>> 2fb609cdb1188f9b99584a4b4989f4de25a96a07
+    int handlerSize = 27;//(syscallHandlers)/sizeof(syscallHandlers[0]);
 
     if(rax < 0 || rax > HANDLER_SIZE)
         return -1;
@@ -61,14 +56,14 @@ int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor){
 int incSize(){
     int zoomFail = sizeUp();
     if(!zoomFail)
-        resize();
+        vdResize();
     return zoomFail;
 }
 
 int decSize(){
     int zoomFail = sizeDown();
     if(!zoomFail)
-        resize();
+        vdResize();
     return zoomFail;
 }
 
@@ -124,8 +119,8 @@ int printRegs(){
     return regPrinting();
 }
 
-int sound(uint64_t ticks){
-    beep(ticks);
+int sound(uint64_t ticks, uint64_t freq){
+    beep(ticks, freq);
     return 0;
 }
 
@@ -139,25 +134,7 @@ int ticksleep(uint64_t secs, uint64_t ticks){
     return 0;
 }
 
-<<<<<<< HEAD
-int hideCursor(){
-=======
-int incSize(){
-    int zoomFail = sizeUp();
-    if(!zoomFail)
-        vdResize();
-    return zoomFail;
-}
-
-int decSize(){
-    int zoomFail = sizeDown();
-    if(!zoomFail)
-        vdResize();
-    return zoomFail;
-}
-
 void hideCursor(){
->>>>>>> 2fb609cdb1188f9b99584a4b4989f4de25a96a07
     vdSetCursorColor(0x00000000);
 }
 
@@ -191,4 +168,9 @@ int getCurrentMonth(void){
 
 int getCurrentYear(void){
     return rtc_get_year();
+}
+
+int easterEggSong(){
+    playEasterEggSong();
+    return 0;
 }

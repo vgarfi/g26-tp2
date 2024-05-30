@@ -15,6 +15,7 @@ int printRectangle(int x,int y,int base,int height,uint32_t hexColor);
 int printSquare(int x,int y , int side, uint32_t hexColor);
 int setCursorPosition(uint64_t x, uint64_t y);
 int beepSound(uint64_t secs, uint64_t freq);
+int easterEgg();
 
 int getSecs(void);
 int getMins(void);
