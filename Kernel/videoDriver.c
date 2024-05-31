@@ -190,10 +190,12 @@ void vdDeleteChar(){
 void vdResize(){
 	vdClearScreen();
 	scrollUpdateBuffer = 0;
-	int i,j,z,r,q = 0;
+	int i,j = 0;
 	char c;
+	/* int z,r,q = 0;
+	
 	char b;
-	int limit = (widthScreen/getCurrentFont().size.realWidth) * (heightScreen/getCurrentFont().size.height);
+	int limit = (widthScreen/getCurrentFont().size.realWidth) * (heightScreen/getCurrentFont().size.height); */
 	/*while(z < index){
 		b = charsInScreen[z++];
 		if(b == '\n'){

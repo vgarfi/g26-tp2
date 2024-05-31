@@ -16,7 +16,7 @@ void wait(void);
 int directionIsHorizontal (int direction);
 
 int decideSnakeDirection (int lastDirection, int upArrowValue, int downArrowValue, int leftArrowValue, int rightArrowValue, unsigned char keyPressed);
-int decideSnakeDirectionCPU(int lastDirectionP2, SnakeHead snakeHeadCPU, char** board);
+int decideSnakeDirectionCPU(int lastDirectionP2, SnakeHead snakeHeadCPU, char board[WIDTH][HEIGHT]);
 
 void updateSnakeHead (SnakeHead * head, int direction);
 

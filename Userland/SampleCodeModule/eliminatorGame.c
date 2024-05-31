@@ -1,6 +1,8 @@
 #include "include/eliminatorGame.h"
 #include "include/eliminatorGameUtils.h"
 #include "include/colors.h"
+#include "include/syscalls.h"
+#include "include/stdio.h"
 
 SnakeHead snakeHeadP1;
 SnakeHead snakeHeadP2;
@@ -14,7 +16,7 @@ int lastDirectionP2 = DOWN;
 int scoreP1 = 0;
 int scoreP2 = 0;
 
-char board [WIDTH][HEIGHT] = {0};
+char board [WIDTH][HEIGHT] = {{0}};
 
 int eliminatorMode = ELIMINATOR_EXEC;
 
@@ -108,7 +110,7 @@ void playAlone(void) {
 void playTwoPlayers(int player2) {
     unsigned char finishKey;
     unsigned char keyPressed;
-    unsigned char lastDirection, lastKeyPressed, aux;
+    unsigned char lastKeyPressed, aux;
     while (finishKey != ESC) {
 
         cleanBoard();

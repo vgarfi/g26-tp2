@@ -2,6 +2,8 @@
 #include "include/eliminatorGame.h"
 #include "include/colors.h"
 #include "include/syscalls.h"
+#include "include/stdio.h"
+#include "include/string.h"
 
 static int shellFontLevel;
 
@@ -222,7 +224,7 @@ int decideSnakeDirection (int lastDirection, int upArrowValue, int downArrowValu
     }
 }
 
-int decideSnakeDirectionCPU(int lastDirectionP2, SnakeHead snakeHeadCPU, char** board) {
+int decideSnakeDirectionCPU(int lastDirectionP2, SnakeHead snakeHeadCPU, char board[WIDTH][HEIGHT]) {
     switch (lastDirectionP2) {
         
     case UP: 

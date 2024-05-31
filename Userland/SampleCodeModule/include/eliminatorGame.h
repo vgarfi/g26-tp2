@@ -53,4 +53,9 @@ typedef struct {
 } SnakeHead;
 
 void eliminatorGame(void);
+void playAlone(void);
+void playTwoPlayers(int player2);
+void cleanBoard(void);
+void printWall(void);
+
 #endif
