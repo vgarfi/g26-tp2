@@ -45,6 +45,7 @@ void exceptionDispatcher(int exception) {
 		flag=read(STDIN, &key, 1);
 	}
 	vdClearScreen();
+	vdClearBuffer();
 }
 
 static void zero_division() {
