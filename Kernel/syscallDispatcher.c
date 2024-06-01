@@ -112,8 +112,8 @@ int setCursor(uint64_t x, uint64_t y) {
     return 0;
 }
 
-/** registers is a buffer of 17 qwords to save registers in the next order:
- *  RIP RAX RBX RCX RDX RSI RDI RBP RSP R8 R9 R10 R11 R12 R13 R14 R15
+/** registers is a buffer of 18 qwords to save registers in the next order:
+ *  RIP RFLAGS RSP RAX RBX RCX RDX RSI RDI RBP R8 R9 R10 R11 R12 R13 R14 R15
  */
 int printRegs(){
     return regPrinting();
