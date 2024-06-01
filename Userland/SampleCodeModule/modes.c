@@ -14,7 +14,7 @@ int zoomAux, regAux;
 
 
 void help (void) {
-    for(int i = 0; i < HELP_TEXTS; i++){
+    for(int i=0; strcasecmp(helpText[i], "end")!=0; i++){
         printColor(helpText[i], YELLOW);
     }
 }

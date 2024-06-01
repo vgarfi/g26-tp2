@@ -93,7 +93,7 @@ int scanf(char * buffer, int size){
             continue;
         
         if(ctrlFlag){
-            if(read == 'q'){
+            if(read == 'i'){
                 checkZoomFlag = incTextSize();
                 if(checkZoomFlag){
                     print("   Maximum Size Reached.");
@@ -107,7 +107,7 @@ int scanf(char * buffer, int size){
                     sysprintCursor();
                 }
             }
-            else if(read == 'e'){
+            else if(read == 'o'){
                 checkZoomFlag = decTextSize();
                 if(checkZoomFlag){
                     print("   Minimum Size Reached.");
