@@ -9,5 +9,5 @@ divZero:
     ret
 
 invalidOpcode:
-    db 0xFF, 0xFF
+    mov cr6, rax
     ret
