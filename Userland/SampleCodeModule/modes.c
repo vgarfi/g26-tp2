@@ -8,6 +8,7 @@
 #include "include/exceptions.h"
 #include "include/dateTime.h"
 #include "include/colors.h"
+#include "include/utils.h"
 
 char* dateTimeAux;
 int zoomAux, regAux;
@@ -77,5 +78,39 @@ void playEasterEgg(){
     printColor("ter ", BLUE);
     printColor("egg", WHITE);
     printColor("!\n", YELLOW);
-    syseasterEgg();
+
+    syshideCursor();
+    sysprintCursor();
+
+    sysbeepSound(4, DO);
+	sysbeepSound(4, DO_SOST);
+	sysbeepSound(4, SOL);
+	sysbeepSound(4, MI);
+	sysbeepSound(4, SOL);
+	sysbeepSound(4, MI);
+	
+	sysbeepSound(4, DO_SOST);
+	sysbeepSound(4, DO);
+	sysbeepSound(4, SOL_SOST);
+	sysbeepSound(4, FA);
+	sysbeepSound(4, SOL_SOST);
+	sysbeepSound(4, FA);
+
+	sysbeepSound(4, DO);
+	sysbeepSound(4, DO_SOST);
+	sysbeepSound(4, SOL);
+	sysbeepSound(4, MI);
+	sysbeepSound(4, SOL);
+	sysbeepSound(4, MI);
+
+	sysbeepSound(2, FA);
+	sysbeepSound(3, FA_SOST);
+	sysbeepSound(2, SOL);
+	sysbeepSound(3, SOL_SOST);
+	sysbeepSound(2, LA);
+	sysbeepSound(3, SI);
+	sysbeepSound(2, DO_PRIMA);
+
+    sysshowCursor();
+    sysprintCursor();
 }

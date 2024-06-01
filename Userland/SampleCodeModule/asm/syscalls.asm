@@ -21,7 +21,6 @@ GLOBAL sysgetDay
 GLOBAL sysgetMonth
 GLOBAL sysgetYear
 
-GLOBAL syseasterEgg
 GLOBAL sysbeepSound
 GLOBAL syszoomIn
 GLOBAL syszoomOut
@@ -169,17 +168,12 @@ sysgetYear:
     int 80h
     ret
 
-syseasterEgg:
+sysctrlPressed:
     mov rax, 26
     int 80h
     ret
 
-sysctrlPressed:
-    mov rax, 27
-    int 80h
-    ret
-
 sysclearKbEntry:
-    mov rax, 28
+    mov rax, 27
     int 80h
     ret

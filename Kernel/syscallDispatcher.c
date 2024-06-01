@@ -15,7 +15,7 @@ static int (*syscallHandlers[])()={
     read, write, printRegs, incSize, decSize, getZoomLevel, setZoomLevel, upArrowValue, leftArrowValue, downArrowValue,
     rightArrowValue, clearScreen, printSquare, printRect, setCursor, sound, ticksleep, hideCursor,
     showCursor, printCursor, getCurrentSeconds, getCurrentMinutes, getCurrentHours, getCurrentDay,
-    getCurrentMonth, getCurrentYear, easterEggSong, isctrlPressed, cleanKbBuffer
+    getCurrentMonth, getCurrentYear, isctrlPressed, cleanKbBuffer
 };
 
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
@@ -168,11 +168,6 @@ int getCurrentMonth(void){
 
 int getCurrentYear(void){
     return rtc_get_year();
-}
-
-int easterEggSong(){
-    playEasterEggSong();
-    return 0;
 }
 
 int isctrlPressed(){

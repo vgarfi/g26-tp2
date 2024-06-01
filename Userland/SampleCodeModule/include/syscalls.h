@@ -19,7 +19,6 @@ int sysprintRectangle(int x,int y,int base,int height,uint32_t hexColor);
 int sysprintSquare(int x,int y , int side, uint32_t hexColor);
 int syssetCursorPosition(uint64_t x, uint64_t y);
 int sysbeepSound(uint64_t secs, uint64_t freq);
-int syseasterEgg();
 
 int sysgetSecs(void);
 int sysgetMins(void);
