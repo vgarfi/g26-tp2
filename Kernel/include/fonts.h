@@ -44,4 +44,7 @@ FontBitmap getCurrentFont();
 int sizeUp(void);
 int sizeDown(void);
 
+int getZoom();
+int setZoom(int zoomLevel);
+
 #endif
