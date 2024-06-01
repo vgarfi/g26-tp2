@@ -3,6 +3,7 @@
 #include "include/colors.h"
 #include "include/syscalls.h"
 #include "include/stdio.h"
+#include "include/utils.h"
 
 SnakeHead snakeHeadP1;
 SnakeHead snakeHeadP2;
@@ -17,6 +18,7 @@ int scoreP1 = 0;
 int scoreP2 = 0;
 
 char board [WIDTH][HEIGHT] = {{0}};
+int map;
 
 int eliminatorMode = ELIMINATOR_EXEC;
 
@@ -26,7 +28,7 @@ void eliminatorGame () {
     snakeHeadP2.color = BLUE;
     
     while(eliminatorMode == ELIMINATOR_EXEC) {
-        unsigned char option = menuOption();
+        unsigned char option = menuOption(&map);
         switch (option) {
         case ONE_PLAYER:
             playAlone();
@@ -86,25 +88,27 @@ void playAlone(void) {
             lastKeyPressed = keyPressed;
         }
 
-        sysbeepSound(3, 200);
-        sysbeepSound(2, 500);
+        sysbeepSound(3, DO);
+        sysbeepSound(2, SI);
+        
         userDied(&scoreP1);
         didP1Crashed = !CRASHED;
 
-        for (int i = 0; i < DIED_TIME && (finishKey != ESC && finishKey != RESET); i++) {
+        while (finishKey != ESC && finishKey != RESET && finishKey != SPACE) {
             finishKey = getchar();
-            syssleep(0,1);
         }
 
-        if (finishKey == ESC){
-            scoreP1 = 0;
-            cleanBoard();
-        }
-        else {
-            scoreP1 = (finishKey == RESET) ? 0 : scoreP1;
+        if (finishKey != ESC) {
+            scoreP1 = (finishKey == RESET)? 0 : scoreP1;
+            sysbeepSound(1, LA);
+            sysbeepSound(1, SI);
+            sysbeepSound(1, FA);
             finishKey = 0;
         }
+
     }
+    scoreP1 = 0;
+    cleanBoard();
 }
 
 void playTwoPlayers(int player2) {
@@ -156,11 +160,7 @@ void playTwoPlayers(int player2) {
             lastKeyPressed=keyPressed;
         }
 
-        sysbeepSound(2, 200);
-        sysbeepSound(1, 500);
-        sysbeepSound(1, 570);
-        sysbeepSound(2, 320);
-
+        twoPlayersSound(didP1Crashed, didP2Crashed, player2);
 
         playerDied(didP1Crashed, didP2Crashed, &scoreP1, &scoreP2);
         
@@ -168,25 +168,22 @@ void playTwoPlayers(int player2) {
         didP2Crashed = !CRASHED;
         
 
-        for (int i = 0; i < DIED_TIME && (finishKey != ESC && finishKey != RESET); i++) {
+        while (finishKey != ESC && finishKey != RESET && finishKey != SPACE) {
             finishKey = getchar();
-            syssleep(0,1);
         }
 
-        if (finishKey == ESC) {
-            scoreP1 = 0;
-            scoreP2 = 0;
-            cleanBoard();
-        }
-        else {
-            if (finishKey == RESET) {
-                scoreP1 = 0;
-                scoreP2 = 0;
-            }
-            cleanBoard();
+        if (finishKey != ESC) {
+            scoreP1 = (finishKey == RESET)? 0 : scoreP1;
+            scoreP2 = (finishKey == RESET)? 0 : scoreP2;
+            sysbeepSound(1, LA);
+            sysbeepSound(1, SI);
+            sysbeepSound(1, FA);
             finishKey = 0;
         }
     }
+    scoreP1 = 0;
+    scoreP2 = 0;
+    cleanBoard();
 }
 
 void cleanBoard(void) {
@@ -222,5 +219,50 @@ void printWall(void) {
         board[i][HEIGHT-1] = BLOCKED;
         board[k][HEIGHT-1] = BLOCKED;
         wait();
-    }   
+    }
+
+    if (map == MAP_B) {
+        int boxSize = 5;
+        int offsets[] = {1, 3, 5, 7, 9};
+        for (int k = 0; k < 5; k++) {
+            int startX = offsets[k] * WIDTH / 10;
+            int startY = offsets[(k+2)%5] * HEIGHT / 10;
+            for (int i = startX; i < startX + boxSize; i++) {
+                sysprintSquare(i*WALL_SIZE, startY*WALL_SIZE, WALL_SIZE, YELLOW);
+                board[i][startY] = BLOCKED;
+                sysprintSquare(i*WALL_SIZE, (startY + boxSize - 1)*WALL_SIZE, WALL_SIZE, YELLOW);
+                board[i][startY + boxSize - 1] = BLOCKED;
+                wait();
+            }
+            for (int j = startY; j < startY + boxSize; j++) {
+                sysprintSquare(startX*WALL_SIZE, j*WALL_SIZE, WALL_SIZE, YELLOW);
+                board[startX][j] = BLOCKED;
+                sysprintSquare((startX + boxSize - 1)*WALL_SIZE, j*WALL_SIZE, WALL_SIZE, YELLOW);
+                board[startX + boxSize - 1][j] = BLOCKED;
+                wait();
+            }
+        }
+    }
+
+    if (map == MAP_C) {
+        // Líneas y formas que no bloquean el juego
+        int lineLength = WIDTH / 5; // Longitud de la línea
+        int offsets[] = {1, 3, 5, 7}; // Posiciones más alejadas del centro
+        for (int k = 0; k < 4; k++) {
+            int startX = offsets[k] * WIDTH / 8;
+            int startY = offsets[(k+2)%4] * HEIGHT / 8;
+            // Dibujar una línea horizontal
+            for (int i = startX; i < startX + lineLength; i++) {
+                sysprintSquare(i*WALL_SIZE, startY*WALL_SIZE, WALL_SIZE, YELLOW);
+                board[i][startY] = BLOCKED;
+                wait();
+            }
+            // Dibujar una línea vertical
+            for (int j = startY; j < startY + lineLength; j++) {
+                sysprintSquare(startX*WALL_SIZE, j*WALL_SIZE, WALL_SIZE, YELLOW);
+                board[startX][j] = BLOCKED;
+                wait();
+            }
+        }
+    }
 }

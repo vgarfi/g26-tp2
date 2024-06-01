@@ -36,10 +36,14 @@
 
 
 #define ESC                 27
+#define SPACE               ' '
 #define ONE_PLAYER          '1'
 #define TWO_PLAYERS         '2'
 #define COMPUTER            '3'
 #define RESET               'r'
+#define A_OPTION            'a'
+#define B_OPTION            'b'
+#define C_OPTION            'c'
 
 
 enum Direction {UP, DOWN, LEFT, RIGHT};

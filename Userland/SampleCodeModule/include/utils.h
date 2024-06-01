@@ -1,5 +1,5 @@
-#ifndef __SYSCALLS_H_
-#define __SYSCALLS_H_
+#ifndef __UTILS_H_
+#define __UTILS_H_
 
 #define DO 262
 #define RE 294

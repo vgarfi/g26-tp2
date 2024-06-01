@@ -4,6 +4,7 @@
 #include "include/syscalls.h"
 #include "include/stdio.h"
 #include "include/string.h"
+#include "include/utils.h"
 
 static int shellFontLevel;
 
@@ -32,7 +33,7 @@ void printEliminatorTitle(void) {
         {300, 3},   // O
         {400, 2}    // R
     };
-    // Representación de cada letra en píxeles
+
     char* letters[] = {
         // E
         "1111\n"
@@ -96,11 +97,11 @@ void printEliminatorTitle(void) {
         "10001\n"
     };
 
-    int startX = WIDTH / 2 - (4 + 3) * 10 / 2; // Centra la palabra en la pantalla, 4 = ancho de letra, 3 = espacio entre letras
-    int startY = HEIGHT / 2 - 5 / 2;
+    int startX = WIDTH / 2 - (4 + 3) * 10 / 2;
+    int startY = HEIGHT / 2 - 10;
 
-    for (int l = 0; l <= 9; l++) {
-        int increment = /*(l == 2 || l == 4)? l*6 :*/ l*7;
+    for (int l = 0; l < 10; l++) {
+        int increment = l*7;
         int x = startX + increment;
 
         int y = startY;
@@ -122,7 +123,7 @@ void printEliminatorTitle(void) {
         sysbeepSound(beepParameters[l][1], beepParameters[l][0]);
     }
 }
-unsigned char menuOption(void){
+unsigned char menuOption(int* map){
     printEliminatorTitle();
     syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 15, (PIXELS_HEIGHT / 12) / 2 + 5);
     print("Welcome to the Eliminator Game\n");
@@ -132,11 +133,33 @@ unsigned char menuOption(void){
     print("Press 2 to play against a friend\n");
     syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 17, (PIXELS_HEIGHT / 12) / 2 + 8);
     print("Press 3 to play against a computer\n");
+    
+    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 17, (PIXELS_HEIGHT / 12) / 2 + 10);
+    print("Change maps by pressing A [BASIC], B [MEDIUM], C [HARD] \n");
+    
     syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 9, (PIXELS_HEIGHT / 12) / 2 + 9);
     print("Press ESC to exit\n");
     unsigned char option = getchar();
+
     while (option != ONE_PLAYER && option != TWO_PLAYERS && option != COMPUTER && option != ESC) {
         option = getchar();
+        if (option == A_OPTION || option == B_OPTION || option == C_OPTION) {
+            sysbeepSound(1, DO_PRIMA);
+            sysbeepSound(2, SI);
+            // TODO mostrar un texto que dps se borre (rectangulazo negro) que diga MAP X SELECTED
+            switch (option) {
+                case A_OPTION:
+                    *map = MAP_A;
+                    break;
+                case B_OPTION:
+                    *map = MAP_B;
+                    break;
+                case C_OPTION:
+                    *map = MAP_C;
+                    break;
+            }
+        }
+        
     }
     return option;
 }
@@ -174,7 +197,47 @@ void playerDied(int P1Crashed, int P2Crashed, int *scoreP1, int *scoreP2) {
     syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2);
     print("\nPress R to restart");
     syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2+1);
-    print("\nPress ESC to exit");    
+    print("\nPress ESC to exit");
+    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2+2);
+    print("\nPress SPACE to replay");
+}
+
+void twoPlayersSound(int didP1Crashed, int didP2Crashed, int player2) {
+    if (didP1Crashed == CRASHED && didP2Crashed != CRASHED) {
+        if (player2 == CPU) {
+            sysbeepSound(3, DO_PRIMA);
+            sysbeepSound(2, SI);
+            sysbeepSound(1, LA);
+            sysbeepSound(1, SOL);
+            sysbeepSound(1, FA);
+        } else {
+            sysbeepSound(3, DO);
+            sysbeepSound(2, RE);
+            sysbeepSound(1, MI);
+            sysbeepSound(1, FA);
+            sysbeepSound(1, SOL);
+            sysbeepSound(1, LA);
+            sysbeepSound(1, SI);
+            sysbeepSound(1, DO_PRIMA);
+        }
+    } else if (didP1Crashed != CRASHED && didP2Crashed == CRASHED) {
+        if (player2 == CPU) {
+            sysbeepSound(3, DO_PRIMA);
+            sysbeepSound(2, SI);
+            sysbeepSound(1, LA);
+            sysbeepSound(1, SOL);
+            sysbeepSound(1, FA);
+        } else {
+            sysbeepSound(3, DO);
+            sysbeepSound(2, RE);
+            sysbeepSound(1, MI);
+            sysbeepSound(1, FA);
+            sysbeepSound(1, SOL);
+            sysbeepSound(1, LA);
+            sysbeepSound(1, SI);
+            sysbeepSound(1, DO_PRIMA);
+        }
+    }
 }
 
 void userDied(int* scoreP1) {
@@ -196,9 +259,11 @@ void userDied(int* scoreP1) {
     print(score);
 
     syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2+1);
-    print("Press R to restart");
+    print("Press R to restart scores");
     syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2+2);
     print("Press ESC to exit");
+    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2+3);
+    print("Press SPACE to replay");
 }
 
 
