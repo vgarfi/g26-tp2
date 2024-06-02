@@ -33,8 +33,7 @@ int read(uint64_t fd, char * buf, uint64_t count) {
     }
     uint64_t sizeRead=0;
     unsigned char lastRead='\0';
-    //int startTick = ticks_elapsed();
-    while(sizeRead!=count && !kbisBufferEmpty()/* && ticks_elapsed() <= startTick*/){
+    while(sizeRead!=count && !kbisBufferEmpty()){
             lastRead = kbreadBuf();
             buf[sizeRead++] = lastRead;
     }
