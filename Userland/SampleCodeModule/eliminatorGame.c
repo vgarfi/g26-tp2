@@ -104,6 +104,7 @@ void playAlone(void) {
             sysbeepSound(1, SI);
             sysbeepSound(1, FA);
             finishKey = 0;
+            keyPressed = UP;
         }
 
     }
@@ -179,6 +180,7 @@ void playTwoPlayers(int player2) {
             sysbeepSound(1, SI);
             sysbeepSound(1, FA);
             finishKey = 0;
+            keyPressed = UP;
         }
     }
     scoreP1 = 0;
