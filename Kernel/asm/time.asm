@@ -20,7 +20,7 @@ section .text
     ; Lee el valor del registro
     in al, 0x71
     or al, 4
-    out 0x71, al    ; Sets Seconds to be returned in binary
+    out 0x71, al    ; Sets data to be returned in binary
 
     mov al, %1      ; Argumento (registro a leer)
     out 70h, al
