@@ -114,11 +114,3 @@ unsigned char kbreadBuf () {
     bufferPos--;
     return ans;
 }   
-
-// TODO: Check if this is necessary
-char readLastCharacter() {
-    if(bufferPos > 1){
-        return buffer[bufferPos-1];
-    }
-    return 0;
-}
