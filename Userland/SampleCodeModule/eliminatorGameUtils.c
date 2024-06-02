@@ -125,20 +125,21 @@ void printEliminatorTitle(void) {
 }
 unsigned char menuOption(int* map){
     printEliminatorTitle();
-    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 15, (PIXELS_HEIGHT / 12) / 2 + 5);
+    syssetCursorPosition((PIXELS_WIDTH / 12) / 2 - 15, (PIXELS_HEIGHT / 22) / 2);
     print("Welcome to the Eliminator Game\n");
-    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 11, (PIXELS_HEIGHT / 12) / 2 + 6);
+    syssetCursorPosition((PIXELS_WIDTH / 12) / 2 - 11, (PIXELS_HEIGHT / 22) / 2 + 1);
     print("Press 1 to play alone\n");
-    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 16, (PIXELS_HEIGHT / 12) / 2 + 7);
+    syssetCursorPosition((PIXELS_WIDTH / 12) / 2 - 16, (PIXELS_HEIGHT / 22) / 2 + 2);
     print("Press 2 to play against a friend\n");
-    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 17, (PIXELS_HEIGHT / 12) / 2 + 8);
+    syssetCursorPosition((PIXELS_WIDTH / 12) / 2 - 17, (PIXELS_HEIGHT / 22) / 2 + 3);
     print("Press 3 to play against a computer\n");
     
-    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 17, (PIXELS_HEIGHT / 12) / 2 + 10);
+    syssetCursorPosition((PIXELS_WIDTH / 12) / 2 - 27, (PIXELS_HEIGHT / 22) / 2 + 10);
     print("Change maps by pressing A [BASIC], B [MEDIUM], C [HARD] \n");
     
-    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 9, (PIXELS_HEIGHT / 12) / 2 + 9);
+    syssetCursorPosition((PIXELS_WIDTH / 12) / 2 - 9, (PIXELS_HEIGHT / 22) / 2 + 9);
     print("Press ESC to exit\n");
+    sysclearKbEntry();
     unsigned char option = getchar();
 
     while (option != ONE_PLAYER && option != TWO_PLAYERS && option != COMPUTER && option != ESC) {
@@ -166,26 +167,26 @@ unsigned char menuOption(int* map){
 
 void playerDied(int P1Crashed, int P2Crashed, int *scoreP1, int *scoreP2) {
     sysprintRectangle(
-        PIXELS_WIDTH / 2 - 140, 
-        PIXELS_HEIGHT / 2 - 40, 
-        35*WALL_SIZE, 
-        10*WALL_SIZE, 
+        PIXELS_WIDTH / 2 - 200, 
+        PIXELS_HEIGHT / 2 - 60, 
+        48*WALL_SIZE, 
+        22*WALL_SIZE, 
         GREY
     );
     if (P1Crashed == CRASHED && P2Crashed == CRASHED) {
-        syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 2, (PIXELS_HEIGHT / 12) / 2 - 3);
-        print("DRAW!\n");
+        syssetCursorPosition((PIXELS_WIDTH / 12) / 2 - 2, (PIXELS_HEIGHT / 22) / 2 - 3);
+        print("DRAW!");
     } else if (P1Crashed == CRASHED) {
-        syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 7, (PIXELS_HEIGHT / 12) / 2 - 3);
-        print("PLAYER 2 WINS!\n");
+        syssetCursorPosition((PIXELS_WIDTH / 12) / 2 - 7, (PIXELS_HEIGHT / 22) / 2 - 3);
+        print("PLAYER 2 WINS!");
         (*scoreP2)++;
     } else {
-        syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 7, (PIXELS_HEIGHT / 12) / 2 - 3);
-        print("PLAYER 1 WINS!\n");
+        syssetCursorPosition((PIXELS_WIDTH / 12) / 2 - 7, (PIXELS_HEIGHT / 22) / 2 - 3);
+        print("PLAYER 1 WINS!");
         (*scoreP1)++;
     }
 
-    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 15, (PIXELS_HEIGHT / 12) / 2-1);
+    syssetCursorPosition((PIXELS_WIDTH / 12) / 2 - 15, (PIXELS_HEIGHT / 22) / 2 - 1);
     print("P1 SCORE is: ");
     char score[10];
     itoa((*scoreP1), score);
@@ -194,12 +195,12 @@ void playerDied(int P1Crashed, int P2Crashed, int *scoreP1, int *scoreP2) {
     itoa((*scoreP2), score);
     print(score);
     
-    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2);
-    print("\nPress R to restart");
-    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2+1);
-    print("\nPress ESC to exit");
-    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2+2);
-    print("\nPress SPACE to replay");
+    syssetCursorPosition((PIXELS_WIDTH / 12) / 2 -9, (PIXELS_HEIGHT / 22) / 2);
+    print("Press R to restart");
+    syssetCursorPosition((PIXELS_WIDTH / 12) / 2 - 8, (PIXELS_HEIGHT / 22) / 2+1);
+    print("Press ESC to exit");
+    syssetCursorPosition((PIXELS_WIDTH / 12) / 2 - 11, (PIXELS_HEIGHT / 22) / 2+2);
+    print("Press SPACE to replay");
 }
 
 void twoPlayersSound(int didP1Crashed, int didP2Crashed, int player2) {
@@ -242,27 +243,27 @@ void twoPlayersSound(int didP1Crashed, int didP2Crashed, int player2) {
 
 void userDied(int* scoreP1) {
     sysprintRectangle(
-        PIXELS_WIDTH / 2 - 80, 
-        PIXELS_HEIGHT / 2 - 40, 
-        20*WALL_SIZE, 
-        10*WALL_SIZE, 
+        PIXELS_WIDTH / 2 - 190, 
+        PIXELS_HEIGHT / 2 - 60, 
+        44*WALL_SIZE, 
+        22*WALL_SIZE, 
         GREY
     );
     (*scoreP1)++;
-    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 5, (PIXELS_HEIGHT / 12) / 2 - 2);
+    syssetCursorPosition((PIXELS_WIDTH / 12) / 2 - 5, (PIXELS_HEIGHT / 22) / 2 - 3);
     print("YOU DIED!");
     
-    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2);
+    syssetCursorPosition((PIXELS_WIDTH / 12) / 2 - 10, (PIXELS_HEIGHT / 22) / 2 - 1);
     print("Your DEATHS are: ");
     char score[10];
     itoa((*scoreP1), score);
     print(score);
 
-    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2+1);
+    syssetCursorPosition((PIXELS_WIDTH / 12) / 2 - 14, (PIXELS_HEIGHT / 22) / 2);
     print("Press R to restart scores");
-    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2+2);
+    syssetCursorPosition((PIXELS_WIDTH / 12) / 2 - 10, (PIXELS_HEIGHT / 22) / 2+1);
     print("Press ESC to exit");
-    syssetCursorPosition((PIXELS_WIDTH / 8) / 2 - 10, (PIXELS_HEIGHT / 12) / 2+3);
+    syssetCursorPosition((PIXELS_WIDTH / 12) / 2 - 12, (PIXELS_HEIGHT / 22) / 2+2);
     print("Press SPACE to replay");
 }
 

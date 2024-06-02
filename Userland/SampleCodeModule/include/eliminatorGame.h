@@ -18,7 +18,7 @@
 #define WIDTH                   128 // x 8 = 1024
 #define HEIGHT                  96 // x 8 = 768
 
-#define ELIMINATOR_FONT_LEVEL   6
+#define ELIMINATOR_FONT_LEVEL   4
 #define PIXELS_WIDTH            1024
 #define PIXELS_HEIGHT           768
 
