@@ -9,9 +9,9 @@
 
 #define FONTS_QUANTITY	7
 
-#define S_FONT			0
-#define M_FONT			1
-#define B_FONT			2
+#define A_FONT			0
+#define B_FONT			1
+#define C_FONT			2
 #define D_FONT			3
 #define E_FONT			4
 #define F_FONT			5
