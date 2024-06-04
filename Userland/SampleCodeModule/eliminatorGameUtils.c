@@ -146,8 +146,8 @@ unsigned char menuOption(int* map){
     while (option != ONE_PLAYER && option != TWO_PLAYERS && option != COMPUTER && option != ESC) {
         option = getchar();
         if (option == A_OPTION || option == B_OPTION || option == C_OPTION) {
-            sysbeepSound(1, DO_PRIMA);
-            sysbeepSound(2, SI);
+            sysBeepSound(1, DO_PRIMA);
+            sysBeepSound(2, SI);
             switch (option) {
                 case A_OPTION:
                     *map = MAP_A;
