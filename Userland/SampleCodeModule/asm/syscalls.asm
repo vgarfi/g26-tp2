@@ -1,179 +1,179 @@
-GLOBAL syswriteScreen
-GLOBAL sysreadScreen
-GLOBAL sysclearScreen
-GLOBAL sysclearKbEntry
+GLOBAL sysWriteScreen
+GLOBAL sysReadScreen
+GLOBAL sysClearScreen
+GLOBAL sysClearKbEntry
 
-GLOBAL sysupArrowValue
-GLOBAL sysleftArrowValue
-GLOBAL sysdownArrowValue
-GLOBAL sysrightArrowValue
+GLOBAL sysUpArrowValue
+GLOBAL sysLeftArrowValue
+GLOBAL sysDownArrowValue
+GLOBAL sysRightArrowValue
 
-GLOBAL sysprintRectangle
-GLOBAL sysprintSquare
+GLOBAL sysPrintRectangle
+GLOBAL sysPrintSquare
 
-GLOBAL sysprintRegs
-GLOBAL syssleep
+GLOBAL sysPrintRegs
+GLOBAL sysSleep
 
-GLOBAL sysgetSecs
-GLOBAL sysgetMins
-GLOBAL sysgetHour
-GLOBAL sysgetDay
-GLOBAL sysgetMonth
-GLOBAL sysgetYear
+GLOBAL sysGetSecs
+GLOBAL sysGetMins
+GLOBAL sysGetHour
+GLOBAL sysGetDay
+GLOBAL sysGetMonth
+GLOBAL sysGetYear
 
-GLOBAL sysbeepSound
-GLOBAL syszoomIn
-GLOBAL syszoomOut
-GLOBAL sysgetZoomLevel
-GLOBAL syssetZoomLevel
-GLOBAL sysprintCursor
-GLOBAL syshideCursor
-GLOBAL sysshowCursor
-GLOBAL syssetCursorPosition
+GLOBAL sysBeepSound
+GLOBAL sysZoomIn
+GLOBAL sysZoomOut
+GLOBAL sysGetZoomLevel
+GLOBAL sysSetZoomLevel
+GLOBAL sysPrintCursor
+GLOBAL sysHideCursor
+GLOBAL sysShowCursor
+GLOBAL sysSetCursorPosition
 
-GLOBAL sysctrlPressed
+GLOBAL sysCtrlPressed
 
 section .text
 
-sysreadScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToRead
+sysReadScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToRead
     mov rax, 0
     int 80h
     ret
 
-syswriteScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToPrint, R10: colorHex
+sysWriteScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToPrint, R10: colorHex
     mov r10, rcx
     mov rax, 1
     int 80h
     ret
 
-sysprintRegs:
+sysPrintRegs:
     mov rax, 2
     int 80h
     ret
 
-syszoomIn:
+sysZoomIn:
     mov rax, 3
     int 80h
     ret
 
-syszoomOut:
+sysZoomOut:
     mov rax, 4
     int 80h
     ret
 
-sysgetZoomLevel:
+sysGetZoomLevel:
     mov rax, 5
     int 80h
     ret
 
-syssetZoomLevel:
+sysSetZoomLevel:
     mov rax, 6
     int 80h
     ret
 
-sysupArrowValue:
+sysUpArrowValue:
     mov rax, 7
     int 80h
     ret
 
-sysleftArrowValue:
+sysLeftArrowValue:
     mov rax, 8
     int 80h
     ret
 
-sysdownArrowValue:
+sysDownArrowValue:
     mov rax, 9
     int 80h
     ret
 
-sysrightArrowValue:
+sysRightArrowValue:
     mov rax, 10
     int 80h
     ret
 
-sysclearScreen:
+sysClearScreen:
     mov rax, 11
     int 80h
     ret
 
-sysprintSquare:
+sysPrintSquare:
     mov r10, rcx
     mov rax, 12
     int 80h
     ret
 
-sysprintRectangle:
+sysPrintRectangle:
     mov r10, rcx
     mov rax, 13
     int 80h
     ret
 
-syssetCursorPosition:
+sysSetCursorPosition:
     mov rax, 14
     int 80h
     ret
 
-sysbeepSound:
+sysBeepSound:
     mov rax, 15
     int 80h
     ret
 
-syssleep:
+sysSleep:
     mov rax, 16
     int 80h
     ret
 
-syshideCursor:
+sysHideCursor:
     mov rax, 17
     int 80h
     ret
 
-sysshowCursor:
+sysShowCursor:
     mov rax, 18
     int 80h
     ret
 
-sysprintCursor:
+sysPrintCursor:
     mov rax, 19
     int 80h
     ret
 
-sysgetSecs:
+sysGetSecs:
     mov rax, 20
     int 80h
     ret
 
-sysgetMins:
+sysGetMins:
     mov rax, 21
     int 80h
     ret
 
-sysgetHour:
+sysGetHour:
     mov rax, 22
     int 80h
     ret
 
-sysgetDay:
+sysGetDay:
     mov rax, 23
     int 80h
     ret
 
-sysgetMonth:
+sysGetMonth:
     mov rax, 24
     int 80h
     ret
 
-sysgetYear:
+sysGetYear:
     mov rax, 25
     int 80h
     ret
 
-sysctrlPressed:
+sysCtrlPressed:
     mov rax, 26
     int 80h
     ret
 
-sysclearKbEntry:
+sysClearKbEntry:
     mov rax, 27
     int 80h
     ret

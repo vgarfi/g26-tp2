@@ -20,7 +20,7 @@ static int has31days(int month){
 }
 
 static void setDateToTimezone(int* year, int* month, int* days){
-	int hours = sysgetHour();
+	int hours = sysGetHour();
 	if(hours<3 && hours>=0){		// If time is a day ahead of our timezone, we adjust the date
 		if(*month==JAN && *days==1){
 			*days=31;
@@ -40,13 +40,13 @@ static void setDateToTimezone(int* year, int* month, int* days){
 }
 
 void printDate(void){
-    int days=sysgetDay(), month=sysgetMonth(), year=sysgetYear();
+    int days=sysGetDay(), month=sysGetMonth(), year=sysGetYear();
     setDateToTimezone(&year, &month, &days);
     printf("%d/%d/%d\n", days, month, year);
 }
 
 void printTime(void){
-    int hours=sysgetHour(), mins=sysgetMins(), secs=sysgetSecs();
+    int hours=sysGetHour(), mins=sysGetMins(), secs=sysGetSecs();
     hours=setHoursToTimezone(hours);
     printf("%d:%d:%d\n", hours, mins, secs);
 }

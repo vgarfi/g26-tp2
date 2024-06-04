@@ -21,14 +21,14 @@ void help (void) {
 }
 
 void eliminator() {
-    syshideCursor();
+    sysHideCursor();
     print("\nLoading eliminator...");
-    syssleep(2,0);
+    sysSleep(2,0);
     eliminatorGame();
 }
 
 void clear (void) {
-    sysclearScreen();
+    sysClearScreen();
 }
 
 void time(void) {
@@ -60,7 +60,7 @@ void invalidOp(){
 }
 
 void registers()  {
-    regAux = sysprintRegs();
+    regAux = sysPrintRegs();
     if(regAux){
         print("You need to save registers first by pressing ALT\n");
     }
@@ -79,38 +79,38 @@ void playEasterEgg(){
     printColor("egg", WHITE);
     printColor("!\n", YELLOW);
 
-    syshideCursor();
-    sysprintCursor();
+    sysHideCursor();
+    sysPrintCursor();
 
-    sysbeepSound(4, DO);
-	sysbeepSound(4, DO_SOST);
-	sysbeepSound(4, SOL);
-	sysbeepSound(4, MI);
-	sysbeepSound(4, SOL);
-	sysbeepSound(4, MI);
+    sysBeepSound(4, DO);
+	sysBeepSound(4, DO_SOST);
+	sysBeepSound(4, SOL);
+	sysBeepSound(4, MI);
+	sysBeepSound(4, SOL);
+	sysBeepSound(4, MI);
 	
-	sysbeepSound(4, DO_SOST);
-	sysbeepSound(4, DO);
-	sysbeepSound(4, SOL_SOST);
-	sysbeepSound(4, FA);
-	sysbeepSound(4, SOL_SOST);
-	sysbeepSound(4, FA);
+	sysBeepSound(4, DO_SOST);
+	sysBeepSound(4, DO);
+	sysBeepSound(4, SOL_SOST);
+	sysBeepSound(4, FA);
+	sysBeepSound(4, SOL_SOST);
+	sysBeepSound(4, FA);
 
-	sysbeepSound(4, DO);
-	sysbeepSound(4, DO_SOST);
-	sysbeepSound(4, SOL);
-	sysbeepSound(4, MI);
-	sysbeepSound(4, SOL);
-	sysbeepSound(4, MI);
+	sysBeepSound(4, DO);
+	sysBeepSound(4, DO_SOST);
+	sysBeepSound(4, SOL);
+	sysBeepSound(4, MI);
+	sysBeepSound(4, SOL);
+	sysBeepSound(4, MI);
 
-	sysbeepSound(2, FA);
-	sysbeepSound(3, FA_SOST);
-	sysbeepSound(2, SOL);
-	sysbeepSound(3, SOL_SOST);
-	sysbeepSound(2, LA);
-	sysbeepSound(3, SI);
-	sysbeepSound(2, DO_PRIMA);
+	sysBeepSound(2, FA);
+	sysBeepSound(3, FA_SOST);
+	sysBeepSound(2, SOL);
+	sysBeepSound(3, SOL_SOST);
+	sysBeepSound(2, LA);
+	sysBeepSound(3, SI);
+	sysBeepSound(2, DO_PRIMA);
 
-    sysshowCursor();
-    sysprintCursor();
+    sysShowCursor();
+    sysPrintCursor();
 }

@@ -27,12 +27,12 @@ static int inputIndex = 0;
 
 unsigned char getchar(void){
     unsigned char read=0;
-    readSizeFlag=sysreadScreen(STDIN, &read, 1);
+    readSizeFlag=sysReadScreen(STDIN, &read, 1);
     return read;
 }
 
 unsigned char putchar(unsigned char c){
-    syswriteScreen(STDOUT, &c, 1, hexcol);
+    sysWriteScreen(STDOUT, &c, 1, hexcol);
     return c;
 }
 
@@ -87,7 +87,7 @@ int scanf(char * buffer, int size){
     unsigned char read=0;
     int readSize=0, printedSize=0;
     while(read!='\n'){
-        ctrlFlag = sysctrlPressed();
+        ctrlFlag = sysCtrlPressed();
         read=getchar();
         if(!readSizeFlag)
             continue;
@@ -97,28 +97,28 @@ int scanf(char * buffer, int size){
                 checkZoomFlag = incTextSize();
                 if(checkZoomFlag){
                     print("   Maximum Size Reached.");
-                    syshideCursor();
-                    sysprintCursor();
-                    syssleep(0,15);
+                    sysHideCursor();
+                    sysPrintCursor();
+                    sysSleep(0,15);
                     for(int i=0; i<strlen("   Maximum Size Reached."); i++){
                         putchar('\b');
                     }
-                    sysshowCursor();
-                    sysprintCursor();
+                    sysShowCursor();
+                    sysPrintCursor();
                 }
             }
             else if(read == 'o'){
                 checkZoomFlag = decTextSize();
                 if(checkZoomFlag){
                     print("   Minimum Size Reached.");
-                    syshideCursor();
-                    sysprintCursor();
-                    syssleep(0,15);
+                    sysHideCursor();
+                    sysPrintCursor();
+                    sysSleep(0,15);
                     for(int i=0; i<strlen("   Minimum Size Reached."); i++){
                         putchar('\b');
                     }
-                    sysshowCursor();
-                    sysprintCursor();
+                    sysShowCursor();
+                    sysPrintCursor();
                 }
             }
         }
@@ -136,7 +136,7 @@ int scanf(char * buffer, int size){
                 printedSize--;
             }
             else if (isVerticalArrow(read)) {
-                if (read == sysupArrowValue()) {
+                if (read == sysUpArrowValue()) {
                     if (inputIndex > 0) {
                         inputIndex--;
                     }
@@ -169,5 +169,5 @@ static int isPrintable(unsigned char c){
 }
 
 static int isVerticalArrow(unsigned char c) {
-    return c == sysupArrowValue() || c == sysdownArrowValue();
+    return c == sysUpArrowValue() || c == sysDownArrowValue();
 }
