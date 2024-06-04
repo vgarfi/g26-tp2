@@ -12,26 +12,26 @@ Por último, algunos dispositivos o computadoras requieren tener instalado y eje
 
 ### Instalación de qemu x86
 
-Ejecute el comando  sudo apt install qemu‐system‐x86 qemu‐utils
+Ejecute el comando  ```sudo apt install qemu‐system‐x86 qemu‐utils```
 
 ### Instalación de Docker
 
 - **Instalación del programa**
-Ejecute el comando sudo apt install docker.io
+Ejecute el comando ```sudo apt install docker.io```
 
 - **Descarga de la imagen** 
-Ejecute el comando  docker pull agodio/itba‐so:1.0
+Ejecute el comando ```docker pull agodio/itba‐so:1.0```
 
 ### Instalación de XLaunch
-Ejecute el comando  https://sourceforge.net/projects/vcxsrv/
+Descarguelo desde el siguiente link:  https://sourceforge.net/projects/vcxsrv/
 
 ## Iniciar la shell
 
 ### Sin el archivo qcow2 generado:
-Teniendo Docker correctamente instalado, debe ejecutar el archivo compile.sh. Para esto, párese donde tenga guardada la carpeta de la shell (llamada TPE-Arqui) e ingrese ${PWD}/TPE-Arqui/compile.sh.
+Teniendo Docker correctamente instalado, debe ejecutar el archivo compile.sh. Para esto, párese donde tenga guardada la carpeta de la shell (llamada TPE-Arqui) e ingrese ```${PWD}/TPE-Arqui/compile.sh```.
 
 ### Con el archivo qcow2 ya generado/descargado:
-Una vez que posea el archivo qcow2, debe ejecutar el archivo run.sh. Para esto párese donde tenga guardada la carpeta de la shell (llamada TPE-Arqui) e ingrese ${PWD}/TPE-Arqui/run.sh . Luego de su ejecución, se abrirá el emulador qemu y verá una pantalla con una leyenda brindándole la bienvenida y proporcionándole ayuda  inicial.
+Una vez que posea el archivo qcow2, debe ejecutar el archivo run.sh. Para esto párese donde tenga guardada la carpeta de la shell (llamada TPE-Arqui) e ingrese ```${PWD}/TPE-Arqui/run.sh``` . Luego de su ejecución, se abrirá el emulador qemu y verá una pantalla brindándole la bienvenida y proporcionándole ayuda inicial.
 
 ## Guía de comandos
 
@@ -76,5 +76,5 @@ Presionando las teclas CTRL + I, podrá realizar un aumento rápido de la fuente
 La shell se encarga de almacenar los comandos que el usuario envía. Presionando la flecha hacia arriba de su teclado podrá acceder a los comandos anteriores, mientras que con la flecha hacia abajo podrá ver los comandos más recientes. 
 
 ### Escritura en la Shell y recepción de comandos
-	BurinShell maneja varios caracteres imprimibles recibidos por teclado. Para acceder a más caracteres, solo requiere de combinar la tecla SHIFT con alguna otra tecla. Por ejemplo, SHIFT + Letra dará como resultado la letra en mayúscula, SHIFT + 1 dará como resultado un signo de admiración, y así con otras combinaciones.
+BurinShell maneja varios caracteres imprimibles recibidos por teclado. Para acceder a más caracteres, solo requiere de combinar la tecla SHIFT con alguna otra tecla. Por ejemplo, SHIFT + Letra dará como resultado la letra en mayúscula, SHIFT + 1 dará como resultado un signo de admiración, y así con otras combinaciones.
 	La Shell está preparada para recibir comandos sin considerar si las letras son mayúsculas o minúsculas. Esto quiere decir que tanto ‘HELP’ como ‘help’ serán interpretadas como el mismo comando, al igual que todas sus combinaciones.
