@@ -17,7 +17,7 @@ int printRect(int x,int y,int base,int height,uint32_t hexColor);
 int printSquare (int x, int y,int side, uint32_t hexColor);
 
 int clearScreen();
-int ticksleep(uint64_t secs, uint64_t ticks);     // rdi : seconds, rsi : miliseconds
+int ticksleep(uint64_t secs, uint64_t ticks);     // rdi : seconds, rsi : ticks
 int printRegs(void);
 
 int sound(uint64_t ticks, uint64_t freq);
