@@ -15,8 +15,8 @@
 #define WALL_SIZE               8
 #define LETTERS_THICK           8
 
-#define WIDTH                   128 // x 8 = 1024
-#define HEIGHT                  96 // x 8 = 768
+#define WIDTH                   128
+#define HEIGHT                  96
 
 #define ELIMINATOR_FONT_LEVEL   4
 #define PIXELS_WIDTH            1024

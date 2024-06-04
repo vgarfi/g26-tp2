@@ -247,19 +247,19 @@ void printWall(void) {
     }
 
     if (map == MAP_C) {
-        // Líneas y formas que no bloquean el juego
-        int lineLength = WIDTH / 8; // Longitud de la línea
-        int offsets[] = {1, 3, 5, 7}; // Posiciones más alejadas del centro
+        
+        int lineLength = WIDTH / 8;
+        int offsets[] = {1, 3, 5, 7};
         for (int k = 0; k < 4; k++) {
             int startX = offsets[k] * WIDTH / 9;
             int startY = offsets[(k+2)%4] * HEIGHT / 10;
-            // Dibujar una línea horizontal
+            
             for (int i = startX; i < startX + lineLength; i++) {
                 sysprintSquare(i*WALL_SIZE, startY*WALL_SIZE, WALL_SIZE, YELLOW);
                 board[i][startY] = BLOCKED;
                 wait();
             }
-            // Dibujar una línea vertical
+            
             for (int j = startY; j < startY + lineLength; j++) {
                 sysprintSquare(startX*WALL_SIZE, j*WALL_SIZE, WALL_SIZE, YELLOW);
                 board[startX][j] = BLOCKED;

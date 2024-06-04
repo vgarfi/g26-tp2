@@ -21,7 +21,7 @@ int intLength(int num, int minLen) {
 void intToString(int num, char *buf, int minLen) {
     int length = intLength(num, minLen);
 
-    // Convertir cada dígito del número a un carácter y agregarlo a la cadena
+   // Convert each digit to a char
     for (int i = length - 1; i >= 0; i--) {
         buf[i] = (num % 10) + '0';
         num /= 10;

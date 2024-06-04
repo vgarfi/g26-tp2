@@ -32,8 +32,4 @@ int strcasecmp(const char * str1, const char * str2);
 */
 char * strcpy(char *dest, const char *src);
 
-/**
- * Transforms int to ascii
- * **/
-void itoa (int value, char* result);
 #endif

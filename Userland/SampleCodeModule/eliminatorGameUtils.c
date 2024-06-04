@@ -4,6 +4,7 @@
 #include "include/syscalls.h"
 #include "include/stdio.h"
 #include "include/string.h"
+#include "include/lib.h"
 #include "include/utils.h"
 
 static int shellFontLevel;
@@ -147,7 +148,6 @@ unsigned char menuOption(int* map){
         if (option == A_OPTION || option == B_OPTION || option == C_OPTION) {
             sysbeepSound(1, DO_PRIMA);
             sysbeepSound(2, SI);
-            // TODO mostrar un texto que dps se borre (rectangulazo negro) que diga MAP X SELECTED
             switch (option) {
                 case A_OPTION:
                     *map = MAP_A;
@@ -189,10 +189,10 @@ void playerDied(int P1Crashed, int P2Crashed, int *scoreP1, int *scoreP2) {
     syssetCursorPosition((PIXELS_WIDTH / 12) / 2 - 15, (PIXELS_HEIGHT / 22) / 2 - 1);
     print("P1 SCORE is: ");
     char score[10];
-    itoa((*scoreP1), score);
+    intToString((*scoreP1), score, 1);
     print(score);
     print(" P2 SCORE is: ");
-    itoa((*scoreP2), score);
+    intToString((*scoreP2), score, 1);
     print(score);
     
     syssetCursorPosition((PIXELS_WIDTH / 12) / 2 -9, (PIXELS_HEIGHT / 22) / 2);
@@ -256,7 +256,7 @@ void userDied(int* scoreP1) {
     syssetCursorPosition((PIXELS_WIDTH / 12) / 2 - 10, (PIXELS_HEIGHT / 22) / 2 - 1);
     print("Your DEATHS are: ");
     char score[10];
-    itoa((*scoreP1), score);
+    intToString((*scoreP1), score, 1);
     print(score);
 
     syssetCursorPosition((PIXELS_WIDTH / 12) / 2 - 14, (PIXELS_HEIGHT / 22) / 2);
