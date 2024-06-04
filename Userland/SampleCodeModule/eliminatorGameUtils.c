@@ -238,6 +238,14 @@ void twoPlayersSound(int didP1Crashed, int didP2Crashed, int player2) {
             sysBeepSound(1, SI);
             sysBeepSound(1, DO_PRIMA);
         }
+    } else {
+        sysBeepSound(1, DO);
+        sysBeepSound(1, MI);
+        sysBeepSound(1, SOL);
+        sysBeepSound(1, DO_PRIMA);
+        sysBeepSound(1, SOL);
+        sysBeepSound(1, MI);
+        sysBeepSound(1, DO);
     }
 }
 
