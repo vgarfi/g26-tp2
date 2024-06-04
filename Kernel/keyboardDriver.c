@@ -81,7 +81,7 @@ void updateBuffer() {
     else if(scancode==CONTROL_RELEASED){
         ctrlPressed=0;
     }
-    else if(arrowValue || (!shiftHandler(scancode) && scancode < MAX_SCANCODE)) { // Agregamos los caracteres, con su modificación correspondiente ante un shift
+    else if(arrowValue || (!shiftHandler(scancode) && scancode < MAX_SCANCODE)) { // We add the characters, with their corresponding modification for a shift
         dataStatus = 1;
         char c = (arrowValue != 0)? arrowValue : scancodesChars[shift][scancode];
         buffer[bufferPos++] = c;
