@@ -27,10 +27,12 @@ Descarguelo desde el siguiente link:  https://sourceforge.net/projects/vcxsrv/
 
 ## Iniciar la shell
 
-### Sin el archivo qcow2 generado:
-Teniendo Docker correctamente instalado, debe ejecutar el archivo compile.sh. Para esto, párese donde tenga guardada la carpeta de la shell (llamada TPE-Arqui) e ingrese ```${PWD}/TPE-Arqui/compile.sh```.
+En caso de no contar con los permisos necesarios para algun archivo ejecutable, debe correr (posicionado dentro de la carpeta del proyecto TPE-Arqui) el comando ```chmod 777 *```
 
-### Con el archivo qcow2 ya generado/descargado:
+### Sin el archivo qcow2 generado
+Teniendo Docker correctamente instalado, debe ejecutar el archivo compile.sh. Para esto, párese dentro de la carpeta de la shell (llamada TPE-Arqui) e ingrese el comando ```./compile.sh```.
+
+### Con el archivo qcow2 ya generado/descargado
 Una vez que posea el archivo qcow2, debe ejecutar el archivo run.sh. Para esto párese dentro de la carpeta de la Shell (TPE-Arqui) e ingrese el comando ```./run.sh``` . Luego de su ejecución, se abrirá el emulador qemu y verá una pantalla brindándole la bienvenida y proporcionándole ayuda inicial.
 
 ## Guía de comandos
