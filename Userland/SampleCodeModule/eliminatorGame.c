@@ -43,7 +43,7 @@ void eliminatorGame () {
             break;
         
         case ESC:
-            sysclearScreen();
+            sysClearScreen();
             eliminatorMode = !ELIMINATOR_EXEC;
             break;
         } 
@@ -68,7 +68,7 @@ void playAlone(void) {
 
         while (didP1Crashed != CRASHED) {
 
-            sysprintSquare(snakeHeadP1.x*SNAKE_HEAD_SIZE, snakeHeadP1.y*SNAKE_HEAD_SIZE, SNAKE_HEAD_SIZE, snakeHeadP1.color);
+            sysPrintSquare(snakeHeadP1.x*SNAKE_HEAD_SIZE, snakeHeadP1.y*SNAKE_HEAD_SIZE, SNAKE_HEAD_SIZE, snakeHeadP1.color);
             
             if (board[snakeHeadP1.x][snakeHeadP1.y] == BLOCKED) {
                 didP1Crashed = CRASHED;
@@ -88,8 +88,8 @@ void playAlone(void) {
             lastKeyPressed = keyPressed;
         }
 
-        sysbeepSound(3, DO);
-        sysbeepSound(2, SI);
+        sysBeepSound(3, DO);
+        sysBeepSound(2, SI);
         
         userDied(&scoreP1);
         didP1Crashed = !CRASHED;
@@ -100,9 +100,9 @@ void playAlone(void) {
 
         if (finishKey != ESC) {
             scoreP1 = (finishKey == RESET)? 0 : scoreP1;
-            sysbeepSound(1, LA);
-            sysbeepSound(1, SI);
-            sysbeepSound(1, FA);
+            sysBeepSound(1, LA);
+            sysBeepSound(1, SI);
+            sysBeepSound(1, FA);
             finishKey = 0;
             keyPressed = UP;
         }
@@ -131,8 +131,8 @@ void playTwoPlayers(int player2) {
         snakeHeadP2.y = HEIGHT/2 + HEIGHT/4;
         
         while (didP1Crashed != CRASHED && didP2Crashed != CRASHED) {
-            sysprintSquare(snakeHeadP1.x*SNAKE_HEAD_SIZE, snakeHeadP1.y*SNAKE_HEAD_SIZE, SNAKE_HEAD_SIZE, snakeHeadP1.color);
-            sysprintSquare(snakeHeadP2.x*SNAKE_HEAD_SIZE, snakeHeadP2.y*SNAKE_HEAD_SIZE, SNAKE_HEAD_SIZE, snakeHeadP2.color);
+            sysPrintSquare(snakeHeadP1.x*SNAKE_HEAD_SIZE, snakeHeadP1.y*SNAKE_HEAD_SIZE, SNAKE_HEAD_SIZE, snakeHeadP1.color);
+            sysPrintSquare(snakeHeadP2.x*SNAKE_HEAD_SIZE, snakeHeadP2.y*SNAKE_HEAD_SIZE, SNAKE_HEAD_SIZE, snakeHeadP2.color);
 
             if (board[snakeHeadP1.x][snakeHeadP1.y] == BLOCKED) {
                 didP1Crashed = CRASHED;
@@ -176,9 +176,9 @@ void playTwoPlayers(int player2) {
         if (finishKey != ESC) {
             scoreP1 = (finishKey == RESET)? 0 : scoreP1;
             scoreP2 = (finishKey == RESET)? 0 : scoreP2;
-            sysbeepSound(1, LA);
-            sysbeepSound(1, SI);
-            sysbeepSound(1, FA);
+            sysBeepSound(1, LA);
+            sysBeepSound(1, SI);
+            sysBeepSound(1, FA);
             finishKey = 0;
             keyPressed = UP;
         }
@@ -194,29 +194,29 @@ void cleanBoard(void) {
             board[i][j] = 0;
         }
     }
-    sysclearScreen();
+    sysClearScreen();
 }
 
 void printWall(void) {
     for (int i = WIDTH/2, k = WIDTH/2; i >= 0 && k < WIDTH ; i--, k++) {
-        sysprintSquare(i*WALL_SIZE, 0, WALL_SIZE, RED);
-        sysprintSquare(k*WALL_SIZE, 0, WALL_SIZE, RED);
+        sysPrintSquare(i*WALL_SIZE, 0, WALL_SIZE, RED);
+        sysPrintSquare(k*WALL_SIZE, 0, WALL_SIZE, RED);
         board[i][0] = BLOCKED;
         board[k][0] = BLOCKED;
         wait();
     }
 
     for (int i = 0; i < HEIGHT ; i++) {
-        sysprintSquare(0, i*WALL_SIZE, WALL_SIZE, RED);
-        sysprintSquare((WIDTH-1)*WALL_SIZE, i*WALL_SIZE, WALL_SIZE, RED);
+        sysPrintSquare(0, i*WALL_SIZE, WALL_SIZE, RED);
+        sysPrintSquare((WIDTH-1)*WALL_SIZE, i*WALL_SIZE, WALL_SIZE, RED);
         board[0][i] = BLOCKED;
         board[WIDTH-1][i] = BLOCKED;
         wait();
     }
 
     for (int i = 0, k = WIDTH-1; i <= WIDTH/2 && k >= WIDTH/2 ; i++, k--) {
-        sysprintSquare(i*WALL_SIZE, (HEIGHT-1)*WALL_SIZE, WALL_SIZE, RED);
-        sysprintSquare(k*WALL_SIZE, (HEIGHT-1)*WALL_SIZE, WALL_SIZE, RED);
+        sysPrintSquare(i*WALL_SIZE, (HEIGHT-1)*WALL_SIZE, WALL_SIZE, RED);
+        sysPrintSquare(k*WALL_SIZE, (HEIGHT-1)*WALL_SIZE, WALL_SIZE, RED);
 
         board[i][HEIGHT-1] = BLOCKED;
         board[k][HEIGHT-1] = BLOCKED;
@@ -230,16 +230,16 @@ void printWall(void) {
             int startX = offsets[k] * WIDTH / 10;
             int startY = offsets[(k+2)%5] * HEIGHT / 10;
             for (int i = startX; i < startX + boxSize; i++) {
-                sysprintSquare(i*WALL_SIZE, startY*WALL_SIZE, WALL_SIZE, YELLOW);
+                sysPrintSquare(i*WALL_SIZE, startY*WALL_SIZE, WALL_SIZE, YELLOW);
                 board[i][startY] = BLOCKED;
-                sysprintSquare(i*WALL_SIZE, (startY + boxSize - 1)*WALL_SIZE, WALL_SIZE, YELLOW);
+                sysPrintSquare(i*WALL_SIZE, (startY + boxSize - 1)*WALL_SIZE, WALL_SIZE, YELLOW);
                 board[i][startY + boxSize - 1] = BLOCKED;
                 wait();
             }
             for (int j = startY; j < startY + boxSize; j++) {
-                sysprintSquare(startX*WALL_SIZE, j*WALL_SIZE, WALL_SIZE, YELLOW);
+                sysPrintSquare(startX*WALL_SIZE, j*WALL_SIZE, WALL_SIZE, YELLOW);
                 board[startX][j] = BLOCKED;
-                sysprintSquare((startX + boxSize - 1)*WALL_SIZE, j*WALL_SIZE, WALL_SIZE, YELLOW);
+                sysPrintSquare((startX + boxSize - 1)*WALL_SIZE, j*WALL_SIZE, WALL_SIZE, YELLOW);
                 board[startX + boxSize - 1][j] = BLOCKED;
                 wait();
             }
@@ -255,13 +255,13 @@ void printWall(void) {
             int startY = offsets[(k+2)%4] * HEIGHT / 10;
             // Dibujar una línea horizontal
             for (int i = startX; i < startX + lineLength; i++) {
-                sysprintSquare(i*WALL_SIZE, startY*WALL_SIZE, WALL_SIZE, YELLOW);
+                sysPrintSquare(i*WALL_SIZE, startY*WALL_SIZE, WALL_SIZE, YELLOW);
                 board[i][startY] = BLOCKED;
                 wait();
             }
             // Dibujar una línea vertical
             for (int j = startY; j < startY + lineLength; j++) {
-                sysprintSquare(startX*WALL_SIZE, j*WALL_SIZE, WALL_SIZE, YELLOW);
+                sysPrintSquare(startX*WALL_SIZE, j*WALL_SIZE, WALL_SIZE, YELLOW);
                 board[startX][j] = BLOCKED;
                 wait();
             }

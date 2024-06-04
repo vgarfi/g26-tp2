@@ -2,11 +2,11 @@
 #include "include/syscalls.h"
 
 int incTextSize(){
-    return syszoomIn();
+    return sysZoomIn();
 }
 
 int decTextSize(){
-    return syszoomOut();
+    return sysZoomOut();
 }
 
 int intLength(int num, int minLen) {

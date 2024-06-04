@@ -9,10 +9,10 @@ int init(){
     printColor("Welcome to Shell! Type HELP for command information.\n\n", YELLOW);
     char commandPrompt[32]={0};
     while(IDLE_MODE) {
-        sysclearKbEntry();
+        sysClearKbEntry();
         printColor("$", GREEN);
         print("> ");
-        sysshowCursor();
+        sysShowCursor();
         scanf(commandPrompt, 32);
         if(strcasecmp(commandPrompt, modes[HELP_MODE]) == SELECTED_MODE) help();
         else if(strcasecmp(commandPrompt, modes[ELIMINATOR_MODE]) == SELECTED_MODE) eliminator();
