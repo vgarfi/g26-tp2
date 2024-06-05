@@ -18,6 +18,7 @@ GLOBAL _exception6Handler
 
 GLOBAL _syscallHandler
 
+EXTERN getKey
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 EXTERN syscallDispatcher
@@ -146,8 +147,13 @@ _irq00Handler:
 
 ;Keyboard
 _irq01Handler:
-	saveIntRegs
-	irqHandlerMaster 1
+	push rax
+	call getKey
+	cmp al, 0x38
+	pop rax
+	jne .continue
+		saveIntRegs
+.continue:	irqHandlerMaster 1
 
 ;Cascade pic never called
 _irq02Handler:
@@ -201,7 +207,7 @@ saveRegsInBuffer:	;; Once you enter here, regs[0]=RIP, regs[1]=RFLAGS, regs[2]=R
 ; rax is the last parameters -> r9 = rax
 ; r10 is not a parameters -> rcx = r10
 _syscallHandler:
-	saveIntRegs
+	;saveIntRegs
 	mov rcx, r10
 	mov r9, rax
 	call syscallDispatcher
