@@ -16,7 +16,7 @@ uint16_t heightScreen;
 uint16_t pitch;
 uint8_t  bytesPerPixel;
 static uint32_t fgColor = GREY;
-static uint32_t bgColor = BLACK;
+const uint32_t bgColor = BLACK;
 char charsInScreen[MAXCHARSINSCREEN];
 uint32_t colorsInScreen[MAXCHARSINSCREEN];
 static int index;
