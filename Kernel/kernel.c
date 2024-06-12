@@ -7,6 +7,7 @@
 #include "include/time.h"
 #include <defs.h>
 #include "interrupts.h"
+#include "time.h"
 
 
 void load_idt(void);
@@ -53,8 +54,9 @@ void * initializeKernelBinary()
 	return getStackBase();
 }
 
-int main() {	
+int main() {
 	load_idt();
+	initializeTimer();	
 	initializeVideoDriver();
 	initFontManager();
 	

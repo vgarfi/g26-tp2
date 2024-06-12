@@ -4,9 +4,10 @@
 #include <stdint.h>
 
 void timer_handler();
-int ticks_elapsed();
+int ms_elapsed();
 int seconds_elapsed();
-void sleep(int ticksToSleep);
+void sleep(int ms);
+void initializeTimer();
 
 uint64_t rtc_get_seconds();
 uint64_t rtc_get_minutes();
