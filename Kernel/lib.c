@@ -2,8 +2,8 @@
 #include <videoDriver.h>
 #include <lib.h>
 
-uint64_t* saveRegsInBuffer(void);
-
+void saveRegsInBuffer(void);
+uint64_t* getRegs(void);
 static int backupDone=0;
 static uint64_t * registers;
 
@@ -57,7 +57,6 @@ void * memcpy(void * destination, const void * source, uint64_t length)
 }
 
 void saveRegs(void){
-	registers=saveRegsInBuffer();
 	backupDone=1;
 }
 
@@ -80,9 +79,10 @@ static char* hexToString(uint64_t value) {
 int regPrinting(void){	
 	if(!backupDone)
 		return 1;
+	registers=getRegs();
 	int count=0;
     char * value;
-    char * regFormat[]={"RIP:    ","RFLAGS:    ", "RSP:    ", "RAX:       ", "RBX:    ", "RCX:       ", "RDX:    ", "RSI:       ", "RDI:    ", "RBP:       ", "R8:     ", "R9:        ",
+    char * regFormat[]={"RIP:    ","RFLAGS:    ", "RSP:    ", "RAX:       ", "RBP:    ", "RCX:       ", "RDX:    ", "RSI:       ", "RDI:    ", "RBX:       ", "R8:     ", "R9:        ",
         "R10:    ", "R11:       ", "R12:    ", "R13:       ", "R14:    ", "R15:       "};
     for(int i=0; i<18; i++){
         value=hexToString(registers[i]);
@@ -91,13 +91,13 @@ int regPrinting(void){
         vdPrint(value, 0x00FFFFFF);
         count++;
         if(count==2){
-            vdPrint("\n", 0x00FFFFFF);
+            vdPrint("\n", 0x00000000);
             count=0;
         }
         else{
-            vdPrint("  ", 0x00FFFFFF);
+            vdPrint("  ", 0x00000000);
         }
     }
-    vdPrint("\n", 0x00FFFFFF);
+    vdPrint("\n", 0x00000000);
 	return 0;
 }

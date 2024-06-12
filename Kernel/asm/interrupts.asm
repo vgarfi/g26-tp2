@@ -18,6 +18,7 @@ GLOBAL _exception6Handler
 
 GLOBAL _syscallHandler
 
+GLOBAL getRegs
 EXTERN getKey
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
@@ -28,6 +29,27 @@ GLOBAL saveRegsInBuffer
 
 
 SECTION .text
+
+
+
+
+%macro saveRegsInBuffer 0	;; Once you enter here, regs[0]=RIP, regs[1]=RFLAGS, regs[2]=RSP
+    mov [regs + 8*3], rax
+    mov [regs + 8*4], rbp
+    mov [regs + 8*5], rcx
+    mov [regs + 8*6], rdx
+    mov [regs + 8*7], rsi
+    mov [regs + 8*8], rdi
+    mov [regs + 8*9], rbx
+    mov [regs + 8*10], r8
+    mov [regs + 8*11], r9
+    mov [regs + 8*12], r10
+    mov [regs + 8*13], r11
+    mov [regs + 8*14], r12
+    mov [regs + 8*15], r13
+    mov [regs + 8*16], r14
+    mov [regs + 8*17], r15
+%endmacro
 
 %macro pushState 0
 	push rax
@@ -153,7 +175,10 @@ _irq01Handler:
 	pop rax
 	jne .continue
 		saveIntRegs
-.continue:	irqHandlerMaster 1
+		saveRegsInBuffer
+		
+.continue:
+	irqHandlerMaster 1
 
 ;Cascade pic never called
 _irq02Handler:
@@ -175,31 +200,19 @@ _irq05Handler:
 ;Zero Division Exception
 _exception0Handler:
 	saveIntRegs
+	saveRegsInBuffer
 	exceptionHandler 0
 
 ;Invalid OpCode Exception
 _exception6Handler:
 	saveIntRegs
+	saveRegsInBuffer
 	exceptionHandler 6
 
-saveRegsInBuffer:	;; Once you enter here, regs[0]=RIP, regs[1]=RFLAGS, regs[2]=RSP
-    mov [regs + 8*3], rax
-    mov [regs + 8*4], rbx
-    mov [regs + 8*5], rcx
-    mov [regs + 8*6], rdx
-    mov [regs + 8*7], rsi
-    mov [regs + 8*8], rdi
-    mov [regs + 8*9], rbp
-    mov [regs + 8*10], r8
-    mov [regs + 8*11], r9
-    mov [regs + 8*12], r10
-    mov [regs + 8*13], r11
-    mov [regs + 8*14], r12
-    mov [regs + 8*15], r13
-    mov [regs + 8*16], r14
-    mov [regs + 8*17], r15
-    mov rax, regs
-    ret
+
+getRegs:
+	mov rax,regs
+	ret
 	
 ;Syscall Handling
 ; _syscallHandler receives parameters in the next order: rax rdi rsi rdx r10 r8 r9
