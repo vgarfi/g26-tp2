@@ -99,7 +99,7 @@ int scanf(char * buffer, int size){
                     print("   Maximum Size Reached.");
                     sysHideCursor();
                     sysPrintCursor();
-                    sysSleep(0,15);
+                    sysSleep(750);
                     for(int i=0; i<strlen("   Maximum Size Reached."); i++){
                         putchar('\b');
                     }
@@ -113,7 +113,7 @@ int scanf(char * buffer, int size){
                     print("   Minimum Size Reached.");
                     sysHideCursor();
                     sysPrintCursor();
-                    sysSleep(0,15);
+                    sysSleep(750);
                     for(int i=0; i<strlen("   Minimum Size Reached."); i++){
                         putchar('\b');
                     }

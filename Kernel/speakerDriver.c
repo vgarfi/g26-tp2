@@ -21,8 +21,8 @@
  	outb(0x61, tmp);
  }
  
- void beep(uint64_t ticks, uint64_t freq) {
+ void beep(uint64_t ms, uint64_t freq) {
  	 playSound(freq);
- 	 sleep(ticks);
+ 	 sleep(ms);
  	 nosound();
  }

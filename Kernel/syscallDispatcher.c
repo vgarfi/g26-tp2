@@ -13,7 +13,7 @@
 
 static int (*syscallHandlers[])()={
     read, write, printRegs, incSize, decSize, getZoomLevel, setZoomLevel, upArrowValue, leftArrowValue, downArrowValue,
-    rightArrowValue, clearScreen, printSquare, printRect, setCursor, sound, ticksleep, hideCursor,
+    rightArrowValue, clearScreen, printSquare, printRect, setCursor, sound, msSleep, hideCursor,
     showCursor, printCursor, getCurrentSeconds, getCurrentMinutes, getCurrentHours, getCurrentDay,
     getCurrentMonth, getCurrentYear, isctrlPressed, cleanKbBuffer
 };
@@ -118,18 +118,16 @@ int printRegs(){
     return regPrinting();
 }
 
-int sound(uint64_t ticks, uint64_t freq){
-    beep(ticks, freq);
+int sound(uint64_t ms, uint64_t freq){
+    beep(ms, freq);
     return 0;
 }
 
-// rdi = seconds, rsi = ticks
-int ticksleep(uint64_t secs, uint64_t ticks){
-    if(secs<0 || ticks<0)
+// rdi = seconds, rsi = ms
+int msSleep(uint64_t ms){
+    if(ms<0)
         return -1;
-    int secondsToTicks = secs*18, msToTicks=ticks;
-    int totalTicks = secondsToTicks + msToTicks;
-    sleep(totalTicks);
+    sleep(ms);
     return 0;
 }
 

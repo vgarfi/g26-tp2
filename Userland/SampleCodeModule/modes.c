@@ -23,7 +23,7 @@ void help (void) {
 void eliminator() {
     sysHideCursor();
     print("\nLoading eliminator...");
-    sysSleep(2,0);
+    sysSleep(2000);
     eliminatorGame();
 }
 
