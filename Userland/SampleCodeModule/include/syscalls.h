@@ -18,7 +18,7 @@ uint8_t sysRightArrowValue();
 int sysPrintRectangle(int x,int y,int base,int height,uint32_t hexColor);
 int sysPrintSquare(int x,int y , int side, uint32_t hexColor);
 int sysSetCursorPosition(uint64_t x, uint64_t y);
-int sysBeepSound(uint64_t secs, uint64_t freq);
+int sysBeepSound(uint64_t ms, uint64_t freq);
 
 int sysGetSecs(void);
 int sysGetMins(void);
