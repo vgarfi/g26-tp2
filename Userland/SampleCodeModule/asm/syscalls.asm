@@ -33,6 +33,8 @@ GLOBAL sysSetCursorPosition
 
 GLOBAL sysCtrlPressed
 
+GLOBAL sysSilence
+GLOBAL sysPlaySound
 section .text
 
 sysReadScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToRead
@@ -175,5 +177,15 @@ sysCtrlPressed:
 
 sysClearKbEntry:
     mov rax, 27
+    int 80h
+    ret
+
+sysSilence:
+    mov rax, 28
+    int 80h
+    ret
+
+sysPlaySound:
+    mov rax,29
     int 80h
     ret

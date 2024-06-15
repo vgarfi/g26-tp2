@@ -9,7 +9,7 @@
 #include "include/dateTime.h"
 #include "include/colors.h"
 #include "include/utils.h"
-
+#include "include/piano.h"
 char* dateTimeAux;
 int zoomAux, regAux;
 
@@ -71,6 +71,10 @@ void notFound(char* commandNotFound){
     print(": command not found.\n");
 }
 
+void pianoMode(){
+    piano();
+}
+
 void playEasterEgg(){
     printColor("I'm", RED);
     printColor(" an", YELLOW);
@@ -82,34 +86,34 @@ void playEasterEgg(){
     sysHideCursor();
     sysPrintCursor();
 
-    sysBeepSound(4, DO);
-	sysBeepSound(4, DO_SOST);
-	sysBeepSound(4, SOL);
-	sysBeepSound(4, MI);
-	sysBeepSound(4, SOL);
-	sysBeepSound(4, MI);
+    sysBeepSound(200, C);
+	sysBeepSound(200, Db);
+	sysBeepSound(200, G);
+	sysBeepSound(200, E);
+	sysBeepSound(200, G);
+	sysBeepSound(200, E);
 	
-	sysBeepSound(4, DO_SOST);
-	sysBeepSound(4, DO);
-	sysBeepSound(4, SOL_SOST);
-	sysBeepSound(4, FA);
-	sysBeepSound(4, SOL_SOST);
-	sysBeepSound(4, FA);
+	sysBeepSound(200, Db);
+	sysBeepSound(200, C);
+	sysBeepSound(200, Ab);
+	sysBeepSound(200, F);
+	sysBeepSound(200, Ab);
+	sysBeepSound(200, F);
 
-	sysBeepSound(4, DO);
-	sysBeepSound(4, DO_SOST);
-	sysBeepSound(4, SOL);
-	sysBeepSound(4, MI);
-	sysBeepSound(4, SOL);
-	sysBeepSound(4, MI);
+	sysBeepSound(200, C);
+	sysBeepSound(200, Db);
+	sysBeepSound(200, G);
+	sysBeepSound(200, E);
+	sysBeepSound(200, G);
+	sysBeepSound(200, E);
 
-	sysBeepSound(2, FA);
-	sysBeepSound(3, FA_SOST);
-	sysBeepSound(2, SOL);
-	sysBeepSound(3, SOL_SOST);
-	sysBeepSound(2, LA);
-	sysBeepSound(3, SI);
-	sysBeepSound(2, DO_PRIMA);
+	sysBeepSound(100, F);
+	sysBeepSound(150, Gb);
+	sysBeepSound(100, G);
+	sysBeepSound(150, Ab);
+	sysBeepSound(100, A);
+	sysBeepSound(150, B);
+	sysBeepSound(100, C5);
 
     sysShowCursor();
     sysPrintCursor();

@@ -25,6 +25,7 @@ int init(){
         else if(strcasecmp(commandPrompt, modes[DIVBYZERO_MODE]) == SELECTED_MODE) divByZero();
         else if(strcasecmp(commandPrompt, modes[INVALIDOPCODE_MODE]) == SELECTED_MODE) invalidOp();
         else if(strcasecmp(commandPrompt, modes[REGISTERS_MODE]) == SELECTED_MODE) registers();
+        else if(strcasecmp(commandPrompt, modes[PIANO_MODE]) == SELECTED_MODE) pianoMode();
         else notFound(commandPrompt);
     }
 }

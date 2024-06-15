@@ -21,6 +21,7 @@ int msSleep(uint64_t ms);     // rdi : ms
 int printRegs(void);
 
 int sound(uint64_t ms, uint64_t freq);
+int playFreq(uint64_t freq);
 
 int getCurrentSeconds(void);
 int getCurrentMinutes(void);
@@ -35,11 +36,13 @@ int decSize();
 int getZoomLevel();
 int setZoomLevel(int zoomLevel);
 
-int read(uint64_t fd, char * buf, uint64_t count);
+int read(uint64_t fd,unsigned char * buf, uint64_t count);
 int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor);
 
 int cleanKbBuffer(void);
 
 int isctrlPressed(void);
+int silence(void);
+
 
 #endif

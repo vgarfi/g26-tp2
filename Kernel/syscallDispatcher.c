@@ -15,7 +15,7 @@ static int (*syscallHandlers[])()={
     read, write, printRegs, incSize, decSize, getZoomLevel, setZoomLevel, upArrowValue, leftArrowValue, downArrowValue,
     rightArrowValue, clearScreen, printSquare, printRect, setCursor, sound, msSleep, hideCursor,
     showCursor, printCursor, getCurrentSeconds, getCurrentMinutes, getCurrentHours, getCurrentDay,
-    getCurrentMonth, getCurrentYear, isctrlPressed, cleanKbBuffer
+    getCurrentMonth, getCurrentYear, isctrlPressed, cleanKbBuffer,silence,playFreq
 };
 
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
@@ -27,15 +27,23 @@ uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r1
     return syscallHandlers[rax](rdi,rsi,rdx,r10,r8);
 }
 
-int read(uint64_t fd, char * buf, uint64_t count) {
-    if(fd!=STDIN) {   // Only can read from standard input
+int read(uint64_t fd,unsigned char * buf, uint64_t count) {
+    if(fd!=STDIN && fd!= STDKB) {   // Only can read from standard input
         return 0;
     }
     uint64_t sizeRead=0;
     unsigned char lastRead='\0';
+    if(fd == STDIN){
     while(sizeRead!=count && !kbisBufferEmpty()){
             lastRead = kbreadBuf();
             buf[sizeRead++] = lastRead;
+    }
+    }
+    else{
+        while(sizeRead!=count && !kbReleaseIsBufferEmpty()){
+            lastRead = kbreadBufRelease();
+            buf[sizeRead++] = lastRead;
+    }
     }
     return sizeRead == count? count : sizeRead;    // If we return sizeRead-1 it means we stopped at '\n'
 }
@@ -123,6 +131,11 @@ int sound(uint64_t ms, uint64_t freq){
     return 0;
 }
 
+int silence() {
+ 	nosound();
+    return 0;
+ }
+
 // rdi = seconds, rsi = ms
 int msSleep(uint64_t ms){
     if(ms<0)
@@ -174,4 +187,8 @@ int isctrlPressed(){
 int cleanKbBuffer(){
     kbcleanBuffer();
     return 0;
+}
+
+int playFreq( uint64_t freq){
+    playSound(freq);
 }

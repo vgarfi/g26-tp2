@@ -88,8 +88,8 @@ void playAlone(void) {
             lastKeyPressed = keyPressed;
         }
 
-        sysBeepSound(3, DO);
-        sysBeepSound(2, SI);
+        sysBeepSound(150, C);
+        sysBeepSound(100, B);
         
         userDied(&scoreP1);
         didP1Crashed = !CRASHED;
@@ -100,9 +100,9 @@ void playAlone(void) {
 
         if (finishKey != ESC) {
             scoreP1 = (finishKey == RESET)? 0 : scoreP1;
-            sysBeepSound(1, LA);
-            sysBeepSound(1, SI);
-            sysBeepSound(1, FA);
+            sysBeepSound(50, A);
+            sysBeepSound(50, B);
+            sysBeepSound(50, F);
             finishKey = 0;
             keyPressed = UP;
         }
@@ -176,9 +176,9 @@ void playTwoPlayers(int player2) {
         if (finishKey != ESC) {
             scoreP1 = (finishKey == RESET)? 0 : scoreP1;
             scoreP2 = (finishKey == RESET)? 0 : scoreP2;
-            sysBeepSound(1, LA);
-            sysBeepSound(1, SI);
-            sysBeepSound(1, FA);
+            sysBeepSound(50, A);
+            sysBeepSound(50, B);
+            sysBeepSound(50, F);
             finishKey = 0;
             keyPressed = UP;
         }

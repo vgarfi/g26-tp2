@@ -3,9 +3,9 @@
 
 #include <stdint.h>
 
-void beep(uint64_t secs, uint64_t freq);
-
+void beep(uint64_t ms, uint64_t freq);
+void nosound();
 void outb(int memPos, int output);
 int inb(int memPos);
-
+void playSound(uint32_t nFrequence);
 #endif

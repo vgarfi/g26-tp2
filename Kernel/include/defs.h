@@ -23,7 +23,8 @@
 
 #define STDIN   0
 #define STDOUT  1
-#define STDERR  2
+#define STDKB   2
+#define STDERR  3
 
 #define BYTE_LENGHT      8
 #define TWO_BYTE_LENGHT  16

@@ -37,5 +37,6 @@ int sysPrintRegs(void);
 int sysPrintCursor();
 int sysHideCursor();
 int sysShowCursor();
-
+int sysSilence(void);
+int sysPlaySound();
 #endif

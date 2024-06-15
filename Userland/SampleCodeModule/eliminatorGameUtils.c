@@ -146,8 +146,8 @@ unsigned char menuOption(int* map){
     while (option != ONE_PLAYER && option != TWO_PLAYERS && option != COMPUTER && option != ESC) {
         option = getchar();
         if (option == A_OPTION || option == B_OPTION || option == C_OPTION) {
-            sysBeepSound(1, DO_PRIMA);
-            sysBeepSound(2, SI);
+            sysBeepSound(50, C5);
+            sysBeepSound(100, B);
             switch (option) {
                 case A_OPTION:
                     *map = MAP_A;
@@ -206,46 +206,46 @@ void playerDied(int P1Crashed, int P2Crashed, int *scoreP1, int *scoreP2) {
 void twoPlayersSound(int didP1Crashed, int didP2Crashed, int player2) {
     if (didP1Crashed == CRASHED && didP2Crashed != CRASHED) {
         if (player2 == CPU) {
-            sysBeepSound(3, DO_PRIMA);
-            sysBeepSound(2, SI);
-            sysBeepSound(1, LA);
-            sysBeepSound(1, SOL);
-            sysBeepSound(1, FA);
+            sysBeepSound(150, C5);
+            sysBeepSound(100, B);
+            sysBeepSound(50, A);
+            sysBeepSound(50, G);
+            sysBeepSound(50, F);
         } else {
-            sysBeepSound(3, DO);
-            sysBeepSound(2, RE);
-            sysBeepSound(1, MI);
-            sysBeepSound(1, FA);
-            sysBeepSound(1, SOL);
-            sysBeepSound(1, LA);
-            sysBeepSound(1, SI);
-            sysBeepSound(1, DO_PRIMA);
+            sysBeepSound(150, C);
+            sysBeepSound(100, D);
+            sysBeepSound(50, E);
+            sysBeepSound(50, F);
+            sysBeepSound(50, G);
+            sysBeepSound(50, A);
+            sysBeepSound(50, B);
+            sysBeepSound(50, C5);
         }
     } else if (didP1Crashed != CRASHED && didP2Crashed == CRASHED) {
         if (player2 == CPU) {
-            sysBeepSound(3, DO_PRIMA);
-            sysBeepSound(2, SI);
-            sysBeepSound(1, LA);
-            sysBeepSound(1, SOL);
-            sysBeepSound(1, FA);
+            sysBeepSound(150, C5);
+            sysBeepSound(100, B);
+            sysBeepSound(50, A);
+            sysBeepSound(50, G);
+            sysBeepSound(50, F);
         } else {
-            sysBeepSound(3, DO);
-            sysBeepSound(2, RE);
-            sysBeepSound(1, MI);
-            sysBeepSound(1, FA);
-            sysBeepSound(1, SOL);
-            sysBeepSound(1, LA);
-            sysBeepSound(1, SI);
-            sysBeepSound(1, DO_PRIMA);
+            sysBeepSound(150, C);
+            sysBeepSound(100, D);
+            sysBeepSound(50, E);
+            sysBeepSound(50, F);
+            sysBeepSound(50, G);
+            sysBeepSound(50, A);
+            sysBeepSound(50, B);
+            sysBeepSound(50, C5);
         }
     } else {
-        sysBeepSound(1, DO);
-        sysBeepSound(1, MI);
-        sysBeepSound(1, SOL);
-        sysBeepSound(1, DO_PRIMA);
-        sysBeepSound(1, SOL);
-        sysBeepSound(1, MI);
-        sysBeepSound(1, DO);
+        sysBeepSound(50, C);
+        sysBeepSound(50, E);
+        sysBeepSound(50, G);
+        sysBeepSound(50, C5);
+        sysBeepSound(50, G);
+        sysBeepSound(50, E);
+        sysBeepSound(50, C);
     }
 }
 

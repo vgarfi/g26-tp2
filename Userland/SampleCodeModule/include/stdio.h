@@ -3,9 +3,10 @@
 
 #include <stdint.h>
 
-#define STDIN 0
+#define STDIN  0
 #define STDOUT 1
-#define STDERR 2
+#define STDKB  2
+#define STDERR 3
 
 
 typedef unsigned int size_t;
@@ -15,6 +16,9 @@ typedef unsigned int size_t;
  * If STDIN buffer is empty, waits for input and returns it
 */
 unsigned char getchar(void);
+
+
+unsigned char getReleaseKey(void);
 
 /**
  * Receives a char and prints it on STDOUT

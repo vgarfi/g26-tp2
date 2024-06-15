@@ -31,6 +31,12 @@ unsigned char getchar(void){
     return read;
 }
 
+unsigned char getReleaseKey(void){
+    unsigned char read=0;
+    readSizeFlag=sysReadScreen(STDKB, &read, 1);
+    return read;
+}
+
 unsigned char putchar(unsigned char c){
     sysWriteScreen(STDOUT, &c, 1, hexcol);
     return c;

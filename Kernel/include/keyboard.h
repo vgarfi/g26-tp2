@@ -14,7 +14,9 @@ uint8_t kbDownArrowValue(void);
 uint8_t kbRightArrowValue(void);
 
 int kbisBufferEmpty();
+int kbReleaseIsBufferEmpty();
 unsigned char kbreadBuf(void);
+unsigned char kbreadBufRelease();
 int kbctrlPressed(void);
 
 static unsigned char scancodesChars[SHIFT_VALUES][MAX_SCANCODE] = {
