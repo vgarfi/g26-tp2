@@ -24,7 +24,8 @@ static int isVerticalArrow(unsigned char c);
 
 static char inputs[MAX_INPUTS_STORE][MAXBUFLEN];
 static int inputIndex = 0;
-
+char readBuffer[MAXBUFLEN];
+static int readBufferIndex = 0;
 unsigned char getchar(void){
     unsigned char read=0;
     readSizeFlag=sysReadScreen(STDIN, &read, 1);
@@ -86,80 +87,86 @@ int scanf(char * buffer, int size){
         return 0;
     unsigned char read=0;
     int readSize=0, printedSize=0;
-    while(read!='\n'){
-        ctrlFlag = sysCtrlPressed();
-        read=getchar();
-        if(!readSizeFlag)
-            continue;
-        
-        if(ctrlFlag){
-            if(read == 'i'){
-                checkZoomFlag = incTextSize();
-                if(checkZoomFlag){
-                    print("   Maximum Size Reached.");
-                    sysHideCursor();
-                    sysPrintCursor();
-                    sysSleep(750);
-                    for(int i=0; i<strlen("   Maximum Size Reached."); i++){
-                        putchar('\b');
+    while(read != '\n'){
+            int charsRead = sysReadScreen(STDIN, &readBuffer,size);
+        while (charsRead!=0 && read != '\n'){
+            ctrlFlag = sysCtrlPressed();
+            read=readBuffer[readBufferIndex];
+            if(charsRead==0)
+                continue;
+
+            if(ctrlFlag){
+                if(read == 'i'){
+                    checkZoomFlag = incTextSize();
+                    if(checkZoomFlag){
+                        print("   Maximum Size Reached.");
+                        sysHideCursor();
+                        sysPrintCursor();
+                        sysSleep(750);
+                        for(int i=0; i<strlen("   Maximum Size Reached."); i++){
+                            putchar('\b');
+                        }
+                        sysShowCursor();
+                        sysPrintCursor();
                     }
-                    sysShowCursor();
-                    sysPrintCursor();
+                }
+                else if(read == 'o'){
+                    checkZoomFlag = decTextSize();
+                    if(checkZoomFlag){
+                        print("   Minimum Size Reached.");
+                        sysHideCursor();
+                        sysPrintCursor();
+                        sysSleep(750);
+                        for(int i=0; i<strlen("   Minimum Size Reached."); i++){
+                            putchar('\b');
+                        }
+                        sysShowCursor();
+                        sysPrintCursor();
+                    }
                 }
             }
-            else if(read == 'o'){
-                checkZoomFlag = decTextSize();
-                if(checkZoomFlag){
-                    print("   Minimum Size Reached.");
-                    sysHideCursor();
-                    sysPrintCursor();
-                    sysSleep(750);
-                    for(int i=0; i<strlen("   Minimum Size Reached."); i++){
-                        putchar('\b');
-                    }
-                    sysShowCursor();
-                    sysPrintCursor();
-                }
-            }
-        }
-        else{
-            if(read=='\n'){
-                buffer[readSize]=0;
-                if (readSize > 0) strcpy(inputs[inputIndex++ % MAX_INPUTS_STORE], buffer);
-                putchar(read);  // Newline
-            }
-            else if(read=='\b' && readSize!=0){
-                if(readSize>=printedSize)
-                    readSize--;
+            else{
+                if(read=='\n'){
                     buffer[readSize]=0;
-                putchar(read);  // Backspace
-                printedSize--;
-            }
-            else if (isVerticalArrow(read)) {
-                if (read == sysUpArrowValue()) {
-                    if (inputIndex > 0) {
-                        inputIndex--;
-                    }
-                } else {
-                    if (inputIndex < MAX_INPUTS_STORE) {
-                        inputIndex++;
-                    }
+                    if (readSize > 0) strcpy(inputs[inputIndex++ % MAX_INPUTS_STORE], buffer);
+                    putchar(read);  // Newline
                 }
-                strcpy(buffer, inputs[inputIndex % MAX_INPUTS_STORE]);
-                int commandLen = strlen(buffer);
-                for(int i=0; i<printedSize; i++)
-                    putchar('\b');
-                printedSize = commandLen;
-                readSize = commandLen;
-                print(buffer);
+                else if(read=='\b' && readSize!=0){
+                    if(readSize>=printedSize)
+                        readSize--;
+                        buffer[readSize]=0;
+                    putchar(read);  // Backspace
+                    printedSize--;
+                }
+                else if (isVerticalArrow(read)) {
+                    if (read == sysUpArrowValue()) {
+                        if (inputIndex > 0) {
+                            inputIndex--;
+                        }
+                    } else {
+                        if (inputIndex < MAX_INPUTS_STORE) {
+                            inputIndex++;
+                        }
+                    }
+                    strcpy(buffer, inputs[inputIndex % MAX_INPUTS_STORE]);
+                    int commandLen = strlen(buffer);
+                    for(int i=0; i<printedSize; i++)
+                        putchar('\b');
+                    printedSize = commandLen;
+                    readSize = commandLen;
+                    print(buffer);
+                }
+                else if(isPrintable(read)){       // Printable Character
+                    if(readSize!=size)
+                        buffer[readSize++]=read;
+                    putchar(read);
+                    printedSize++;
+                }
             }
-            else if(isPrintable(read)){       // Printable Character
-                if(readSize!=size)
-                    buffer[readSize++]=read;
-                putchar(read);
-                printedSize++;
-            }
+            charsRead--;
+            readBufferIndex++;
         }
+        readBufferIndex = 0;
     }
     return readSize;
 }
