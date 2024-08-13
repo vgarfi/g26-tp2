@@ -82,34 +82,34 @@ void playEasterEgg(){
     sysHideCursor();
     sysPrintCursor();
 
-    sysBeepSound(4, DO);
-	sysBeepSound(4, DO_SOST);
-	sysBeepSound(4, SOL);
-	sysBeepSound(4, MI);
-	sysBeepSound(4, SOL);
-	sysBeepSound(4, MI);
+    sysBeepSound(220, DO);
+	sysBeepSound(220, DO_SOST);
+	sysBeepSound(220, SOL);
+	sysBeepSound(220, MI);
+	sysBeepSound(220, SOL);
+	sysBeepSound(220, MI);
 	
-	sysBeepSound(4, DO_SOST);
-	sysBeepSound(4, DO);
-	sysBeepSound(4, SOL_SOST);
-	sysBeepSound(4, FA);
-	sysBeepSound(4, SOL_SOST);
-	sysBeepSound(4, FA);
+	sysBeepSound(220, DO_SOST);
+	sysBeepSound(220, DO);
+	sysBeepSound(220, SOL_SOST);
+	sysBeepSound(220, FA);
+	sysBeepSound(220, SOL_SOST);
+	sysBeepSound(220, FA);
 
-	sysBeepSound(4, DO);
-	sysBeepSound(4, DO_SOST);
-	sysBeepSound(4, SOL);
-	sysBeepSound(4, MI);
-	sysBeepSound(4, SOL);
-	sysBeepSound(4, MI);
+	sysBeepSound(220, DO);
+	sysBeepSound(220, DO_SOST);
+	sysBeepSound(220, SOL);
+	sysBeepSound(220, MI);
+	sysBeepSound(220, SOL);
+	sysBeepSound(220, MI);
 
-	sysBeepSound(2, FA);
-	sysBeepSound(3, FA_SOST);
-	sysBeepSound(2, SOL);
-	sysBeepSound(3, SOL_SOST);
-	sysBeepSound(2, LA);
-	sysBeepSound(3, SI);
-	sysBeepSound(2, DO_PRIMA);
+	sysBeepSound(110, FA);
+	sysBeepSound(165, FA_SOST);
+	sysBeepSound(110, SOL);
+	sysBeepSound(165, SOL_SOST);
+	sysBeepSound(110, LA);
+	sysBeepSound(165, SI);
+	sysBeepSound(110, DO_PRIMA);
 
     sysShowCursor();
     sysPrintCursor();
