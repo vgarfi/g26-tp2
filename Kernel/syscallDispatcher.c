@@ -19,7 +19,7 @@ static int (*syscallHandlers[])()={
 };
 
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
-    int handlerSize = sizeof(syscallHandlers)/sizeof(syscallHandlers[0]);
+    // int handlerSize = sizeof(syscallHandlers)/sizeof(syscallHandlers[0]);
 
     if(rax < 0 || rax > HANDLER_SIZE)
         return -1;
@@ -124,23 +124,28 @@ int sound(uint64_t ms, uint64_t freq){
 }
 
 // rdi = seconds, rsi = ms
-int msSleep(uint64_t ms){
-    if(ms<0)
+int msSleep(uint64_t secs, uint64_t ticks){
+    if(secs < 0 || ticks < 0)
         return -1;
-    sleep(ms);
+    int secondsToTicks = secs*18, msToTicks=ticks;
+    int totalTicks = secondsToTicks + msToTicks;
+    sleep(totalTicks);
     return 0;
 }
 
-void hideCursor(){
+int hideCursor(){
     vdSetCursorColor(0x00000000);
+    return 0;
 }
 
-void showCursor(){
+int showCursor(){
     vdSetCursorColor(0x00F0F0F0);
+    return 0;
 }
 
-void printCursor(){
+int printCursor(){
     vdPrintCursor();
+    return 0;
 }
 
 int getCurrentSeconds(void){

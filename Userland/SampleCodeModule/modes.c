@@ -13,7 +13,6 @@
 char* dateTimeAux;
 int zoomAux, regAux;
 
-
 void help (void) {
     for(int i=0; strcasecmp(helpText[i], "end")!=0; i++){
         printColor(helpText[i], YELLOW);
@@ -23,7 +22,7 @@ void help (void) {
 void eliminator() {
     sysHideCursor();
     print("\nLoading eliminator...");
-    sysSleep(2000);
+    sysSleep(2,0);
     eliminatorGame();
 }
 

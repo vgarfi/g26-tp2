@@ -4,9 +4,9 @@
 #include <stdint.h>
 
 int setCursor(uint64_t x, uint64_t y);
-void hideCursor();
-void showCursor();
-void printCursor();
+int hideCursor();
+int showCursor();
+int printCursor();
 
 int upArrowValue();
 int leftArrowValue();
@@ -17,7 +17,7 @@ int printRect(int x,int y,int base,int height,uint32_t hexColor);
 int printSquare (int x, int y,int side, uint32_t hexColor);
 
 int clearScreen();
-int msSleep(uint64_t ms);     // rdi : ms
+int msSleep(uint64_t secs, uint64_t ticks);     // rdi : ms
 int printRegs(void);
 
 int sound(uint64_t ms, uint64_t freq);
