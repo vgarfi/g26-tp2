@@ -56,7 +56,7 @@ void * initializeKernelBinary()
 
 int main() {
 	load_idt();
-	initializeTimer();	
+	//initializeTimer();	
 	initializeVideoDriver();
 	initFontManager();
 	

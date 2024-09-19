@@ -13,7 +13,7 @@ int ms_elapsed() {
 }
 
 int seconds_elapsed() {
-	return ticks / 1000;
+	return ticks / 18;
 }
 
 void sleep(int msToSleep){
