@@ -15,6 +15,7 @@ typedef struct MemoryManagerCDT {
     char *memory_base;              // La dirección donde comienzan a guardarse los datos
     size_t memory_size;             // El tamaño total de la memoria
     size_t block_size;              // El tamaño de cada bloque de memoria
+    size_t used_blocks;             // Cantidad de bloques usados
 } MemoryManagerCDT;
 
 
@@ -25,6 +26,7 @@ MemoryManagerADT initialize_mm(void* base, size_t memory_size, size_t block_size
 
     mm->memory_size = memory_size;
     mm->block_size = block_size;
+    mm->used_blocks = 0;
 
     mm->bitmap = (unsigned char*)((char*)base + sizeof(MemoryManagerCDT));
     mm->memory_base = (char*)mm->bitmap + bitmap_size;
@@ -64,6 +66,7 @@ void* malloc_mm(MemoryManagerADT mm, size_t size) {
         if (!get_bit(mm->bitmap, i)) {
             // Encontramos un bloque libre
             set_bit(mm->bitmap, i, !FREE_BLOCK);        // TODO chequear que se coloque bien
+            mm->used_blocks++;
             return (void*)(mm->memory_base + (i * mm->block_size));
         }
     }
@@ -77,6 +80,20 @@ void free_mm(MemoryManagerADT mm, void* ptr) {
     }
     int block_index = ((char*)ptr - mm->memory_base) / mm->block_size;
     set_bit(mm->bitmap, block_index, FREE_BLOCK);
+    mm->used_blocks--;
 }
 
+size_t get_used_memory(MemoryManagerADT mm) {
+    size_t num_blocks = mm->memory_size / mm->block_size;
+}
 
+MemoryDiagnostic get_diagnostic_mm(MemoryManagerADT mm) { // TODO ver si trunca
+    MemoryDiagnostic diagnostic;
+    diagnostic.total_memory = mm->memory_size;
+    diagnostic.used_memory = (mm->used_blocks * mm->block_size);
+    diagnostic.free_memory = diagnostic.total_memory - diagnostic.used_memory;
+    diagnostic.total_blocks = (mm->memory_size / mm->block_size);
+    diagnostic.used_blocks = mm->used_blocks;
+    diagnostic.free_blocks = diagnostic.total_blocks - diagnostic.used_blocks;
+    return diagnostic;
+}
