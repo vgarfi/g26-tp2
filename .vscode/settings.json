@@ -1,8 +1,6 @@
 {
     "files.associations": {
-        "*.properties": "java-properties",
-        "cstdint": "cpp",
-        "stdint.h": "c",
-        "lib.h": "c"
+        "memorymanageradt.h": "c",
+        "stdbool.h": "c"
     }
 }
