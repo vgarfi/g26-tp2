@@ -8,7 +8,7 @@
 #include <stdbool.h>
 #include "memoryManagerADT.h"
 
-#define FREE_BLOCK              1
+#define ALL_ONES 0xff
 
 typedef struct MemoryManagerCDT {
     unsigned char *bitmap;          // Los bits para identificar bbloques libres
@@ -21,10 +21,10 @@ typedef struct MemoryManagerCDT {
 
 MemoryManagerADT initialize_mm(void* base, size_t memory_size, size_t block_size) {
     MemoryManagerADT mm = (MemoryManagerADT)base;
-    size_t num_blocks = memory_size / block_size;
-    size_t bitmap_size = (num_blocks + 7) / 8; // TODO usar funcion ceil si podemos incluir de math
+    size_t max_num_blocks = memory_size / block_size;
+    size_t bitmap_size = (max_num_blocks + 7) / 8; // TODO usar funcion ceil si podemos incluir de math
 
-    mm->memory_size = memory_size;
+    mm->memory_size = memory_size - bitmap_size - sizeof(MemoryManagerCDT);
     mm->block_size = block_size;
     mm->used_blocks = 0;
 
@@ -32,7 +32,7 @@ MemoryManagerADT initialize_mm(void* base, size_t memory_size, size_t block_size
     mm->memory_base = (char*)mm->bitmap + bitmap_size;
 
     for (size_t i = 0; i < bitmap_size; i++) {
-        mm->bitmap[i] = FREE_BLOCK;
+        mm->bitmap[i] = ALL_ONES;
     }
 
     return mm;
@@ -63,9 +63,9 @@ void* malloc_mm(MemoryManagerADT mm, size_t size) {
     size_t num_blocks = mm->memory_size / mm->block_size;
 
     for (size_t i = 0; i < num_blocks; i++) {
-        if (!get_bit(mm->bitmap, i)) {
+        if (get_bit(mm->bitmap, i)) {
             // Encontramos un bloque libre
-            set_bit(mm->bitmap, i, !FREE_BLOCK);        // TODO chequear que se coloque bien
+            set_bit(mm->bitmap, i, 0);        // TODO chequear que se coloque bien
             mm->used_blocks++;
             return (void*)(mm->memory_base + (i * mm->block_size));
         }
@@ -79,7 +79,7 @@ void free_mm(MemoryManagerADT mm, void* ptr) {
         return;
     }
     int block_index = ((char*)ptr - mm->memory_base) / mm->block_size;
-    set_bit(mm->bitmap, block_index, FREE_BLOCK);
+    set_bit(mm->bitmap, block_index, 1);
     mm->used_blocks--;
 }
 

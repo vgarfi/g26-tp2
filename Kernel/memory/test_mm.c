@@ -49,23 +49,25 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
         printf("Iniciando nueva iteración del ciclo principal\n");
 
         // Request as many blocks as we can
-        while (rq < MAX_BLOCKS && total < max_memory) {
-        mm_rqs[rq].size = GetUniform(max_memory - total - 1) + 1;
-        printf("Tamaño solicitado para el bloque: %d\n", mm_rqs[rq].size);
+        while (rq < MAX_BLOCKS && total < max_memory)
+        {
+            mm_rqs[rq].size = GetUniform(max_memory - total - 1) + 1;
+            //printf("Tamaño solicitado para el bloque: %d\n", mm_rqs[rq].size);
 
-        mm_rqs[rq].address = malloc_mm(memory_manager, mm_rqs[rq].size);
+            mm_rqs[rq].address = malloc_mm(memory_manager, mm_rqs[rq].size);
 
-        if (mm_rqs[rq].address == NULL) {
-            printf("Fallo al asignar bloque de tamaño %d\n", mm_rqs[rq].size);
-        } else {
-            printf("Bloque asignado de tamaño %d en dirección %p\n", mm_rqs[rq].size, mm_rqs[rq].address);
+            if (mm_rqs[rq].address == NULL) {
+                //printf("Fallo al asignar bloque de tamaño %d\n", mm_rqs[rq].size);
+            } else {
+                printf("Bloque asignado de tamaño %d en dirección %p\n", mm_rqs[rq].size, mm_rqs[rq].address);
+            }
+
+            if (mm_rqs[rq].address)
+            {
+                total += mm_rqs[rq].size;
+                rq++;
+            }
         }
-
-        if (mm_rqs[rq].address) {
-            total += mm_rqs[rq].size;
-            rq++;
-        }
-    }
 
     // Set
     printf("Bloques asignados: %d\n", rq);
