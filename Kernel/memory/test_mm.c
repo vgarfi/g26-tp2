@@ -42,7 +42,7 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
     }
 
 
-    printf("Inicializando con %zu bytes de memoria (máximo solicitado: %llu bytes)\n", total_memory, max_memory);
+    printf("Inicializando con %zu bytes de memoria (máximo solicitado: %lu bytes)\n", total_memory, max_memory);
 
     while (1) {
         rq = 0;
