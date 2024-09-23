@@ -11,7 +11,11 @@ LOADEROBJECT=$(LOADERSRC:.asm=.o)
 OBJDIR=obj
 STATICLIBS=
 
-all: $(KERNEL) move_objects
+TEST_SOURCES=./memory/test_mm.c ./memory/bitmapMemoryManager.c ./memory/test_util.c ./memory/syscall.c
+TEST_OBJECTS=$(TEST_SOURCES:.c=.o)
+TEST_EXEC=test_mm
+
+all: $(KERNEL) move_objects $(TEST_EXEC)
 
 $(KERNEL): $(LOADEROBJECT) $(OBJECTS) $(STATICLIBS) $(OBJECTS_ASM)
 	$(LD) $(LDFLAGS) -T kernel.ld -o $(KERNEL) $(LOADEROBJECT) $(OBJECTS) $(OBJECTS_ASM) $(STATICLIBS)
@@ -34,5 +38,8 @@ move_objects: $(OBJDIR)
 	mv asm/*.o $(OBJDIR)
 clean:
 	rm -rf $(OBJDIR) *.bin
+
+$(TEST_EXEC): $(TEST_SOURCES)
+	$(GCC) -o $(TEST_EXEC) $(TEST_SOURCES) -I./include/memory -std=c99
 
 .PHONY: all clean

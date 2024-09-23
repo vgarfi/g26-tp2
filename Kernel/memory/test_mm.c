@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "memoryManagerADT.h"
+#include "test_mm.h"
 
 #define MAX_BLOCKS 128
 
@@ -41,26 +42,17 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
     }
 
 
-    printf("Inicializando el manager con %zu bytes de memoria\n", total_memory);
+    printf("Inicializando con %zu bytes de memoria (máximo solicitado: %llu bytes)\n", total_memory, max_memory);
 
     while (1) {
         rq = 0;
         total = 0;
-        printf("Iniciando nueva iteración del ciclo principal\n");
 
         // Request as many blocks as we can
         while (rq < MAX_BLOCKS && total < max_memory)
         {
             mm_rqs[rq].size = GetUniform(max_memory - total - 1) + 1;
-            //printf("Tamaño solicitado para el bloque: %d\n", mm_rqs[rq].size);
-
             mm_rqs[rq].address = malloc_mm(memory_manager, mm_rqs[rq].size);
-
-            if (mm_rqs[rq].address == NULL) {
-                //printf("Fallo al asignar bloque de tamaño %d\n", mm_rqs[rq].size);
-            } else {
-                printf("Bloque asignado de tamaño %d en dirección %p\n", mm_rqs[rq].size, mm_rqs[rq].address);
-            }
 
             if (mm_rqs[rq].address)
             {
@@ -70,7 +62,6 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
         }
 
     // Set
-    printf("Bloques asignados: %d\n", rq);
     uint32_t i;
     for (i = 0; i < rq; i++)
       if (mm_rqs[i].address)
