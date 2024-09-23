@@ -1,3 +1,5 @@
+# Trabajo Práctico N2 - Sistemas Operativos
+
 # BurinShell
 
 BurinShell es un proyecto que provee una consola de comandos que demuestra el funcionamiento del Kernel.
@@ -20,7 +22,7 @@ Ejecute el comando  ```sudo apt install qemu‐system‐x86 qemu‐utils```
 Ejecute el comando ```sudo apt install docker.io```
 
 - **Descarga de la imagen** 
-Ejecute el comando ```docker pull agodio/itba‐so:1.0```
+Ejecute el comando ```docker pull agodio/itba-so-multi-platform:3.0```
 
 ### Instalación de XLaunch
 Descarguelo desde el siguiente link:  https://sourceforge.net/projects/vcxsrv/

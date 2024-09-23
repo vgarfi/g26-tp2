@@ -65,7 +65,7 @@ void* malloc_mm(MemoryManagerADT mm, size_t size) {
     for (size_t i = 0; i < num_blocks; i++) {
         if (get_bit(mm->bitmap, i)) {
             // Encontramos un bloque libre
-            set_bit(mm->bitmap, i, 0);        // TODO chequear que se coloque bien
+            set_bit(mm->bitmap, i, 0);
             mm->used_blocks++;
             return (void*)(mm->memory_base + (i * mm->block_size));
         }
