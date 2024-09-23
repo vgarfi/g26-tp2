@@ -1,8 +1,67 @@
+
+
 # Trabajo Práctico N2 - Sistemas Operativos
 
-# BurinShell
+En el presente repositorio se desarrolla el Trabajo Práctico N2 de la materia Sistemas Operativos}}
 
-BurinShell es un proyecto que provee una consola de comandos que demuestra el funcionamiento del Kernel.
+## Grupo 26
+
+- [Nicole Salama](https://github.com/NikyySalama) - 64488
+- [Valentin Garfi](https://github.com/vgarfi) - 64486
+- [Esteban Bouyges](https://github.com/esteban481) - 67168
+
+
+## Bases del desarrollo
+
+Este trabajo ha sido desarrollado tomando como base la consola desarrollada en la materia Arquitectura de Computadoras. Partiendo de este, se desarrollará un kernel monolítico de 64 bits, con manejo de interrupciones básico, system calls, driver de teclado, driver de video (modo texto o gráfico) y binarios de kernel space y user space separados.
+
+## Primera Entrega Parcial - Memory Manager
+
+Hemos implementado un *bitmap* como algoritmo para el manejo de la memoria dentro de nuestro Sistema Operativo.
+
+### Compilación y ejecución - Memory Manager
+
+Para la compilación y compilación de los testeos necesarios, existen dos alternativas: hacerlo dentro de la shell desarrollada, o por fuera.
+
+#### Por fuera de la shell
+
+1. Localizar el archivo `test_mm.c` (ubicado en el directorio `Kernel/memory`).
+2. Compilar mediante `gcc` haciendo uso de los archivos `memoryManagerADT.h`, `test_util.c`, `test_util.h`, `bitmapMemoryManager.c` y `syscall.c`:
+
+    ```sh
+    gcc -I../include/memory -o test_mm test_mm.c test_util.c bitmapMemoryManager.c syscall.c
+    ```
+
+3. Ejecutar el archivo generado `test_mm` ingresando como argumento la memoria máxima a almacenar:
+
+    ```sh
+    ./test_mm <memoria_maxima>
+    ```
+
+#### Dentro de la shell
+
+Para correr los testeos usando el entorno del kernel desarrollado en Arquitectura de Computadoras, se debe hacer uso del compilado dentro del repositorio. Para ello, contando con la imagen de Docker provista por la cátedra, es necesario ejecutar (posicionados en el directorio del proyecto):
+
+```sh
+	./compile.sh
+```
+
+Esto generará el archivo `test_mm` en la carpeta de `Kernel/memory`. Ejecutarlo ingresando como argumento el número de bytes solicitados:
+
+```sh
+	./test_mm <memoria_maxima>
+```
+Brindar los permisos necesarios de ejecución de los mismos mediante chmod +x a los ejecutables que lo requieran.
+
+---
+
+***
+
+___
+
+## Instructivos para compilar y ejecutar BurinShell
+
+BurinShell es el proyecto realizado en la materia Arquitectura de Computadoras, y provee una consola de comandos que demuestra el funcionamiento del Kernel.
 
 ## Prerrequisitos
 
