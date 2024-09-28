@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 #include "memoryManagerADT.h"
 
 typedef struct BuddyNode {
@@ -18,7 +19,11 @@ typedef struct MemoryManagerCDT {
 }MemoryManagerCDT;
 
 int get_max_size(size_t size, size_t block_size){
-
+    size_t max_size = block_size;
+    while (max_size < size) {
+        max_size *= 2;
+    }
+    return max_size;
 }
 
 int get_height(size_t size, size_t block_size){
