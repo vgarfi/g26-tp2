@@ -48,9 +48,9 @@ MemoryManagerADT initialize_mm(void* base, size_t size, size_t block_size) {
     mm->root->free = 1;
     mm->root->left = NULL;
     mm->root->right = NULL;
-    mm->free_space = mm->root + sizeof(BuddyNode); 
+    mm->free_space = (char*)mm->root + sizeof(BuddyNode); 
 
-    mm->next = (BuddyNode *)(mm->root + sizeof(BuddyNode));
+    mm->next = (BuddyNode *)((char*)mm->root + sizeof(BuddyNode));
     return mm;
 }
 
