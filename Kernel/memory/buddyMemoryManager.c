@@ -15,13 +15,11 @@ typedef struct MemoryManagerCDT {
     size_t total_size;
     size_t block_size;
     BuddyNode * root;
-    BuddyNode * next;
-    void* free_space;
 }MemoryManagerCDT;
 
 int get_max_size(size_t size, size_t block_size){
     size_t max_size = block_size;
-    while (max_size < size) {
+    while (max_size * 2 < size) {
         max_size *= 2;
     }
     return max_size;
@@ -48,13 +46,10 @@ MemoryManagerADT initialize_mm(void* base, size_t size, size_t block_size) {
     mm->root->free = 1;
     mm->root->left = NULL;
     mm->root->right = NULL;
-    mm->free_space = (char*)mm->root + sizeof(BuddyNode); 
-
-    mm->next = (BuddyNode *)((char*)mm->root + sizeof(BuddyNode));
     return mm;
 }
 
-BuddyNode* get_free_node(BuddyNode* current, size_t looked_size, size_t current_size, MemoryManagerADT mm) {
+BuddyNode* get_free_node(BuddyNode* current, size_t looked_size, size_t current_size,  int* offset, int remainingNodes) {
     if (current == NULL || !current->free) {
         return NULL;
     }
@@ -63,15 +58,15 @@ BuddyNode* get_free_node(BuddyNode* current, size_t looked_size, size_t current_
         current->free = 0;
         return current;
     }
+    
+    remainingNodes--;
 
     // Si el nodo no tiene hijos, debemos dividirlo
     if (current->left == NULL && current->right == NULL) {
         size_t half_size = current_size / 2;
 
-        BuddyNode* left_child = (BuddyNode*)mm->free_space;
-        mm->free_space += sizeof(BuddyNode);
-        BuddyNode* right_child = (BuddyNode*)mm->free_space;
-        mm->free_space += sizeof(BuddyNode);
+        BuddyNode* left_child = (BuddyNode*)(current + sizeof(BuddyNode));
+        BuddyNode* right_child = (BuddyNode*)(current + (remainingNodes/2)*sizeof(BuddyNode));
 
         left_child->free = 1;
         left_child->left = NULL;
@@ -85,12 +80,13 @@ BuddyNode* get_free_node(BuddyNode* current, size_t looked_size, size_t current_
         current->right = right_child;
     }
 
-    BuddyNode* result = get_free_node(current->left, looked_size, current_size / 2, mm);
+    BuddyNode* result = get_free_node(current->left, looked_size, current_size / 2, offset, remainingNodes);
     if (result != NULL) {
         return result;
     }
 
-    return get_free_node(current->right, looked_size, current_size / 2, mm);
+    *offset = *offset + current_size/2;
+    return get_free_node(current->right, looked_size, current_size / 2, offset, (remainingNodes - remainingNodes/2));
 }
 
 size_t get_block_looked_size(size_t real_size) {
@@ -115,12 +111,14 @@ void* malloc_mm(MemoryManagerADT mm, size_t size) {
         block_looked_size = mm->block_size;
     }
 
-    BuddyNode* node = get_free_node(mm->root, block_looked_size, mm->total_size, mm);
+    int offset=0;
+
+    BuddyNode* node = get_free_node(mm->root, block_looked_size, mm->total_size, &offset, get_qty_nodes(get_height(mm->total_size, mm->block_size)));
     if(node == NULL)
         return node;
     
     node->free = 0;
-    return (void*)node;
+    return (void*)mm->base + offset;
 }
 
 void free_mm(MemoryManagerADT mm, void* ptr) {
