@@ -4,6 +4,9 @@
 #include <string.h>
 #include "memoryManagerADT.h"
 
+#define FREE                1
+#define NOT_FREE            0
+
 typedef struct BuddyNode {
     BuddyNode * left;
     BuddyNode * right;
@@ -43,7 +46,7 @@ MemoryManagerADT initialize_mm(void* base, size_t size, size_t block_size) {
     mm->block_size = block_size;
 
     mm->root = (BuddyNode *)(base + sizeof(MemoryManagerCDT));
-    mm->root->free = 1;
+    mm->root->free = FREE;
     mm->root->left = NULL;
     mm->root->right = NULL;
     return mm;
@@ -75,7 +78,7 @@ BuddyNode* get_free_node(BuddyNode* current, size_t looked_size, size_t current_
     }
 
     if (current_size == looked_size) {
-        current->free = 0;
+        current->free = NOT_FREE;
         return current;
     }
     
@@ -115,7 +118,7 @@ void* malloc_mm(MemoryManagerADT mm, size_t size) {
         block_looked_size = mm->block_size;
     }
 
-    int offset=0;
+    int offset = 0;
 
     BuddyNode* node = get_free_node(mm->root, block_looked_size, mm->total_size, &offset, get_qty_nodes(get_height(mm->total_size, mm->block_size)));
     if(node == NULL)
@@ -139,8 +142,7 @@ void merge_brother_buddies(BuddyNode* current, BuddyNode* root) {
     BuddyNode* right = parent->right;
 
     if (left->free && right->free) {
-        // Ambos hijos están libres, fusionar
-        parent->free = 1;
+        parent->free = FREE;
         parent->left = NULL;
         parent->right = NULL;
 
@@ -197,7 +199,7 @@ void free_mm(MemoryManagerADT mm, void* ptr) {
         return;
     }
 
-    node->free = 1;
+    node->free = FREE;
 
     merge_brother_buddies(node, mm->root);
     
