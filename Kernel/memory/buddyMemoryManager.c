@@ -203,6 +203,36 @@ void free_mm(MemoryManagerADT mm, void* ptr) {
     
 }
 
+ void calculate_diagnostic(MemoryDiagnostic* diagnostic, BuddyNode* node, size_t current_size, size_t block_size) {
+        if (node == NULL) {
+            return;
+        }
+
+        if (node->left == NULL && node->right == NULL) {
+
+            if (node->free) {
+                diagnostic->free_memory += current_size;
+                diagnostic->free_blocks+= current_size/block_size;
+            } else {
+                diagnostic->used_memory += current_size;
+                diagnostic->used_blocks += current_size/block_size;
+            }
+        } else {
+            calculate_diagnostic(diagnostic, node->left, current_size / 2, block_size);
+            calculate_diagnostic(diagnostic, node->right, current_size / 2, block_size);
+        }
+    }
+
 MemoryDiagnostic get_diagnostic_mm(MemoryManagerADT mm) {
-    
+     MemoryDiagnostic diagnostic = {0};
+        diagnostic.total_memory = mm->total_size;
+        diagnostic.used_memory = 0;
+        diagnostic.free_memory = 0;
+        diagnostic.total_blocks = (mm->total_size)/(mm->block_size);
+        diagnostic.used_blocks = 0;
+        diagnostic.free_blocks = 0;
+
+        calculate_diagnostic(&diagnostic, mm->root, mm->total_size, mm->block_size);
+
+        return diagnostic;
 }
