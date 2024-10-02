@@ -49,24 +49,12 @@ MemoryManagerADT initialize_mm(void* base, size_t size, size_t block_size) {
     return mm;
 }
 
-BuddyNode* get_free_node(BuddyNode* current, size_t looked_size, size_t current_size,  int* offset, int remainingNodes) {
-    if (current == NULL || !current->free) {
-        return NULL;
-    }
-
-    if (current_size == looked_size) {
-        current->free = 0;
-        return current;
-    }
-    
-    remainingNodes--;
-
-    // Si el nodo no tiene hijos, debemos dividirlo
+void split_node(BuddyNode* current, size_t current_size, int remaining_nodes) {  
     if (current->left == NULL && current->right == NULL) {
         size_t half_size = current_size / 2;
 
         BuddyNode* left_child = (BuddyNode*)(current + sizeof(BuddyNode));
-        BuddyNode* right_child = (BuddyNode*)(current + (remainingNodes/2)*sizeof(BuddyNode));
+        BuddyNode* right_child = (BuddyNode*)(current + (remaining_nodes / 2) * sizeof(BuddyNode));
 
         left_child->free = 1;
         left_child->left = NULL;
@@ -79,14 +67,30 @@ BuddyNode* get_free_node(BuddyNode* current, size_t looked_size, size_t current_
         current->left = left_child;
         current->right = right_child;
     }
+}
 
-    BuddyNode* result = get_free_node(current->left, looked_size, current_size / 2, offset, remainingNodes);
+BuddyNode* get_free_node(BuddyNode* current, size_t looked_size, size_t current_size,  int* offset, int remaining_nodes) {
+    if (current == NULL || !current->free) {
+        return NULL;
+    }
+
+    if (current_size == looked_size) {
+        current->free = 0;
+        return current;
+    }
+    
+    remaining_nodes--;
+
+    // Si el nodo no tiene hijos, debemos dividirlo
+    split_node(current, current_size, remaining_nodes);
+
+    BuddyNode* result = get_free_node(current->left, looked_size, current_size / 2, offset, remaining_nodes);
     if (result != NULL) {
         return result;
     }
 
     *offset = *offset + current_size/2;
-    return get_free_node(current->right, looked_size, current_size / 2, offset, (remainingNodes - remainingNodes/2));
+    return get_free_node(current->right, looked_size, current_size / 2, offset, (remaining_nodes - remaining_nodes/2));
 }
 
 size_t get_block_looked_size(size_t real_size) {
@@ -117,11 +121,85 @@ void* malloc_mm(MemoryManagerADT mm, size_t size) {
     if(node == NULL)
         return node;
     
-    node->free = 0;
     return (void*)mm->base + offset;
 }
 
+void merge_brother_buddies(BuddyNode* current, BuddyNode* root) {
+    if (current == NULL || current == root) {
+        return;
+    }
+
+    BuddyNode* parent = find_parent(root, current);
+
+    if (parent == NULL) {
+        return;
+    }
+
+    BuddyNode* left = parent->left;
+    BuddyNode* right = parent->right;
+
+    if (left->free && right->free) {
+        // Ambos hijos están libres, fusionar
+        parent->free = 1;
+        parent->left = NULL;
+        parent->right = NULL;
+
+        merge_brother_buddies(parent, root); // Por si también es necesario mergearlo a él también
+    }
+}
+
+BuddyNode* find_parent(BuddyNode* root, BuddyNode* node) {
+    if (root == NULL || root->left == NULL || root->right == NULL) {
+        return NULL;
+    }
+
+    if (root->left == node || root->right == node) {
+        return root;
+    }
+
+    BuddyNode* left_parent = find_parent(root->left, node);
+    if (left_parent != NULL) {
+        return left_parent;
+    }
+
+    return find_parent(root->right, node);
+}
+
+
+BuddyNode* find_buddy_node(BuddyNode* current, void* base, void* ptr, size_t current_size, int* offset) {
+    if (current == NULL) {
+        return NULL;
+    }
+
+    if ((void*)(base + *offset) == ptr) {
+        return current;
+    }
+
+
+    BuddyNode* result = find_buddy_node(current->left, base, ptr, current_size/2, offset);
+    if (result != NULL) {
+        return result;
+    }
+
+    *offset += current_size/2;
+    return find_buddy_node(current->right, base, ptr, current_size/2, offset);
+}
+
 void free_mm(MemoryManagerADT mm, void* ptr) {
+    if (ptr == NULL || ptr < mm->base || ptr >= (mm->base + mm->total_size)) {
+        return;
+    }
+
+    int offset = 0;
+    BuddyNode* node = find_buddy_node(mm->root, mm->base, ptr, mm->total_size, &offset);
+    
+    if (node == NULL) {
+        return;
+    }
+
+    node->free = 1;
+
+    merge_brother_buddies(node, mm->root);
     
 }
 
