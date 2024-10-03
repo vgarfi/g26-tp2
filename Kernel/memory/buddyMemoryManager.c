@@ -7,11 +7,16 @@
 #define FREE                1
 #define NOT_FREE            0
 
-typedef struct BuddyNode {
+typedef struct BuddyNode BuddyNode;
+
+BuddyNode* find_parent(BuddyNode* root, BuddyNode* node);
+void split_node(BuddyNode* current, size_t current_size, int remaining_nodes);
+
+struct BuddyNode {
     BuddyNode * left;
     BuddyNode * right;
     char free; 
-} BuddyNode;
+};
 
 typedef struct MemoryManagerCDT {
     void* base;
@@ -39,9 +44,7 @@ int get_qty_nodes(int height){
 MemoryManagerADT initialize_mm(void* base, size_t size, size_t block_size) {
     MemoryManagerADT mm = (MemoryManagerADT)base;
     mm->total_size = get_max_size(size, block_size);
-    mm->base = base
-                + sizeof(MemoryManagerCDT)
-                + sizeof(BuddyNode)*get_qty_nodes(get_height(mm->total_size, block_size));
+    mm->base = base + sizeof(MemoryManagerCDT) + sizeof(BuddyNode)*get_qty_nodes(get_height(mm->total_size, block_size));
 
     mm->block_size = block_size;
 
@@ -56,19 +59,16 @@ void split_node(BuddyNode* current, size_t current_size, int remaining_nodes) {
     if (current->left == NULL && current->right == NULL) {
         size_t half_size = current_size / 2;
 
-        BuddyNode* left_child = (BuddyNode*)(current + sizeof(BuddyNode));
-        BuddyNode* right_child = (BuddyNode*)(current + (remaining_nodes / 2) * sizeof(BuddyNode));
+        current->left = (BuddyNode*)((char*)current + sizeof(BuddyNode));
+        current->right = (BuddyNode*)((char*)current + sizeof(BuddyNode) + sizeof(BuddyNode));
 
-        left_child->free = 1;
-        left_child->left = NULL;
-        left_child->right = NULL;
+        current->left->free = FREE;
+        current->left->left = NULL;
+        current->left->right = NULL;
 
-        right_child->free = 1;
-        right_child->left = NULL;
-        right_child->right = NULL;
-
-        current->left = left_child;
-        current->right = right_child;
+        current->right->free = FREE;
+        current->right->left = NULL;
+        current->right->right = NULL;
     }
 }
 
@@ -122,7 +122,7 @@ void* malloc_mm(MemoryManagerADT mm, size_t size) {
 
     BuddyNode* node = get_free_node(mm->root, block_looked_size, mm->total_size, &offset, get_qty_nodes(get_height(mm->total_size, mm->block_size)));
     if(node == NULL)
-        return node;
+        return NULL;
     
     return (void*)mm->base + offset;
 }

@@ -11,7 +11,7 @@ LOADEROBJECT=$(LOADERSRC:.asm=.o)
 OBJDIR=obj
 STATICLIBS=
 
-TEST_SOURCES=./memory/test_mm.c ./memory/bitmapMemoryManager.c ./memory/test_util.c ./memory/syscall.c
+TEST_SOURCES=./memory/test_mm.c ./memory/buddyMemoryManager.c ./memory/test_util.c ./memory/syscall.c
 TEST_OBJECTS=$(TEST_SOURCES:.c=.o)
 TEST_EXEC=test_mm
 
@@ -41,6 +41,6 @@ clean:
 	rm -rf $(OBJDIR) *.bin
 
 $(TEST_EXEC): $(TEST_SOURCES)
-	$(GCC) -o $(TEST_EXEC) $(TEST_SOURCES) -I./include/memory -std=c99
+	$(GCC) -o $(TEST_EXEC) $(TEST_SOURCES) -I./include/memory -std=c99 -lm
 
 .PHONY: all clean
