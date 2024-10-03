@@ -9,3 +9,4 @@
 .gdbinit
 *.elf
 test_mm
+.gdb_history
