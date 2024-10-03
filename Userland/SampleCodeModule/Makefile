@@ -1,5 +1,7 @@
 include ../Makefile.inc
 
+GCCFLAGS += -fPIE
+
 MODULE=0000-sampleCodeModule.bin
 SOURCES=$(wildcard [^_]*.c)
 SOURCES_ASM=$(wildcard asm/*.asm)
