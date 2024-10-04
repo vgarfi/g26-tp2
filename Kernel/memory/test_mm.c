@@ -41,50 +41,61 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
         return -1;
     }
 
-
     printf("Inicializando con %zu bytes de memoria (máximo solicitado: %lu bytes)\n", total_memory, max_memory);
 
     while (1) {
         rq = 0;
         total = 0;
-
         // Request as many blocks as we can
-        while (rq < MAX_BLOCKS && total < max_memory)
-        {
+        while (rq < MAX_BLOCKS && total < max_memory) {
             mm_rqs[rq].size = GetUniform(max_memory - total - 1) + 1;
             mm_rqs[rq].address = malloc_mm(memory_manager, mm_rqs[rq].size);
 
-            if (mm_rqs[rq].address)
-            {
+            if (mm_rqs[rq].address) {
                 total += mm_rqs[rq].size;
+                printf("Bloque %d reservado: %u bytes en la dirección %p (total reservado: %u bytes)\n", rq, mm_rqs[rq].size, mm_rqs[rq].address, total);
                 rq++;
+            } else {
+              if(rq==1)
+                printf("Error al reservar bloque %d: %u bytes\n", rq, mm_rqs[rq].size);
             }
         }
 
-    // Set
-    uint32_t i;
-    for (i = 0; i < rq; i++)
-      if (mm_rqs[i].address)
-        memset(mm_rqs[i].address, i, mm_rqs[i].size);
-
-    // Check
-    for (i = 0; i < rq; i++){
-      if (mm_rqs[i].address){
-        if (!memcheck(mm_rqs[i].address, i, mm_rqs[i].size)) {
-          printf("test_mm ERROR\n");
-          return -1;
+        // Set
+        uint32_t i;
+        for (i = 0; i < rq; i++) {
+            if (mm_rqs[i].address) {
+                memset(mm_rqs[i].address, i, mm_rqs[i].size);
+                printf("Bloque %d inicializado con valor %d\n", i, i);
+            }
         }
-      }
+
+        // Check
+        for (i = 0; i < rq; i++) {
+            if (mm_rqs[i].address) {
+                if (!memcheck(mm_rqs[i].address, i, mm_rqs[i].size)) {
+                    printf("test_mm ERROR: Fallo al comprobar el bloque %d en la dirección %p\n", i, mm_rqs[i].address);
+                    return -1;
+                } else {
+                    printf("Bloque %d verificado correctamente\n", i);
+                }
+            }
+        }
+
+        // Free
+        for (i = 0; i < rq; i++) {
+            if (mm_rqs[i].address) {
+                free_mm(memory_manager, mm_rqs[i].address);
+                printf("Bloque %d liberado de la dirección %p\n", i, mm_rqs[i].address);
+            }
+        }
+
+        printf("Ciclo de reserva, verificación y liberación completado.\n");
     }
 
-    // Free
-    for (i = 0; i < rq; i++)
-      if (mm_rqs[i].address)
-        free_mm(memory_manager, mm_rqs[i].address);
-  }
-
-  free(memory); // Liberar la memoria utilizada por el memory manager
-  return 0;
+    free(memory); // Liberar la memoria utilizada por el memory manager
+    printf("Memoria del memory manager liberada.\n");
+    return 0;
 }
 
 int main(int argc, char *argv[]) {
