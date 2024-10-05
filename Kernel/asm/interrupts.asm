@@ -51,8 +51,7 @@ SECTION .text
     mov [regs + 8*17], r15
 %endmacro
 
-%macro pushState 0
-	push rax
+%macro pushStateNoRAX 0
 	push rbx
 	push rcx
 	push rdx
@@ -69,7 +68,7 @@ SECTION .text
 	push r15
 %endmacro
 
-%macro popState 0
+%macro popStateNoRAX 0
 	pop r15
 	pop r14
 	pop r13
@@ -84,6 +83,15 @@ SECTION .text
 	pop rdx
 	pop rcx
 	pop rbx
+%endmacro
+
+%macro pushState 0
+	push rax
+	pushStateNoRAX
+%endmacro
+
+%macro popState 0
+	popStateNoRAX
 	pop rax
 %endmacro
 
