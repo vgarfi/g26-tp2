@@ -3,17 +3,18 @@
  * @brief Definición del scheduler.
  */
 
-#include <process.h>
+#include <process/process.h>
 #include "../include/structures/queueADT.h"
 
 #ifndef scheduler_H
-#define scheduler_H_H
+#define scheduler_H
 
 
 typedef enum {
     BLOCKED,
     READY,
-    RUNNING
+    RUNNING,
+    KILLED,
 } TState;
 
 typedef struct TPCB {
@@ -24,8 +25,6 @@ typedef struct TPCB {
     uint64_t* rsp;
     uint8_t priority;
 } TPCB;
-
-TPCB* pcb_array[MAX_PROCESSES];
 
 TQueueADT pcb_readies_queue;
 
