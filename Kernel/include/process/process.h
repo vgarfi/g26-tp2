@@ -11,6 +11,6 @@
 
 int next_process_index = 0;
 
-uint8_t create_process (void);
+uint8_t create_process (char* name, uint64_t argc, char *argv[], uint8_t priority);
 
 #endif

@@ -18,13 +18,24 @@ uint64_t* schedule(){
     running_pcb = next;  
 }
 
-void add_pcb(void* stack_base, uint8_t pid, uint8_t priority) {
+void add_pcb(char* name, uint64_t argc, char *argv[], void* stack_base, uint8_t pid, uint8_t priority) {
+    if (name == NULL || argc < 0 || argv == NULL || stack_base == NULL) {
+        return;
+    } // TODO ver que hacemos con argc y argv
+
     TPCB* new_pcb = (TPCB*) malloc_mm(memory_manager, sizeof(TPCB));
-    if (new_pcb == NULL || priority == 0) {
+    if (new_pcb == NULL) {
         free_mm(memory_manager, new_pcb);
         return;
     }
+    
+	new_pcb->name = (char *) malloc_mm(memory_manager, strlen(name) + 1);
+	if (new_pcb->name == NULL) {
+		free_mm(memory_manager, new_pcb);
+		return;
+	}
 
+	strcpy(new_pcb->name, name);
     new_pcb->pid = pid;
     new_pcb->m_pid = get_current_pid();
     new_pcb->rsp = stack_base;

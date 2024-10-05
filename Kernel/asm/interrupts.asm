@@ -95,7 +95,7 @@ SECTION .text
 	pop rax
 %endmacro
 
-%macro irqHandlerMaster 1
+%macro irqHandlerMaster 1 ; TODO handler del scheduling
 	pushState
 
 	mov rdi, %1 ; pasaje de parametro
@@ -111,17 +111,17 @@ SECTION .text
 
 %macro saveIntRegs 0
 
-push rax
-mov rax, [rsp + 8]	; RIP Contexto anterior
-mov [regs], rax
+	push rax
+	mov rax, [rsp + 8]	; RIP Contexto anterior
+	mov [regs], rax
 
-mov rax, [rsp + 8*3] ; RFLAGS Contexto anterior
-mov [regs + 8*1], rax
+	mov rax, [rsp + 8*3] ; RFLAGS Contexto anterior
+	mov [regs + 8*1], rax
 
-mov rax, [rsp + 8*4] ; RSP Contexto anterior
-mov [regs + 8*2], rax
+	mov rax, [rsp + 8*4] ; RSP Contexto anterior
+	mov [regs + 8*2], rax
 
-pop rax
+	pop rax
 
 %endmacro
    
