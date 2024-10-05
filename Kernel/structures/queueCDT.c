@@ -2,13 +2,24 @@
 #include "../kernel.c"                      // TODO prguntar la correctitud de esto
 
 
-TQueueCDT createQueue() {
-    TQueueCDT queue = (TQueueCDT)malloc_mm(memory_manager, sizeof(TQueueADT));
+typedef struct TQueueNode {
+    void* data;            
+    struct TQueueNode* next;    
+} TQueueNode;
+
+typedef struct TQueueCDT {
+    TQueueNode* first;
+    TQueueNode* last;
+} TQueueCDT;
+
+
+TQueueADT createQueue() {
+    TQueueADT queue = (TQueueADT)malloc_mm(memory_manager, sizeof(TQueueCDT));
     queue->first = queue->last = NULL;
     return queue;
 }
 
-void enqueue(TQueueCDT queue, void* value) {
+void enqueue(TQueueADT queue, void* value) {
     TQueueNode* newNode = (TQueueNode*)malloc_mm(memory_manager, sizeof(TQueueNode));
     newNode->data = value;
     newNode->next = NULL;
@@ -22,7 +33,7 @@ void enqueue(TQueueCDT queue, void* value) {
     queue->last = newNode;
 }
 
-void* dequeue(TQueueCDT queue) {
+void* dequeue(TQueueADT queue) {
     if (queue->first == NULL) {
         return NULL;
     }
@@ -39,6 +50,10 @@ void* dequeue(TQueueCDT queue) {
     return data;
 }
 
-int isEmpty(TQueueCDT queue) {
+int isEmpty(TQueueADT queue) {
     return queue->first == NULL;
+}
+
+void* peek(TQueueADT queue){
+    return (queue->first == NULL)? NULL : queue->first->data;
 }

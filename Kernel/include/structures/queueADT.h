@@ -1,24 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct TQueueNode {
-    void* data;            
-    struct TQueueNode* next;    
-} TQueueNode;
+typedef struct TQueueCDT* TQueueADT;
 
-typedef struct TQueueADT {
-    TQueueNode* first;
-    TQueueNode* last;
-} TQueueADT;
+TQueueADT createQueue();
 
-typedef TQueueADT* TQueueCDT;
+void enqueue(TQueueADT queue, void* value);
 
-TQueueCDT createQueue();
+void* dequeue(TQueueADT queue);
 
-void enqueue(TQueueCDT queue, void* value);
+void* peek(TQueueADT queue);
 
-void* dequeue(TQueueCDT queue);
-
-void* peek(TQueueCDT queue);
-
-int isEmpty(TQueueCDT queue);
+int isEmpty(TQueueADT queue);
