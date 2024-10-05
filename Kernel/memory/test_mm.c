@@ -56,8 +56,7 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
                 printf("Bloque %d reservado: %u bytes en la dirección %p (total reservado: %u bytes)\n", rq, mm_rqs[rq].size, mm_rqs[rq].address, total);
                 rq++;
             } else {
-              if(rq==1)
-                printf("Error al reservar bloque %d: %u bytes\n", rq, mm_rqs[rq].size);
+                //printf("Error al reservar bloque %d: %u bytes\n", rq, mm_rqs[rq].size);
             }
         }
 

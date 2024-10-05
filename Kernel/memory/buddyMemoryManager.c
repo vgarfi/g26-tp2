@@ -137,7 +137,7 @@ void* malloc_mm(MemoryManagerADT mm, size_t size) {
     return (void*)((char*)mm->base + offset);
 }
 
-void merge_brother_buddies(BuddyNode* current, BuddyNode* root) {
+/*void merge_brother_buddies2(BuddyNode* current, BuddyNode* root) {
     if (current == NULL || current == root) {
         return;
     }
@@ -156,11 +156,11 @@ void merge_brother_buddies(BuddyNode* current, BuddyNode* root) {
         parent->left = NULL;
         parent->right = NULL;
 
-        merge_brother_buddies(parent, root); // Por si también es necesario mergearlo a él también
+        merge_brother_buddies2(parent, root); // Por si también es necesario mergearlo a él también
     }
-}
+}*/
 
-BuddyNode* find_parent(BuddyNode* root, BuddyNode* node) {
+/*BuddyNode* find_parent(BuddyNode* root, BuddyNode* node) {
     if (root == NULL || root->left == NULL || root->right == NULL) {
         return NULL;
     }
@@ -175,10 +175,10 @@ BuddyNode* find_parent(BuddyNode* root, BuddyNode* node) {
     }
 
     return find_parent(root->right, node);
-}
+}*/
 
 
-BuddyNode* find_buddy_node(BuddyNode* current, void* base, void* ptr, size_t current_size, int* offset) {
+/*BuddyNode* find_buddy_node2(BuddyNode* current, void* base, void* ptr, size_t current_size, int* offset) {
     if (current == NULL) {
         return NULL;
     }
@@ -188,13 +188,65 @@ BuddyNode* find_buddy_node(BuddyNode* current, void* base, void* ptr, size_t cur
     }
 
 
-    BuddyNode* result = find_buddy_node(current->left, base, ptr, current_size/2, offset);
+    BuddyNode* result = find_buddy_node2(current->left, base, ptr, current_size/2, offset);
     if (result != NULL) {
         return result;
     }
 
     *offset += current_size/2;
-    return find_buddy_node(current->right, base, ptr, current_size/2, offset);
+    return find_buddy_node2(current->right, base, ptr, current_size/2, offset);
+}*/
+
+BuddyNode* find_buddy_node(MemoryManagerADT mm, void* base, void*ptr){
+    size_t offset = (char*)ptr - (char*)mm->base;
+
+    int index = offset / mm->block_size;
+
+    BuddyNode* node = (BuddyNode*)((char*)mm->root + index * sizeof(BuddyNode));
+}
+
+int get_remaining_nodes(BuddyNode* current, BuddyNode* root){
+    int current_index = (current - root) / sizeof(BuddyNode);
+    int height = 0;
+
+    // Calcular la altura (0 para hojas, 1 para sus padres, etc.)
+    while (current_index > 0) {
+        current_index = (current_index - 1) / 2;
+        height++;
+    }
+
+    return (1 << height) - 1; // 2^height - 1
+}
+
+void merge_brother_buddies(BuddyNode* current, BuddyNode* root) {
+    if (current == NULL || root == NULL) {
+        return;
+    }
+
+    int current_index = (current - root) / sizeof(BuddyNode);
+
+    if (current_index == 0) {
+        return;
+    }
+
+    int parent_index = (current_index - 1) / 2;
+    BuddyNode* parent = root + parent_index; // se ajusta automaticamente por aritmetica de punteros
+
+    BuddyNode* sibling;
+    if (current_index % 2 == 0) {
+        sibling = root + (current_index - 1);
+    } else {
+        int remaining_nodes = get_remaining_nodes(current, root);
+        sibling = root + (current_index - 1) + (remaining_nodes/2);
+    }
+
+    if (sibling->free == FREE && current->free == FREE) {
+        parent->free = FREE;
+        parent->left = NULL;
+        parent->right = NULL;
+
+        merge_brother_buddies(parent, root);
+    }
 }
 
 void free_mm(MemoryManagerADT mm, void* ptr) {
@@ -202,49 +254,49 @@ void free_mm(MemoryManagerADT mm, void* ptr) {
         return;
     }
 
-    int offset = 0;
-    BuddyNode* node = find_buddy_node(mm->root, mm->base, ptr, mm->total_size, &offset);
-    
+    //int offset = 0;
+    //BuddyNode* node = find_buddy_node(mm->root, mm->base, ptr, mm->total_size, &offset);
+    BuddyNode* node = find_buddy_node(mm, mm->base, ptr);
+
+    if (node == NULL) {
+        return;
+    }
+        printf("Liberando nodo en dirección: %p\n", node);
+    node->free = FREE;
+
+    merge_brother_buddies(node, mm->root);
+}
+
+void calculate_diagnostic(MemoryDiagnostic* diagnostic, BuddyNode* node, size_t current_size, size_t block_size) {
     if (node == NULL) {
         return;
     }
 
-    node->free = FREE;
+    if (node->left == NULL && node->right == NULL) {
 
-    merge_brother_buddies(node, mm->root);
-    
+        if (node->free) {
+            diagnostic->free_memory += current_size;
+            diagnostic->free_blocks+= current_size/block_size;
+        } else {
+            diagnostic->used_memory += current_size;
+            diagnostic->used_blocks += current_size/block_size;
+        }
+    } else {
+        calculate_diagnostic(diagnostic, node->left, current_size / 2, block_size);
+        calculate_diagnostic(diagnostic, node->right, current_size / 2, block_size);
+    }
 }
 
- void calculate_diagnostic(MemoryDiagnostic* diagnostic, BuddyNode* node, size_t current_size, size_t block_size) {
-        if (node == NULL) {
-            return;
-        }
-
-        if (node->left == NULL && node->right == NULL) {
-
-            if (node->free) {
-                diagnostic->free_memory += current_size;
-                diagnostic->free_blocks+= current_size/block_size;
-            } else {
-                diagnostic->used_memory += current_size;
-                diagnostic->used_blocks += current_size/block_size;
-            }
-        } else {
-            calculate_diagnostic(diagnostic, node->left, current_size / 2, block_size);
-            calculate_diagnostic(diagnostic, node->right, current_size / 2, block_size);
-        }
-    }
-
 MemoryDiagnostic get_diagnostic_mm(MemoryManagerADT mm) {
-     MemoryDiagnostic diagnostic = {0};
-        diagnostic.total_memory = mm->total_size;
-        diagnostic.used_memory = 0;
-        diagnostic.free_memory = 0;
-        diagnostic.total_blocks = (mm->total_size)/(mm->block_size);
-        diagnostic.used_blocks = 0;
-        diagnostic.free_blocks = 0;
+    MemoryDiagnostic diagnostic = {0};
+    diagnostic.total_memory = mm->total_size;
+    diagnostic.used_memory = 0;
+    diagnostic.free_memory = 0;
+    diagnostic.total_blocks = (mm->total_size)/(mm->block_size);
+    diagnostic.used_blocks = 0;
+    diagnostic.free_blocks = 0;
 
-        calculate_diagnostic(&diagnostic, mm->root, mm->total_size, mm->block_size);
+    calculate_diagnostic(&diagnostic, mm->root, mm->total_size, mm->block_size);
 
-        return diagnostic;
+    return diagnostic;
 }
