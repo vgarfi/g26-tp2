@@ -40,7 +40,7 @@ void add_pcb(char* name, uint64_t argc, char *argv[], void* stack_base, uint8_t 
     new_pcb->pid = pid;                 // TODO: hay que recorrer porque se pueden matar procesos y esos PIDs se puede reutilizar
     new_pcb->m_pid = get_current_pid();
 
-    new_pcb->rsp = stack_base - sizeof(stack_frame) - sizeof(code_frame);
+    new_pcb->rsp = stack_base - sizeof(TStackFrame) - sizeof(TCodeFrame);
     new_pcb->state = READY;
     new_pcb->priority = priority;
 

@@ -13,7 +13,7 @@ uint8_t create_process (char* name, uint64_t argc, char *argv[], uint8_t priorit
 
 TPCB* pcb_array[MAX_PROCESSES];
 
-typedef struct stack_frame {
+typedef struct TStackFrame {
     uint64_t r15;
     uint64_t r14;
     uint64_t r13;
@@ -37,11 +37,11 @@ typedef struct stack_frame {
     uint64_t rflags;
     uint64_t rsp;
     uint64_t ss;
-} stack_frame;
+} TStackFrame;
 
-typedef struct code_frame {
+typedef struct TCodeFrame {
     uint64_t argc;
     char** argv;
     int64_t(*code)(int, char**);
-} code_frame;
+} TCodeFrame;
 #endif
