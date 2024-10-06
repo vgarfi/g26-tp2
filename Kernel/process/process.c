@@ -14,7 +14,7 @@ uint8_t create_process(char* name, uint64_t argc, char *argv[], uint8_t priority
     }
 
     void* stack_base = ptr + STACK_SIZE; // si el malloc devuelve alineado esto no hace falta alinearlo, ya esta (tambien STACK_SIZE tiene que ser multiplo de 8)
-
+    create_initial_stack((uint64_t *)stack_base, argc, argv, code, &wrapper);
     add_pcb(name, argc, argv, stack_base, next_process_index, priority);
     return next_process_index++;        // TODO: hay que recorrer porque se pueden matar procesos y esos PIDs se puede reutilizar
 }
@@ -48,4 +48,9 @@ void add_pcb(char* name, uint64_t argc, char *argv[], void* stack_base, uint8_t 
     
     enqueue(pcb_readies_queue, new_pcb);
     return;
+}
+
+void wrapper(uint64_t argc, char* argv[], int64_t (*code)(int, char**)){
+    code(argc, argv);
+    // TODO hacer kill(getCurrentPID)
 }

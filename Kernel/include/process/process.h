@@ -10,7 +10,9 @@
 #define MAX_PROCESSES   1024
 
 uint8_t create_process (char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**));
+uint64_t * create_initial_stack(uint64_t * stack_base, uint64_t argc, char* argv[], int64_t (*code)(int, char**), void* wrapper);
 
+void wrapper(uint64_t argc, char* argv[], int64_t (*code)(int, char**));
 TPCB* pcb_array[MAX_PROCESSES];
 
 typedef struct TStackFrame {
