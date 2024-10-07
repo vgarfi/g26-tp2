@@ -7,12 +7,22 @@
 #define PROCESS_H
 
 #include <memory/memoryManagerADT.h>
-#define MAX_PROCESSES   1024
-#define STACK_SIZE     128
-#define PROCESS_SIZE   1024
+
+#define MAX_PROCESSES       1024
+#define STACK_SIZE          128
+#define PROCESS_SIZE        1024
 
 #define AVAILABLE_PID       0
 #define NOT_AVAILABLE_PID   1
+
+#define IDLE_PROOCESS       "idle"
+#define IDLE_PRIORITY       0
+
+char* idle_args[] = {IDLE_PROOCESS, 0};
+
+void initialize_process_management(void);
+
+void idle_process(void);
 
 int get_available_pid(void);
 void add_pcb(char* name, uint64_t argc, char *argv[], void* stack_base, uint8_t pid, uint8_t priority);

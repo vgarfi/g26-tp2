@@ -2,8 +2,17 @@
 #include <process/process.h>
 #include "../kernel.c"
 
-
 uint8_t pids[MAX_PROCESSES] = {AVAILABLE_PID};
+
+void initialize_process_management(void) { // TODO esta función debería crear la shell
+    int idle_pid = create_process(IDLE_PROOCESS, 0, idle_args, IDLE_PRIORITY, &idle_process);
+}
+
+void idle_process(void) {
+    while (1) {
+		_hlt();
+	}
+}
 
 int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**)) {
     void* ptr = malloc_mm(memory_manager, PROCESS_SIZE);
