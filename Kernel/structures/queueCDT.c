@@ -3,7 +3,7 @@
 
 
 typedef struct TQueueNode {
-    void* data;            
+    void* value;            
     struct TQueueNode* next;    
 } TQueueNode;
 
@@ -21,7 +21,7 @@ TQueueADT createQueue() {
 
 void enqueue(TQueueADT queue, void* value) {
     TQueueNode* newNode = (TQueueNode*)malloc_mm(memory_manager, sizeof(TQueueNode));
-    newNode->data = value;
+    newNode->value = value;
     newNode->next = NULL;
 
     if (queue->last == NULL) {
@@ -39,7 +39,7 @@ void* dequeue(TQueueADT queue) {
     }
 
     TQueueNode* temp = queue->first;
-    void* data = temp->data;
+    void* value = temp->value;
     queue->first = queue->first->next;
 
     if (queue->first == NULL) {
@@ -47,13 +47,39 @@ void* dequeue(TQueueADT queue) {
     }
 
     free_mm(memory_manager,temp);
-    return data;
+    return value;
+}
+void* dequeue_value(TQueueADT queue, void* value) {
+    TQueueNode * current = queue->first;
+	TQueueNode * previous = NULL;
+	while (current != NULL && current->value != value) {
+		previous = current;
+		current = current->next;
+	}
+
+	if (current == NULL) {
+		return NULL;
+	}
+
+	if (previous == NULL) {
+		queue->first = current->next;
+	} else {
+		previous->next = current->next;
+	}
+
+	if (current == queue->last) {
+		queue->last = previous;
+	}
+
+	void * dataToReturn = current->value;
+	free(current);
+	return dataToReturn;
 }
 
-int isEmpty(TQueueADT queue) {
+int is_empty(TQueueADT queue) {
     return queue->first == NULL;
 }
 
 void* peek(TQueueADT queue){
-    return (queue->first == NULL)? NULL : queue->first->data;
+    return (queue->first == NULL)? NULL : queue->first->value;
 }

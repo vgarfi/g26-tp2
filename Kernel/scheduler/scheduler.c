@@ -22,3 +22,20 @@ uint8_t get_current_pid() {
     if (running_pcb == NULL) return 0;
     return running_pcb->pid;    
 }
+
+TPCB* get_pcb_by_pid(uint8_t pid) {
+    for(int i = 0; i < MAX_PROCESSES-1; i++){
+        if (pcb_array[i]->pid == pid) {
+            return pcb_array[i];
+        }
+    }
+    return NULL;
+}
+
+void remove_pcb(TPCB* pcb){
+    dequeue_value(pcb_readies_queue, pcb);
+    free_mm(memory_manager, pcb->rsp);
+    free_mm(memory_manager, pcb->name);
+    free_mm(memory_manager, pcb);
+}
+

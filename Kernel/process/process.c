@@ -2,27 +2,33 @@
 #include <process/process.h>
 #include "../kernel.c"
 
-#define STACK_SIZE     128
-#define PROCESS_SIZE   1024
 
-int next_process_index = 0;
+uint8_t pids[MAX_PROCESSES] = {AVAILABLE_PID};
 
-uint8_t create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**)) {
+int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**)) {
     void* ptr = malloc_mm(memory_manager, PROCESS_SIZE);
     if (ptr == NULL) {
         return -1;
     }
 
+    int pid = get_available_pid();
+    if (pid == -1){
+        return -1;
+    }
+
     void* stack_base = ptr + STACK_SIZE; // si el malloc devuelve alineado esto no hace falta alinearlo, ya esta (tambien STACK_SIZE tiene que ser multiplo de 8)
     create_initial_stack((uint64_t *)stack_base, argc, argv, code, &wrapper);
-    add_pcb(name, argc, argv, stack_base, next_process_index, priority);
-    return next_process_index++;        // TODO: hay que recorrer porque se pueden matar procesos y esos PIDs se puede reutilizar
+    add_pcb(name, argc, argv, stack_base, (uint8_t) pid, priority);
+    
+    pids[pid] = NOT_AVAILABLE_PID;
+    
+    return pid;
 }
 
 void add_pcb(char* name, uint64_t argc, char *argv[], void* stack_base, uint8_t pid, uint8_t priority) {
     if (name == NULL || argc < 0 || argv == NULL || stack_base == NULL) {
         return;
-    } // TODO ver que hacemos con argc y argv
+    }
 
     TPCB* new_pcb = (TPCB*) malloc_mm(memory_manager, sizeof(TPCB));
     if (new_pcb == NULL) {
@@ -50,7 +56,27 @@ void add_pcb(char* name, uint64_t argc, char *argv[], void* stack_base, uint8_t 
     return;
 }
 
-void wrapper(uint64_t argc, char* argv[], int64_t (*code)(int, char**)){
+int get_available_pid() {
+    for(int pid = 0; pid < MAX_PROCESSES-1; pid++){
+        if (pids[pid] == AVAILABLE_PID){
+            return AVAILABLE_PID;
+        }
+    }
+    return -1;
+}
+
+void wrapper(uint64_t argc, char* argv[], int64_t (*code)(int, char**)) {
     code(argc, argv);
-    // TODO hacer kill(getCurrentPID)
+    kill_process(get_current_pid());
+}
+
+int kill_process(uint8_t pid) {
+    TPCB* process_pcb  = get_pcb_by_pid(pid);
+    if (process_pcb == NULL) {
+        return -1;
+    }
+    process_pcb->state = KILLED;
+    remove_pcb(process_pcb);
+    pids[pid] = AVAILABLE_PID;
+    return EXIT_SUCCESS;
 }

@@ -8,12 +8,20 @@
 
 #include <memory/memoryManagerADT.h>
 #define MAX_PROCESSES   1024
+#define STACK_SIZE     128
+#define PROCESS_SIZE   1024
 
-uint8_t create_process (char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**));
+#define AVAILABLE_PID       0
+#define NOT_AVAILABLE_PID   1
+
+int get_available_pid(void);
+void add_pcb(char* name, uint64_t argc, char *argv[], void* stack_base, uint8_t pid, uint8_t priority);
+int create_process (char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**));
 uint64_t * create_initial_stack(uint64_t * stack_base, uint64_t argc, char* argv[], int64_t (*code)(int, char**), void* wrapper);
 
 void wrapper(uint64_t argc, char* argv[], int64_t (*code)(int, char**));
-TPCB* pcb_array[MAX_PROCESSES];
+
+int kill_process(uint8_t pid);
 
 typedef struct TStackFrame {
     uint64_t r15;

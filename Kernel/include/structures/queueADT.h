@@ -9,6 +9,8 @@ void enqueue(TQueueADT queue, void* value);
 
 void* dequeue(TQueueADT queue);
 
+void* dequeue_value(TQueueADT queue, void* value);
+
 void* peek(TQueueADT queue);
 
-int isEmpty(TQueueADT queue);
+int is_empty(TQueueADT queue);
