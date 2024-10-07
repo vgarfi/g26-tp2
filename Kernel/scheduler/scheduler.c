@@ -1,5 +1,5 @@
+#include <kernel.h>
 #include <scheduler/scheduler.h>
-#include <kernel.c> // TODO mover a un .h
 
 uint64_t* schedule(){
     TPCB* next = (TPCB*) dequeue(pcb_readies_queue);

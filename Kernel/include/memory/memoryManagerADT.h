@@ -7,6 +7,7 @@
 #define memoryManagerADT_H
 
 #include <stdint.h>
+#include <stddef.h>
 
 /**
  * @typedef MemoryManagerADT

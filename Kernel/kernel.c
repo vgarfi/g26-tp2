@@ -1,3 +1,4 @@
+#include <kernel.h>
 #include <stdint.h>
 #include <string.h>
 #include <lib.h>
@@ -9,6 +10,7 @@
 #include "interrupts.h"
 #include "time.h"
 #include "memory/memoryManagerADT.h"
+#include "process/process.h"
 
 
 void load_idt(void);
@@ -29,8 +31,6 @@ static const uint64_t PageSize = 0x1000;
 static void * const sampleCodeModuleAddress = (void*)0x400000;
 static void * const sampleDataModuleAddress = (void*)0x500000;
 static void * const memoryBaseAddress = (void*)0x600000;
-
-static MemoryManagerADT memory_manager;
 
 typedef int (*EntryPoint)();
 
@@ -66,7 +66,7 @@ int main() {
 	//initializeTimer();	
 	initializeVideoDriver();
 	initFontManager();
-	
+	//initialize_process_management();
 	((EntryPoint)sampleCodeModuleAddress)();
 	
 	while(1)

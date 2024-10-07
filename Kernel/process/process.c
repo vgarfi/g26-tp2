@@ -1,6 +1,7 @@
 #include <scheduler/scheduler.h>
 #include <process/process.h>
-#include "../kernel.c"
+#include <string.h>
+#include "../kernel.h"
 
 uint8_t pids[MAX_PROCESSES] = {AVAILABLE_PID};
 

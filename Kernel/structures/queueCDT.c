@@ -72,7 +72,7 @@ void* dequeue_value(TQueueADT queue, void* value) {
 	}
 
 	void * dataToReturn = current->value;
-	free(current);
+	free_mm(memory_manager, current);
 	return dataToReturn;
 }
 

@@ -4,6 +4,7 @@
  */
 
 #include <process/process.h>
+#include "string.h"
 #include "../include/structures/queueADT.h"
 
 #ifndef scheduler_H
