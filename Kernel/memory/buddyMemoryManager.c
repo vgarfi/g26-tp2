@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include "memoryManagerADT.h"
+#include <memory/memoryManagerADT.h>
 
 #define FREE                1
 #define NOT_FREE            0

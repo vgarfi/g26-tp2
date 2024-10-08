@@ -18,8 +18,6 @@
 #define IDLE_PROCESS       "idle"
 #define IDLE_PRIORITY       0
 
-char* idle_args[] = {IDLE_PROCESS, 0};
-
 void initialize_process_management(void);
 
 int64_t idle_process(int, char**);

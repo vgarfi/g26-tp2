@@ -1,10 +1,10 @@
-#include "syscall.h"
-#include "test_util.h"
+#include <memory/syscall.h>
+#include <memory/test_util.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "memoryManagerADT.h"
-#include "test_mm.h"
+#include <memory/memoryManagerADT.h>
+#include <memory/test_mm.h>
 
 #define MAX_BLOCKS 128
 
