@@ -15,14 +15,14 @@
 #define AVAILABLE_PID       0
 #define NOT_AVAILABLE_PID   1
 
-#define IDLE_PROOCESS       "idle"
+#define IDLE_PROCESS       "idle"
 #define IDLE_PRIORITY       0
 
-char* idle_args[] = {IDLE_PROOCESS, 0};
+char* idle_args[] = {IDLE_PROCESS, 0};
 
 void initialize_process_management(void);
 
-void idle_process(void);
+int64_t idle_process(int, char**);
 
 int get_available_pid(void);
 void add_pcb(char* name, uint64_t argc, char *argv[], void* stack_base, uint8_t pid, uint8_t priority);

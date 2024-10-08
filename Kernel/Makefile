@@ -43,6 +43,6 @@ clean:
 	rm -rf $(OBJDIR) *.bin
 
 $(TEST_EXEC): $(TEST_SOURCES)
-	$(GCC) -o $(TEST_EXEC) $(TEST_SOURCES) -I./include/memory -std=c99 -lm
+	$(GCC) -o $(TEST_EXEC) $(TEST_SOURCES) -I./include/memory -std=c99
 
 .PHONY: all clean

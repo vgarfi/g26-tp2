@@ -1,15 +1,17 @@
 #include <scheduler/scheduler.h>
 #include <process/process.h>
 #include <string.h>
+#include <interrupts.h>
 #include "../kernel.h"
 
 uint8_t pids[MAX_PROCESSES] = {AVAILABLE_PID};
 
 void initialize_process_management(void) { // TODO esta función debería crear la shell
-    int idle_pid = create_process(IDLE_PROOCESS, 0, idle_args, IDLE_PRIORITY, &idle_process);
+    // TODO: no deberia usar create_process sino mas bien un create_process_with_pid o algo asi porque el pid del idle deberia ser 0 siempre
+    int idle_pid = create_process(IDLE_PROCESS, 0, idle_args, IDLE_PRIORITY, &idle_process);
 }
 
-void idle_process(void) {
+int64_t idle_process(int, char**){
     while (1) {
 		_hlt();
 	}
@@ -46,7 +48,7 @@ void add_pcb(char* name, uint64_t argc, char *argv[], void* stack_base, uint8_t 
         return;
     }
     
-	new_pcb->name = (char *) malloc_mm(memory_manager, strlen(name) + 1);
+	new_pcb->name = (char *) malloc_mm(memory_manager, strlen(name) + 1); // strlen esta en string.h
 	if (new_pcb->name == NULL) {
 		free_mm(memory_manager, new_pcb);
 		return;
