@@ -30,18 +30,14 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
     size_t block_size = 64; // Bloques de 64 bytes
     void *memory = malloc(total_memory);
     if (memory == NULL) {
-        printf("Error: No se pudo asignar memoria para el memory manager\n");
         return -1;
     }
 
     MemoryManagerADT memory_manager = initialize_mm(memory, total_memory, block_size);
     if (memory_manager == NULL) {
-        printf("Error: No se pudo inicializar el memory manager\n");
         free(memory);
         return -1;
     }
-
-    printf("Inicializando con %zu bytes de memoria (máximo solicitado: %lu bytes)\n", total_memory, max_memory);
 
     while (1) {
         rq = 0;
@@ -53,11 +49,7 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
 
             if (mm_rqs[rq].address) {
                 total += mm_rqs[rq].size;
-                printf("Bloque %d reservado: %u bytes en la dirección %p (total reservado: %u bytes)\n", rq, mm_rqs[rq].size, mm_rqs[rq].address, total);
                 rq++;
-            } else {
-              if(rq==1)
-                printf("Error al reservar bloque %d: %u bytes\n", rq, mm_rqs[rq].size);
             }
         }
 
@@ -66,7 +58,6 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
         for (i = 0; i < rq; i++) {
             if (mm_rqs[i].address) {
                 memset(mm_rqs[i].address, i, mm_rqs[i].size);
-                printf("Bloque %d inicializado con valor %d\n", i, i);
             }
         }
 
@@ -74,10 +65,7 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
         for (i = 0; i < rq; i++) {
             if (mm_rqs[i].address) {
                 if (!memcheck(mm_rqs[i].address, i, mm_rqs[i].size)) {
-                    printf("test_mm ERROR: Fallo al comprobar el bloque %d en la dirección %p\n", i, mm_rqs[i].address);
                     return -1;
-                } else {
-                    printf("Bloque %d verificado correctamente\n", i);
                 }
             }
         }
@@ -86,15 +74,11 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
         for (i = 0; i < rq; i++) {
             if (mm_rqs[i].address) {
                 free_mm(memory_manager, mm_rqs[i].address);
-                printf("Bloque %d liberado de la dirección %p\n", i, mm_rqs[i].address);
             }
         }
-
-        printf("Ciclo de reserva, verificación y liberación completado.\n");
     }
 
     free(memory); // Liberar la memoria utilizada por el memory manager
-    printf("Memoria del memory manager liberada.\n");
     return 0;
 }
 
