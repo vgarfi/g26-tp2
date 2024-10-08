@@ -90,5 +90,6 @@ int kill_process(uint8_t pid) {
     process_pcb->state = KILLED;
     kill_pcb(process_pcb);
     pids[pid] = AVAILABLE_PID;
+    requestSchedule();
     return EXIT_SUCCESS;
 }

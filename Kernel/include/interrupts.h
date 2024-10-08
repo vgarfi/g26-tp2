@@ -28,4 +28,6 @@ void picSlaveMask(uint8_t mask);
 //The CPU execution ends.
 void haltcpu(void);
 
+void requestSchedule(void);
+
 #endif /* INTERRUPS_H_ */

@@ -3,6 +3,8 @@ GLOBAL _sti
 GLOBAL picMasterMask
 GLOBAL picSlaveMask
 GLOBAL haltcpu
+GLOBAL requestSchedule
+
 GLOBAL _hlt
 
 GLOBAL _irq00Handler
@@ -234,6 +236,8 @@ _exception6Handler:
 getRegs:
 	mov rax,regs
 	ret	
+
+
 ;Syscall Handling
 ; _syscallHandler receives parameters in the next order: rax rdi rsi rdx r10 r8 r9
 ; syscallDispatcher receives parameters via regs this way: rdi rsi rdx rcx r8 r9
@@ -253,6 +257,10 @@ _syscallHandler:
 haltcpu:
 	cli
 	hlt
+	ret
+
+requestSchedule:
+	int 20h
 	ret
 
 section .data
