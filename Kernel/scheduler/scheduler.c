@@ -24,7 +24,7 @@ uint8_t get_current_pid() {
 }
 
 TPCB* get_pcb_by_pid(uint8_t pid) {
-    for(int i = 0; i < MAX_PROCESSES-1; i++){
+    for(int i = 0; i < MAX_PROCESSES; i++){
         if (pcb_array[i]->pid == pid) {
             return pcb_array[i];
         }
@@ -32,10 +32,22 @@ TPCB* get_pcb_by_pid(uint8_t pid) {
     return NULL;
 }
 
-void remove_pcb(TPCB* pcb){
-    dequeue_value(pcb_readies_queue, pcb);
-    free_mm(memory_manager, pcb->rsp);
-    free_mm(memory_manager, pcb->name);
-    free_mm(memory_manager, pcb);
+void put_children_zombie(uint8_t m_pid) {
+    for(int i = 0; i < MAX_PROCESSES; i++) {
+        if (pcb_array[i]->m_pid == m_pid) {
+            pcb_array[i]->state = ZOMBIE;
+        }
+    }
+}
+
+void kill_pcb(TPCB* pcb) {
+    if (pcb->state == READY || pcb->state == RUNNING) {
+        while((dequeue_value(pcb_readies_queue, pcb)) != NULL); // Lo eliminamos de la lista las veces necesarias
+        if (pcb->state == RUNNING) {
+            timer_interrupt(); // TODO llamar a la interrupción del timer
+        }
+    }
+    put_children_zombie(pcb->pid);
+    pcb->state = KILLED;
 }
 

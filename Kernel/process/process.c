@@ -67,7 +67,7 @@ void add_pcb(char* name, uint64_t argc, char *argv[], void* stack_base, uint8_t 
 }
 
 int get_available_pid() {
-    for(int pid = 0; pid < MAX_PROCESSES-1; pid++){
+    for(int pid = 0; pid < MAX_PROCESSES; pid++){
         if (pids[pid] == AVAILABLE_PID){
             return AVAILABLE_PID;
         }
@@ -86,7 +86,7 @@ int kill_process(uint8_t pid) {
         return -1;
     }
     process_pcb->state = KILLED;
-    remove_pcb(process_pcb);
+    kill_pcb(process_pcb);
     pids[pid] = AVAILABLE_PID;
     return EXIT_SUCCESS;
 }

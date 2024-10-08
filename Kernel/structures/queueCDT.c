@@ -71,9 +71,7 @@ void* dequeue_value(TQueueADT queue, void* value) {
 		queue->last = previous;
 	}
 
-	void * dataToReturn = current->value;
-	free_mm(memory_manager, current);
-	return dataToReturn;
+	return current->value;
 }
 
 int is_empty(TQueueADT queue) {
