@@ -5,12 +5,11 @@
 #include <moduleLoader.h>
 #include <videoDriver.h>
 #include <fonts.h>
-#include "include/time.h"
+#include <time.h>
 #include <defs.h>
-#include "interrupts.h"
-#include "time.h"
-#include "memory/memoryManagerADT.h"
-#include "process/process.h"
+#include <interrupts.h>
+#include <memory/memoryManagerADT.h>
+#include <process/process.h>
 
 
 void load_idt(void);
