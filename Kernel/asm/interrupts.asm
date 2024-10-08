@@ -1,4 +1,3 @@
-
 GLOBAL _cli
 GLOBAL _sti
 GLOBAL picMasterMask
@@ -15,22 +14,21 @@ GLOBAL _irq05Handler
 
 GLOBAL _exception0Handler
 GLOBAL _exception6Handler
-
 GLOBAL _syscallHandler
 
 GLOBAL getRegs
+GLOBAL saveRegsInBuffer
 EXTERN getKey
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 EXTERN syscallDispatcher
 EXTERN getStackBase
 
-GLOBAL saveRegsInBuffer
+EXTERN schedule
+
 
 
 SECTION .text
-
-
 
 
 %macro saveRegsInBuffer 0	;; Once you enter here, regs[0]=RIP, regs[1]=RFLAGS, regs[2]=RSP
@@ -173,7 +171,23 @@ picSlaveMask:
 
 ;8254 Timer (Timer Tick)
 _irq00Handler:
-	irqHandlerMaster 0
+	cli
+
+	pushState
+	mov rdi, rsp
+	call schedule
+	
+	cmp rax, 0	; Evitamos caer en NULL
+	je .skip
+	mov rsp, rax ; Cambio de proceso
+	.skip:
+	
+	mov al, 20h ; EOI para el PIC
+	out 20h, al
+	popState
+	sti
+	
+	iretq
 
 ;Keyboard
 _irq01Handler:

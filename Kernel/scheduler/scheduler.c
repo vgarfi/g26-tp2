@@ -15,7 +15,8 @@ uint64_t* schedule(){
         }
     }
     next->state = RUNNING;
-    running_pcb = next;  
+    running_pcb = next;
+    return running_pcb->rsp;
 }
 
 uint8_t get_current_pid() {
@@ -50,4 +51,3 @@ void kill_pcb(TPCB* pcb) {
     put_children_zombie(pcb->pid);
     pcb->state = KILLED;
 }
-
