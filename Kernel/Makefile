@@ -12,7 +12,7 @@ STATICLIBS=
 
 CFLAGS += -I./include -msse2
 
-MEMORY_MANAGER ?= buddy
+MEMORY_MANAGER ?= bitmap
 
 ifeq ($(MEMORY_MANAGER), bitmap)
     SOURCES += ./memory/bitmapMemoryManager.c
