@@ -1,4 +1,4 @@
-/*#include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
@@ -246,4 +246,4 @@ MemoryDiagnostic get_diagnostic_mm(MemoryManagerADT mm) {
         calculate_diagnostic(&diagnostic, mm->root, mm->total_size, mm->block_size);
 
         return diagnostic;
-}*/
+}
