@@ -59,10 +59,10 @@ void * initializeKernelBinary()
 
 int main() {
     
-	memory_manager = initialize_mm(memoryBaseAddress, 1024*1024*1024, 1024*1024);
+	//memory_manager = initialize_mm(memoryBaseAddress, 1024*1024*1024, 1024*1024);
 	
 	load_idt();
-	//initializeTimer();	
+	// initializeTimer();	
 	initializeVideoDriver();
 	initFontManager();
 	//initialize_process_management();
