@@ -3,4 +3,6 @@
 
 int log2(int n);
 
+double pow(double base, int exponente);
+
 #endif

@@ -13,3 +13,13 @@ int log2(int n) {
 
     return log_value;
 }
+
+double pow(double base, int exponente) {
+    double resultado = 1.0;
+
+    for (int i = 0; i < exponente; i++) {
+        resultado *= base;
+    }
+
+    return resultado;
+}
