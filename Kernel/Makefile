@@ -43,10 +43,10 @@ $(KERNEL): $(LOADEROBJECT) $(OBJECTS) $(STATICLIBS) $(OBJECTS_ASM)
 	$(LD) $(LDFLAGS) -T kernel.ld --oformat=elf64-x86-64 -o kernel.elf $(LOADEROBJECT) $(OBJECTS) $(OBJECTS_ASM) $(STATICLIBS)
 
 # Cambia la regla para crear archivos .o y colócalos en OBJDIR
-$(OBJDIR)/%.o: %.c
+%.o: %.c
 	$(GCC) $(GCCFLAGS) $(CFLAGS) -c $< -o $@
 
-$(OBJDIR)/%.o: %.asm
+%.o: %.asm
 	$(ASM) $(ASMFLAGS) $< -o $@
 
 $(LOADEROBJECT):
@@ -60,6 +60,6 @@ move_objects: $(OBJDIR)
 	mv *.o $(OBJDIR) || true
 	mv asm/*.o $(OBJDIR) || true
 clean:
-	rm -rf $(OBJDIR)/*.o $(OBJDIR)/*.bin $(OBJDIR)/*.elf # Elimina todos los .o y otros binarios en OBJDIR
-
+	rm -rf $(OBJDIR) *.bin
+	
 .PHONY: all clean

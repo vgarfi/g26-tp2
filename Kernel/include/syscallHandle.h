@@ -39,7 +39,7 @@ int read(uint64_t fd, char * buf, uint64_t count);
 int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor);
 
 uint8_t getPid();
-int exit();
+int my_exit();
 
 int cleanKbBuffer(void);
 

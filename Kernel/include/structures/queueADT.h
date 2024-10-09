@@ -1,3 +1,6 @@
+#ifndef QUEUE_ADT_H
+#define QUEUE_ADT_H
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -14,3 +17,5 @@ void* dequeue_value(TQueueADT queue, void* value);
 void* peek(TQueueADT queue);
 
 int is_empty(TQueueADT queue);
+
+#endif

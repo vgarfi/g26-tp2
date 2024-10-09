@@ -1,6 +1,9 @@
 #include <kernel.h>
 #include <scheduler/scheduler.h>
 
+TQueueADT pcb_readies_queue;
+TPCB* running_pcb;
+
 uint64_t* schedule(){
     TPCB* next = (TPCB*) dequeue(pcb_readies_queue);
     if (next == NULL) {
@@ -45,7 +48,7 @@ void kill_pcb(TPCB* pcb) {
     if (pcb->state == READY || pcb->state == RUNNING) {
         while((dequeue_value(pcb_readies_queue, pcb)) != NULL); // Lo eliminamos de la lista las veces necesarias
         if (pcb->state == RUNNING) {
-            timer_interrupt(); // TODO llamar a la interrupción del timer
+            //timer_interrupt(); // TODO llamar a la interrupción del timer
         }
     }
     put_children_zombie(pcb->pid);

@@ -1,5 +1,5 @@
 #include "../include/structures/queueADT.h"
-#include "../kernel.c"                      // TODO prguntar la correctitud de esto
+#include <kernel.h>                      // TODO prguntar la correctitud de esto
 
 
 typedef struct TQueueNode {

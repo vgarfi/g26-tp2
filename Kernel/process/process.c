@@ -7,6 +7,7 @@
 uint8_t pids[MAX_PROCESSES] = {AVAILABLE_PID};
 
 char* idle_args[] = {IDLE_PROCESS, 0};
+TPCB* pcb_array[MAX_PROCESSES];
 
 void initialize_process_management(void) { // TODO esta función debería crear la shell
     // TODO: no deberia usar create_process sino mas bien un create_process_with_pid o algo asi porque el pid del idle deberia ser 0 siempre

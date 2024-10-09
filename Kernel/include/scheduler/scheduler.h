@@ -28,11 +28,11 @@ typedef struct TPCB {
     uint8_t priority;
 } TPCB;
 
-TPCB* pcb_array[MAX_PROCESSES];
+extern TPCB* pcb_array[MAX_PROCESSES];
 
-TQueueADT pcb_readies_queue;
+extern TQueueADT pcb_readies_queue;
 
-TPCB* running_pcb;
+extern TPCB* running_pcb;
 
 uint64_t* schedule();
 uint8_t get_current_pid();
