@@ -15,16 +15,6 @@
 #define AVAILABLE_PID       0
 #define NOT_AVAILABLE_PID   1
 
-#define SHELL_PROCESS       "shell"
-#define SHELL_PRIORITY      1
-
-#define IDLE_PROCESS       "idle"
-#define IDLE_PRIORITY       1
-
-void initialize_process_management(void);
-
-int64_t idle_process();
-
 int get_available_pid(void);
 void add_pcb(char* name, uint64_t argc, char *argv[], void* stack_base, uint8_t pid, uint8_t priority);
 int create_process (char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**));

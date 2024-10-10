@@ -1,5 +1,5 @@
 #include "../include/structures/queueADT.h"
-#include <kernel.h>                      // TODO prguntar la correctitud de esto
+#include <kernelManagement.h>
 
 extern MemoryManagerADT memory_manager;
 

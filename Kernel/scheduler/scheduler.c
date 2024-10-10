@@ -1,4 +1,4 @@
-#include <kernel.h>
+#include <kernelManagement.h>
 #include <videoDriver.h>
 #include <scheduler/scheduler.h>
 
@@ -9,9 +9,8 @@ int is_initialized(void){
     return pcb_array[0] != NULL;
 }
 
-uint64_t* schedule(){
+uint64_t* schedule(uint64_t* rsp) {
     if (!is_initialized()) return 0;
-
     TPCB* next = (TPCB*) dequeue(pcb_readies_queue);
     if (next == NULL) {
         return pcb_array[0]->rsp;
@@ -19,11 +18,12 @@ uint64_t* schedule(){
 
     if (running_pcb->state == RUNNING){
         running_pcb->state = READY;
-        
+        running_pcb->rsp = rsp;
         for (uint8_t i = running_pcb->priority; i > 0; i--) {
             enqueue(pcb_readies_queue, running_pcb); // cuando en la syscall de kill se mata a un proceso hay qye borrarlo de la queue priority veces
         }
     }
+    
     next->state = RUNNING;
     running_pcb = next;
     vdPrint("\nY la que schedulee", 0x00FFFFFF);

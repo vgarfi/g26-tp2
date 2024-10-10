@@ -1,29 +1,15 @@
 #include <scheduler/scheduler.h>
+#include <kernelManagement.h>
 #include <process/process.h>
-#include <string.h>
 #include <videoDriver.h>
 #include <interrupts.h>
-#include <kernel.h>
+#include <string.h>
 
 extern MemoryManagerADT memory_manager;
+
 uint8_t pids[MAX_PROCESSES] = {AVAILABLE_PID};
 
-char* idle_args[] = {IDLE_PROCESS, 0};
-
 TPCB* pcb_array[MAX_PROCESSES];
-
-void initialize_process_management(void) { // TODO esta función debería crear la shell
-    // TODO: no deberia usar create_process sino mas bien un create_process_with_pid o algo asi porque el pid del idle deberia ser 0 siempre
-	vdPrint("\nDesde la creación del IDLE: ", 0x00FFFFFF);
-    int idle_pid = create_process(IDLE_PROCESS, 0, idle_args, IDLE_PRIORITY, &idle_process);
-}
-
-int64_t idle_process(){
-    while (1) {
-		_hlt();
-        vdPrint("\nIDLE", 0x00FFFFFF);
-	}
-}
 
 int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**)) {
     void* ptr = malloc_mm(memory_manager, PROCESS_SIZE);
