@@ -10,7 +10,6 @@ char* idle_args[] = {IDLE_PROCESS, 0};
 
 MemoryManagerADT memory_manager;
 
-
 typedef int (*EntryPoint)();
 
 static void * const sampleCodeModuleAddress = (void*)0x400000;
@@ -21,13 +20,15 @@ static void * const memoryBaseAddress = (void*)0x600000;
 void initialize_management(void){
 	memory_manager = initialize_mm(memoryBaseAddress, 1024*1024*1024, 1024*1024);
     create_process(IDLE_PROCESS, 0, idle_args, IDLE_PRIORITY, &idle_process);
-	create_process(SHELL_PROCESS, 0, shell_args, SHELL_PRIORITY, (EntryPoint)sampleCodeModuleAddress);
+    vdPrint("\nPasado la creación del IDLE", 0x00FFFFFF);
+	//create_process(SHELL_PROCESS, 0, shell_args, SHELL_PRIORITY, (EntryPoint)sampleCodeModuleAddress);
+    //vdPrint("\nPasado la creación de SHELL", 0x00FFFFFF);
 }
 
 int64_t idle_process(int argc, char* argv){
     while (1) {
-        _hlt();
         vdPrint("\nIDLE", 0x00FFFFFF);
+        _hlt();
     }
 }
 

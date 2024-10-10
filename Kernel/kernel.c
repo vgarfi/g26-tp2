@@ -55,12 +55,7 @@ int main() {
 	// initializeTimer();
 	initializeVideoDriver();
 	initFontManager();
-	
-	vdPrint("Hoooooooooooola", 0x00FFFFFF);
-	vdPrint("\npase el inicio", 0x00FFFFFF);
-	vdPrint("\npase el process managmente", 0x00FFFFFF);
 	initialize_management();
-    vdPrint("\npase la creación de shell", 0x00FFFFFF);
 	requestSchedule();
 	vdPrint("\npase el request schedule", 0x00FFFFFF);
 	return 0;
