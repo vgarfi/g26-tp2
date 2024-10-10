@@ -190,6 +190,7 @@ _irq00Handler:
 	sti
 	
 	iretq
+	; irqHandlerMaster 0
 
 ;Keyboard
 _irq01Handler:

@@ -1,6 +1,7 @@
 #include "../include/structures/queueADT.h"
 #include <kernel.h>                      // TODO prguntar la correctitud de esto
 
+extern MemoryManagerADT memory_manager;
 
 typedef struct TQueueNode {
     void* value;            

@@ -24,6 +24,7 @@ typedef struct TPCB {
     uint8_t m_pid;      // Mother PID
     char* name;
     TState state;
+    uint64_t* stack_base;
     uint64_t* rsp;
     uint8_t priority;
 } TPCB;
@@ -34,6 +35,7 @@ extern TQueueADT pcb_readies_queue;
 
 extern TPCB* running_pcb;
 
+int is_initialized();
 uint64_t* schedule();
 uint8_t get_current_pid();
 TPCB* get_pcb_by_pid(uint8_t pid);

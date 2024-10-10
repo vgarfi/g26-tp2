@@ -1,10 +1,17 @@
 #include <kernel.h>
+#include <videoDriver.h>
 #include <scheduler/scheduler.h>
 
 TQueueADT pcb_readies_queue;
 TPCB* running_pcb;
 
+int is_initialized(void){
+    return pcb_array[0] != NULL;
+}
+
 uint64_t* schedule(){
+    if (!is_initialized()) return 0;
+
     TPCB* next = (TPCB*) dequeue(pcb_readies_queue);
     if (next == NULL) {
         return pcb_array[0]->rsp;
@@ -19,6 +26,7 @@ uint64_t* schedule(){
     }
     next->state = RUNNING;
     running_pcb = next;
+    vdPrint("\nY la que schedulee", 0x00FFFFFF);
     return running_pcb->rsp;
 }
 
