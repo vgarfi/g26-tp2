@@ -1,7 +1,6 @@
 #include <scheduler/scheduler.h>
 #include <kernelManagement.h>
 #include <process/process.h>
-#include <videoDriver.h>
 #include <interrupts.h>
 #include <string.h>
 
@@ -14,13 +13,11 @@ TPCB* pcb_array[MAX_PROCESSES];
 int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**)) {
     void* ptr = malloc_mm(memory_manager, PROCESS_SIZE);
     if (ptr == NULL) {
-        vdPrint("\nInvalid PID a la hora de crear", 0x00FFFFFF);
         return -1;
     }
 
     int pid = get_available_pid();
     if (pid == -1) {
-        vdPrint("\nInvalid PID a la hora de buscar", 0x00FFFFFF);
         return -1;
     }
 
@@ -39,7 +36,6 @@ void add_pcb(char* name, uint64_t argc, char *argv[], uint64_t* stack_limit, uin
 
     TPCB* new_pcb = (TPCB*) malloc_mm(memory_manager, sizeof(TPCB));
     if (new_pcb == NULL) {
-        vdPrint("\nNew Pcb dio NULL", 0x00FFFFFF);
         free_mm(memory_manager, new_pcb);
         return;
     }
@@ -47,8 +43,7 @@ void add_pcb(char* name, uint64_t argc, char *argv[], uint64_t* stack_limit, uin
 	new_pcb->name = (char *) malloc_mm(memory_manager, strlen(name) + 1); // strlen esta en string.h
 	if (new_pcb->name == NULL) {
 		free_mm(memory_manager, new_pcb);
-        vdPrint("\nNew pcb name dio NULL", 0x00FFFFFF);
-		return;
+    	return;
 	}
 
 	strcpy(new_pcb->name, name);
@@ -59,17 +54,9 @@ void add_pcb(char* name, uint64_t argc, char *argv[], uint64_t* stack_limit, uin
     new_pcb->stack_limit = stack_limit;
 
     char buffer[50];
-    // new_pcb->rsp = stack_base - sizeof(TStackFrame) - sizeof(TCodeFrame);
     new_pcb->rsp = stack_base - sizeof(TStackFrame)/sizeof(uint64_t) + 1;
     
     create_initial_stack((TStackFrame*) new_pcb->rsp, stack_base, argc, argv, code);
-
-    itoa(new_pcb->stack_base, buffer, 10);
-    vdPrint("\nPCB->stack_base: ", 0x00FFFFFF);
-    vdPrint(buffer, 0x00FFFFFF);
-    itoa(new_pcb->rsp, buffer, 10);
-    vdPrint("\nPCB->rsp: ", 0x00FFFFFF);
-    vdPrint(buffer, 0x00FFFFFF);
 
     new_pcb->state = READY;
     new_pcb->priority = priority;

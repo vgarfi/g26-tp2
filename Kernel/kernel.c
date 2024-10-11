@@ -23,8 +23,8 @@ extern uint8_t endOfKernel;
 
 static const uint64_t PageSize = 0x1000;
 
-extern void * const sampleCodeModuleAddress = (void*)0x400000;
-extern void * const sampleDataModuleAddress = (void*)0x500000;
+extern void * sampleCodeModuleAddress;
+extern void * sampleDataModuleAddress;
 
 void clearBSS(void * bssAddress, uint64_t bssSize) {
 	memset(bssAddress, 0, bssSize);

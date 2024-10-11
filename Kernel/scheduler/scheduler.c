@@ -1,5 +1,4 @@
 #include <kernelManagement.h>
-#include <videoDriver.h>
 #include <scheduler/scheduler.h>
 
 extern TPCB* pcb_array[MAX_PROCESSES];
@@ -16,36 +15,26 @@ int is_inside_process_boundaries(uint64_t* rsp) {
 }
 
 uint64_t* schedule(uint64_t* rsp) {
-    if(pcb_array[0] == NULL) return rsp;
-    return pcb_array[0]->rsp;
-    //if (!is_initialized() || !is_inside_process_boundaries(rsp)) return rsp;
-    //running_pcb->rsp = rsp;
-    //return rsp;
+    // if(pcb_array[0] == NULL) return rsp;
+    // return pcb_array[0]->rsp;
+    if (!is_initialized() || !is_inside_process_boundaries(rsp)) return rsp;
+    running_pcb->rsp = rsp;
 
-    // char buffer[50];
-    // itoa(rsp, buffer, 10);
-    // vdPrint("\nSCHEDULE->RSP: ", 0x00FFFFFF);
-    // vdPrint(buffer, 0x00FFFFFF);
+    TPCB* next = (TPCB*) dequeue(pcb_readies_queue);
+    if (next == NULL) {
+        return pcb_array[0]->rsp;
+    }
 
-    // TPCB* next = (TPCB*) dequeue(pcb_readies_queue);
-    // if (next == NULL) {
-    //     return pcb_array[0]->rsp;
-    // }
-
-    // if (running_pcb->state == RUNNING) {
-    //     running_pcb->state = READY;
-    //     for (uint8_t i = running_pcb->priority; i > 0; i--) {
-    //         enqueue(pcb_readies_queue, running_pcb); // cuando en la syscall de kill se mata a un proceso hay qye borrarlo de la queue priority veces
-    //     }
-    // }
+    if (running_pcb->state == RUNNING) {
+        running_pcb->state = READY;
+        for (uint8_t i = running_pcb->priority; i > 0; i--) {
+            enqueue(pcb_readies_queue, running_pcb); // cuando en la syscall de kill se mata a un proceso hay qye borrarlo de la queue priority veces
+        }
+    }
     
-    // next->state = RUNNING;
-    // running_pcb = next;
-    // vdPrint("\nRUNNING_PCB pasa a ser: ", 0x00FFFFFF);
-    // itoa(running_pcb->rsp, buffer, 10);
-    // vdPrint(buffer, 0x00FFFFFF);
-
-    // return running_pcb->rsp;
+    next->state = RUNNING;
+    running_pcb = next;
+    return running_pcb->rsp;
 }
 
 uint8_t get_current_pid() {
