@@ -75,6 +75,20 @@ void* dequeue_value(TQueueADT queue, void* value) {
 	return current->value;
 }
 
+int count_occurrences(TQueueADT queue, void* value) {
+    int count = 0;
+    TQueueNode* current = queue->first;
+
+    while (current != NULL) {
+        if (current->value == value) {
+            count++;
+        }
+        current = current->next;
+    }
+
+    return count;
+}
+
 int is_empty(TQueueADT queue) {
     return queue->first == NULL;
 }

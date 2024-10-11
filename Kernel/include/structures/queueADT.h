@@ -16,6 +16,8 @@ void* dequeue_value(TQueueADT queue, void* value);
 
 void* peek(TQueueADT queue);
 
+int count_occurrences(TQueueADT queue, void* value);
+
 int is_empty(TQueueADT queue);
 
 #endif

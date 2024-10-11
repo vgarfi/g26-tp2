@@ -8,6 +8,7 @@ extern MemoryManagerADT memory_manager;
 
 uint8_t pids[MAX_PROCESSES] = {AVAILABLE_PID};
 
+extern TQueueADT pcb_readies_queue;
 TPCB* pcb_array[MAX_PROCESSES];
 
 int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**)) {
@@ -53,7 +54,7 @@ void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* s
     new_pcb->stack_limit = stack_limit;
 
     char buffer[50];
-    new_pcb->rsp = stack_base - sizeof(TStackFrame);
+    new_pcb->rsp = stack_base - sizeof(TStackFrame) - 1;
     
     create_initial_stack((TStackFrame*) new_pcb->rsp, stack_base, argc, argv, code);
 
@@ -61,7 +62,9 @@ void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* s
     new_pcb->priority = priority;
 
     pcb_array[pid] = new_pcb;
-    enqueue(pcb_readies_queue, new_pcb);
+    //for (uint8_t i = running_pcb->priority; i > 0; i--) {
+        enqueue(pcb_readies_queue, new_pcb);
+    //}
     return;
 }
 

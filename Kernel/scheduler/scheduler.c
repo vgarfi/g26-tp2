@@ -1,7 +1,10 @@
 #include <kernelManagement.h>
 #include <scheduler/scheduler.h>
+#include <videoDriver.h>
 
 extern TPCB* pcb_array[MAX_PROCESSES];
+
+void failure_scheduling(void);
 
 TQueueADT pcb_readies_queue;
 TPCB* running_pcb;
@@ -15,17 +18,16 @@ int is_inside_process_boundaries(uint64_t* rsp) {
 }
 
 uint64_t* schedule(uint64_t* rsp) {
-    // if(pcb_array[0] == NULL) return rsp;
-    // return pcb_array[0]->rsp;
     if (!is_initialized() || !is_inside_process_boundaries(rsp)) return rsp;
-    running_pcb->rsp = rsp;
+    running_pcb->rsp = rsp; // Lo dejamos con el RSP donde me lo haya dejado
 
     TPCB* next = (TPCB*) dequeue(pcb_readies_queue);
-    if (next == NULL) {
-        return pcb_array[0]->rsp;
+    if (next == NULL ) {
+        failure_scheduling();
+        return pcb_array[0]->rsp; // ! Cambiar el 0 por 1 hace que parezca que la shell anda bien, pero el que dejó de funcar será el IDLE
     }
 
-    if (running_pcb->state == RUNNING) {
+    if (running_pcb->state == RUNNING && count_occurrences(pcb_readies_queue, running_pcb) == 0) {
         running_pcb->state = READY;
         for (uint8_t i = running_pcb->priority; i > 0; i--) {
             enqueue(pcb_readies_queue, running_pcb); // cuando en la syscall de kill se mata a un proceso hay qye borrarlo de la queue priority veces
@@ -35,6 +37,11 @@ uint64_t* schedule(uint64_t* rsp) {
     next->state = RUNNING;
     running_pcb = next;
     return running_pcb->rsp;
+}
+
+
+void failure_scheduling(void){
+
 }
 
 uint8_t get_current_pid() {

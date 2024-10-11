@@ -1,7 +1,6 @@
 #include <memory/memoryManagerADT.h>
 #include <kernelManagement.h>
 #include <process/process.h>
-#include <shell_caller.h>
 #include <videoDriver.h>
 #include <interrupts.h>
 #include <string.h>
@@ -22,6 +21,7 @@ void * memoryBaseAddress = (void*)0x600000;
 void initialize_management(void){
 	memory_manager = initialize_mm(memoryBaseAddress, 1024*1024, 1024*8);
     create_process(IDLE_PROCESS, 0, idle_args, IDLE_PRIORITY, idle_process);
+    // create_process(SHELL_PROCESS, 0, shell_args, SHELL_PRIORITY, sampleCodeModuleAddress);
 	//create_process(PUPU_PROCESS, 0, pupu_args, PUPU_PRIORITY, pupu_process);
 	//create_process(SHELL_PROCESS, 0, shell_args, SHELL_PRIORITY, start_shell);
 	//create_process(SHELL_PROCESS, 0, shell_args, SHELL_PRIORITY, sampleCodeModuleAddress);
@@ -33,8 +33,8 @@ int64_t idle_process(int argc, char* argv){
     char buffer[10];
     while (1) {
         vdPrint("\nDentro del IDLE ", 0x00FFFFFF);
-//        itoa(count++, buffer, 10);
-//        vdPrint(buffer, 0x00FFFFFF);
+        itoa(count++, buffer, 10);
+        vdPrint(buffer, 0x00FFFFFF);
         _hlt();
     }
 }

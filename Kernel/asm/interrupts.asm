@@ -95,7 +95,7 @@ SECTION .text
 	pop rax
 %endmacro
 
-%macro irqHandlerMaster 1 ; TODO handler del scheduling
+%macro irqHandlerMaster 1
 	pushState
 
 	mov rdi, %1 ; pasaje de parametro
@@ -240,7 +240,7 @@ getRegs:
 ; _syscallHandler receives parameters in the next order: rax rdi rsi rdx r10 r8 r9
 ; syscallDispatcher receives parameters via regs this way: rdi rsi rdx rcx r8 r9
 ; rax is the last parameters -> r9 = rax
-; r10 is not a parameters -> rcx = r10
+; r10 is not a parameter -> rcx = r10
 _syscallHandler:
 	; --- ARQUI ---
 	saveIntRegs
