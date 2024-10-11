@@ -11,7 +11,7 @@ uint8_t pids[MAX_PROCESSES] = {AVAILABLE_PID};
 TPCB* pcb_array[MAX_PROCESSES];
 
 int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**)) {
-    void* ptr = malloc_mm(memory_manager, PROCESS_SIZE);
+    char* ptr = malloc_mm(memory_manager, PROCESS_SIZE);
     if (ptr == NULL) {
         return -1;
     }
@@ -21,7 +21,7 @@ int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, in
         return -1;
     }
 
-    void* stack_base = ptr + STACK_SIZE/sizeof(uint64_t) - 1;
+    void* stack_base = ptr + STACK_SIZE;
     // create_initial_stack((uint64_t *)stack_base, argc, argv, code, &wrapper);
     add_pcb(name, argc, argv, ptr, stack_base, (uint8_t) pid, priority, code);
     
@@ -29,14 +29,13 @@ int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, in
     return pid;
 }
 
-void add_pcb(char* name, uint64_t argc, char *argv[], uint64_t* stack_limit, uint64_t* stack_base, uint8_t pid, uint8_t priority, int64_t (*code)(int, char**)) {
+void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* stack_base, uint8_t pid, uint8_t priority, int64_t (*code)(int, char**)) {
     if (name == NULL || argc < 0 || argv == NULL || stack_base == NULL) {
         return;
     }
 
     TPCB* new_pcb = (TPCB*) malloc_mm(memory_manager, sizeof(TPCB));
     if (new_pcb == NULL) {
-        free_mm(memory_manager, new_pcb);
         return;
     }
     
@@ -54,7 +53,7 @@ void add_pcb(char* name, uint64_t argc, char *argv[], uint64_t* stack_limit, uin
     new_pcb->stack_limit = stack_limit;
 
     char buffer[50];
-    new_pcb->rsp = stack_base - sizeof(TStackFrame)/sizeof(uint64_t) + 1;
+    new_pcb->rsp = stack_base - sizeof(TStackFrame);
     
     create_initial_stack((TStackFrame*) new_pcb->rsp, stack_base, argc, argv, code);
 
@@ -66,7 +65,7 @@ void add_pcb(char* name, uint64_t argc, char *argv[], uint64_t* stack_limit, uin
     return;
 }
 
-void create_initial_stack(TStackFrame* stack_initial_data, uint64_t* stack_base, uint64_t argc, uint64_t argv, int64_t (*code)(int, char**)) {
+void create_initial_stack(TStackFrame* stack_initial_data, char* stack_base, uint64_t argc, uint64_t argv, int64_t (*code)(int, char**)) {
     // Esto simula los pushes para abajo
     stack_initial_data->rax = 0;
     stack_initial_data->rbx = 0;
@@ -85,7 +84,7 @@ void create_initial_stack(TStackFrame* stack_initial_data, uint64_t* stack_base,
     stack_initial_data->r15 = 0;
 
     // Propio del IRETQ
-    stack_initial_data->rsp = stack_base + 1;
+    stack_initial_data->rsp = (uint64_t*)stack_base;
     stack_initial_data->rip = code; // TODO y la wrapper?
     stack_initial_data->cs = 0x08;
     stack_initial_data->rflags = 0x202;
@@ -96,7 +95,7 @@ void create_initial_stack(TStackFrame* stack_initial_data, uint64_t* stack_base,
 int get_available_pid() {
     for(int pid = 0; pid < MAX_PROCESSES; pid++){
         if (pids[pid] == AVAILABLE_PID){
-            return AVAILABLE_PID;
+            return pid;
         }
     }
     return -1;
