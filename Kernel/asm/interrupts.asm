@@ -179,12 +179,7 @@ _irq00Handler:
 	mov rdi, rsp
 	call schedule
 	
-	cmp rax, 0	; Evitamos caer en NULL
-	je .skip
 	mov rsp, rax ; Cambio de proceso
-	.skip:
-
-
 	
 	mov al, 20h ; EOI para el PIC
 	out 20h, al

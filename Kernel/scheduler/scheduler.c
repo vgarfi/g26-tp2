@@ -2,6 +2,8 @@
 #include <videoDriver.h>
 #include <scheduler/scheduler.h>
 
+extern TPCB* pcb_array[MAX_PROCESSES];
+
 TQueueADT pcb_readies_queue;
 TPCB* running_pcb;
 
@@ -9,34 +11,41 @@ int is_initialized(void){
     return pcb_array[0] != NULL;
 }
 
+int is_inside_process_boundaries(uint64_t* rsp) {
+    return (rsp >= running_pcb->stack_limit && rsp <= running_pcb->stack_base);
+}
+
 uint64_t* schedule(uint64_t* rsp) {
-    if (!is_initialized()) return 0;
-    running_pcb->rsp = rsp;
-    char buffer[50];
-    itoa(rsp, buffer, 10);
+    if(pcb_array[0] == NULL) return rsp;
+    return pcb_array[0]->rsp;
+    //if (!is_initialized() || !is_inside_process_boundaries(rsp)) return rsp;
+    //running_pcb->rsp = rsp;
+    //return rsp;
+
+    // char buffer[50];
+    // itoa(rsp, buffer, 10);
+    // vdPrint("\nSCHEDULE->RSP: ", 0x00FFFFFF);
+    // vdPrint(buffer, 0x00FFFFFF);
+
+    // TPCB* next = (TPCB*) dequeue(pcb_readies_queue);
+    // if (next == NULL) {
+    //     return pcb_array[0]->rsp;
+    // }
+
+    // if (running_pcb->state == RUNNING) {
+    //     running_pcb->state = READY;
+    //     for (uint8_t i = running_pcb->priority; i > 0; i--) {
+    //         enqueue(pcb_readies_queue, running_pcb); // cuando en la syscall de kill se mata a un proceso hay qye borrarlo de la queue priority veces
+    //     }
+    // }
     
-    vdPrint("\nEl rsp que vino es ", 0x00FFFFFF);
-    vdPrint(buffer, 0x00FFFFFF);
+    // next->state = RUNNING;
+    // running_pcb = next;
+    // vdPrint("\nRUNNING_PCB pasa a ser: ", 0x00FFFFFF);
+    // itoa(running_pcb->rsp, buffer, 10);
+    // vdPrint(buffer, 0x00FFFFFF);
 
-    TPCB* next = (TPCB*) dequeue(pcb_readies_queue);
-    if (next == NULL) {
-        return pcb_array[0]->rsp;
-    }
-
-    if (running_pcb->state == RUNNING){
-        running_pcb->state = READY;
-        for (uint8_t i = running_pcb->priority; i > 0; i--) {
-            enqueue(pcb_readies_queue, running_pcb); // cuando en la syscall de kill se mata a un proceso hay qye borrarlo de la queue priority veces
-        }
-    }
-    
-    next->state = RUNNING;
-    running_pcb = next;
-    vdPrint("\nEl rsp pasa a ser ", 0x00FFFFFF);
-    itoa(running_pcb->rsp, buffer, 10);
-    vdPrint(buffer, 0x00FFFFFF);
-
-    return running_pcb->rsp;
+    // return running_pcb->rsp;
 }
 
 uint8_t get_current_pid() {

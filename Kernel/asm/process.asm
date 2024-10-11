@@ -1,8 +1,8 @@
-GLOBAL create_initial_stack
+GLOBAL create_initial_stack_asm
 
-create_initial_stack:
+create_initial_stack_asm:
 
-create_initial_stack: 
+create_initial_stack_asm: 
 	mov r8, rsp
 	mov rsp, rdi
 	push 0x0

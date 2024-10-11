@@ -19,7 +19,7 @@ int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, in
     }
 
     int pid = get_available_pid();
-    if (pid == -1){
+    if (pid == -1) {
         vdPrint("\nInvalid PID a la hora de buscar", 0x00FFFFFF);
         return -1;
     }
@@ -29,11 +29,10 @@ int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, in
     add_pcb(name, argc, argv, ptr, stack_base, (uint8_t) pid, priority, code);
     
     pids[pid] = NOT_AVAILABLE_PID;
-
     return pid;
 }
 
-void add_pcb(char* name, uint64_t argc, char *argv[], uint64_t* stack_limit, uint64_t* stack_base, uint8_t pid, uint8_t priority, uint64_t* code) {
+void add_pcb(char* name, uint64_t argc, char *argv[], uint64_t* stack_limit, uint64_t* stack_base, uint8_t pid, uint8_t priority, int64_t (*code)(int, char**)) {
     if (name == NULL || argc < 0 || argv == NULL || stack_base == NULL) {
         return;
     }
@@ -61,12 +60,27 @@ void add_pcb(char* name, uint64_t argc, char *argv[], uint64_t* stack_limit, uin
 
     char buffer[50];
     // new_pcb->rsp = stack_base - sizeof(TStackFrame) - sizeof(TCodeFrame);
-    new_pcb->rsp = stack_base - sizeof(TStackFrame)/sizeof(uint64_t);
+    new_pcb->rsp = stack_base - sizeof(TStackFrame)/sizeof(uint64_t) + 1;
+    
+    create_initial_stack((TStackFrame*) new_pcb->rsp, stack_base, argc, argv, code);
 
-    TStackFrame* stack_initial_data = (TStackFrame*) new_pcb->rsp;
+    itoa(new_pcb->stack_base, buffer, 10);
+    vdPrint("\nPCB->stack_base: ", 0x00FFFFFF);
+    vdPrint(buffer, 0x00FFFFFF);
+    itoa(new_pcb->rsp, buffer, 10);
+    vdPrint("\nPCB->rsp: ", 0x00FFFFFF);
+    vdPrint(buffer, 0x00FFFFFF);
 
+    new_pcb->state = READY;
+    new_pcb->priority = priority;
+
+    pcb_array[pid] = new_pcb;
+    enqueue(pcb_readies_queue, new_pcb);
+    return;
+}
+
+void create_initial_stack(TStackFrame* stack_initial_data, uint64_t* stack_base, uint64_t argc, uint64_t argv, int64_t (*code)(int, char**)) {
     // Esto simula los pushes para abajo
-
     stack_initial_data->rax = 0;
     stack_initial_data->rbx = 0;
     stack_initial_data->rcx = 0;
@@ -90,22 +104,6 @@ void add_pcb(char* name, uint64_t argc, char *argv[], uint64_t* stack_limit, uin
     stack_initial_data->rflags = 0x202;
     stack_initial_data->ss = 0;
     stack_initial_data->align = 0;
-
-    itoa(new_pcb->stack_base, buffer, 10);
-    vdPrint("\nEl stack base es ", 0x00FFFFFF);
-    vdPrint(buffer, 0x00FFFFFF);
-    itoa(new_pcb->rsp, buffer, 10);
-    vdPrint("\nEl valor que debería agarrar es ", 0x00FFFFFF);
-    vdPrint(buffer, 0x00FFFFFF);
-
-    new_pcb->state = READY;
-    new_pcb->priority = priority;
-
-    pcb_array[pid] = new_pcb;
-    
-    enqueue(pcb_readies_queue, new_pcb);
-    vdPrint("\nEl proceso fue encolado correctamente", 0x00FFFFFF);
-    return;
 }
 
 int get_available_pid() {

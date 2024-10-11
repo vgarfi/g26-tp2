@@ -56,5 +56,7 @@ int main() {
 	initializeVideoDriver();
 	initFontManager();
 	initialize_management();
+	requestSchedule();
+	vdPrint("\nKERNEL EXIT", 0x00FFFFFF);
 	return 0;
 }
