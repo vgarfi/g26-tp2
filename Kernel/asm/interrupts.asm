@@ -243,9 +243,9 @@ getRegs:
 ; r10 is not a parameters -> rcx = r10
 _syscallHandler:
 	; --- ARQUI ---
-	;saveIntRegs
-	;mov rcx, r10
-	;mov r9, rax
+	saveIntRegs
+	mov rcx, r10
+	mov r9, rax
 	; --- ARQUI ---
 	pushStateNoRAX
 	call syscallDispatcher
