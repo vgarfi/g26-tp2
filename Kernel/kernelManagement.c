@@ -67,7 +67,4 @@ void initial_printing(){
     vdPrint(buffer, 0x00FFFFFF);
     vdPrint("\n", 0x00FFFFFF);
 	vdPrint("-----------------------------------", 0x00FFFFFF);
-
-
-	
 }

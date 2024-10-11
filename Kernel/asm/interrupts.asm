@@ -183,6 +183,8 @@ _irq00Handler:
 	je .skip
 	mov rsp, rax ; Cambio de proceso
 	.skip:
+
+
 	
 	mov al, 20h ; EOI para el PIC
 	out 20h, al
@@ -190,7 +192,7 @@ _irq00Handler:
 	sti
 	
 	iretq
-	; irqHandlerMaster 0
+	;irqHandlerMaster 0
 
 ;Keyboard
 _irq01Handler:

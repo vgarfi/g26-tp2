@@ -56,7 +56,5 @@ int main() {
 	initializeVideoDriver();
 	initFontManager();
 	initialize_management();
-	requestSchedule();
-	vdPrint("\npase el request schedule", 0x00FFFFFF);
 	return 0;
 }

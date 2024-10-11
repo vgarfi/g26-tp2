@@ -11,6 +11,13 @@ int is_initialized(void){
 
 uint64_t* schedule(uint64_t* rsp) {
     if (!is_initialized()) return 0;
+    running_pcb->rsp = rsp;
+    char buffer[50];
+    itoa(rsp, buffer, 10);
+    
+    vdPrint("\nEl rsp que vino es ", 0x00FFFFFF);
+    vdPrint(buffer, 0x00FFFFFF);
+
     TPCB* next = (TPCB*) dequeue(pcb_readies_queue);
     if (next == NULL) {
         return pcb_array[0]->rsp;
@@ -18,7 +25,6 @@ uint64_t* schedule(uint64_t* rsp) {
 
     if (running_pcb->state == RUNNING){
         running_pcb->state = READY;
-        running_pcb->rsp = rsp;
         for (uint8_t i = running_pcb->priority; i > 0; i--) {
             enqueue(pcb_readies_queue, running_pcb); // cuando en la syscall de kill se mata a un proceso hay qye borrarlo de la queue priority veces
         }
@@ -26,7 +32,10 @@ uint64_t* schedule(uint64_t* rsp) {
     
     next->state = RUNNING;
     running_pcb = next;
-    vdPrint("\nY la que schedulee", 0x00FFFFFF);
+    vdPrint("\nEl rsp pasa a ser ", 0x00FFFFFF);
+    itoa(running_pcb->rsp, buffer, 10);
+    vdPrint(buffer, 0x00FFFFFF);
+
     return running_pcb->rsp;
 }
 

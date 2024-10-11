@@ -24,6 +24,7 @@ typedef struct TPCB {
     uint8_t m_pid;      // Mother PID
     char* name;
     TState state;
+    uint64_t* stack_limit;
     uint64_t* stack_base;
     uint64_t* rsp;
     uint8_t priority;
