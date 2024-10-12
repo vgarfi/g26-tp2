@@ -89,7 +89,7 @@ void create_initial_stack(TStackFrame* stack_initial_data, char* stack_base, uin
 
     // Propio del IRETQ
     stack_initial_data->rsp = (uint64_t*)stack_base;
-    stack_initial_data->rip = (uint64_t)wrapper; // TODO y la wrapper?
+    stack_initial_data->rip = (uint64_t)wrapper;
     stack_initial_data->cs = 0x08;
     stack_initial_data->rflags = 0x202;
     stack_initial_data->ss = 0;

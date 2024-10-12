@@ -7,10 +7,13 @@
 #define PROCESS_H
 
 #include <memory/memoryManagerADT.h>
+#include <kernelManagement.h>
 
-#define MAX_PROCESSES       1024
 #define STACK_SIZE          4096
+
 #define PROCESS_SIZE        STACK_SIZE
+
+#define MAX_PROCESSES       (MEMORY_SIZE/PROCESS_SIZE)
 
 #define AVAILABLE_PID       0
 #define NOT_AVAILABLE_PID   1
