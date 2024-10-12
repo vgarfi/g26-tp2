@@ -12,7 +12,18 @@ typedef struct MM_rq {
   uint32_t size;
 } mm_rq;
 
-uint64_t test_mm_no_kernel(uint64_t argc, char *argv[]) {
+void *memset(void *s, int c, size_t n) {
+  unsigned char *ptr = s;
+  unsigned char value = (unsigned char)c;
+
+  for (size_t i = 0; i < n; i++) {
+    ptr[i] = value;
+  }
+
+  return s;
+}
+
+uint64_t test_mm(uint64_t argc, char *argv[]) {
   mm_rq mm_rqs[MAX_BLOCKS];
   uint8_t rq;
   uint32_t total;

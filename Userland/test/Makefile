@@ -5,7 +5,7 @@ withKernel ?= false
 ifeq ($(withKernel),false)
     SOURCES += noKernel/mainMemory.c
 else
-    SOURCES += kernel.c
+    SOURCES += ../../Kernel/kernel.c
 endif
 
 OBJECTS=$(SOURCES:.c=.o)
