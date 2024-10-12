@@ -38,11 +38,15 @@ int setZoomLevel(int zoomLevel);
 int read(uint64_t fd, char * buf, uint64_t count);
 int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor);
 
-uint8_t getPid();
-int my_exit();
-
 int cleanKbBuffer(void);
-
 int isctrlPressed(void);
+
+int getCurrentPid(void);
+int exitProcess(void);
+int createProcess(char* name, uint64_t argc, char *argv[], int64_t (*code)(int, char**));
+int blockProcess(uint8_t pid);
+int unblockProcess(uint8_t pid);
+int killProcess(uint8_t pid);
+int nice(uint8_t pid, uint8_t newPriority);
 
 #endif

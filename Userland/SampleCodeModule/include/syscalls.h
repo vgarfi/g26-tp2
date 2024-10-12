@@ -1,6 +1,5 @@
 #ifndef __SYSCALLS_H_
 #define __SYSCALLS_H_
-
 #include <stdint.h>
 
 int sysWriteScreen(uint64_t fd, unsigned char* buffer, uint64_t len, uint64_t hexColor);
@@ -37,5 +36,17 @@ int sysPrintRegs(void);
 int sysPrintCursor();
 int sysHideCursor();
 int sysShowCursor();
+
+int sysCreateProcess(char* name, uint64_t argc, char *argv[], int64_t (*code)(int, char**));
+uint8_t sysGetCurrentPid(void);
+int sysExit(void);
+
+int sysBlockProcess(uint8_t pid);
+int sysUnblockProcess(uint8_t pid);
+int sysKillProcess(uint8_t pid);
+
+int sysNice(uint8_t pid, uint8_t newPriority);
+
+
 
 #endif

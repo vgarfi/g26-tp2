@@ -44,7 +44,7 @@ void failure_scheduling(void){
 
 }
 
-uint8_t get_current_pid() {
+uint8_t get_current_pid(void) {
     if (running_pcb == NULL) return 0;
     return running_pcb->pid;    
 }

@@ -13,10 +13,13 @@
 #define HANDLER_SIZE 31
 
 static int (*syscallHandlers[])()={
+    // Syscalls de Arqui
     read, write, printRegs, incSize, decSize, getZoomLevel, setZoomLevel, upArrowValue, leftArrowValue, downArrowValue,
     rightArrowValue, clearScreen, printSquare, printRect, setCursor, sound, msSleep, hideCursor,
     showCursor, printCursor, getCurrentSeconds, getCurrentMinutes, getCurrentHours, getCurrentDay,
-    getCurrentMonth, getCurrentYear, isctrlPressed, cleanKbBuffer, getPid, my_exit,
+    getCurrentMonth, getCurrentYear, isctrlPressed, cleanKbBuffer,
+    // Syscalls de Procesos
+    getCurrentPid, exitProcess, createProcess, blockProcess, unblockProcess, killProcess, nice
 };
 
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
@@ -51,15 +54,6 @@ int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor){
         vdPrint(toPrint, hexColor);
     }
     return i;
-}
-
-
-uint8_t getPid(){
-    return get_current_pid();
-}
-
-int my_exit(){
-    return kill_process(getPid());
 }
 
 int incSize(){
@@ -189,4 +183,32 @@ int isctrlPressed(){
 int cleanKbBuffer(){
     kbcleanBuffer();
     return 0;
+}
+
+int getCurrentPid(){
+    return get_current_pid();
+}
+
+int exitProcess(){
+    return kill_process(getCurrentPid());
+}
+
+int createProcess(char* name, uint64_t argc, char *argv[], int64_t (*code)(int, char**)){
+    return create_process(name, argc, argv, 1, code);
+}
+
+int blockProcess(uint8_t pid){
+    return block_process(pid);
+}
+
+int unblockProcess(uint8_t pid){
+    return unblock_process(pid);
+}
+
+int killProcess(uint8_t pid) {
+    return kill_process(pid);
+}
+
+int nice(uint8_t pid, uint8_t newPriority){
+    return change_priority(pid, newPriority);
 }

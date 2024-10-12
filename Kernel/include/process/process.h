@@ -53,10 +53,12 @@ typedef struct TCodeFrame {
 int get_available_pid(void);
 void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* stack_base, uint8_t pid, uint8_t priority, int64_t (*code)(int, char**));
 int create_process (char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**));
-//uint64_t * create_initial_stack(uint64_t * stack_base, uint64_t argc, char* argv[], int64_t (*code)(int, char**), void* wrapper);
+int block_process(uint8_t pid);
+int unblock_process(uint8_t pid);
+int change_priority(uint8_t pid, uint8_t new_priority);
+
 void create_initial_stack(TStackFrame* stack_initial_data, char* stack_base, uint64_t argc, uint64_t argv, int64_t (*code)(int, char**));
 void wrapper(uint64_t argc, char* argv[], int64_t (*code)(int, char**));
-
 
 int kill_process(uint8_t pid);
 #endif

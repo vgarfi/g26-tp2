@@ -31,6 +31,33 @@ int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, in
     return pid;
 }
 
+int block_process(uint8_t pid) {
+    TPCB* pcb_to_block = get_pcb_by_pid(pid);
+    if (pcb_to_block == NULL){
+        return -1;
+    }
+    pcb_to_block->state = BLOCKED;
+    return EXIT_SUCCESS;
+}
+
+int unblock_process(uint8_t pid) {
+    TPCB* pcb_to_unblock = get_pcb_by_pid(pid);
+    if (pcb_to_unblock == NULL){
+        return -1;
+    }
+    pcb_to_unblock->state = READY;
+    return EXIT_SUCCESS;
+}
+
+int change_priority(uint8_t pid, uint8_t new_priority){
+    TPCB* pcb_to_change = get_pcb_by_pid(pid);
+    if (pcb_to_change == NULL){
+        return -1;
+    }
+    pcb_to_change->priority = new_priority;
+    return EXIT_SUCCESS;
+}
+
 void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* stack_base, uint8_t pid, uint8_t priority, int64_t (*code)(int, char**)) {
     if (name == NULL || argc < 0 || argv == NULL || stack_base == NULL) {
         return;

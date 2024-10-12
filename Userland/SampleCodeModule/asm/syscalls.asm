@@ -33,6 +33,15 @@ GLOBAL sysSetCursorPosition
 
 GLOBAL sysCtrlPressed
 
+
+GLOBAL sysGetCurrentPid
+GLOBAL sysExit
+GLOBAL sysCreateProcess
+GLOBAL sysBlockProcess
+GLOBAL sysUnblockProcess
+GLOBAL sysKillProcess
+GLOBAL sysNice
+
 section .text
 
 sysReadScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToRead
@@ -178,12 +187,37 @@ sysClearKbEntry:
     int 80h
     ret
 
-sysGetPid:
+sysGetCurrentPid:
     mov rax, 28,
     int 80h
     ret
     
 sysExit:
     mov rax, 29,
+    int 80h
+    ret
+
+sysCreateProcess:
+    mov rax, 30,
+    int 80h
+    ret
+
+sysBlockProcess:
+    mov rax, 31,
+    int 80h
+    ret
+
+sysUnblockProcess:
+    mov rax, 32,
+    int 80h
+    ret
+
+sysKillProcess:
+    mov rax, 33
+    int 80h
+    ret
+
+sysNice:
+    mov rax, 34
     int 80h
     ret
