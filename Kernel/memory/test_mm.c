@@ -53,14 +53,14 @@
 //             }
 //         }
 
-            if (mm_rqs[rq].address) {
-                total += mm_rqs[rq].size;
-                printf("Bloque %d reservado: %u bytes en la dirección %p (total reservado: %u bytes)\n", rq, mm_rqs[rq].size, mm_rqs[rq].address, total);
-                rq++;
-            } else {
-                //printf("Error al reservar bloque %d: %u bytes\n", rq, mm_rqs[rq].size);
-            }
-        }
+            // if (mm_rqs[rq].address) {
+            //     total += mm_rqs[rq].size;
+            //     printf("Bloque %d reservado: %u bytes en la dirección %p (total reservado: %u bytes)\n", rq, mm_rqs[rq].size, mm_rqs[rq].address, total);
+            //     rq++;
+            // } else {
+            //     //printf("Error al reservar bloque %d: %u bytes\n", rq, mm_rqs[rq].size);
+            // }
+        
 
 //         // Check
 //         for (i = 0; i < rq; i++) {
