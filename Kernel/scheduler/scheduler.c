@@ -22,9 +22,9 @@ uint64_t* schedule(uint64_t* rsp) {
     running_pcb->rsp = rsp; // Lo dejamos con el RSP donde me lo haya dejado
 
     TPCB* next = (TPCB*) dequeue(pcb_readies_queue);
-    if (next == NULL ) {
+    if (next == NULL) {
         failure_scheduling();
-        return pcb_array[0]->rsp; // ! Cambiar el 0 por 1 hace que parezca que la shell anda bien, pero el que dejó de funcar será el IDLE
+        return pcb_array[0]->rsp;
     }
 
     if (running_pcb->state == RUNNING && count_occurrences(pcb_readies_queue, running_pcb) == 0) {

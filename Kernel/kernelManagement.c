@@ -21,14 +21,10 @@ void * memoryBaseAddress = (void*)0x600000;
 void initialize_management(void){
 	memory_manager = initialize_mm(memoryBaseAddress, 1024*1024, 1024*8);
     create_process(IDLE_PROCESS, 0, idle_args, IDLE_PRIORITY, idle_process);
-    // create_process(SHELL_PROCESS, 0, shell_args, SHELL_PRIORITY, sampleCodeModuleAddress);
-	//create_process(PUPU_PROCESS, 0, pupu_args, PUPU_PRIORITY, pupu_process);
-	//create_process(SHELL_PROCESS, 0, shell_args, SHELL_PRIORITY, start_shell);
-	//create_process(SHELL_PROCESS, 0, shell_args, SHELL_PRIORITY, sampleCodeModuleAddress);
+    create_process(SHELL_PROCESS, 0, shell_args, SHELL_PRIORITY, sampleCodeModuleAddress);
 }
 
 int64_t idle_process(int argc, char* argv){
-    create_process(SHELL_PROCESS, 0, shell_args, SHELL_PRIORITY, sampleCodeModuleAddress);
     static int count = 0;
     char buffer[10];
     while (1) {

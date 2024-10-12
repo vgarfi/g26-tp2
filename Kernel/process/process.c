@@ -1,6 +1,7 @@
 #include <scheduler/scheduler.h>
 #include <kernelManagement.h>
 #include <process/process.h>
+#include <videoDriver.h>
 #include <interrupts.h>
 #include <string.h>
 
@@ -40,21 +41,21 @@ void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* s
         return;
     }
     
-	new_pcb->name = (char *) malloc_mm(memory_manager, strlen(name) + 1); // strlen esta en string.h
+	new_pcb->name = (char *) malloc_mm(memory_manager, strlen(name) + 1);
 	if (new_pcb->name == NULL) {
 		free_mm(memory_manager, new_pcb);
     	return;
 	}
 
 	strcpy(new_pcb->name, name);
-    new_pcb->pid = pid;                 // TODO: hay que recorrer porque se pueden matar procesos y esos PIDs se puede reutilizar
+    new_pcb->pid = pid;
     new_pcb->m_pid = get_current_pid();
 
     new_pcb->stack_base = stack_base;
     new_pcb->stack_limit = stack_limit;
 
     char buffer[50];
-    new_pcb->rsp = stack_base - sizeof(TStackFrame) - 1;
+    new_pcb->rsp = stack_base - sizeof(TStackFrame) + 1;
     
     create_initial_stack((TStackFrame*) new_pcb->rsp, stack_base, argc, argv, code);
 
@@ -62,9 +63,9 @@ void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* s
     new_pcb->priority = priority;
 
     pcb_array[pid] = new_pcb;
-    //for (uint8_t i = running_pcb->priority; i > 0; i--) {
+    for (uint8_t i = priority; i > 0; i--) {
         enqueue(pcb_readies_queue, new_pcb);
-    //}
+    }
     return;
 }
 
@@ -73,7 +74,7 @@ void create_initial_stack(TStackFrame* stack_initial_data, char* stack_base, uin
     stack_initial_data->rax = 0;
     stack_initial_data->rbx = 0;
     stack_initial_data->rcx = 0;
-    stack_initial_data->rdx = 0;
+    stack_initial_data->rdx = (uint64_t)code;
     stack_initial_data->rbp = stack_base;
     stack_initial_data->rdi = argc;
     stack_initial_data->rsi = argv;
@@ -88,7 +89,7 @@ void create_initial_stack(TStackFrame* stack_initial_data, char* stack_base, uin
 
     // Propio del IRETQ
     stack_initial_data->rsp = (uint64_t*)stack_base;
-    stack_initial_data->rip = code; // TODO y la wrapper?
+    stack_initial_data->rip = (uint64_t)wrapper; // TODO y la wrapper?
     stack_initial_data->cs = 0x08;
     stack_initial_data->rflags = 0x202;
     stack_initial_data->ss = 0;
@@ -105,7 +106,9 @@ int get_available_pid() {
 }
 
 void wrapper(uint64_t argc, char* argv[], int64_t (*code)(int, char**)) {
+    vdPrint("\nDentro de la wrapper", 0x00FFFFFF);
     code(argc, argv);
+    vdPrint("\nSaliendo de la wrapper", 0x00FFFFFF);
     kill_process(get_current_pid());
 }
 
