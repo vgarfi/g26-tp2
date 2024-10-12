@@ -1,9 +1,10 @@
-
 GLOBAL _cli
 GLOBAL _sti
 GLOBAL picMasterMask
 GLOBAL picSlaveMask
 GLOBAL haltcpu
+GLOBAL requestSchedule
+
 GLOBAL _hlt
 
 GLOBAL _irq00Handler
@@ -15,22 +16,21 @@ GLOBAL _irq05Handler
 
 GLOBAL _exception0Handler
 GLOBAL _exception6Handler
-
 GLOBAL _syscallHandler
 
 GLOBAL getRegs
+GLOBAL saveRegsInBuffer
 EXTERN getKey
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 EXTERN syscallDispatcher
 EXTERN getStackBase
 
-GLOBAL saveRegsInBuffer
+EXTERN schedule
+
 
 
 SECTION .text
-
-
 
 
 %macro saveRegsInBuffer 0	;; Once you enter here, regs[0]=RIP, regs[1]=RFLAGS, regs[2]=RSP
@@ -51,8 +51,7 @@ SECTION .text
     mov [regs + 8*17], r15
 %endmacro
 
-%macro pushState 0
-	push rax
+%macro pushStateNoRAX 0
 	push rbx
 	push rcx
 	push rdx
@@ -69,7 +68,7 @@ SECTION .text
 	push r15
 %endmacro
 
-%macro popState 0
+%macro popStateNoRAX 0
 	pop r15
 	pop r14
 	pop r13
@@ -84,6 +83,15 @@ SECTION .text
 	pop rdx
 	pop rcx
 	pop rbx
+%endmacro
+
+%macro pushState 0
+	push rax
+	pushStateNoRAX
+%endmacro
+
+%macro popState 0
+	popStateNoRAX
 	pop rax
 %endmacro
 
@@ -103,17 +111,17 @@ SECTION .text
 
 %macro saveIntRegs 0
 
-push rax
-mov rax, [rsp + 8]	; RIP Contexto anterior
-mov [regs], rax
+	push rax
+	mov rax, [rsp + 8]	; RIP Contexto anterior
+	mov [regs], rax
 
-mov rax, [rsp + 8*3] ; RFLAGS Contexto anterior
-mov [regs + 8*1], rax
+	mov rax, [rsp + 8*3] ; RFLAGS Contexto anterior
+	mov [regs + 8*1], rax
 
-mov rax, [rsp + 8*4] ; RSP Contexto anterior
-mov [regs + 8*2], rax
+	mov rax, [rsp + 8*4] ; RSP Contexto anterior
+	mov [regs + 8*2], rax
 
-pop rax
+	pop rax
 
 %endmacro
    
@@ -165,7 +173,21 @@ picSlaveMask:
 
 ;8254 Timer (Timer Tick)
 _irq00Handler:
-	irqHandlerMaster 0
+	cli
+
+	pushState
+	mov rdi, rsp
+	call schedule
+	
+	mov rsp, rax ; Cambio de proceso
+	
+	mov al, 20h ; EOI para el PIC
+	out 20h, al
+	popState
+	sti
+	
+	iretq
+	;irqHandlerMaster 0
 
 ;Keyboard
 _irq01Handler:
@@ -209,26 +231,34 @@ _exception6Handler:
 	saveRegsInBuffer
 	exceptionHandler 6
 
-
 getRegs:
 	mov rax,regs
-	ret
-	
+	ret	
+
+
 ;Syscall Handling
 ; _syscallHandler receives parameters in the next order: rax rdi rsi rdx r10 r8 r9
 ; syscallDispatcher receives parameters via regs this way: rdi rsi rdx rcx r8 r9
 ; rax is the last parameters -> r9 = rax
-; r10 is not a parameters -> rcx = r10
+; r10 is not a parameter -> rcx = r10
 _syscallHandler:
-	;saveIntRegs
+	; --- ARQUI ---
+	saveIntRegs
 	mov rcx, r10
 	mov r9, rax
+	; --- ARQUI ---
+	pushStateNoRAX
 	call syscallDispatcher
+	popStateNoRAX
 	iretq
 
 haltcpu:
 	cli
 	hlt
+	ret
+
+requestSchedule:
+	int 20h
 	ret
 
 section .data

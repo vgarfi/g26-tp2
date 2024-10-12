@@ -3,30 +3,31 @@
 #include <videoDriver.h>
 #include "include/time.h"
 #include <keyboard.h>
+#include <scheduler/scheduler.h>
 #include <interrupts.h>
 #include <lib.h>
 #include <syscallHandle.h>
 #include "speaker.h"
 #include "fonts.h"
 
-#define HANDLER_SIZE 29
+#define HANDLER_SIZE 31
 
 static int (*syscallHandlers[])()={
     read, write, printRegs, incSize, decSize, getZoomLevel, setZoomLevel, upArrowValue, leftArrowValue, downArrowValue,
     rightArrowValue, clearScreen, printSquare, printRect, setCursor, sound, msSleep, hideCursor,
     showCursor, printCursor, getCurrentSeconds, getCurrentMinutes, getCurrentHours, getCurrentDay,
-    getCurrentMonth, getCurrentYear, isctrlPressed, cleanKbBuffer
+    getCurrentMonth, getCurrentYear, isctrlPressed, cleanKbBuffer, getPid, my_exit,
 };
 
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
     // int handlerSize = sizeof(syscallHandlers)/sizeof(syscallHandlers[0]);
-
     if(rax < 0 || rax > HANDLER_SIZE)
         return -1;
 
     return syscallHandlers[rax](rdi,rsi,rdx,r10,r8);
 }
 
+// TODO read debe poder ser bloqueante. Manejarlo con semáforos (?)
 int read(uint64_t fd, char * buf, uint64_t count) {
     if(fd!=STDIN) {   // Only can read from standard input
         return 0;
@@ -50,6 +51,15 @@ int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor){
         vdPrint(toPrint, hexColor);
     }
     return i;
+}
+
+
+uint8_t getPid(){
+    return get_current_pid();
+}
+
+int my_exit(){
+    return kill_process(getPid());
 }
 
 int incSize(){

@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "memoryManagerADT.h"
+#include <memory/memoryManagerADT.h>
 
 #define ALL_ONES 0xff
 

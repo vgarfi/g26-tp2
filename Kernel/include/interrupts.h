@@ -1,10 +1,3 @@
- /*
- *   interrupts.h
- *
- *  Created on: Apr 18, 2010
- *      Author: anizzomc
- */
-
 #ifndef INTERRUPS_H_
 #define INTERRUPS_H_
 
@@ -34,5 +27,7 @@ void picSlaveMask(uint8_t mask);
 
 //The CPU execution ends.
 void haltcpu(void);
+
+void requestSchedule(void);
 
 #endif /* INTERRUPS_H_ */

@@ -177,3 +177,13 @@ sysClearKbEntry:
     mov rax, 27
     int 80h
     ret
+
+sysGetPid:
+    mov rax, 28,
+    int 80h
+    ret
+    
+sysExit:
+    mov rax, 29,
+    int 80h
+    ret

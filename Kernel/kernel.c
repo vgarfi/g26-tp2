@@ -4,16 +4,15 @@
 #include <moduleLoader.h>
 #include <videoDriver.h>
 #include <fonts.h>
-#include "include/time.h"
+#include <time.h>
 #include <defs.h>
-#include "interrupts.h"
-#include "time.h"
-
+#include <interrupts.h>
+#include <kernelManagement.h>
+#include <process/process.h>
 
 void load_idt(void);
 
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax);
-
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -24,13 +23,8 @@ extern uint8_t endOfKernel;
 
 static const uint64_t PageSize = 0x1000;
 
-
-static void * const sampleCodeModuleAddress = (void*)0x400000;
-static void * const sampleDataModuleAddress = (void*)0x500000;
-static void *const memoryBaseAddress = (void*)0x600000;
-
-
-typedef int (*EntryPoint)();
+extern void * sampleCodeModuleAddress;
+extern void * sampleDataModuleAddress;
 
 void clearBSS(void * bssAddress, uint64_t bssSize) {
 	memset(bssAddress, 0, bssSize);
@@ -58,14 +52,11 @@ void * initializeKernelBinary()
 
 int main() {
 	load_idt();
-	//initializeTimer();	
+	// initializeTimer();
 	initializeVideoDriver();
 	initFontManager();
-	
-	((EntryPoint)sampleCodeModuleAddress)();
-	
-	while(1)
-		_hlt();
-
+	initialize_management();
+	requestSchedule();
+	vdPrint("\nKERNEL EXIT", 0x00FFFFFF);
 	return 0;
 }
