@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <syscalls.h>
+#include <syscall.h>
 #include <testUtil.h>
 
 enum State { RUNNING,
