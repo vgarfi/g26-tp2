@@ -3,7 +3,7 @@
 #include <testUtil.h>
 #include "../../SampleCodeModule/include/syscalls.h"
 
-#define TEST_PROCESSES        "process"
+#include <test_proc.h>
 
 enum State { RUNNING,
              BLOCKED,
@@ -85,9 +85,4 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
         }
     }
   }
-}
-
-int main() {
-  char * test_args[] = {TEST_PROCESSES, 1, 100, 0}; //argc = 1, argv[0] = 100
-  return sysCreateProcess(TEST_PROCESSES, 0, test_args, *test_processes);
 }
