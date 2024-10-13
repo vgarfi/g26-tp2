@@ -7,7 +7,7 @@ bootloader:
 kernel:
 	cd Kernel; make all
 
-userland:
+userland: kernel
 	cd Userland; make all
 
 image: kernel bootloader userland
