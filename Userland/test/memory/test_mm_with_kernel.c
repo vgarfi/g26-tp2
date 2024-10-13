@@ -23,7 +23,7 @@ void *memset(void *s, int c, size_t n) {
   return s;
 }
 
-uint64_t test_mm(uint64_t argc, char *argv[]) {
+uint64_t test_mm_with_kernel(uint64_t argc, char *argv[]) {
   mm_rq mm_rqs[MAX_BLOCKS];
   uint8_t rq;
   uint32_t total;
@@ -79,7 +79,7 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
     for (i = 0; i < rq; i++){
       if (mm_rqs[i].address){
         if (!memcheck(mm_rqs[i].address, i, mm_rqs[i].size)) {
-          printf("test_mm ERROR\n");
+          printf("test_mm ERROR\n", 0, 0, 0);
           return -1;
         }
       }

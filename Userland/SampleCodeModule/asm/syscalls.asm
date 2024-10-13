@@ -188,27 +188,27 @@ sysClearKbEntry:
     ret
 
 sysGetCurrentPid:
-    mov rax, 28,
+    mov rax, 28
     int 80h
     ret
     
 sysExit:
-    mov rax, 29,
+    mov rax, 29
     int 80h
     ret
 
 sysCreateProcess:
-    mov rax, 30,
+    mov rax, 30
     int 80h
     ret
 
 sysBlockProcess:
-    mov rax, 31,
+    mov rax, 31
     int 80h
     ret
 
 sysUnblockProcess:
-    mov rax, 32,
+    mov rax, 32
     int 80h
     ret
 

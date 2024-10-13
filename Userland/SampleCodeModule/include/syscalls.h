@@ -47,6 +47,4 @@ int sysKillProcess(uint8_t pid);
 
 int sysNice(uint8_t pid, uint8_t newPriority);
 
-
-
 #endif

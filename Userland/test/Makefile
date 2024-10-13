@@ -2,17 +2,20 @@ SOURCES=$(wildcard *.c) $(wildcard memory/*.c) ../../Kernel/memory/bitmapMemoryM
 
 withKernel ?= false
 
+GCCFLAGS=-g -fPIE -I./include -I../../Kernel/include -m64 -fno-exceptions -std=c99 -Wall
+
 ifeq ($(withKernel),false)
     SOURCES += noKernel/mainMemory.c
 else
-    SOURCES += ../../Kernel/kernel.c
+    SOURCES += withKernel/mainMemory.c
+	GCCFLAGS += -I../SampleCodeModule/include
+	GCCFLAGS += -DNO_STDDEF -ffreestanding -nostdlib -fno-common -mno-red-zone -mno-mmx -mno-sse -mno-sse2
 endif
 
 OBJECTS=$(SOURCES:.c=.o)
 
 GCC=gcc
 
-GCCFLAGS=-g -fPIE -I./include -I../../Kernel/include -m64 -fno-exceptions -std=c99 -Wall
 LDFLAGS=-pie
 
 all: test_mm
