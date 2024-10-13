@@ -117,9 +117,12 @@ void playEasterEgg(){
 
 void process_test() {
   char * test_args_proc[] = {TEST_PROCESSES, 1, 100, 0}; //argc = 1, argv[0] = 100
-  char * test_args_prio[] = {TEST_PRIORITY, 0};
   printf("\nCreando test de procesos...",0,0,0);
   sysCreateProcess(TEST_PROCESSES, 0, test_args_proc, test_processes);
-  printf("\nCreando test de prioridades...",0,0,0);
-  sysCreateProcess(TEST_PRIORITY, 0, test_args_prio, test_priorities);
+}
+
+void priorities_test(){
+    char * test_args_prio[] = {TEST_PRIORITY, 0};
+    printf("\nCreando test de prioridades...",0,0,0);
+    sysCreateProcess(TEST_PRIORITY, 0, test_args_prio, test_priorities);
 }

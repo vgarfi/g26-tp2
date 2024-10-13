@@ -14,5 +14,7 @@ void eliminator(void);
 void notFound(char* commandNotFound);
 void playEasterEgg();
 void process_test();
+void priorities_test();
+
 
 #endif

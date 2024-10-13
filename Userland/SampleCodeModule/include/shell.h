@@ -19,15 +19,16 @@
 #define CLEAR_MODE          10
 #define REGISTERS_MODE      11
 #define EASTEREGG_MODE      12
-#define TEST_MODE           13
+#define TESTP_MODE          13
+#define TESTPRIO_MODE       14
+
 
 static const char* modes[] = {
-    "shell", "idle", "help", "divbyzero", "invalidopcode", "zoomin", "zoomout", "time", "date", "eliminator", "clear", "registers", "easteregg", "testp"
+    "shell", "idle", "help", "divbyzero", "invalidopcode", "zoomin", "zoomout", "time", "date", "eliminator", "clear", "registers", "easteregg", "testp", "testprio"
 };
 
 static char* helpText[] = { "Command information is displayed below:\n\n",
 "HELP                ->      Shows a description on each available command.\n",
-"TESTP               ->      Tests processes functionalities required for processes.\n",
 "DIVBYZERO           ->      Shows handling in case of division by zero.\n",
 "INVALIDOPCODE       ->      Shows handling in case of an invalid operation code.\n",
 "ZOOMIN              ->      Enlarges text size on screen. In case maximum size is reached,\n",
@@ -42,6 +43,9 @@ static char* helpText[] = { "Command information is displayed below:\n\n",
 "CLEAR               ->      Clears the screen\n",
 "REGISTERS           ->      Prints registers values. To do this, first you need to save\n",
 "                            your registers by pressing ALT.\n",
+"----------------------------------- TESTING -----------------------------------\n"
+"TESTP               ->      Tests functionalities required for proces administration.\n",
+"TESTPRIO            ->      Tests processes priorities creation.\n",
 "end" 
 };
 
