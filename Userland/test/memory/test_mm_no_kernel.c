@@ -7,6 +7,17 @@
 
 #define MAX_BLOCKS 128
 
+void *my_memset(void *s, int c, size_t n) {
+  unsigned char *ptr = s;
+  unsigned char value = (unsigned char)c;
+
+  for (size_t i = 0; i < n; i++) {
+    ptr[i] = value;
+  }
+
+  return s;
+}
+
 typedef struct MM_rq {
   void *address;
   uint32_t size;
@@ -60,7 +71,7 @@ uint64_t test_mm_no_kernel(uint64_t argc, char *argv[]) {
     {
       if (mm_rqs[i].address)
       {
-        memset(mm_rqs[i].address, i, mm_rqs[i].size);
+        my_memset(mm_rqs[i].address, i, mm_rqs[i].size);
       }
     }
 

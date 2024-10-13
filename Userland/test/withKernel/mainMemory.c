@@ -1,5 +1,5 @@
 #include <test_mm.h>
-#include <syscalls.h>
+#include "../../SampleCodeModule/include/syscalls.h"
 
 #define TEST_PROCESS        "test"
 

@@ -7,7 +7,7 @@
 #define STDOUT 1
 #define STDERR 2
 
-//typedef unsigned int size_t;
+typedef unsigned int size_t;
 
 /**
  * Reads STDIN and returns the next char in it.
