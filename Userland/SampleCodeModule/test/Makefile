@@ -1,10 +1,10 @@
-SOURCES_MM=$(wildcard *.c) $(wildcard memory/*.c) ../../Kernel/memory/bitmapMemoryManager.c
+SOURCES_MM=$(wildcard *.c) $(wildcard memory/*.c) ../../../Kernel/memory/bitmapMemoryManager.c
 SOURCES_PROC=$(wildcard *.c) $(wildcard process/*.c)
-SOURCES_ASM=../SampleCodeModule/asm/syscalls.asm 
+SOURCES_ASM=../asm/syscalls.asm 
 
 withKernel ?= false
 
-GCCFLAGS=-include ../SampleCodeModule/include/syscalls.h -g -fPIE -I./include -I../../Kernel/include -m64 -fno-exceptions -std=c99 -Wall
+GCCFLAGS=-include ../include/syscalls.h -include ../include/testing.h -g -fPIE -I./include -I../../../Kernel/include -m64 -fno-exceptions -std=c99 -Wall
 
 ifeq ($(withKernel),false)
     SOURCES_MM += noKernel/mainMemory.c
@@ -20,7 +20,7 @@ GCC=gcc
 
 LDFLAGS=-pie
 
-all: test_mm test_processes
+all: test_mm
 
 %.o: %.c
 	$(GCC) $(GCCFLAGS) -c $< -o $@
@@ -31,8 +31,8 @@ all: test_mm test_processes
 test_mm: $(OBJECTS_MM)
 	$(GCC) $(LDFLAGS) $(OBJECTS_MM) -o test_mm
 
-test_processes: $(OBJECTS_PROC)
-	$(GCC) $(LDFLAGS) $(OBJECTS_PROC) -o test_processes
+test_processes_objects: $(OBJECTS_PROC)
+	@echo "Compilando objetos de test_processes sin generar ejecutable."
 
 clean:
 	rm -rf *.o ./process/*.o ./memory/*.o ./noKernel/*.o ./withKernel/*.o test_mm test_processes

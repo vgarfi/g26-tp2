@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <syscall.h>
 #include <test_util.h>
-#include "../../SampleCodeModule/include/syscalls.h"
+#include "../../include/syscalls.h"
 
 #include <processes/test_proc.h>
 
