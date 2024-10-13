@@ -19,7 +19,7 @@ GCC=gcc
 
 LDFLAGS=-pie
 
-all: test_mm test_priorities test_processes
+all: test_mm test_processes
 
 %.o: %.c
 	$(GCC) $(GCCFLAGS) -c $< -o $@
