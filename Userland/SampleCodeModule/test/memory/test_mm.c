@@ -1,9 +1,9 @@
 #include <syscall.h>
 #include <test_util.h>
-#include <memory/test_mm.h>
+#include <test_mm.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <memory/memoryManagerADT.h>
+#include <memoryManagerADT.h>
 
 #define MAX_BLOCKS 128
 
@@ -23,7 +23,7 @@ void *memset(void *s, int c, size_t n) {
   return s;
 }
 
-uint64_t test_mm_with_kernel(uint64_t argc, char *argv[]) {
+uint64_t test_mm(uint64_t argc, char *argv[]) {
   mm_rq mm_rqs[MAX_BLOCKS];
   uint8_t rq;
   uint32_t total;

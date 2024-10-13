@@ -1,5 +1,5 @@
-#include <processes/test_proc.h>
-#include "../../include/testing.h"
+#include <test_proc.h>
+#include <testing.h>
 
 #define TEST_PROCESSES        "process"
 #define TEST_PRIORITY        "priority"
