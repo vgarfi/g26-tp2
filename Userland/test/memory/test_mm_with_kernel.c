@@ -1,6 +1,6 @@
 #include <syscall.h>
-#include <testUtil.h>
-#include <test_mm.h>
+#include <test_util.h>
+#include <memory/test_mm.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <memory/memoryManagerADT.h>

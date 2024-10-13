@@ -1,5 +1,6 @@
 SOURCES_MM=$(wildcard *.c) $(wildcard memory/*.c) ../../Kernel/memory/bitmapMemoryManager.c
-SOURCES_PROC= $(wildcard process/*.c)
+SOURCES_PROC=$(wildcard *.c) $(wildcard process/*.c)
+SOURCES_ASM=../SampleCodeModule/asm/syscalls.asm 
 
 withKernel ?= false
 
@@ -12,8 +13,8 @@ else
 	GCCFLAGS += -DNO_STDDEF -ffreestanding -nostdlib -fno-common -mno-red-zone -mno-mmx -mno-sse -mno-sse2
 endif
 
-OBJECTS_MM=$(SOURCES_MM:.c=.o)
-OBJECTS_PROC=$(SOURCES_PROC:.c=.o)
+OBJECTS_MM=$(SOURCES_MM:.c=.o) $(SOURCES_ASM:.asm=.o)
+OBJECTS_PROC=$(SOURCES_PROC:.c=.o) $(SOURCES_ASM:.asm=.o)
 
 GCC=gcc
 
@@ -23,6 +24,9 @@ all: test_mm test_processes
 
 %.o: %.c
 	$(GCC) $(GCCFLAGS) -c $< -o $@
+
+%.o: %.asm
+	nasm -f elf64 $< -o $@
 
 test_mm: $(OBJECTS_MM)
 	$(GCC) $(LDFLAGS) $(OBJECTS_MM) -o test_mm

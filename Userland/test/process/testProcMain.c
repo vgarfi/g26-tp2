@@ -1,4 +1,4 @@
-#include <test_proc.h>
+#include <processes/test_proc.h>
 
 #define TEST_PROCESSES        "process"
 #define TEST_PRIORITY        "priority"

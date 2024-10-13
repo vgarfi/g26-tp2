@@ -1,4 +1,4 @@
-#include <test_mm.h>
+#include <memory/test_mm.h>
 #include "../../SampleCodeModule/include/syscalls.h"
 
 #define TEST_PROCESS        "test"

@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <syscall.h>
-#include <testUtil.h>
+#include <test_util.h>
 #include "../../SampleCodeModule/include/syscalls.h"
 
-#include <test_proc.h>
+#include <processes/test_proc.h>
 
 enum State { RUNNING,
              BLOCKED,
