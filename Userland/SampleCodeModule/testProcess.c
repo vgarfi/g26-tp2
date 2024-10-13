@@ -15,6 +15,8 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
   uint64_t max_processes;
   char *argvAux[] = {0};
 
+  printf("\nFui creado con %d argumentos\n", argc, 0,0);
+
   if (argc != 1)
     return -1;
 
@@ -22,7 +24,7 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
     return -1;
 
   p_rq p_rqs[max_processes];
-  printf("test_processes: Testing processes...",0,0,0);
+  printf("test_processes: Testing process administration...",0,0,0);
   while (1) {
 
     // Create max_processes processes
