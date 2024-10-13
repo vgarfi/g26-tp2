@@ -13,6 +13,6 @@ void registers(void);
 void eliminator(void);
 void notFound(char* commandNotFound);
 void playEasterEgg();
-void test();
+void process_test();
 
 #endif

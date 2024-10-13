@@ -1,7 +1,6 @@
 #include <memory/memoryManagerADT.h>
 #include <kernelManagement.h>
 #include <process/process.h>
-#include <videoDriver.h>
 #include <interrupts.h>
 #include <string.h>
 
@@ -24,12 +23,7 @@ void initialize_management(void){
 }
 
 int64_t idle_process(int argc, char* argv) {
-    static int count = 0;
-    char buffer[10];
     while (1) {
-        vdPrint("\nDentro del IDLE ", 0x00FFFFFF);
-        itoa(count++, buffer, 10);
-        vdPrint(buffer, 0x00FFFFFF);
         _hlt();
     }
 }

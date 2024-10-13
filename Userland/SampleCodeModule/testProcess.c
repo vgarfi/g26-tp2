@@ -1,17 +1,12 @@
-#include <stdio.h>
-#include <syscalls.h>
-#include <test_util.h>
-
 #include <test_proc.h>
+#include <test_util.h>
+#include <syscalls.h>
+#include <stdio.h>
 
-enum State { RUNNING,
-             BLOCKED,
-             KILLED };
 
-typedef struct P_rq {
-  uint8_t pid;
-  enum State state;
-} p_rq;
+
+
+uint8_t prio[TOTAL_PROCESSES] = {LOWEST, MEDIUM, HIGHEST};
 
 int64_t test_processes(uint64_t argc, char *argv[]) {
   uint8_t rq;
@@ -27,7 +22,7 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
     return -1;
 
   p_rq p_rqs[max_processes];
-
+  printf("test_processes: Testing processes...",0,0,0);
   while (1) {
 
     // Create max_processes processes
@@ -84,4 +79,48 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
         }
     }
   }
+  printf("test_processes: Process tested succesfully",0,0,0);
+}
+
+void test_priorities(void) {
+  uint8_t pids[TOTAL_PROCESSES];
+  char *argv[] = {0};
+  uint64_t i;
+
+  printf("test_priorities: Testing Process Priorities...",0,0,0);
+
+
+  for (i = 0; i < TOTAL_PROCESSES; i++)
+    pids[i] = sysCreateProcess("endless_loop_print", 0, argv, endless_loop_print);
+
+  bussy_wait(WAIT);
+  printf("\nCHANGING PRIORITIES...\n", 0,0,0);
+
+  for (i = 0; i < TOTAL_PROCESSES; i++)
+    sysNice(pids[i], prio[i]);
+
+  bussy_wait(WAIT);
+  printf("\nBLOCKING...\n",0,0,0);
+
+  for (i = 0; i < TOTAL_PROCESSES; i++)
+    sysBlockProcess(pids[i]);
+
+  printf("CHANGING PRIORITIES WHILE BLOCKED...\n",0,0,0);
+
+  for (i = 0; i < TOTAL_PROCESSES; i++)
+    sysNice(pids[i], MEDIUM);
+
+  printf("UNBLOCKING...\n",0,0,0);
+
+  for (i = 0; i < TOTAL_PROCESSES; i++)
+    sysUnblockProcess(pids[i]);
+
+  bussy_wait(WAIT);
+  printf("\nKILLING...\n",0,0,0);
+
+  for (i = 0; i < TOTAL_PROCESSES; i++)
+    sysKillProcess(pids[i]);
+  
+  printf("test_priorities: Process priorities tested succesfully",0,0,0);
+
 }

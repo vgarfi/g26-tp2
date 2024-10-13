@@ -22,12 +22,12 @@
 #define TEST_MODE           13
 
 static const char* modes[] = {
-    "shell", "idle", "help", "divbyzero", "invalidopcode", "zoomin", "zoomout", "time", "date", "eliminator", "clear", "registers", "easteregg", "test_processes"
+    "shell", "idle", "help", "divbyzero", "invalidopcode", "zoomin", "zoomout", "time", "date", "eliminator", "clear", "registers", "easteregg", "testp"
 };
 
 static char* helpText[] = { "Command information is displayed below:\n\n",
 "HELP                ->      Shows a description on each available command.\n",
-"TEST                ->      Tests processes functionalities required for the processes.\n",
+"TESTP               ->      Tests processes functionalities required for processes.\n",
 "DIVBYZERO           ->      Shows handling in case of division by zero.\n",
 "INVALIDOPCODE       ->      Shows handling in case of an invalid operation code.\n",
 "ZOOMIN              ->      Enlarges text size on screen. In case maximum size is reached,\n",

@@ -1,7 +1,6 @@
 #include <scheduler/scheduler.h>
 #include <kernelManagement.h>
 #include <process/process.h>
-#include <videoDriver.h>
 #include <interrupts.h>
 #include <string.h>
 
@@ -133,9 +132,7 @@ int get_available_pid() {
 }
 
 void wrapper(uint64_t argc, char* argv[], int64_t (*code)(int, char**)) {
-    vdPrint("\nDentro de la wrapper", 0x00FFFFFF);
     code(argc, argv);
-    vdPrint("\nSaliendo de la wrapper", 0x00FFFFFF);
     kill_process(get_current_pid());
 }
 

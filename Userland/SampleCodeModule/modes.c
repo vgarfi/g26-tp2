@@ -9,7 +9,7 @@
 #include "include/dateTime.h"
 #include "include/colors.h"
 #include "include/utils.h"
-#include "include/testing.h"
+#include "include/test_proc.h"
 
 char* dateTimeAux;
 int zoomAux, regAux;
@@ -115,6 +115,11 @@ void playEasterEgg(){
     sysPrintCursor();
 }
 
-void test() {
-    proc_test();
+void process_test() {
+  char * test_args_proc[] = {TEST_PROCESSES, 1, 100, 0}; //argc = 1, argv[0] = 100
+  char * test_args_prio[] = {TEST_PRIORITY, 0};
+  printf("\nCreando test de procesos...",0,0,0);
+  sysCreateProcess(TEST_PROCESSES, 0, test_args_proc, test_processes);
+  printf("\nCreando test de prioridades...",0,0,0);
+  sysCreateProcess(TEST_PRIORITY, 0, test_args_prio, test_priorities);
 }

@@ -302,25 +302,25 @@ int decideSnakeDirectionCPU(int lastDirectionP2, SnakeHead snakeHeadCPU, char bo
     switch (lastDirectionP2) {
         
     case UP: 
-        if (board[snakeHeadCPU.x][snakeHeadCPU.y-2] == BLOCKED)
+        if (board[snakeHeadCPU.x][snakeHeadCPU.y-2] == BLOCKED_SPACE)
             return LEFT;
         else
             return lastDirectionP2;
         break;
     case DOWN:
-        if (board[snakeHeadCPU.x][snakeHeadCPU.y+2] == BLOCKED)
+        if (board[snakeHeadCPU.x][snakeHeadCPU.y+2] == BLOCKED_SPACE)
             return RIGHT;
         else
             return lastDirectionP2;
         break;
     case LEFT:
-        if (board[snakeHeadCPU.x-2][snakeHeadCPU.y] == BLOCKED)
+        if (board[snakeHeadCPU.x-2][snakeHeadCPU.y] == BLOCKED_SPACE)
             return DOWN;
         else
             return lastDirectionP2;
         break;
     case RIGHT:
-        if (board[snakeHeadCPU.x+2][snakeHeadCPU.y] == BLOCKED)
+        if (board[snakeHeadCPU.x+2][snakeHeadCPU.y] == BLOCKED_SPACE)
             return UP;
         else
             return lastDirectionP2;
