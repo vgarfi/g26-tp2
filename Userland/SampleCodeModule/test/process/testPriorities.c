@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <syscalls.h>
 #include <test_util.h>
-#include <syscalls.h>
 
 #include <test_proc.h>
 
