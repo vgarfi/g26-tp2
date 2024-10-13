@@ -9,6 +9,7 @@
 #include "include/dateTime.h"
 #include "include/colors.h"
 #include "include/utils.h"
+#include "include/testing.h"
 
 char* dateTimeAux;
 int zoomAux, regAux;
@@ -112,4 +113,8 @@ void playEasterEgg(){
 
     sysShowCursor();
     sysPrintCursor();
+}
+
+void test() {
+    proc_test();
 }
