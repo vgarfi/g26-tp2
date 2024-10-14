@@ -24,30 +24,32 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
   p_rq p_rqs[max_processes];
   printf("test_processes: Testing process administration...",0,0,0);
   while (1) {
-
-    // Create max_processes processes
+    
     for (rq = 0; rq < max_processes; rq++) {
       p_rqs[rq].pid = sysCreateProcess("endless_loop", 0, argvAux, endless_loop);
-
       if (p_rqs[rq].pid == -1) {
         printf("test_processes: ERROR creating process\n",0,0,0);
         return -1;
       } else {
+        printf("\nCreado proceso con PID: %d", p_rqs[rq].pid,0,0);
         p_rqs[rq].state = RUNNING;
         alive++;
       }
     }
 
+    printf("\nCREATED %d PROCESSES", max_processes, 0, 0);
+
+
     // Randomly kills, blocks or unblocks processes until every one has been killed
     while (alive > 0) {
       for (rq = 0; rq < max_processes; rq++) {
         action = GetUniform(100) % 2;
-
         switch (action) {
           case 0:
             if (p_rqs[rq].state == RUNNING || p_rqs[rq].state == BLOCKED) {
               if (sysKillProcess(p_rqs[rq].pid) == -1) {
                 printf("test_processes: ERROR killing process\n",0,0,0);
+                printf("No se pudo matar al proceso %d de PID %d", rq, p_rqs[rq].pid, 0);
                 return -1;
               }
               p_rqs[rq].state = KILLED;
@@ -76,9 +78,10 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
           }
           p_rqs[rq].state = RUNNING;
         }
+        printf("\nALIVE: %d, DEAD: %d", alive, max_processes-alive, 0);
     }
+    printf("\nKILLED %d PROCESSES", max_processes, 0, 0);
   }
-  printf("test_processes: Process tested succesfully",0,0,0);
 }
 
 void test_priorities(void) {
@@ -119,7 +122,40 @@ void test_priorities(void) {
 
   for (i = 0; i < TOTAL_PROCESSES; i++)
     sysKillProcess(pids[i]);
-  
-  printf("test_priorities: Process priorities tested succesfully",0,0,0);
 
+  bussy_wait(WAIT);
+  sysPs();
+  printf("\ntest_priorities: Process priorities tested succesfully\n",0,0,0);
+  finish_testing();
+}
+
+void finish_testing() {
+    bussy_wait(WAIT*3);
+    printf("\nFinishing testing in 3", 0,0,0);
+    bussy_wait(WAIT);
+    printf(".", 0,0,0);
+    bussy_wait(WAIT);
+    printf(".", 0,0,0);
+    bussy_wait(WAIT);
+    printf(".", 0,0,0);
+    bussy_wait(WAIT);
+    printf(" 2",0,0,0);
+    bussy_wait(WAIT);
+    printf(".", 0,0,0);
+    bussy_wait(WAIT);
+    printf(".", 0,0,0);
+    bussy_wait(WAIT);
+    printf(".", 0,0,0);
+    bussy_wait(WAIT);
+    printf(" 1",0,0,0);
+    bussy_wait(WAIT);
+    printf(".", 0,0,0);
+    bussy_wait(WAIT);
+    printf(".", 0,0,0);
+    bussy_wait(WAIT);
+    printf(".", 0,0,0);
+    sysClearScreen();
+    sysShowCursor();
+    sysPrintCursor();
+    sysKillProcess(sysGetCurrentPid());
 }

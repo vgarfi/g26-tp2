@@ -48,5 +48,6 @@ int blockProcess(uint8_t pid);
 int unblockProcess(uint8_t pid);
 int killProcess(uint8_t pid);
 int nice(uint8_t pid, uint8_t newPriority);
+int ps(void);
 
 #endif

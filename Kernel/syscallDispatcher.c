@@ -11,7 +11,7 @@
 #include "speaker.h"
 #include "fonts.h"
 
-#define HANDLER_SIZE 35
+#define HANDLER_SIZE 36
 
 static int (*syscallHandlers[])()={
     // Syscalls de Arqui
@@ -20,7 +20,7 @@ static int (*syscallHandlers[])()={
     showCursor, printCursor, getCurrentSeconds, getCurrentMinutes, getCurrentHours, getCurrentDay,
     getCurrentMonth, getCurrentYear, isctrlPressed, cleanKbBuffer,
     // Syscalls de Procesos
-    getCurrentPid, exitProcess, createProcess, blockProcess, unblockProcess, killProcess, nice
+    getCurrentPid, exitProcess, createProcess, blockProcess, unblockProcess, killProcess, nice, ps
 };
 
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
@@ -212,4 +212,8 @@ int killProcess(uint8_t pid) {
 
 int nice(uint8_t pid, uint8_t newPriority){
     return change_priority(pid, newPriority);
+}
+
+int ps(void){
+    return processes_information();
 }

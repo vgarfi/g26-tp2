@@ -46,5 +46,6 @@ int sysUnblockProcess(uint8_t pid);
 int sysKillProcess(uint8_t pid);
 
 int sysNice(uint8_t pid, uint8_t newPriority);
+void sysPs(void);
 
 #endif

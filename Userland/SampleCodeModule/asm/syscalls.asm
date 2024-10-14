@@ -41,6 +41,8 @@ GLOBAL sysBlockProcess
 GLOBAL sysUnblockProcess
 GLOBAL sysKillProcess
 GLOBAL sysNice
+GLOBAL sysPs
+
 
 section .text
 
@@ -220,5 +222,10 @@ sysKillProcess:
 
 sysNice:
     mov rax, 34
+    int 80h
+    ret
+
+sysPs
+    mov rax, 35
     int 80h
     ret

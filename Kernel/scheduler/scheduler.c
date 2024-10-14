@@ -1,6 +1,7 @@
 #include <kernelManagement.h>
 #include <scheduler/scheduler.h>
 #include <videoDriver.h>
+#include <interrupts.h>
 
 extern TPCB* pcb_array[MAX_PROCESSES];
 
@@ -23,7 +24,6 @@ uint64_t* schedule(uint64_t* rsp) {
 
     TPCB* next = (TPCB*) dequeue(pcb_readies_queue);
     if (next == NULL) {
-        failure_scheduling();
         return pcb_array[0]->rsp;
     }
 
@@ -37,11 +37,6 @@ uint64_t* schedule(uint64_t* rsp) {
     next->state = RUNNING;
     running_pcb = next;
     return running_pcb->rsp;
-}
-
-
-void failure_scheduling(void){
-
 }
 
 uint8_t get_current_pid(void) {
@@ -68,11 +63,14 @@ void put_children_zombie(uint8_t m_pid) {
 
 void kill_pcb(TPCB* pcb) {
     if (pcb->state == READY || pcb->state == RUNNING) {
-        while((dequeue_value(pcb_readies_queue, pcb)) != NULL); // Lo eliminamos de la lista las veces necesarias
+        remove_pcb_from_queue(pcb);
         if (pcb->state == RUNNING) {
-            //timer_interrupt(); // TODO llamar a la interrupción del timer
+            requestSchedule();
         }
     }
     put_children_zombie(pcb->pid);
-    pcb->state = KILLED;
+}
+
+void remove_pcb_from_queue(TPCB* pcb) {
+    while ((dequeue_value(pcb_readies_queue, pcb)) != NULL);
 }

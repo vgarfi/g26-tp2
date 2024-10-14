@@ -1,5 +1,8 @@
 #include "../include/structures/queueADT.h"
 #include <kernelManagement.h>
+#include <videoDriver.h>
+#include <scheduler/scheduler.h>
+
 
 extern MemoryManagerADT memory_manager;
 
@@ -96,3 +99,14 @@ int is_empty(TQueueADT queue) {
 void* peek(TQueueADT queue){
     return (queue->first == NULL)? NULL : queue->first->value;
 }
+/*
+void dump(TQueueADT queue){
+    TQueueNode* current = queue->first;
+    while (current != NULL) {
+        TPCB* pcb = (TPCB*)current->value;
+        vdPrint(pcb->name, 0x00FFFFFF);
+        vdPrint(" - ", 0x00FFFFFF);
+        current = current->next;
+    }
+}
+*/

@@ -3,7 +3,6 @@
 #include <process/process.h>
 #include <interrupts.h>
 #include <videoDriver.h>
-
 #include <string.h>
 
 extern MemoryManagerADT memory_manager;
@@ -16,6 +15,7 @@ TPCB* pcb_array[MAX_PROCESSES];
 int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**)) {
     char* ptr = malloc_mm(memory_manager, PROCESS_SIZE);
     if (ptr == NULL) {
+        vdPrint("\nKERNEL: OUT OF MEMEORY. Possible errors may ocurr", 0x00FF0000);
         return -1;
     }
 
@@ -25,7 +25,6 @@ int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, in
     }
 
     void* stack_base = ptr + STACK_SIZE;
-    // create_initial_stack((uint64_t *)stack_base, argc, argv, code, &wrapper);
     add_pcb(name, argc, argv, ptr, stack_base, (uint8_t) pid, priority, code);
     
     pids[pid] = NOT_AVAILABLE_PID;
@@ -37,6 +36,7 @@ int block_process(uint8_t pid) {
     if (pcb_to_block == NULL){
         return -1;
     }
+    remove_pcb_from_queue(pcb_to_block);
     pcb_to_block->state = BLOCKED;
     return EXIT_SUCCESS;
 }
@@ -46,7 +46,11 @@ int unblock_process(uint8_t pid) {
     if (pcb_to_unblock == NULL){
         return -1;
     }
+    for (uint8_t i = pcb_to_unblock->priority; i > 0; i--) {
+        enqueue(pcb_readies_queue, pcb_to_unblock);
+    }
     pcb_to_unblock->state = READY;
+
     return EXIT_SUCCESS;
 }
 
@@ -66,12 +70,13 @@ void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* s
 
     TPCB* new_pcb = (TPCB*) malloc_mm(memory_manager, sizeof(TPCB));
     if (new_pcb == NULL) {
+        vdPrint("\nKERNEL: OUT OF MEMEORY. Possible errors may ocurr", 0x00FF0000);
         return;
     }
     
 	new_pcb->name = (char *) malloc_mm(memory_manager, strlen(name) + 1);
 	if (new_pcb->name == NULL) {
-		free_mm(memory_manager, new_pcb);
+        free_mm(memory_manager, new_pcb);
     	return;
 	}
 
@@ -143,9 +148,52 @@ int kill_process(uint8_t pid) {
     if (process_pcb == NULL) {
         return -1;
     }
-    process_pcb->state = KILLED;
     kill_pcb(process_pcb);
+    process_pcb->state = KILLED;
     pids[pid] = AVAILABLE_PID;
-    requestSchedule();
+    free_process(process_pcb);
     return EXIT_SUCCESS;
+}
+
+void free_process(TPCB* pcb){
+    if (pcb == NULL) return;
+
+    if(pcb->stack_base != NULL){
+        free_mm(memory_manager, pcb->stack_base);
+    }
+    
+    if(pcb->stack_limit != NULL){
+        free_mm(memory_manager, pcb->stack_limit);
+    }
+
+    if(pcb->name != NULL){
+        free_mm(memory_manager, pcb->name);
+    }
+
+    free_mm(memory_manager, pcb);
+}
+
+int processes_information(void){
+    char buffer[10];
+    char* states_labels[] = {"BLOCKED","READY","RUNNING","KILLED","ZOMBIE"};
+    for(int i = 0; i < MAX_PROCESSES; i++) {
+        if (pcb_array[i] != NULL) {
+            vdPrint("\nPID: ", 0x00FFFFFF);
+            itoa(i, buffer, 10);
+            vdPrint(buffer, 0x00FFFFFF);
+            vdPrint(" NAME: ", 0x00FFFFFF);
+            vdPrint(pcb_array[i]->name, 0x00FFFFFF);
+            vdPrint(" PRIORITY: ", 0x00FFFFFF);
+            itoa(pcb_array[i]->priority, buffer, 10);
+            vdPrint(buffer, 0x00FFFFFF);
+            vdPrint(" SP: ", 0x00FFFFFF);
+            itoa(pcb_array[i]->rsp, buffer, 16);
+            vdPrint(buffer, 0x00FFFFFF);
+            vdPrint(" BP: ", 0x00FFFFFF);
+            itoa(pcb_array[i]->stack_base, buffer, 16);
+            vdPrint(buffer, 0x00FFFFFF);
+            vdPrint(" STATE: ", 0x00FFFFFF);
+            vdPrint(states_labels[pcb_array[i]->state], 0x00FFFFFF);
+        }
+    }
 }

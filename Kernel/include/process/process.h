@@ -9,7 +9,7 @@
 #include <memory/memoryManagerADT.h>
 #include <kernelManagement.h>
 
-#define STACK_SIZE          4096
+#define STACK_SIZE          2048
 
 #define PROCESS_SIZE        STACK_SIZE
 
@@ -61,4 +61,6 @@ void create_initial_stack(TStackFrame* stack_initial_data, char* stack_base, uin
 void wrapper(uint64_t argc, char* argv[], int64_t (*code)(int, char**));
 
 int kill_process(uint8_t pid);
+
+int processes_information(void);
 #endif
