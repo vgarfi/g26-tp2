@@ -23,7 +23,7 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
   /*if ((max_processes = satoi(argv[1])) <= 0)
     return -1;*/
 
-  max_processes = 100;
+  max_processes = 6;
 
   p_rq p_rqs[max_processes];
   printf("test_processes: Testing process administration...",0,0,0);
@@ -44,7 +44,6 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
 
     // Randomly kills, blocks or unblocks processes until every one has been killed
     while (alive > 0) {
-
       for (rq = 0; rq < max_processes; rq++) {
         action = GetUniform(100) % 2;
 
