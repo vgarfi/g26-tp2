@@ -157,10 +157,6 @@ int kill_process(uint8_t pid) {
 
 void free_process(TPCB* pcb){
     if (pcb == NULL) return;
-
-    if(pcb->stack_base != NULL){
-        free_mm(memory_manager, pcb->stack_base);
-    }
     
     if(pcb->stack_limit != NULL){
         free_mm(memory_manager, pcb->stack_limit);

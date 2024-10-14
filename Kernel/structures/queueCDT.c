@@ -75,7 +75,10 @@ void* dequeue_value(TQueueADT queue, void* value) {
 		queue->last = previous;
 	}
 
-	return current->value;
+    void* node_value = current->value;
+    free_mm(memory_manager, current);
+
+	return node_value;
 }
 
 int count_occurrences(TQueueADT queue, void* value) {
