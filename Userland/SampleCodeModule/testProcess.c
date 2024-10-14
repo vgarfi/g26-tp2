@@ -20,10 +20,8 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
   if (argc != 2)
     return -1;
 
-  /*if ((max_processes = satoi(argv[1])) <= 0)
-    return -1;*/
-
-  max_processes = 6;
+  if ((max_processes = satoi(argv[1])) <= 0)
+    return -1;
 
   p_rq p_rqs[max_processes];
   printf("test_processes: Testing process administration...",0,0,0);
