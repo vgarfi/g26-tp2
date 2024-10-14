@@ -15,8 +15,6 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
   uint64_t max_processes;
   char *argvAux[] = {0};
 
-  printf("\nFui creado con %d argumentos: %d \n", argc, satoi(argv[1]), 0);
-
   if (argc != 2)
     return -1;
 

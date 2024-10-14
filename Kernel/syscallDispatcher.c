@@ -10,9 +10,8 @@
 #include <syscallHandle.h>
 #include "speaker.h"
 #include "fonts.h"
-#define BLANCO  0x00FFFFFF
 
-#define HANDLER_SIZE 31
+#define HANDLER_SIZE 35
 
 static int (*syscallHandlers[])()={
     // Syscalls de Arqui
@@ -196,26 +195,6 @@ int exitProcess(){
 }
 
 int createProcess(char* name, uint64_t argc, char *argv[], int64_t (*code)(int, char**)){
-    vdPrint("\nEn el dispatcher:\n", BLANCO);
-    vdPrint("Los argumentos son: name:'", BLANCO);
-    vdPrint(name, BLANCO);
-    char buffer[32];
-    itoa(argc, buffer ,10);
-    vdPrint("', Args: (", BLANCO);
-    vdPrint(buffer, BLANCO);
-    vdPrint("): ", BLANCO);
-    for (size_t i = 0; i < argc; i++) {
-        if (argv[i] != NULL && argv[i] != 0){
-            vdPrint(argv[i], BLANCO);
-            vdPrint(" - ", BLANCO);
-        }
-        else {
-            vdPrint(" era NULL en una posición, ", BLANCO);
-        }
-    }
-    vdPrint(" y CODE: ", BLANCO);
-    itoa(code, buffer, 16);
-    vdPrint(buffer, BLANCO);
     return create_process(name, argc, argv, 1, code);
 }
 
