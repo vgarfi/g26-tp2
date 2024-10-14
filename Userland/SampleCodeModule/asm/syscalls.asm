@@ -199,6 +199,7 @@ sysExit:
 
 sysCreateProcess:
     mov rax, 30
+    mov r10, rcx
     int 80h
     ret
 

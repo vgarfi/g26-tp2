@@ -1,7 +1,5 @@
 include ../Makefile.inc
 
-GCCFLAGS += -fPIE
-
 MODULE=0000-sampleCodeModule.bin
 SOURCES=$(wildcard [^_]*.c)
 SOURCES_ASM=$(wildcard asm/*.asm)
@@ -14,7 +12,7 @@ all: $(MODULE)
 
 $(MODULE): $(SOURCES) $(SOURCES_MM) $(SOURCES_PROC) $(OBJECTS_ASM)
 	$(GCC) $(GCCFLAGS) -I./include -I../../Kernel/include/memory -T sampleCodeModule.ld _loader.c $(SOURCES) $(SOURCES_MM) $(SOURCES_PROC) $(OBJECTS_ASM) -o ../$(MODULE)
-	$(GCC) $(GCCFLAGS) -I./include -I../../Kernel/include/memory -T sampleCodeModule.ld -Wl,--oformat=elf64-x86-64 _loader.c $(SOURCES) $(OBJECTS_ASM) -o ../0000-sampleCodeModule.elf
+	$(GCC) $(GCCFLAGS) -no-pie -I./include -I../../Kernel/include/memory -T sampleCodeModule.ld -Wl,--oformat=elf64-x86-64 _loader.c $(SOURCES) $(OBJECTS_ASM) -o ../0000-sampleCodeModule.elf
 
 obj/%.o : asm/%.asm
 	mkdir -p obj
