@@ -116,7 +116,7 @@ void playEasterEgg(){
 }
 
 void process_test() {
-  char * test_args_proc[] = {TEST_PROCESSES, "100", 0};
+  char * test_args_proc[] = {TEST_PROCESSES, "99", 0};
   sysCreateProcess(TEST_PROCESSES, 2, test_args_proc, test_processes);
 }
 

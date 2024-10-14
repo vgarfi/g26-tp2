@@ -15,13 +15,15 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
   uint64_t max_processes;
   char *argvAux[] = {0};
 
-  printf("\nFui creado con %d argumentos\n", argc, 0,0);
+  printf("\nFui creado con %d argumentos: %d \n", argc, satoi(argv[1]), 0);
 
-  if (argc != 1)
+  if (argc != 2)
     return -1;
 
-  if ((max_processes = satoi(argv[0])) <= 0)
-    return -1;
+  /*if ((max_processes = satoi(argv[1])) <= 0)
+    return -1;*/
+
+  max_processes = 100;
 
   p_rq p_rqs[max_processes];
   printf("test_processes: Testing process administration...",0,0,0);
