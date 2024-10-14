@@ -3,9 +3,6 @@
 #include <syscalls.h>
 #include <stdio.h>
 
-
-
-
 uint8_t prio[TOTAL_PROCESSES] = {LOWEST, MEDIUM, HIGHEST};
 
 int64_t test_processes(uint64_t argc, char *argv[]) {
@@ -91,7 +88,6 @@ void test_priorities(void) {
 
   printf("test_priorities: Testing Process Priorities...",0,0,0);
 
-
   for (i = 0; i < TOTAL_PROCESSES; i++)
     pids[i] = sysCreateProcess("endless_loop_print", 0, argv, endless_loop_print);
 
@@ -155,7 +151,4 @@ void finish_testing() {
     bussy_wait(WAIT);
     printf(".", 0,0,0);
     sysClearScreen();
-    sysShowCursor();
-    sysPrintCursor();
-    sysKillProcess(sysGetCurrentPid());
 }

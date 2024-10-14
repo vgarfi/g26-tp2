@@ -4,7 +4,7 @@
 #include <interrupts.h>
 #include <string.h>
 
-char* shell_args[] = {SHELL_PROCESS, "Shell", "Pablo", 0};
+char* shell_args[] = {SHELL_PROCESS, 0};
 char* idle_args[] = {IDLE_PROCESS, 0};
 
 MemoryManagerADT memory_manager;

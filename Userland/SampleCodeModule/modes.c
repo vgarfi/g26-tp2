@@ -115,7 +115,7 @@ void playEasterEgg(){
     sysPrintCursor();
 }
 
-static char * test_args_proc[] = {TEST_PROCESSES, "5", 0};
+static char * test_args_proc[] = {TEST_PROCESSES, "6", 0};
 
 void process_test() {
   sysCreateProcess(TEST_PROCESSES, 2, test_args_proc, test_processes);
