@@ -28,7 +28,6 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
         printf("test_processes: ERROR creating process\n",0,0,0);
         return -1;
       } else {
-        printf("\nCreado proceso con PID: %d", p_rqs[rq].pid,0,0);
         p_rqs[rq].state = RUNNING;
         alive++;
       }
@@ -46,7 +45,6 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
             if (p_rqs[rq].state == RUNNING || p_rqs[rq].state == BLOCKED) {
               if (sysKillProcess(p_rqs[rq].pid) == -1) {
                 printf("test_processes: ERROR killing process\n",0,0,0);
-                printf("No se pudo matar al proceso %d de PID %d", rq, p_rqs[rq].pid, 0);
                 return -1;
               }
               p_rqs[rq].state = KILLED;
@@ -151,4 +149,10 @@ void finish_testing() {
     bussy_wait(WAIT);
     printf(".", 0,0,0);
     sysClearScreen();
+    sysClearKbEntry();
+    printColor("$", 0x0000FF00);
+    print("> ");
+    sysShowCursor();
+    bussy_wait(WAIT);
+    sysKillProcess(sysGetCurrentPid());
 }

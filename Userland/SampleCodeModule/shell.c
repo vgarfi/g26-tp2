@@ -27,6 +27,7 @@ int init(){
         else if(strcasecmp(commandPrompt, modes[REGISTERS_MODE]) == SELECTED_MODE) registers();
         else if(strcasecmp(commandPrompt, modes[TESTP_MODE]) == SELECTED_MODE) process_test();
         else if(strcasecmp(commandPrompt, modes[TESTPRIO_MODE]) == SELECTED_MODE) priorities_test();
+        else if(strcasecmp(commandPrompt, modes[PS_MODE]) == SELECTED_MODE) ps_printing();
         else notFound(commandPrompt);
     }
 }

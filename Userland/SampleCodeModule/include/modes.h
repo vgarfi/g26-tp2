@@ -13,6 +13,9 @@ void registers(void);
 void eliminator(void);
 void notFound(char* commandNotFound);
 void playEasterEgg();
+
 void process_test();
 void priorities_test();
+
+void ps_printing(void);
 #endif

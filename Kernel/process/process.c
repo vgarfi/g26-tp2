@@ -148,10 +148,14 @@ int kill_process(uint8_t pid) {
     if (process_pcb == NULL) {
         return -1;
     }
+    TState process_state = process_pcb->state;
     kill_pcb(process_pcb);
     process_pcb->state = KILLED;
     pids[pid] = AVAILABLE_PID;
     free_process(process_pcb);
+    if (process_state == RUNNING) {
+        requestSchedule();
+    }
     return EXIT_SUCCESS;
 }
 
@@ -160,6 +164,14 @@ void free_process(TPCB* pcb){
     
     if(pcb->stack_limit != NULL){
         free_mm(memory_manager, pcb->stack_limit);
+    }
+
+    if (pcb->rsp != NULL){
+        free_mm(memory_manager, pcb->rsp);
+    }
+    
+    if (pcb->stack_base != NULL){
+        free_mm(memory_manager, pcb->stack_base);
     }
 
     if(pcb->name != NULL){
@@ -173,23 +185,24 @@ int processes_information(void){
     char buffer[10];
     char* states_labels[] = {"BLOCKED","READY","RUNNING","KILLED","ZOMBIE"};
     for(int i = 0; i < MAX_PROCESSES; i++) {
-        if (pcb_array[i] != NULL) {
+        if (pcb_array[i] != NULL && pids[i] == NOT_AVAILABLE_PID) {
             vdPrint("\nPID: ", 0x00FFFFFF);
             itoa(i, buffer, 10);
             vdPrint(buffer, 0x00FFFFFF);
-            vdPrint(" NAME: ", 0x00FFFFFF);
+            vdPrint(" - NAME: ", 0x00FFFFFF);
             vdPrint(pcb_array[i]->name, 0x00FFFFFF);
-            vdPrint(" PRIORITY: ", 0x00FFFFFF);
+            vdPrint(" - PRIORITY: ", 0x00FFFFFF);
             itoa(pcb_array[i]->priority, buffer, 10);
             vdPrint(buffer, 0x00FFFFFF);
-            vdPrint(" SP: ", 0x00FFFFFF);
+            vdPrint(" - SP: ", 0x00FFFFFF);
             itoa(pcb_array[i]->rsp, buffer, 16);
             vdPrint(buffer, 0x00FFFFFF);
-            vdPrint(" BP: ", 0x00FFFFFF);
+            vdPrint(" - BP: ", 0x00FFFFFF);
             itoa(pcb_array[i]->stack_base, buffer, 16);
             vdPrint(buffer, 0x00FFFFFF);
-            vdPrint(" STATE: ", 0x00FFFFFF);
+            vdPrint(" - STATE: ", 0x00FFFFFF);
             vdPrint(states_labels[pcb_array[i]->state], 0x00FFFFFF);
         }
     }
+    vdPrint("\n",0x00FFFFFF);
 }

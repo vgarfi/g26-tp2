@@ -64,9 +64,6 @@ void put_children_zombie(uint8_t m_pid) {
 void kill_pcb(TPCB* pcb) {
     if (pcb->state == READY || pcb->state == RUNNING) {
         remove_pcb_from_queue(pcb);
-        if (pcb->state == RUNNING) {
-            requestSchedule();
-        }
     }
     put_children_zombie(pcb->pid);
 }

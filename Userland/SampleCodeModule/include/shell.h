@@ -21,10 +21,12 @@
 #define EASTEREGG_MODE      12
 #define TESTP_MODE          13
 #define TESTPRIO_MODE       14
+#define PS_MODE             15
 
 
 static const char* modes[] = {
-    "shell", "idle", "help", "divbyzero", "invalidopcode", "zoomin", "zoomout", "time", "date", "eliminator", "clear", "registers", "easteregg", "testp", "testprio"
+    "shell", "idle", "help", "divbyzero", "invalidopcode", "zoomin", "zoomout", "time", "date", "eliminator", "clear", "registers", "easteregg",
+    "testp", "testprio", "ps"
 };
 
 static char* helpText[] = { "Command information is displayed below:\n\n",
@@ -43,6 +45,7 @@ static char* helpText[] = { "Command information is displayed below:\n\n",
 "CLEAR               ->      Clears the screen\n",
 "REGISTERS           ->      Prints registers values. To do this, first you need to save\n",
 "                            your registers by pressing ALT.\n",
+"PS                  ->      Prints current ongoing processes with their information\n "
 "----------------------------------- TESTING -----------------------------------\n"
 "TESTP               ->      Tests functionalities required for proces administration.\n",
 "TESTPRIO            ->      Tests processes priorities creation.\n",

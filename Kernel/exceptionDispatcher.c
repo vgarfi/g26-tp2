@@ -54,5 +54,4 @@ static void zero_division() {
 
 static void invalid_opcode(){
 	vdPrint("Invalid Opcode exception: command not recognised\n",COMMENTCOL);
-
 }
