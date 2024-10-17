@@ -64,15 +64,15 @@ char insert_element(TListADT list, void* element) {
     return TRUE;
 }
 
-char remove_element(TListADT* list, void* element) {
-    if (*list == NULL || (*list)->head == NULL) {
+char remove_element(TListADT list, void* element) {
+    if (list == NULL || list->head == NULL) {
         return FALSE;
     }
 
-    TNode* current = (*list)->head;
+    TNode* current = list->head;
     TNode* prev = NULL;
 
-    while (current != NULL && (*list)->cmpFunc(element, current->data) != 0) {
+    while (current != NULL && list->cmpFunc(element, current->data) != 0) {
         prev = current;
         current = current->next;
     }
@@ -82,7 +82,7 @@ char remove_element(TListADT* list, void* element) {
     }
 
     if (prev == NULL) {
-        (*list)->head = current->next;
+        list->head = current->next;
     } else {
         prev->next = current->next;
     }
@@ -91,35 +91,19 @@ char remove_element(TListADT* list, void* element) {
     return 1;
 }
 
-void* get_first_element(TListADT* list) {
-    if (*list == NULL || (*list)->head == NULL) {
+void* get_first_element(TListADT list) {
+    if (list == NULL || list->head == NULL) {
         return NULL;
     }
-    return (*list)->head->data;
+    return list->head->data;
 }
 
-void* get_next_element(TListADT* list) {
-    static TNode* current = NULL;
-
-    if (*list == NULL) {
-        return NULL;
-    }
-
-    if (current == NULL) {
-        current = (*list)->head;
-    } else {
-        current = current->next;
-    }
-
-    return (current != NULL) ? current->data : NULL;
-}
-
-void destroy_list(TListADT* list) {
-    if (*list == NULL) {
+void destroy_list(TListADT list) {
+    if (list == NULL) {
         return;
     }
 
-    TNode* current = (*list)->head;
+    TNode* current = list->head;
     TNode* nextNode;
 
     while (current != NULL) {
@@ -128,6 +112,6 @@ void destroy_list(TListADT* list) {
         current = nextNode;
     }
 
-    free_mm(memory_manager, *list);
-    *list = NULL;
+    free_mm(memory_manager, list);
+    list = NULL;
 }

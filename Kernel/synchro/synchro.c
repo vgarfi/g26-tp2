@@ -30,7 +30,10 @@ TSemaphore* create_sem(char* name, uint64_t initial_value) {
 
     return new_semaphore;
 }
-TSemaphore* get_sem(char* name);
+
+TSemaphore* get_sem(char* name) {
+    
+}
 void wait_sem(char* name);
 void post_sem(char* name);
 void delete_sem(char* name);
