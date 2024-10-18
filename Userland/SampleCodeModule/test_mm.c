@@ -39,15 +39,9 @@
   
 //   size_t total_memory = 1024 * 1024; // 1 MB
 //   size_t block_size = 64; // Bloques de 64 bytes
-    
-//     void *memory = malloc(total_memory);
-//     if (memory == NULL) {
-//         return -1;
-//     }
 
-//   MemoryManagerADT memory_manager = initialize_mm(memory, total_memory, block_size);
+//   MemoryManagerADT memory_manager = initialize_mm((void*)0x600000, total_memory, block_size);
 //   if(memory_manager == NULL){
-//     free(memory);
 //     return -1;
 //   }
 
@@ -92,6 +86,4 @@
 //       }
 //     }
 //   }
-
-//   free(memory);
 // }
