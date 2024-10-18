@@ -19,11 +19,9 @@ char * strcpy(char *dest, const char *src){
 
 
 void itoa(int value, char* str, int base) {
-    char *rc;
-    char *ptr;
+    char *ptr = str;
     char *low;
     static const char digits[] = "0123456789abcdefghijklmnopqrstuvwxyz";
-    rc = ptr = str;
     if (value < 0 && base == 10) {
         *ptr++ = '-';
         value = -value;

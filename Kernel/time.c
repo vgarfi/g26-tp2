@@ -1,6 +1,7 @@
 #include "include/time.h"
 #include <interrupts.h>
 #include <stdint.h>
+#include <speaker.h>
 
 static unsigned long ticks = 0;
 

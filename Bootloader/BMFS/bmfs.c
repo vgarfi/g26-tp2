@@ -7,6 +7,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#define LOWERCASEDIFF 32
+
 /* Global defines */
 struct BMFSEntry
 {
@@ -50,6 +52,23 @@ void create(char *filename, unsigned long long maxsize);
 void read(char *filename);
 void write(char *filename);
 void delete(char *filename);
+
+void toLower(char * str){
+    for(int i=0; str[i]!='\0'; i++){
+        if(str[i]>='A' && str[i]<='Z'){
+            str[i]+=LOWERCASEDIFF;
+        }
+    }
+}
+int strcasecmp(const char * str1, const char * str2){
+    int len1 = strlen(str1), len2=strlen(str2);
+    char s1[len1], s2[len2];
+    strcpy(s1,str1);
+    strcpy(s2, str2);
+    toLower(s1);
+    toLower(s2);
+    return strcmp(s1,s2);
+}
 
 /* Program code */
 int main(int argc, char *argv[])
