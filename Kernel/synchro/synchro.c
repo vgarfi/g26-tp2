@@ -102,5 +102,24 @@ void post_sem(char* name) {
 }
 
 void delete_sem(char* name) {
+    TSemaphore* new_semaphore = (TSemaphore*) malloc_mm(memory_manager, sizeof(TSemaphore));
+    if(new_semaphore == NULL)
+        return;
     
+    new_semaphore->name = name;
+
+    TSemaphore* looked_semaphore = get_element(semaphore_list, new_semaphore);
+    
+    free_mm(memory_manager, new_semaphore);
+
+    while (!is_empty(looked_semaphore->waiting_processes))
+    {
+        uint8_t first_pid = dequeue(looked_semaphore->waiting_processes);
+        unblock_process(first_pid);
+    }
+    
+    free_mm(memory_manager, looked_semaphore->name);
+    free_mm(memory_manager, looked_semaphore);
+
+    return;
 }
