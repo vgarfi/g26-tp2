@@ -12,6 +12,8 @@ uint8_t pids[MAX_PROCESSES] = {AVAILABLE_PID};
 extern TQueueADT pcb_readies_queue;
 TPCB* pcb_array[MAX_PROCESSES];
 
+void free_process(TPCB* pcb);
+
 int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**)) {
     char* ptr = malloc_mm(memory_manager, PROCESS_SIZE);
     if (ptr == NULL) {
@@ -84,13 +86,12 @@ void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* s
     new_pcb->pid = pid;
     new_pcb->m_pid = get_current_pid();
 
-    new_pcb->stack_base = stack_base;
-    new_pcb->stack_limit = stack_limit;
+    new_pcb->stack_base = (uint64_t*) stack_base;
+    new_pcb->stack_limit = (uint64_t*) stack_limit;
 
-    char buffer[50];
-    new_pcb->rsp = stack_base - sizeof(TStackFrame) + 1;
+    new_pcb->rsp = (uint64_t *)(stack_base - sizeof(TStackFrame) + 1);
     
-    create_initial_stack((TStackFrame*) new_pcb->rsp, stack_base, argc, argv, code);
+    create_initial_stack((TStackFrame*) new_pcb->rsp, stack_base, argc, (uint64_t)argv, code);
 
     new_pcb->state = READY;
     new_pcb->priority = priority;
@@ -108,7 +109,7 @@ void create_initial_stack(TStackFrame* stack_initial_data, char* stack_base, uin
     stack_initial_data->rbx = 0;
     stack_initial_data->rcx = 0;
     stack_initial_data->rdx = (uint64_t)code;
-    stack_initial_data->rbp = stack_base;
+    stack_initial_data->rbp = (uint64_t) stack_base;
     stack_initial_data->rdi = argc;
     stack_initial_data->rsi = argv;
     stack_initial_data->r8 = 0;
@@ -121,7 +122,7 @@ void create_initial_stack(TStackFrame* stack_initial_data, char* stack_base, uin
     stack_initial_data->r15 = 0;
 
     // Propio del IRETQ
-    stack_initial_data->rsp = (uint64_t*)stack_base;
+    stack_initial_data->rsp = (uint64_t)stack_base;
     stack_initial_data->rip = (uint64_t)wrapper;
     stack_initial_data->cs = 0x08;
     stack_initial_data->rflags = 0x202;
@@ -195,14 +196,15 @@ int processes_information(void){
             itoa(pcb_array[i]->priority, buffer, 10);
             vdPrint(buffer, 0x00FFFFFF);
             vdPrint(" - SP: ", 0x00FFFFFF);
-            itoa(pcb_array[i]->rsp, buffer, 16);
+            itoa64((uint64_t) pcb_array[i]->rsp, buffer, 16);
             vdPrint(buffer, 0x00FFFFFF);
             vdPrint(" - BP: ", 0x00FFFFFF);
-            itoa(pcb_array[i]->stack_base, buffer, 16);
+            itoa64((uint64_t) pcb_array[i]->stack_base, buffer, 16);
             vdPrint(buffer, 0x00FFFFFF);
             vdPrint(" - STATE: ", 0x00FFFFFF);
             vdPrint(states_labels[pcb_array[i]->state], 0x00FFFFFF);
         }
     }
     vdPrint("\n",0x00FFFFFF);
+    return EXIT_SUCCESS;
 }
