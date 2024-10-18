@@ -129,9 +129,10 @@ int scanf(char * buffer, int size){
                 putchar(read);  // Newline
             }
             else if(read=='\b' && readSize!=0){
-                if(readSize>=printedSize)
+                if(readSize>=printedSize){
                     readSize--;
                     buffer[readSize]=0;
+                }
                 putchar(read);  // Backspace
                 printedSize--;
             }
