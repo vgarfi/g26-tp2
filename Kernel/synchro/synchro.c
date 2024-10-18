@@ -44,8 +44,19 @@ TSemaphore* create_sem(char* name, uint64_t initial_value) {
 }
 
 TSemaphore* get_sem(char* name) {
+    TSemaphore* new_semaphore = (TSemaphore*) malloc_mm(memory_manager, sizeof(TSemaphore));
+    if(new_semaphore == NULL)
+        return NULL;
     
+    new_semaphore->name = name;
+
+    TSemaphore* looked_semaphore = get_element(semaphore_list, new_semaphore);
+    
+    free_mm(memory_manager, new_semaphore);
+
+    return (TSemaphore*) looked_semaphore;
 }
+
 void wait_sem(char* name) {
 
 }

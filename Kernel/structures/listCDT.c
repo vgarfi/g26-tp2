@@ -90,6 +90,24 @@ char remove_element(TListADT list, void* element) {
     return 1;
 }
 
+void* get_element(TListADT list, void* element) {
+    if (list == NULL || list->head == NULL) {
+        return NULL;
+    }
+
+    TNode* current = list->head;
+
+    while (current != NULL && list->cmpFunc(element, current->data) > 0) {
+        current = current->next;
+    }
+
+    if (current != NULL && list->cmpFunc(element, current->data) == 0) {
+        return current->data;
+    }
+
+    return NULL;
+}
+
 void destroy_list(TListADT list) {
     if (list == NULL) {
         return;
