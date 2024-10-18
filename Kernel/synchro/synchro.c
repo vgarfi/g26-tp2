@@ -53,23 +53,18 @@ TSemaphore* get_sem(char* name) {
     
     new_semaphore->name = name;
 
-    TSemaphore* looked_semaphore = get_element(semaphore_list, new_semaphore);
-    
+    TSemaphore* looked_semaphore = (TSemaphore*) get_element(semaphore_list, new_semaphore);
+
     free_mm(memory_manager, new_semaphore);
 
-    return (TSemaphore*) looked_semaphore;
+    return looked_semaphore;
 }
 
 void wait_sem(char* name) {
-    TSemaphore* new_semaphore = (TSemaphore*) malloc_mm(memory_manager, sizeof(TSemaphore));
-    if(new_semaphore == NULL)
+    TSemaphore* looked_semaphore = get_sem(name);    
+    if (looked_semaphore == NULL){
         return;
-    
-    new_semaphore->name = name;
-
-    TSemaphore* looked_semaphore = get_element(semaphore_list, new_semaphore);
-    
-    free_mm(memory_manager, new_semaphore);
+    }
 
     if(looked_semaphore->value > 0){
         looked_semaphore--;
@@ -82,15 +77,10 @@ void wait_sem(char* name) {
 }
 
 void post_sem(char* name) {
-    TSemaphore* new_semaphore = (TSemaphore*) malloc_mm(memory_manager, sizeof(TSemaphore));
-    if(new_semaphore == NULL)
+    TSemaphore* looked_semaphore = get_sem(name);   
+    if (looked_semaphore == NULL){
         return;
-    
-    new_semaphore->name = name;
-
-    TSemaphore* looked_semaphore = get_element(semaphore_list, new_semaphore);
-    
-    free_mm(memory_manager, new_semaphore);
+    }
 
     if(is_empty(looked_semaphore->waiting_processes)){
         looked_semaphore->value = looked_semaphore->value + 1;
@@ -102,15 +92,10 @@ void post_sem(char* name) {
 }
 
 void delete_sem(char* name) {
-    TSemaphore* new_semaphore = (TSemaphore*) malloc_mm(memory_manager, sizeof(TSemaphore));
-    if(new_semaphore == NULL)
+    TSemaphore* looked_semaphore = get_sem(name);
+    if (looked_semaphore == NULL){
         return;
-    
-    new_semaphore->name = name;
-
-    TSemaphore* looked_semaphore = get_element(semaphore_list, new_semaphore);
-    
-    free_mm(memory_manager, new_semaphore);
+    }
 
     while (!is_empty(looked_semaphore->waiting_processes))
     {
