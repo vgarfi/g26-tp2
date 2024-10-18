@@ -84,7 +84,7 @@ void free_mm(MemoryManagerADT mm, void* ptr) {
 }
 
 size_t get_used_memory(MemoryManagerADT mm) {
-    size_t num_blocks = mm->memory_size / mm->block_size;
+    return mm->used_blocks * mm->block_size;
 }
 
 MemoryDiagnostic get_diagnostic_mm(MemoryManagerADT mm) { // TODO ver si trunca
