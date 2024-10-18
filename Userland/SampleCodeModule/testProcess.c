@@ -23,7 +23,7 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
   while (1) {
     
     for (rq = 0; rq < max_processes; rq++) {
-      p_rqs[rq].pid = sysCreateProcess("endless_loop", 0, argvAux, endless_loop);
+      p_rqs[rq].pid = sysCreateProcess("endless_loop", 0, argvAux, (int64_t (*)(int, char**))endless_loop);
       if (p_rqs[rq].pid == -1) {
         printf("test_processes: ERROR creating process\n",0,0,0);
         return -1;
@@ -65,7 +65,7 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
       }
 
       // Randomly unblocks processes
-      for (rq = 0; rq < max_processes; rq++)
+      for (rq = 0; rq < max_processes; rq++){
         if (p_rqs[rq].state == BLOCKED && GetUniform(100) % 2) {
           if (sysUnblockProcess(p_rqs[rq].pid) == -1) {
             printf("test_processes: ERROR unblocking process\n",0,0,0);
@@ -74,6 +74,7 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
           p_rqs[rq].state = RUNNING;
         }
         printf("\nALIVE: %d, DEAD: %d", alive, max_processes-alive, 0);
+      }
     }
     printf("\nKILLED %d PROCESSES", max_processes, 0, 0);
   }
@@ -87,7 +88,7 @@ void test_priorities(void) {
   printf("test_priorities: Testing Process Priorities...",0,0,0);
 
   for (i = 0; i < TOTAL_PROCESSES; i++)
-    pids[i] = sysCreateProcess("endless_loop_print", 0, argv, endless_loop_print);
+    pids[i] = sysCreateProcess("endless_loop_print", 0, argv, (int64_t (*)(int, char**))endless_loop_print);
 
   bussy_wait(WAIT);
   printf("\nCHANGING PRIORITIES...\n", 0,0,0);
