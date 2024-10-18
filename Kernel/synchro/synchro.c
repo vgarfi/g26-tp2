@@ -63,7 +63,7 @@ TSemaphore* get_sem(char* name) {
 void wait_sem(char* name) {
     TSemaphore* new_semaphore = (TSemaphore*) malloc_mm(memory_manager, sizeof(TSemaphore));
     if(new_semaphore == NULL)
-        return NULL;
+        return;
     
     new_semaphore->name = name;
 
@@ -82,9 +82,25 @@ void wait_sem(char* name) {
 }
 
 void post_sem(char* name) {
+    TSemaphore* new_semaphore = (TSemaphore*) malloc_mm(memory_manager, sizeof(TSemaphore));
+    if(new_semaphore == NULL)
+        return;
+    
+    new_semaphore->name = name;
 
+    TSemaphore* looked_semaphore = get_element(semaphore_list, new_semaphore);
+    
+    free_mm(memory_manager, new_semaphore);
+
+    if(is_empty(looked_semaphore->waiting_processes)){
+        looked_semaphore->value = looked_semaphore->value + 1;
+    }else{
+        uint8_t first_pid = dequeue(looked_semaphore->waiting_processes);
+        unblock_process(first_pid);
+    }
+    return;
 }
 
 void delete_sem(char* name) {
-
+    
 }
