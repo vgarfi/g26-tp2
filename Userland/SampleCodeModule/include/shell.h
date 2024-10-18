@@ -24,12 +24,12 @@
 #define PS_MODE             15
 
 
-static const char* modes[] = {
+static const char* modes[]  __attribute__((unused)) = {
     "shell", "idle", "help", "divbyzero", "invalidopcode", "zoomin", "zoomout", "time", "date", "eliminator", "clear", "registers", "easteregg",
     "testp", "testprio", "ps"
 };
 
-static char* helpText[] = { "Command information is displayed below:\n\n",
+static char* helpText[]  __attribute__((unused)) = { "Command information is displayed below:\n\n",
 "HELP                ->      Shows a description on each available command.\n",
 "DIVBYZERO           ->      Shows handling in case of division by zero.\n",
 "INVALIDOPCODE       ->      Shows handling in case of an invalid operation code.\n",
