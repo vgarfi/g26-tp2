@@ -53,7 +53,7 @@ void eliminatorGame () {
 }
 
 void playAlone(void) {
-    unsigned char finishKey;
+    unsigned char finishKey = UP;
     unsigned char lastKeyPressed = UP;
     unsigned char keyPressed = lastKeyPressed;
     unsigned char aux;
@@ -113,7 +113,7 @@ void playAlone(void) {
 }
 
 void playTwoPlayers(int player2) {
-    unsigned char finishKey;
+    unsigned char finishKey = UP;
     unsigned char keyPressed;
     unsigned char lastKeyPressed, aux;
     while (finishKey != ESC) {
