@@ -1,7 +1,7 @@
 include Makefile.inc
 
 KERNEL=kernel.bin
-SOURCES=$(wildcard *.c) $(wildcard process/*.c) $(wildcard scheduler/*.c) $(wildcard structures/*.c)
+SOURCES=$(wildcard *.c) $(wildcard process/*.c) $(wildcard scheduler/*.c) $(wildcard structures/*.c) $(wildcard synchro/*.c)
 SOURCES_ASM=$(wildcard asm/*.asm)
 OBJECTS=$(SOURCES:.c=.o)
 OBJECTS_ASM=$(SOURCES_ASM:.asm=.o)

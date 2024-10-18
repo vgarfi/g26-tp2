@@ -1,5 +1,5 @@
 #include <structures/listADT.h>
-#include <memoryManagerADT.h>
+#include <memory/memoryManagerADT.h>
 #include <string.h>
 
 #define FALSE       0
@@ -26,7 +26,6 @@ TListADT create_list(int (*cmpFunc)(const void*, const void*)) {
     newList->cmpFunc = cmpFunc;
     return newList;
 }
-
 
 char insert_element(TListADT list, void* element) {
     TNode* newNode = (TNode*) malloc_mm(memory_manager, sizeof(TNode));
@@ -89,13 +88,6 @@ char remove_element(TListADT list, void* element) {
 
     free_mm(memory_manager, current);
     return 1;
-}
-
-void* get_first_element(TListADT list) {
-    if (list == NULL || list->head == NULL) {
-        return NULL;
-    }
-    return list->head->data;
 }
 
 void destroy_list(TListADT list) {
