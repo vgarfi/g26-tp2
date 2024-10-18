@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 uint8_t prio[TOTAL_PROCESSES] = {LOWEST, MEDIUM, HIGHEST};
+void finish_testing();
 
 int64_t test_processes(uint64_t argc, char *argv[]) {
   uint8_t rq;
