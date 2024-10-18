@@ -118,14 +118,13 @@ void playEasterEgg(){
 static char * test_args_proc[] = {TEST_PROCESSES, "10", 0};
 
 void process_test() {
-  sysCreateProcess(TEST_PROCESSES, 2, test_args_proc, test_processes);
+  sysCreateProcess(TEST_PROCESSES, 2, test_args_proc, (int64_t (*)(int, char**))test_processes);
 }
 
 static char * test_args_prio[] = {TEST_PRIORITY, 0};
 
 void priorities_test(){
-    char * test_args_prio[] = {TEST_PRIORITY, 0};
-    sysCreateProcess(TEST_PRIORITY, 1, test_args_prio, test_priorities);
+    sysCreateProcess(TEST_PRIORITY, 1, test_args_prio, (int64_t (*)(int, char**))test_priorities);
 }
 
 void ps_printing(){
