@@ -31,7 +31,7 @@ TSemaphore* create_sem(char* name, uint64_t initial_value) {
 	new_semaphore->name = (char *) malloc_mm(memory_manager, strlen(name) + 1);
 	if (new_semaphore->name == NULL) {
         free_mm(memory_manager, new_semaphore);
-    	return;
+    	return NULL;
 	}
 
 	strcpy(new_semaphore->name, name);
@@ -48,8 +48,9 @@ TSemaphore* create_sem(char* name, uint64_t initial_value) {
 
 TSemaphore* get_sem(char* name) {
     TSemaphore* new_semaphore = (TSemaphore*) malloc_mm(memory_manager, sizeof(TSemaphore));
-    if(new_semaphore == NULL)
+    if(new_semaphore == NULL) {
         return NULL;
+    }
     
 	strcpy(new_semaphore->name, name);
 
