@@ -1,3 +1,5 @@
+// //test_mm outside Kernel
+
 // #include <syscalls.h>
 // #include <test_util.h>
 // #include <test_mm.h>
@@ -6,8 +8,6 @@
 // #include <memoryManagerADT.h>
 
 // #define MAX_BLOCKS 128
-
-// extern MemoryManagerADT memory_manager;
 
 // typedef struct MM_rq {
 //   void *address;
@@ -39,6 +39,15 @@
 //     return -1;
 //   }
   
+//   size_t total_memory = 1024 * 1024; // 1 MB
+//   size_t block_size = 64; // Bloques de 64 bytes
+
+//   void* memory = malloc(total_memory);
+//   if(memory == NULL){
+//     return NULL;
+//   }
+
+//   MemoryManagerADT memory_manager = initialize_mm(memory, total_memory, block_size);
 //   if(memory_manager == NULL){
 //     return -1;
 //   }
@@ -84,4 +93,5 @@
 //       }
 //     }
 //   }
+//   free(memory);
 // }
