@@ -52,7 +52,7 @@ TSemaphore* get_sem(char* name) {
         return NULL;
     }
     
-	strcpy(new_semaphore->name, name);
+	new_semaphore->name = name;
 
     TSemaphore* looked_semaphore = (TSemaphore*) get_element(semaphore_list, new_semaphore);
 
