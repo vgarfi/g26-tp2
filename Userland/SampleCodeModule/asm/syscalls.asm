@@ -43,7 +43,9 @@ GLOBAL sysKillProcess
 GLOBAL sysNice
 GLOBAL sysPs
 
-
+GLOBAL sysMalloc
+GLOBAL sysFree
+GLOBAL sysMem
 section .text
 
 sysReadScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToRead
@@ -229,3 +231,19 @@ sysPs
     mov rax, 35
     int 80h
     ret
+
+sysMalloc
+    mov rax, 36
+    int 80h
+    ret
+
+sysFree
+    mov rax, 37
+    int 80h
+    ret
+
+sysMem
+    mov rax, 38
+    int 80h
+    ret
+

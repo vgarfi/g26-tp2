@@ -48,4 +48,8 @@ int sysKillProcess(uint8_t pid);
 int sysNice(uint8_t pid, uint8_t newPriority);
 void sysPs(void);
 
+void* sysMalloc(uint64_t size);
+void sysFree(void* ptr);
+void sysMem(void);
+
 #endif

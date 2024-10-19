@@ -8,10 +8,15 @@
 #include <lib.h>
 #include <stdio.h>
 #include <syscallHandle.h>
+#include <kernelManagement.h>
 #include "speaker.h"
 #include "fonts.h"
 
+extern MemoryManagerADT memory_manager;
+
 #define HANDLER_SIZE 36
+
+
 
 static int (*syscallHandlers[])()={
     // Syscalls de Arqui
@@ -20,7 +25,8 @@ static int (*syscallHandlers[])()={
     showCursor, printCursor, getCurrentSeconds, getCurrentMinutes, getCurrentHours, getCurrentDay,
     getCurrentMonth, getCurrentYear, isctrlPressed, cleanKbBuffer,
     // Syscalls de Procesos
-    getCurrentPid, exitProcess, createProcess, (int (*)())blockProcess, (int (*)())unblockProcess, (int (*)())killProcess, (int (*)())nice, ps
+    getCurrentPid, exitProcess, createProcess, (int (*)())blockProcess, (int (*)())unblockProcess, (int (*)())killProcess, (int (*)())nice, ps,
+    memoryMalloc, memoryFree, memoryStatus
 };
 
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
@@ -216,4 +222,18 @@ int nice(uint8_t pid, uint8_t newPriority){
 
 int ps(void){
     return processes_information();
+}
+void* memoryMalloc(uint64_t size){
+    return malloc_mm(memory_manager, size);
+}
+
+int memoryFree(void* ptr) {
+    free_mm(memory_manager, ptr);
+    return 0;
+}
+
+int memoryStatus(void){
+    // TODO preguntar si estas funciones deberian imprimir por su cuenta (a nivel kernel) o hacer que userland imprima
+    get_diagnostic_mm(memory_manager);
+    return 0;
 }
