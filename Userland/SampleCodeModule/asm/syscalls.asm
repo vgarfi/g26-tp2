@@ -234,53 +234,53 @@ sysNice:
     int 80h
     ret
 
-sysPs
+sysPs:
     mov rax, 35
     int 80h
     ret
 
-sysMalloc
+sysMalloc:
     mov rax, 36
     int 80h
     ret
 
-sysFree
+sysFree:
     mov rax, 37
     int 80h
     ret
 
-sysMem
+sysMem:
     mov rax, 38
     int 80h
     ret
 
-sysYield
+sysYield:
     mov rax, 39
     int 80h
     ret
 
 
-sysCreateSem
+sysCreateSem:
     mov rax, 40
     int 80h
     ret
 
-sysGetSem
+sysGetSem:
     mov rax, 41
     int 80h
     ret
 
-sysPostSem
+sysPostSem:
     mov rax, 42
     int 80h
     ret
 
-sysWaitSem
+sysWaitSem:
     mov rax, 43
     int 80h
     ret
 
-sysCloseSem
+sysCloseSem:
     mov rax, 44
     int 80h
     ret
