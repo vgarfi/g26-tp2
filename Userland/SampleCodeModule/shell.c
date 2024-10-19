@@ -28,6 +28,7 @@ int init(){
         else if(strcasecmp(commandPrompt, modes[TESTP_MODE]) == SELECTED_MODE) process_test();
         else if(strcasecmp(commandPrompt, modes[TESTPRIO_MODE]) == SELECTED_MODE) priorities_test();
         else if(strcasecmp(commandPrompt, modes[PS_MODE]) == SELECTED_MODE) ps_printing();
+        else if(strcasecmp(commandPrompt, modes[TESTMEM_MODE]) == SELECTED_MODE) memory_test();
         else notFound(commandPrompt);
     }
 }

@@ -22,11 +22,12 @@
 #define TESTP_MODE          13
 #define TESTPRIO_MODE       14
 #define PS_MODE             15
+#define TESTMEM_MODE        16
 
 
 static const char* modes[]  __attribute__((unused)) = {
     "shell", "idle", "help", "divbyzero", "invalidopcode", "zoomin", "zoomout", "time", "date", "eliminator", "clear", "registers", "easteregg",
-    "testp", "testprio", "ps"
+    "testp", "testprio", "ps", "testmem"
 };
 
 static char* helpText[]  __attribute__((unused)) = { "Command information is displayed below:\n\n",
@@ -49,6 +50,7 @@ static char* helpText[]  __attribute__((unused)) = { "Command information is dis
 "----------------------------------- TESTING -----------------------------------\n"
 "TESTP               ->      Tests functionalities required for proces administration.\n",
 "TESTPRIO            ->      Tests processes priorities creation.\n",
+"TESTMEM            ->       Tests memory manager required functionalities.\n",
 "end" 
 };
 

@@ -16,6 +16,7 @@ void playEasterEgg();
 
 void process_test();
 void priorities_test();
+void memory_test();
 
 void ps_printing(void);
 #endif

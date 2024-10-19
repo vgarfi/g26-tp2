@@ -10,6 +10,7 @@
 #include "include/colors.h"
 #include "include/utils.h"
 #include "include/test_proc.h"
+#include "include/test_mm.h"
 
 char* dateTimeAux;
 int zoomAux, regAux;
@@ -129,4 +130,10 @@ void priorities_test(){
 
 void ps_printing(){
     sysPs();
+}
+
+static char * test_args_memory[] = {TEST_MEMORY, "1024", 0};
+
+void memory_test(){
+    sysCreateProcess(TEST_MEMORY, 2, test_args_memory, (int64_t (*)(int, char**))test_mm);
 }
