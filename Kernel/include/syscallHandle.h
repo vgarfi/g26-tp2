@@ -56,4 +56,10 @@ int memoryStatus(void);
 
 int yield(void);
 
+int createSem(char* name, uint64_t initialValue);
+int getSem(char* name);
+int postSem(char* name);
+int waitSem(char* name);
+int closeSem(char* name);
+
 #endif

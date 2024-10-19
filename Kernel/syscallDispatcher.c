@@ -4,6 +4,7 @@
 #include "include/time.h"
 #include <keyboard.h>
 #include <scheduler/scheduler.h>
+#include <synchro/synchro.h>
 #include <interrupts.h>
 #include <lib.h>
 #include <stdio.h>
@@ -14,7 +15,7 @@
 
 extern MemoryManagerADT memory_manager;
 
-#define HANDLER_SIZE 36
+#define HANDLER_SIZE 45
 
 
 
@@ -26,7 +27,8 @@ static int (*syscallHandlers[])()={
     getCurrentMonth, getCurrentYear, isctrlPressed, cleanKbBuffer,
     // Syscalls de Procesos
     getCurrentPid, exitProcess, createProcess, (int (*)())blockProcess, (int (*)())unblockProcess, (int (*)())killProcess, (int (*)())nice, ps,
-    memoryMalloc, memoryFree, memoryStatus
+    memoryMalloc, memoryFree, memoryStatus,
+    createSem, getSem, postSem, waitSem, closeSem
 };
 
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
@@ -240,4 +242,31 @@ int memoryStatus(void){
 
 int yield(void){
     return yield_process();
+}
+
+int createSem(char* name, uint64_t initialValue){
+    TSemaphore* result = create_sem(name, initialValue);
+    if (result == NULL) {
+        return -1;
+    }
+    return EXIT_SUCCESS;
+}
+int getSem(char* name){
+    TSemaphore* result = get_sem(name);
+    if (result == NULL) {
+        return -1;
+    }
+    return EXIT_SUCCESS;
+}
+int postSem(char* name){
+    post_sem(name);
+    return EXIT_SUCCESS;
+}
+int waitSem(char* name){
+    wait_sem(name);
+    return EXIT_SUCCESS;
+}
+int closeSem(char* name){
+    delete_sem(name);
+    return EXIT_SUCCESS;
 }

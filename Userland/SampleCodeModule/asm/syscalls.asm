@@ -47,6 +47,12 @@ GLOBAL sysMalloc
 GLOBAL sysFree
 GLOBAL sysMem
 GLOBAL sysYield
+
+GLOBAL sysCreateSem
+GLOBAL sysGetSem
+GLOBAL sysPostSem
+GLOBAL sysWaitSem
+GLOBAL sysCloseSem
 section .text
 
 sysReadScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToRead
@@ -253,3 +259,28 @@ sysYield
     int 80h
     ret
 
+
+sysCreateSem
+    mov rax, 40
+    int 80h
+    ret
+
+sysGetSem
+    mov rax, 41
+    int 80h
+    ret
+
+sysPostSem
+    mov rax, 42
+    int 80h
+    ret
+
+sysWaitSem
+    mov rax, 43
+    int 80h
+    ret
+
+sysCloseSem
+    mov rax, 44
+    int 80h
+    ret

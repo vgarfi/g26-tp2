@@ -54,5 +54,10 @@ void sysMem(void);
 
 int sysYield(void);
 
+int sysCreateSem(char* name, uint64_t initial_value);
+int sysGetSem(char* name);
+int sysPostSem(char* name);
+int sysWaitSem(char* name);
+int sysCloseSem(char* name);
 
 #endif

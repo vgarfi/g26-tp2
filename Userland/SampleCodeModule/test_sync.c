@@ -31,22 +31,22 @@ uint64_t my_process_inc(uint64_t argc, char *argv[]) {
     return -1;
 
   if (use_sem)
-    if (!my_sem_open(SEM_ID, 1)) {
-      printf("test_sync: ERROR opening semaphore\n");
+    if (!sysCreateSem(SEM_ID, 1)) {
+      printf("test_sync: ERROR creating semaphore\n", 0,0,0);
       return -1;
     }
 
   uint64_t i;
   for (i = 0; i < n; i++) {
     if (use_sem)
-      my_sem_wait(SEM_ID);
+      sysWaitSem(SEM_ID);
     slowInc(&global, inc);
     if (use_sem)
-      my_sem_post(SEM_ID);
+      sysPostSem(SEM_ID);
   }
 
   if (use_sem)
-    my_sem_close(SEM_ID);
+    sysCloseSem(SEM_ID);
 
   return 0;
 }
@@ -57,23 +57,23 @@ uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
   if (argc != 2)
     return -1;
 
-  char *argvDec[] = {argv[0], "-1", argv[1], NULL};
-  char *argvInc[] = {argv[0], "1", argv[1], NULL};
+  char *argvDec[] = {argv[0], "-1", argv[1], 0};
+  char *argvInc[] = {argv[0], "1", argv[1], 0};
 
   global = 0;
 
   uint64_t i;
   for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
-    pids[i] = my_create_process("my_process_inc", 3, argvDec);
-    pids[i + TOTAL_PAIR_PROCESSES] = my_create_process("my_process_inc", 3, argvInc);
+    pids[i] = sysCreateProcess("my_process_inc", 3, argvDec, my_process_inc);
+    pids[i + TOTAL_PAIR_PROCESSES] = sysCreateProcess("my_process_inc", 3, argvInc, my_process_inc);
   }
 
-  for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
-    my_wait(pids[i]);
-    my_wait(pids[i + TOTAL_PAIR_PROCESSES]);
-  }
+//   for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
+//     my_wait(pids[i]);
+//     my_wait(pids[i + TOTAL_PAIR_PROCESSES]);
+//   }
 
-  printf("Final value: %d\n", global);
+  printf("Final value: %d\n", global, 0,0);
 
   return 0;
 }
