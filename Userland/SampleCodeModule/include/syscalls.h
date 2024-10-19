@@ -52,4 +52,7 @@ void* sysMalloc(uint64_t size);
 void sysFree(void* ptr);
 void sysMem(void);
 
+int sysYield(void);
+
+
 #endif

@@ -54,4 +54,6 @@ void* memoryMalloc(uint64_t size);
 int memoryFree(void* size);
 int memoryStatus(void);
 
+int yield(void);
+
 #endif

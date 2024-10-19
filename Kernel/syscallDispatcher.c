@@ -237,3 +237,7 @@ int memoryStatus(void){
     get_diagnostic_mm(memory_manager);
     return 0;
 }
+
+int yield(void){
+    return yield_process();
+}

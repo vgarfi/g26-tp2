@@ -41,6 +41,7 @@ int is_inside_process_boundaries(uint64_t* rsp);
 uint64_t* schedule(uint64_t* rsp);
 uint8_t get_current_pid(void);
 TPCB* get_pcb_by_pid(uint8_t pid);
+TPCB* get_running_pcb(void);
 void kill_pcb(TPCB* pcb);
 void put_children_zombie(uint8_t m_pid);
 void remove_pcb_from_queue(TPCB* pcb);

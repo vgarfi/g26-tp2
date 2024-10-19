@@ -5,8 +5,6 @@
 
 extern TPCB* pcb_array[MAX_PROCESSES];
 
-void failure_scheduling(void);
-
 TQueueADT pcb_readies_queue;
 TPCB* running_pcb;
 
@@ -43,6 +41,10 @@ uint8_t get_current_pid(void) {
     if (running_pcb == NULL) return 0;
     return running_pcb->pid;    
 }
+
+TPCB* get_running_pcb(void) {
+    return running_pcb;
+} 
 
 TPCB* get_pcb_by_pid(uint8_t pid) {
     for(int i = 0; i < MAX_PROCESSES; i++){

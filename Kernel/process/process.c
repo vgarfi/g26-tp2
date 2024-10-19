@@ -33,6 +33,18 @@ int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, in
     return pid;
 }
 
+int yield_process(void) {
+    TPCB* pcb_to_yield = get_running_pcb();
+    if (pcb_to_yield == NULL){
+        return -1;
+    }
+    remove_pcb_from_queue(pcb_to_yield);
+    for (uint8_t i = pcb_to_yield->priority; i > 0; i--) {
+        enqueue(pcb_readies_queue, pcb_to_yield);
+    }
+    requestSchedule();
+}
+
 int block_process(uint8_t pid) {
     TPCB* pcb_to_block = get_pcb_by_pid(pid);
     if (pcb_to_block == NULL){

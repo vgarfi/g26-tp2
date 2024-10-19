@@ -46,6 +46,7 @@ GLOBAL sysPs
 GLOBAL sysMalloc
 GLOBAL sysFree
 GLOBAL sysMem
+GLOBAL sysYield
 section .text
 
 sysReadScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToRead
@@ -244,6 +245,11 @@ sysFree
 
 sysMem
     mov rax, 38
+    int 80h
+    ret
+
+sysYield
+    mov rax, 39
     int 80h
     ret
 
