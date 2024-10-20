@@ -15,9 +15,7 @@
 
 extern MemoryManagerADT memory_manager;
 
-#define HANDLER_SIZE 45
-
-
+#define HANDLER_SIZE 46
 
 static int (*syscallHandlers[])()={
     // Syscalls de Arqui
@@ -28,7 +26,8 @@ static int (*syscallHandlers[])()={
     // Syscalls de Procesos
     getCurrentPid, exitProcess, createProcess, (int (*)())blockProcess, (int (*)())unblockProcess, (int (*)())killProcess, (int (*)())nice, ps,
     memoryMalloc, memoryFree, memoryStatus,
-    createSem, getSem, postSem, waitSem, closeSem
+    createSem, getSem, postSem, waitSem, closeSem,
+    wait
 };
 
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
@@ -268,5 +267,10 @@ int waitSem(char* name){
 }
 int closeSem(char* name){
     delete_sem(name);
+    return EXIT_SUCCESS;
+}
+
+int wait(){
+    wait_process();
     return EXIT_SUCCESS;
 }

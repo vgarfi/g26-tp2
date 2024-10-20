@@ -163,6 +163,14 @@ void wrapper(uint64_t argc, char* argv[], int64_t (*code)(int, char**)) {
     kill_process(get_current_pid());
 }
 
+void wait_process(void){
+    TPCB* pcb_to_wait = get_running_pcb();
+    if (pcb_to_wait == NULL){
+        return -1;
+    }
+    wait_sem(pcb_to_wait->semaphore->name);
+}
+
 int kill_process(uint8_t pid) {
     TPCB* process_pcb  = get_pcb_by_pid(pid);
     if (process_pcb == NULL) {

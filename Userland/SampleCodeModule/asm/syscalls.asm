@@ -53,6 +53,8 @@ GLOBAL sysGetSem
 GLOBAL sysPostSem
 GLOBAL sysWaitSem
 GLOBAL sysCloseSem
+GLOBAL sysWait
+
 section .text
 
 sysReadScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToRead
@@ -282,5 +284,10 @@ sysWaitSem:
 
 sysCloseSem:
     mov rax, 44
+    int 80h
+    ret
+
+sysWait:
+    mov rax, 45
     int 80h
     ret

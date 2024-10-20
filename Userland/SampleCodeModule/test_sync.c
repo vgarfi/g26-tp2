@@ -68,10 +68,10 @@ uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
     pids[i + TOTAL_PAIR_PROCESSES] = sysCreateProcess("my_process_inc", 3, argvInc, my_process_inc);
   }
 
-//   for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
-//     my_wait(pids[i]);
-//     my_wait(pids[i + TOTAL_PAIR_PROCESSES]);
-//   }
+    // for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
+    //   my_wait(pids[i]);
+    //   my_wait(pids[i + TOTAL_PAIR_PROCESSES]);
+    // }
 
   printf("Final value: %d\n", global, 0,0);
 
