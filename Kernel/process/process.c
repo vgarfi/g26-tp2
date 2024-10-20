@@ -108,6 +108,13 @@ void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* s
     new_pcb->state = READY;
     new_pcb->priority = priority;
 
+    int name_lenght = strlen(name);
+    char sem_name[name_lenght+5];
+    char pid_name[5];
+    itoa(pid, pid_name, 10); 
+    strconcat(sem_name, pid_name, name);
+    new_pcb->semaphore = create_sem(sem_name, 0);
+
     pcb_array[pid] = new_pcb;
     for (uint8_t i = priority; i > 0; i--) {
         enqueue(pcb_readies_queue, new_pcb);
@@ -160,6 +167,10 @@ int kill_process(uint8_t pid) {
     TPCB* process_pcb  = get_pcb_by_pid(pid);
     if (process_pcb == NULL) {
         return -1;
+    }
+    TPCB* mother_process_pcb = get_pcb_by_pid(process_pcb->m_pid);
+    if (mother_process_pcb != NULL) {
+        post_sem(mother_process_pcb->semaphore->name);
     }
     TState process_state = process_pcb->state;
     kill_pcb(process_pcb);

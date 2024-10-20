@@ -4,6 +4,7 @@
  */
 
 #include <process/process.h>
+#include <synchro/synchro.h>
 #include "string.h"
 #include "../include/structures/queueADT.h"
 
@@ -28,6 +29,7 @@ typedef struct TPCB {
     uint64_t* stack_base;
     uint64_t* rsp;
     uint8_t priority;
+    TSemaphore* semaphore;
 } TPCB;
 
 extern TPCB* pcb_array[MAX_PROCESSES];
