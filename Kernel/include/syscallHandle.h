@@ -50,7 +50,7 @@ int killProcess(uint8_t pid);
 int nice(uint8_t pid, uint8_t newPriority);
 int ps(void);
 
-int wait(void);
+int waitPid(uint8_t pid);
 
 void* memoryMalloc(uint64_t size);
 int memoryFree(void* size);

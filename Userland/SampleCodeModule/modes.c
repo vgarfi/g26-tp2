@@ -11,6 +11,8 @@
 #include "include/utils.h"
 #include "include/test_proc.h"
 #include "include/test_mm.h"
+#include "include/test_sync.h"
+
 
 char* dateTimeAux;
 int zoomAux, regAux;
@@ -136,4 +138,10 @@ static char * test_args_memory[] = {TEST_MEMORY, "1024", 0};
 
 void memory_test(){
     sysCreateProcess(TEST_MEMORY, 2, test_args_memory, (int64_t (*)(int, char**))test_mm);
+}
+
+static char * sync_args_memory[] = {TEST_SYNC, 5, 1, 0};
+
+void sync_test(){
+    sysCreateProcess(TEST_SYNC, 3, sync_args_memory,  (int64_t (*)(int, char**))test_sync);
 }

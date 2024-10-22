@@ -27,7 +27,7 @@ static int (*syscallHandlers[])()={
     getCurrentPid, exitProcess, createProcess, (int (*)())blockProcess, (int (*)())unblockProcess, (int (*)())killProcess, (int (*)())nice, ps,
     memoryMalloc, memoryFree, memoryStatus,
     createSem, getSem, postSem, waitSem, closeSem,
-    wait
+    waitPid
 };
 
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
@@ -270,7 +270,7 @@ int closeSem(char* name){
     return EXIT_SUCCESS;
 }
 
-int wait(){
-    wait_process();
+int waitPid(uint8_t pid){
+    wait_process_by_pid(pid);
     return EXIT_SUCCESS;
 }

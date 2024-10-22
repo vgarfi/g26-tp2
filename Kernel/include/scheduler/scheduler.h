@@ -45,6 +45,5 @@ uint8_t get_current_pid(void);
 TPCB* get_pcb_by_pid(uint8_t pid);
 TPCB* get_running_pcb(void);
 void kill_pcb(TPCB* pcb);
-void put_children_zombie(uint8_t m_pid);
 void remove_pcb_from_queue(TPCB* pcb);
 #endif

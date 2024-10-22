@@ -52,7 +52,7 @@ void* sysMalloc(uint64_t size);
 void sysFree(void* ptr);
 void sysMem(void);
 
-void sysWait(void);
+void sysWaitPid(uint8_t pid);
 
 int sysYield(void);
 
