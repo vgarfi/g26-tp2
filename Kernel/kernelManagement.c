@@ -5,8 +5,9 @@
 #include <interrupts.h>
 #include <string.h>
 
-char* shell_args[] = {SHELL_PROCESS, 0};
+char* init_args[] = {INIT_PROCESS, 0};
 char* idle_args[] = {IDLE_PROCESS, 0};
+char* shell_args[] = {SHELL_PROCESS, 0};
 
 MemoryManagerADT memory_manager;
 
@@ -20,10 +21,13 @@ void * memoryBaseAddress = (void*)0x600000;
 void initialize_management(void){
 	memory_manager = initialize_mm(memoryBaseAddress, MEMORY_SIZE, MEMORY_BLOCK_SIZE);
 	initialize_synchro();
+    create_process(INIT_PROCESS, 1, init_args, INIT_PRIORITY, (int64_t (*)(int, char**)) init_process);
     create_process(IDLE_PROCESS, 1, idle_args, IDLE_PRIORITY, (int64_t (*)(int, char**)) idle_process);
     create_process(SHELL_PROCESS, 3, shell_args, SHELL_PRIORITY, sampleCodeModuleAddress);
 }
 
+
+// ? No debería ser char** ?
 int64_t idle_process(int argc, char* argv) {
     while (1) {
         _hlt();

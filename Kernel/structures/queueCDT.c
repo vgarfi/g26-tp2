@@ -102,14 +102,15 @@ int is_empty(TQueueADT queue) {
 void* peek(TQueueADT queue){
     return (queue->first == NULL)? NULL : queue->first->value;
 }
-/*
+
 void dump(TQueueADT queue){
     TQueueNode* current = queue->first;
     while (current != NULL) {
-        TPCB* pcb = (TPCB*)current->value;
-        vdPrint(pcb->name, 0x00FFFFFF);
+        uint8_t pid = (uint8_t)current->value;
+        char buffer[10];
+        itoa(pid, buffer, 10);
+        vdPrint(buffer, 0x00FFFFFF);
         vdPrint(" - ", 0x00FFFFFF);
         current = current->next;
     }
 }
-*/

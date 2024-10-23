@@ -172,21 +172,17 @@ void wait_process_by_pid(uint8_t pid){
     wait_sem(pcb_to_wait->semaphore->name);
 }
 
-// ! Todavía falta vovler a incorporar el free_process() por el IDLE
 int kill_process(uint8_t pid) {
     TPCB* process_pcb  = get_pcb_by_pid(pid);
     if (process_pcb == NULL) {
         return -1;
     }
-    TPCB* mother_process_pcb = get_pcb_by_pid(process_pcb->m_pid);
-    if (mother_process_pcb != NULL) {
-        post_sem(mother_process_pcb->semaphore->name);
-    }
+    post_sem(process_pcb->semaphore->name);
     TState process_state = process_pcb->state;
     kill_pcb(process_pcb);
     process_pcb->state = ZOMBIE;
-    post_sem(process_pcb->semaphore->name);
     pids[pid] = AVAILABLE_PID;
+    process_pcb->m_pid = 0;
     if (process_state == RUNNING) {
         requestSchedule();
     }
@@ -227,6 +223,9 @@ int processes_information(void){
             vdPrint("\nPID: ", 0x00FFFFFF);
             itoa(i, buffer, 10);
             vdPrint(buffer, 0x00FFFFFF);
+            vdPrint(" - MOTHER PID: ", 0x00FFFFFF);
+            itoa(pcb_array[i]->m_pid, buffer, 10);
+            vdPrint(buffer, 0x00FFFFFF);
             vdPrint(" - NAME: ", 0x00FFFFFF);
             vdPrint(pcb_array[i]->name, 0x00FFFFFF);
             vdPrint(" - PRIORITY: ", 0x00FFFFFF);
@@ -244,4 +243,16 @@ int processes_information(void){
     }
     vdPrint("\n",0x00FFFFFF);
     return EXIT_SUCCESS;
+}
+
+int64_t init_process(int argc, char** argv) {
+    uint64_t init_pid = get_current_pid();
+    while(1) {
+        for(int i = 0; i < MAX_PROCESSES; i++) {
+            if (i != init_pid && pcb_array[i] != NULL && pcb_array[i]->m_pid == init_pid && pcb_array[i]->state == ZOMBIE) {
+                pcb_array[i]->state = KILLED;
+                free_process(pcb_array[i]);
+            }
+        }
+    }
 }
