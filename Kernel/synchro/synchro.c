@@ -39,6 +39,7 @@ TSemaphore* create_sem(char* name, uint64_t initial_value) {
 
     char insertion = insert_element(semaphore_list, new_semaphore);
     if (!insertion) {
+        free_mm(memory_manager, new_semaphore->name);
         free_mm(memory_manager, new_semaphore);
         return NULL;
     }
@@ -47,16 +48,10 @@ TSemaphore* create_sem(char* name, uint64_t initial_value) {
 }
 
 TSemaphore* get_sem(char* name) {
-    TSemaphore* new_semaphore = (TSemaphore*) malloc_mm(memory_manager, sizeof(TSemaphore));
-    if(new_semaphore == NULL) {
-        return NULL;
-    }
-    
-	new_semaphore->name = name;
+    TSemaphore temp_semaphore;
+    temp_semaphore.name = name;
 
-    TSemaphore* looked_semaphore = (TSemaphore*) get_element(semaphore_list, new_semaphore);
-
-    free_mm(memory_manager, new_semaphore);
+    TSemaphore* looked_semaphore = (TSemaphore*) get_element(semaphore_list, &temp_semaphore);
 
     return looked_semaphore;
 }
@@ -68,7 +63,7 @@ void wait_sem(char* name) {
     }
 
     if(looked_semaphore->value > 0){
-        looked_semaphore--;
+        looked_semaphore->value--;
     }else{
         uint8_t current_pid = get_current_pid();
         enqueue(looked_semaphore->waiting_processes, current_pid);
@@ -98,7 +93,7 @@ void delete_sem(char* name) {
         return;
     }
 
-    while (!is_empty(looked_semaphore->waiting_processes))
+    while (!is_empty(looked_semaphore->waiting_processes)) // TODO chequear que is_empty funciona bien
     {
         uint8_t first_pid = dequeue(looked_semaphore->waiting_processes);
         unblock_process(first_pid);

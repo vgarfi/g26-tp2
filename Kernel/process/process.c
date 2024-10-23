@@ -43,6 +43,7 @@ int yield_process(void) {
         enqueue(pcb_readies_queue, pcb_to_yield);
     }
     requestSchedule();
+    return 0;
 }
 
 int block_process(uint8_t pid) {
@@ -185,6 +186,10 @@ int kill_process(uint8_t pid) {
 
 void free_process(TPCB* pcb){
     if (pcb == NULL) return;
+    
+    if(pcb->semaphore != NULL){
+        delete_sem(pcb->semaphore->name);
+    }
     
     if(pcb->stack_limit != NULL){
         free_mm(memory_manager, pcb->stack_limit);
