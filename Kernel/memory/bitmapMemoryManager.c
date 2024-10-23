@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <videoDriver.h>
 #include <memory/memoryManagerADT.h>
 
 #define ALL_ONES 0xff
@@ -71,6 +72,7 @@ void* malloc_mm(MemoryManagerADT mm, size_t size) {
         }
     }
 
+    vdPrint("\nKERNEL: OUT OF MEMEORY. Possible errors may ocurr", 0x00FF0000);
     return NULL;  // No hay bloques libres
 }
 

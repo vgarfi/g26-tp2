@@ -22,7 +22,6 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
   p_rq p_rqs[max_processes];
   printf("test_processes: Testing process administration...",0,0,0);
   while (1) {
-    
     for (rq = 0; rq < max_processes; rq++) {
       p_rqs[rq].pid = sysCreateProcess("endless_loop", 0, argvAux, (int64_t (*)(int, char**))endless_loop);
       if (p_rqs[rq].pid == -1) {

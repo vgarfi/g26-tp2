@@ -17,7 +17,6 @@ void free_process(TPCB* pcb);
 int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**)) {
     char* ptr = malloc_mm(memory_manager, PROCESS_SIZE);
     if (ptr == NULL) {
-        vdPrint("\nKERNEL: OUT OF MEMEORY. Possible errors may ocurr", 0x00FF0000);
         return -1;
     }
 
@@ -85,7 +84,6 @@ void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* s
 
     TPCB* new_pcb = (TPCB*) malloc_mm(memory_manager, sizeof(TPCB));
     if (new_pcb == NULL) {
-        vdPrint("\nKERNEL: OUT OF MEMEORY. Possible errors may ocurr", 0x00FF0000);
         return;
     }
     
