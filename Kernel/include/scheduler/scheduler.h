@@ -38,6 +38,7 @@ extern TQueueADT pcb_readies_queue;
 
 extern TPCB* running_pcb;
 
+void initialize_scheduling(void);
 int is_initialized(void);
 int is_inside_process_boundaries(uint64_t* rsp);
 uint64_t* schedule(uint64_t* rsp);

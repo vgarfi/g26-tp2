@@ -10,6 +10,7 @@ int strlen(const char * str){
 }
 
 int strcmp(const char * str1, const char * str2){
+    if (str1 == 0 || str2 == 0) return 0;
     int i,j;
     i=j=0;
     while(str1[i]!='\0' && (str1[i] == str2[j])){

@@ -21,6 +21,7 @@ void * memoryBaseAddress = (void*)0x600000;
 void initialize_management(void){
 	memory_manager = initialize_mm(memoryBaseAddress, MEMORY_SIZE, MEMORY_BLOCK_SIZE);
 	initialize_synchro();
+    initialize_scheduling();
     create_process(INIT_PROCESS, 1, init_args, INIT_PRIORITY, (int64_t (*)(int, char**)) init_process);
     create_process(IDLE_PROCESS, 1, idle_args, IDLE_PRIORITY, (int64_t (*)(int, char**)) idle_process);
     create_process(SHELL_PROCESS, 3, shell_args, SHELL_PRIORITY, sampleCodeModuleAddress);

@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdint.h>
 
 int strlen(const char *str) {
     int length = 0;

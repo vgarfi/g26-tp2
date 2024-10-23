@@ -120,7 +120,7 @@ void destroy_queue(TQueueADT queue) {
     free_mm(memory_manager, queue);
 }
 
-/*
+
 void dump(TQueueADT queue){
     TQueueNode* current = queue->first;
     while (current != NULL) {

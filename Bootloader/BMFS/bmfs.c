@@ -61,6 +61,7 @@ void toLower(char * str){
     }
 }
 int strcasecmp(const char * str1, const char * str2){
+	if (str1 == NULL || str2 == NULL) return 0;
     int len1 = strlen(str1), len2=strlen(str2);
     char s1[len1], s2[len2];
     strcpy(s1,str1);

@@ -8,6 +8,10 @@ extern TPCB* pcb_array[MAX_PROCESSES];
 TQueueADT pcb_readies_queue;
 TPCB* running_pcb;
 
+void initialize_scheduling(void) {
+    pcb_readies_queue = createQueue();
+}
+
 int is_initialized(void){
     return pcb_array[0] != NULL;
 }
