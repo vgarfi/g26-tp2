@@ -136,20 +136,21 @@ void delete_sem(char* name) {
         return;
     }
 
-    while (!is_empty(looked_semaphore->waiting_processes)) // TODO chequear que is_empty funciona bien
-    {
-        uint8_t first_pid = dequeue(looked_semaphore->waiting_processes);
-        unblock_process(first_pid);
-        vdPrint("Semaforo ", 0x00FFFFFF);
-        vdPrint(name, 0x00FFFFFF);
-        vdPrint(" ha desbloqueado un proceso (loop)\n", 0x00FFFFFF);
+    // while (!is_empty(looked_semaphore->waiting_processes)) // TODO chequear que is_empty funciona bien
+    // {
+    //     uint8_t first_pid = dequeue(looked_semaphore->waiting_processes);
+    //     unblock_process(first_pid);
+    //     vdPrint("Semaforo ", 0x00FFFFFF);
+    //     vdPrint(name, 0x00FFFFFF);
+    //     vdPrint(" ha desbloqueado un proceso (loop)\n", 0x00FFFFFF);
         
-        vdPrint("El looked vale ", 0x00FFFFFF);
-        vdPrint(looked_semaphore->name, 0x00FFFFFF);
-        vdPrint("\n", 0x00FFFFFF);
+    //     vdPrint("El looked vale ", 0x00FFFFFF);
+    //     vdPrint(looked_semaphore->name, 0x00FFFFFF);
+    //     vdPrint("\n", 0x00FFFFFF);
         
-        dump(looked_semaphore->waiting_processes);
-    }
+    //     dump(looked_semaphore->waiting_processes);
+    // }
+    destroy_queue(looked_semaphore->waiting_processes);
     
     free_mm(memory_manager, looked_semaphore->name);
     free_mm(memory_manager, looked_semaphore);

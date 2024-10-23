@@ -49,10 +49,6 @@ char insert_element(TListADT list, void* element) {
     TNode* prev = NULL;
     TNode* current = list->head;
     while (current != NULL && list->cmpFunc(element, current->data) >= 0) {
-        if (list->cmpFunc(element, list->head->data) == 0) {
-            free_mm(memory_manager, newNode);
-            return FALSE;
-        }
         prev = current;
         current = current->next;
     }

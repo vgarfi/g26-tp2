@@ -21,5 +21,6 @@ int count_occurrences(TQueueADT queue, void* value);
 int is_empty(TQueueADT queue);
 
 void dump(TQueueADT queue);
+void destroy_queue(TQueueADT queue);
 
 #endif

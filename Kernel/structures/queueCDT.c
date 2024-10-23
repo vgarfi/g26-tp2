@@ -103,6 +103,24 @@ void* peek(TQueueADT queue){
     return (queue->first == NULL)? NULL : queue->first->value;
 }
 
+void destroy_queue(TQueueADT queue) {
+    if (queue == NULL) {
+        return;
+    }
+
+    TQueueNode* current = queue->first;
+    TQueueNode* nextNode;
+
+    while (current != NULL) {
+        nextNode = current->next;
+        free_mm(memory_manager, current);
+        current = nextNode;
+    }
+
+    free_mm(memory_manager, queue);
+}
+
+/*
 void dump(TQueueADT queue){
     TQueueNode* current = queue->first;
     while (current != NULL) {
