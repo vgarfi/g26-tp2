@@ -164,6 +164,15 @@ void wrapper(uint64_t argc, char* argv[], int64_t (*code)(int, char**)) {
     kill_process(get_current_pid());
 }
 
+void wait_process_by_pid(uint8_t pid){
+    TPCB* pcb_to_wait = get_pcb_by_pid(pid);
+    if (pcb_to_wait == NULL){
+        return -1;
+    }
+    wait_sem(pcb_to_wait->semaphore->name);
+}
+
+// ! Todavía falta vovler a incorporar el free_process() por el IDLE
 int kill_process(uint8_t pid) {
     TPCB* process_pcb  = get_pcb_by_pid(pid);
     if (process_pcb == NULL) {
@@ -175,9 +184,9 @@ int kill_process(uint8_t pid) {
     }
     TState process_state = process_pcb->state;
     kill_pcb(process_pcb);
-    process_pcb->state = KILLED;
+    process_pcb->state = ZOMBIE;
+    post_sem(process_pcb->semaphore->name);
     pids[pid] = AVAILABLE_PID;
-    free_process(process_pcb);
     if (process_state == RUNNING) {
         requestSchedule();
     }

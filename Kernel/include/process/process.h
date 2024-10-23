@@ -62,6 +62,7 @@ void wrapper(uint64_t argc, char* argv[], int64_t (*code)(int, char**));
 
 int kill_process(uint8_t pid);
 
+void wait_process_by_pid(uint8_t pid);
 int yield_process(void);
 
 int processes_information(void);

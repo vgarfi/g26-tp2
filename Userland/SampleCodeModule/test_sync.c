@@ -1,6 +1,6 @@
 #include <stdint.h>
 #include <stdio.h>
-#include <syscalls.h>
+#include "include/syscalls.h"
 #include <test_util.h>
 
 #define SEM_ID "sem"
@@ -20,14 +20,14 @@ uint64_t my_process_inc(uint64_t argc, char *argv[]) {
   int8_t inc;
   int8_t use_sem;
 
-  if (argc != 3)
+  if (argc < 3)
     return -1;
 
-  if ((n = satoi(argv[0])) <= 0)
+  if ((n = satoi(argv[1])) <= 0)
     return -1;
-  if ((inc = satoi(argv[1])) == 0)
+  if ((inc = satoi(argv[2])) == 0)
     return -1;
-  if ((use_sem = satoi(argv[2])) < 0)
+  if ((use_sem = satoi(argv[3])) < 0)
     return -1;
 
   if (use_sem)
@@ -53,25 +53,30 @@ uint64_t my_process_inc(uint64_t argc, char *argv[]) {
 
 uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
   uint64_t pids[2 * TOTAL_PAIR_PROCESSES];
+  printf("test_sync: CREATED\n", 0,0,0);
 
-  if (argc != 2)
+  if (argc < 2)
     return -1;
 
-  char *argvDec[] = {argv[0], "-1", argv[1], 0};
-  char *argvInc[] = {argv[0], "1", argv[1], 0};
+  char *argvDec[] = {"my_process_inc", argv[1], "-1", argv[2], 0};
+  char *argvInc[] = {"my_process_inc", argv[1], "1", argv[2], 0};
 
   global = 0;
 
   uint64_t i;
   for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
-    pids[i] = sysCreateProcess("my_process_inc", 3, argvDec, my_process_inc);
-    pids[i + TOTAL_PAIR_PROCESSES] = sysCreateProcess("my_process_inc", 3, argvInc, my_process_inc);
+    pids[i] = sysCreateProcess("my_process_inc", 4, argvDec, my_process_inc);
+    pids[i + TOTAL_PAIR_PROCESSES] = sysCreateProcess("my_process_inc", 4, argvInc, my_process_inc);
   }
+  printf("Processes INCs CREATED\n", 0,0,0);
 
-//   for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
-//     my_wait(pids[i]);
-//     my_wait(pids[i + TOTAL_PAIR_PROCESSES]);
-//   }
+
+    for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
+      sysWaitPid(pids[i]);
+      sysWaitPid(pids[i + TOTAL_PAIR_PROCESSES]);
+    }
+  printf("Processes WAITED\n", 0,0,0);
+
 
   printf("Final value: %d\n", global, 0,0);
 

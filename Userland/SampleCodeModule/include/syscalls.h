@@ -52,6 +52,8 @@ void* sysMalloc(uint64_t size);
 void sysFree(void* ptr);
 void sysMem(void);
 
+void sysWaitPid(uint8_t pid);
+
 int sysYield(void);
 
 int sysCreateSem(char* name, uint64_t initial_value);
