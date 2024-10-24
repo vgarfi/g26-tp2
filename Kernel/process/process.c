@@ -194,9 +194,10 @@ int kill_process(uint8_t pid) {
     }
     post_sem(process_pcb->semaphore->name);
     TState process_state = process_pcb->state;
-    kill_pcb(process_pcb);
+    kill_pcb(process_pcb);  // en realidad esta funcion lo que hace es sacarte de la queue si estabas y pone a tud hijos en zombie
     process_pcb->state = KILLED;
     pids[pid] = AVAILABLE_PID;
+
     free_process(process_pcb);
     if (process_state == RUNNING) {
         requestSchedule();
@@ -208,7 +209,7 @@ void free_process(TPCB* pcb){
     if (pcb == NULL) return;
     
     if(pcb->semaphore != NULL){
-        //delete_sem(pcb->semaphore->name);
+        delete_sem(pcb->semaphore->name);
     }
     
     if(pcb->stack_limit != NULL){
