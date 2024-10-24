@@ -26,7 +26,7 @@ static int (*syscallHandlers[])()={
     // Syscalls de Procesos
     getCurrentPid, exitProcess, createProcess, (int (*)())blockProcess, (int (*)())unblockProcess, (int (*)())killProcess, (int (*)())nice, ps,
     memoryMalloc, memoryFree, memoryStatus,
-    createSem, getSem, postSem, waitSem, closeSem,
+    yield, createSem, getSem, postSem, waitSem, closeSem,
     waitPid
 };
 

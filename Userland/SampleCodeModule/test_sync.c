@@ -55,8 +55,8 @@ uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
   uint64_t pids[2 * TOTAL_PAIR_PROCESSES];
   printf("test_sync: CREATED\n", 0,0,0);
 
-  if (argc < 2)
-    return -1;
+  if (argc <= 2)
+    return -1;  // no puede devolver un negativo si devuelve un uint64_t
 
   char *argvDec[] = {"my_process_inc", argv[1], "-1", argv[2], 0};
   char *argvInc[] = {"my_process_inc", argv[1], "1", argv[2], 0};
@@ -71,10 +71,10 @@ uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
   printf("Processes INCs CREATED\n", 0,0,0);
 
 
-    for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
-      sysWaitPid(pids[i]);
-      sysWaitPid(pids[i + TOTAL_PAIR_PROCESSES]);
-    }
+  for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
+    sysWaitPid(pids[i]);
+    sysWaitPid(pids[i + TOTAL_PAIR_PROCESSES]);
+  }
   printf("Processes WAITED\n", 0,0,0);
 
 

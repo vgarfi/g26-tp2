@@ -41,13 +41,11 @@ void itoa(int value, char* str, int base) {
 }
 
 int strcmp(const char * str1, const char * str2){
-    int i,j;
-    i=j=0;
-    while(str1[i]!='\0' && (str1[i] == str2[j])){
+    int i = 0;
+    while(str1[i]!='\0' && (str1[i] == str2[i])){
         i++;
-        j++;
     }
-    return str1[i] - str2[j];
+    return str1[i] - str2[i];
 }
 
 void itoa64(uint64_t value, char* str, int base) {

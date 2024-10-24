@@ -165,7 +165,7 @@ void wrapper(uint64_t argc, char* argv[], int64_t (*code)(int, char**)) {
 void wait_process_by_pid(uint8_t pid){
     TPCB* pcb_to_wait = get_pcb_by_pid(pid);
     if (pcb_to_wait == NULL){
-        return -1;
+        return;
     }
     wait_sem(pcb_to_wait->semaphore->name);
 }
