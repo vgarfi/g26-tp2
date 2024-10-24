@@ -59,11 +59,19 @@ TPCB* get_pcb_by_pid(uint8_t pid) {
     return NULL;
 }
 
+void put_children_zombie(uint8_t m_pid) {
+    for(int i = 0; i < MAX_PROCESSES; i++) {
+        if (pcb_array[i]->m_pid == m_pid) {
+            pcb_array[i]->state = ZOMBIE;
+        }
+    }
+}
 
 void kill_pcb(TPCB* pcb) {
     if (pcb->state == READY || pcb->state == RUNNING) {
         remove_pcb_from_queue(pcb);
     }
+    put_children_zombie(pcb->pid);
 }
 
 void remove_pcb_from_queue(TPCB* pcb) {

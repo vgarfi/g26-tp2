@@ -27,9 +27,7 @@ void initialize_management(void){
     create_process(SHELL_PROCESS, 3, shell_args, SHELL_PRIORITY, sampleCodeModuleAddress);
 }
 
-
-// ? No debería ser char** ?
-int64_t idle_process(int argc, char* argv) {
+int64_t idle_process(int argc, char** argv) {
     while (1) {
         _hlt();
     }
