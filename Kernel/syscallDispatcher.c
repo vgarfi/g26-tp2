@@ -248,7 +248,7 @@ int createSem(char* name, uint64_t initialValue){
     if (result == NULL) {
         return -1;
     }
-    return EXIT_SUCCESS;
+    return 0;
 }
 int getSem(char* name){
     TSemaphore* result = get_sem(name);

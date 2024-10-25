@@ -31,11 +31,11 @@ uint64_t my_process_inc(uint64_t argc, char *argv[]) {
     return -1;
 
   if (use_sem)
-    if (!sysCreateSem(SEM_ID, 1)) {
+    if (sysCreateSem(SEM_ID, 1) == -1) {
       printf("test_sync: ERROR creating semaphore\n", 0,0,0);
       return -1;
     }
-
+ 
   uint64_t i;
   for (i = 0; i < n; i++) {
     if (use_sem)
@@ -76,8 +76,6 @@ uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
     sysWaitPid(pids[i + TOTAL_PAIR_PROCESSES]);
   }
   printf("Processes WAITED\n", 0,0,0);
-
-
   printf("Final value: %d\n", global, 0,0);
 
   return 0;

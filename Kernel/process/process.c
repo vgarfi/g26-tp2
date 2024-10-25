@@ -197,24 +197,6 @@ int kill_process(uint8_t pid) {
     return EXIT_SUCCESS;
 }
 
-// int kill_process(uint8_t pid) {
-//     TPCB* process_pcb  = get_pcb_by_pid(pid);
-//     if (process_pcb == NULL) {
-//         return -1;
-//     }
-//     post_sem(process_pcb->semaphore->name);
-//     TState process_state = process_pcb->state;
-//     kill_pcb(process_pcb);  // en realidad esta funcion lo que hace es sacarte de la queue si estabas y pone a tud hijos en zombie
-//     process_pcb->state = KILLED;
-//     pids[pid] = AVAILABLE_PID;
-
-//     free_process(process_pcb);
-//     if (process_state == RUNNING) {
-//         requestSchedule();
-//     }
-//     return EXIT_SUCCESS;
-// }
-
 void free_process(TPCB* pcb){
     if (pcb == NULL) return;
     
@@ -277,10 +259,9 @@ int64_t init_process(int argc, char** argv) {
         for(int i = init_pid+1; i < MAX_PROCESSES; i++) {
             if (pcb_array[i] != NULL && pcb_array[i]->state == ZOMBIE) {
                 pcb_array[i]->state = KILLED;
-                // if (is_empty(pcb_array[i]->semaphore->waiting_processes)) {
-                    vdPrint("\nPROCESO LIBERADO", 0x00FF00);
+                if (is_empty(pcb_array[i]->semaphore->waiting_processes)) {
                     free_process(pcb_array[i]);
-                // }
+                }
             }
         }
     }

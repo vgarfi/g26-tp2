@@ -50,7 +50,7 @@ TPCB* get_running_pcb(void) {
 } 
 
 TPCB* get_pcb_by_pid(uint8_t pid) {
-    for(int i = 0; i < MAX_PROCESSES; i++){
+    for(int i = 0; i < MAX_PROCESSES; i++) {
         if (pcb_array[i] != NULL && pcb_array[i]->pid == pid) {
             return pcb_array[i];
         }
