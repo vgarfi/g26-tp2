@@ -96,7 +96,7 @@ void delete_sem(char* name) {
         return;
     }
 
-    while (!is_empty(looked_semaphore->waiting_processes)) // TODO chequear que is_empty funciona bien
+    while (!is_empty(looked_semaphore->waiting_processes))
     {
         uint8_t first_pid = dequeue(looked_semaphore->waiting_processes);
         unblock_process(first_pid);
@@ -105,7 +105,6 @@ void delete_sem(char* name) {
     destroy_queue(looked_semaphore->waiting_processes);
     
     free_mm(memory_manager, looked_semaphore->name);
-    free_mm(memory_manager, looked_semaphore);
-
+    // ! free_mm(memory_manager, looked_semaphore);
     return;
 }

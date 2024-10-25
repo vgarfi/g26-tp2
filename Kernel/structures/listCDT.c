@@ -90,7 +90,6 @@ void* get_element(TListADT list, void* element) {
     if (list == NULL || list->head == NULL) {
         return NULL;
     }
-
     TNode* current = list->head;
 
     while (current != NULL && list->cmpFunc(element, current->data) > 0) {
@@ -100,7 +99,6 @@ void* get_element(TListADT list, void* element) {
     if (current != NULL && list->cmpFunc(element, current->data) == 0) {
         return current->data;
     }
-
     return NULL;
 }
 

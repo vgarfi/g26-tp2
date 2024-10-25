@@ -111,21 +111,18 @@ void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* s
     new_pcb->state = READY;
     new_pcb->priority = priority;
 
-    // int name_lenght = strlen(name);
-    // char sem_name[name_lenght+5];
+    int name_lenght = strlen(name);
+    char sem_name[name_lenght+5];
     char pid_name[5];
     itoa(pid, pid_name, 10);
-    // strconcat(sem_name, pid_name, name);
-    // vdPrint("\nCreado el semaforo de name: ", 0x00FFFFFF);
-    // vdPrint(pid_name, 0x0000FFFF);
-
-    // new_pcb->semaphore = create_sem(pid_name, 0);
+    strconcat(sem_name, pid_name, name);
     
-    // if (new_pcb->semaphore == NULL) {
-    //     free_mm(memory_manager, new_pcb);
-    // 	return;
-    // }
-
+    new_pcb->semaphore = create_sem(sem_name, 0);
+    
+    if (new_pcb->semaphore == NULL) {
+        free_mm(memory_manager, new_pcb);
+    	return;
+    }
 
     pcb_array[pid] = new_pcb;
     for (uint8_t i = priority; i > 0; i--) {
@@ -180,7 +177,7 @@ void wait_process_by_pid(uint8_t pid){
     if (pcb_to_wait == NULL){
         return;
     }
-    // wait_sem(pcb_to_wait->semaphore->name);
+    wait_sem(pcb_to_wait->semaphore->name);
 }
 
 int kill_process(uint8_t pid) {
@@ -189,7 +186,7 @@ int kill_process(uint8_t pid) {
         return -1;
     }
     remove_pcb_from_queue(process_pcb);
-    // post_sem(process_pcb->semaphore->name);
+    post_sem(process_pcb->semaphore->name);
     TState process_state = process_pcb->state;
     process_pcb->state = ZOMBIE;
     pids[pid] = AVAILABLE_PID;
@@ -221,9 +218,9 @@ int kill_process(uint8_t pid) {
 void free_process(TPCB* pcb){
     if (pcb == NULL) return;
     
-    // if(pcb->semaphore != NULL){
-    //     delete_sem(pcb->semaphore->name);
-    // }
+    if(pcb->semaphore != NULL){
+        delete_sem(pcb->semaphore->name);
+    }
     
     if(pcb->stack_limit != NULL){
         free_mm(memory_manager, pcb->stack_limit);
