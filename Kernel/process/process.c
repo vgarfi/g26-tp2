@@ -180,6 +180,14 @@ void wait_process_by_pid(uint8_t pid){
     wait_sem(pcb_to_wait->semaphore->name);
 }
 
+void put_children_mpid_init(uint8_t m_pid) {
+    for(int i = 0; i < MAX_PROCESSES; i++) {
+        if (pcb_array[i]->m_pid == m_pid) {
+            pcb_array[i]->m_pid = 0;    // 0 es el pid de la madre
+        }
+    }
+}
+
 int kill_process(uint8_t pid) {
     TPCB* process_pcb  = get_pcb_by_pid(pid);
     if (process_pcb == NULL) {
@@ -190,7 +198,8 @@ int kill_process(uint8_t pid) {
     TState process_state = process_pcb->state;
     process_pcb->state = ZOMBIE;
     pids[pid] = AVAILABLE_PID;
-    process_pcb->m_pid = 0;
+    put_children_mpid_init(process_pcb->pid);
+
     if (process_state == RUNNING) {
         requestSchedule();
     }
@@ -257,11 +266,9 @@ int64_t init_process(int argc, char** argv) {
     uint64_t init_pid = get_current_pid();
     while(1) {
         for(int i = init_pid+1; i < MAX_PROCESSES; i++) {
-            if (pcb_array[i] != NULL && pcb_array[i]->state == ZOMBIE) {
+            if (pcb_array[i] != NULL && pcb_array[i]->m_pid == 0 && pcb_array[i]->state == ZOMBIE) {
                 pcb_array[i]->state = KILLED;
-                if (is_empty(pcb_array[i]->semaphore->waiting_processes)) {
-                    free_process(pcb_array[i]);
-                }
+                free_process(pcb_array[i]);
             }
         }
     }
