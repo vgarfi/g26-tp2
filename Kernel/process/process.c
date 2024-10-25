@@ -178,6 +178,7 @@ void wait_process_by_pid(uint8_t pid){
         return;
     }
     wait_sem(pcb_to_wait->semaphore->name);
+    free_process(pcb_to_wait);
 }
 
 void put_children_mpid_init(uint8_t m_pid) {
@@ -198,7 +199,7 @@ int kill_process(uint8_t pid) {
     TState process_state = process_pcb->state;
     process_pcb->state = ZOMBIE;
     pids[pid] = AVAILABLE_PID;
-    put_children_mpid_init(process_pcb->pid);
+    put_children_mpid_init(pid);
 
     if (process_state == RUNNING) {
         requestSchedule();
