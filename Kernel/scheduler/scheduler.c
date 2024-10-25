@@ -30,12 +30,11 @@ uint64_t* schedule(uint64_t* rsp) {
     }
 
     if (running_pcb->state == RUNNING && count_occurrences(pcb_readies_queue, running_pcb) == 0) {
-        running_pcb->state = READY;
         for (uint8_t i = running_pcb->priority; i > 0; i--) {
-            enqueue(pcb_readies_queue, running_pcb); // cuando en la syscall de kill se mata a un proceso hay qye borrarlo de la queue priority veces
+            enqueue(pcb_readies_queue, running_pcb);
         }
     }
-    
+    running_pcb->state = READY;
     next->state = RUNNING;
     running_pcb = next;
     return running_pcb->rsp;
@@ -52,26 +51,11 @@ TPCB* get_running_pcb(void) {
 
 TPCB* get_pcb_by_pid(uint8_t pid) {
     for(int i = 0; i < MAX_PROCESSES; i++){
-        if (pcb_array[i]->pid == pid) {
+        if (pcb_array[i] != NULL && pcb_array[i]->pid == pid) {
             return pcb_array[i];
         }
     }
     return NULL;
-}
-
-void put_children_zombie(uint8_t m_pid) {
-    for(int i = 0; i < MAX_PROCESSES; i++) {
-        if (pcb_array[i]->m_pid == m_pid) {
-            pcb_array[i]->state = ZOMBIE;
-        }
-    }
-}
-
-void kill_pcb(TPCB* pcb) {
-    if (pcb->state == READY || pcb->state == RUNNING) {
-        remove_pcb_from_queue(pcb);
-    }
-    put_children_zombie(pcb->pid);
 }
 
 void remove_pcb_from_queue(TPCB* pcb) {

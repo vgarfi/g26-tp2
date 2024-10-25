@@ -26,7 +26,7 @@ char initialize_synchro(void) {
 
 TSemaphore* create_sem(char* name, uint64_t initial_value) {
     TSemaphore* new_semaphore = (TSemaphore*) malloc_mm(memory_manager, sizeof(TSemaphore));
-    if (new_semaphore == NULL) {
+    if (new_semaphore == NULL || name == NULL) {
         return NULL;
     }
 
@@ -66,13 +66,13 @@ void wait_sem(char* name) {
         return;
     }
 
-    if(looked_semaphore->value > 0){
-        looked_semaphore->value--;
-    }else{
+    if(looked_semaphore->value == 0) {
         uint8_t current_pid = get_current_pid();
         enqueue(looked_semaphore->waiting_processes, current_pid);
-        block_process(current_pid); // TODO: handle de la salida no exitosa
+        block_process(current_pid);
     }
+    looked_semaphore->value--;
+
     return;
 }
 
@@ -82,13 +82,11 @@ void post_sem(char* name) {
         return;
     }
 
-    if(is_empty(looked_semaphore->waiting_processes)){
-        looked_semaphore->value = looked_semaphore->value + 1;
-        
-    } else {
+    if(!is_empty(looked_semaphore->waiting_processes)){
         uint8_t first_pid = dequeue(looked_semaphore->waiting_processes);
         unblock_process(first_pid);
     }
+    looked_semaphore->value++;
     return;
 }
 

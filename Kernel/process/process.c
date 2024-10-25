@@ -51,7 +51,11 @@ int block_process(uint8_t pid) {
         return -1;
     }
     remove_pcb_from_queue(pcb_to_block);
+    TState state = pcb_to_block->state; 
     pcb_to_block->state = BLOCKED;
+    if (state == RUNNING) {
+        requestSchedule();
+    }
     return EXIT_SUCCESS;
 }
 
@@ -107,12 +111,21 @@ void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* s
     new_pcb->state = READY;
     new_pcb->priority = priority;
 
-    int name_lenght = strlen(name);
-    char sem_name[name_lenght+5];
+    // int name_lenght = strlen(name);
+    // char sem_name[name_lenght+5];
     char pid_name[5];
-    itoa(pid, pid_name, 10); 
-    strconcat(sem_name, pid_name, name);
-    new_pcb->semaphore = create_sem(sem_name, 0);
+    itoa(pid, pid_name, 10);
+    // strconcat(sem_name, pid_name, name);
+    // vdPrint("\nCreado el semaforo de name: ", 0x00FFFFFF);
+    // vdPrint(pid_name, 0x0000FFFF);
+
+    // new_pcb->semaphore = create_sem(pid_name, 0);
+    
+    // if (new_pcb->semaphore == NULL) {
+    //     free_mm(memory_manager, new_pcb);
+    // 	return;
+    // }
+
 
     pcb_array[pid] = new_pcb;
     for (uint8_t i = priority; i > 0; i--) {
@@ -167,17 +180,17 @@ void wait_process_by_pid(uint8_t pid){
     if (pcb_to_wait == NULL){
         return;
     }
-    wait_sem(pcb_to_wait->semaphore->name);
+    // wait_sem(pcb_to_wait->semaphore->name);
 }
 
-/*int kill_process(uint8_t pid) {
+int kill_process(uint8_t pid) {
     TPCB* process_pcb  = get_pcb_by_pid(pid);
     if (process_pcb == NULL) {
         return -1;
     }
-    post_sem(process_pcb->semaphore->name);
+    remove_pcb_from_queue(process_pcb);
+    // post_sem(process_pcb->semaphore->name);
     TState process_state = process_pcb->state;
-    kill_pcb(process_pcb);
     process_pcb->state = ZOMBIE;
     pids[pid] = AVAILABLE_PID;
     process_pcb->m_pid = 0;
@@ -185,32 +198,32 @@ void wait_process_by_pid(uint8_t pid){
         requestSchedule();
     }
     return EXIT_SUCCESS;
-}*/
-
-int kill_process(uint8_t pid) {
-    TPCB* process_pcb  = get_pcb_by_pid(pid);
-    if (process_pcb == NULL) {
-        return -1;
-    }
-    post_sem(process_pcb->semaphore->name);
-    TState process_state = process_pcb->state;
-    kill_pcb(process_pcb);  // en realidad esta funcion lo que hace es sacarte de la queue si estabas y pone a tud hijos en zombie
-    process_pcb->state = KILLED;
-    pids[pid] = AVAILABLE_PID;
-
-    free_process(process_pcb);
-    if (process_state == RUNNING) {
-        requestSchedule();
-    }
-    return EXIT_SUCCESS;
 }
+
+// int kill_process(uint8_t pid) {
+//     TPCB* process_pcb  = get_pcb_by_pid(pid);
+//     if (process_pcb == NULL) {
+//         return -1;
+//     }
+//     post_sem(process_pcb->semaphore->name);
+//     TState process_state = process_pcb->state;
+//     kill_pcb(process_pcb);  // en realidad esta funcion lo que hace es sacarte de la queue si estabas y pone a tud hijos en zombie
+//     process_pcb->state = KILLED;
+//     pids[pid] = AVAILABLE_PID;
+
+//     free_process(process_pcb);
+//     if (process_state == RUNNING) {
+//         requestSchedule();
+//     }
+//     return EXIT_SUCCESS;
+// }
 
 void free_process(TPCB* pcb){
     if (pcb == NULL) return;
     
-    if(pcb->semaphore != NULL){
-        delete_sem(pcb->semaphore->name);
-    }
+    // if(pcb->semaphore != NULL){
+    //     delete_sem(pcb->semaphore->name);
+    // }
     
     if(pcb->stack_limit != NULL){
         free_mm(memory_manager, pcb->stack_limit);
@@ -262,12 +275,15 @@ int processes_information(void){
 }
 
 int64_t init_process(int argc, char** argv) {
-    //uint64_t init_pid = get_current_pid();
+    uint64_t init_pid = get_current_pid();
     while(1) {
-        for(int i = 0; i < MAX_PROCESSES; i++) {
-            if (/*i != init_pid &&*/ pcb_array[i] != NULL && pcb_array[i]->state == ZOMBIE) {
+        for(int i = init_pid+1; i < MAX_PROCESSES; i++) {
+            if (pcb_array[i] != NULL && pcb_array[i]->state == ZOMBIE) {
                 pcb_array[i]->state = KILLED;
-                free_process(pcb_array[i]);
+                // if (is_empty(pcb_array[i]->semaphore->waiting_processes)) {
+                    vdPrint("\nPROCESO LIBERADO", 0x00FF00);
+                    free_process(pcb_array[i]);
+                // }
             }
         }
     }

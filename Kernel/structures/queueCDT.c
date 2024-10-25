@@ -24,6 +24,9 @@ TQueueADT createQueue() {
 }
 
 void enqueue(TQueueADT queue, void* value) {
+    if (queue == NULL) {
+        return;
+    }
     TQueueNode* newNode = (TQueueNode*)malloc_mm(memory_manager, sizeof(TQueueNode));
     newNode->value = value;
     newNode->next = NULL;
@@ -38,8 +41,8 @@ void enqueue(TQueueADT queue, void* value) {
 }
 
 void* dequeue(TQueueADT queue) {
-    if (queue->first == NULL) {
-        return NULL;
+    if (queue == NULL || queue->first == NULL) {
+        return;
     }
 
     TQueueNode* temp = queue->first;
@@ -54,6 +57,9 @@ void* dequeue(TQueueADT queue) {
     return value;
 }
 void* dequeue_value(TQueueADT queue, void* value) {
+    if (queue == NULL) {
+        return;
+    }
     TQueueNode * current = queue->first;
 	TQueueNode * previous = NULL;
 	while (current != NULL && current->value != value) {
@@ -82,6 +88,9 @@ void* dequeue_value(TQueueADT queue, void* value) {
 }
 
 int count_occurrences(TQueueADT queue, void* value) {
+    if (queue == NULL) {
+        return;
+    }
     int count = 0;
     TQueueNode* current = queue->first;
 
@@ -96,11 +105,11 @@ int count_occurrences(TQueueADT queue, void* value) {
 }
 
 int is_empty(TQueueADT queue) {
-    return queue->first == NULL;
+    return queue == NULL || queue->first == NULL;
 }
 
 void* peek(TQueueADT queue){
-    return (queue->first == NULL)? NULL : queue->first->value;
+    return (queue == NULL || queue->first == NULL)? NULL : queue->first->value;
 }
 
 void destroy_queue(TQueueADT queue) {
@@ -122,6 +131,9 @@ void destroy_queue(TQueueADT queue) {
 
 
 void dump(TQueueADT queue){
+    if (queue == NULL) {
+        return;
+    }
     TQueueNode* current = queue->first;
     while (current != NULL) {
         uint8_t pid = (uint8_t)current->value;

@@ -13,7 +13,7 @@
 #define SHELL_PRIORITY      10
 
 
-#define MEMORY_SIZE         (1024*1024)
+#define MEMORY_SIZE         (1024*1024*512)
 #define MEMORY_BLOCK_SIZE   (1024*8)
 
 void initialize_management(void);
