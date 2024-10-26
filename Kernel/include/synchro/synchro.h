@@ -7,6 +7,7 @@
 typedef struct TSemaphore {
     char* name;
     uint64_t value;
+    uint8_t lock;
     TQueueADT waiting_processes;
 } TSemaphore;
 

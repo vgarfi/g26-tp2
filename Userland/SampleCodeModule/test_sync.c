@@ -45,9 +45,6 @@ uint64_t my_process_inc(uint64_t argc, char *argv[]) {
       sysPostSem(SEM_ID);
   }
 
-  if (use_sem)
-    sysCloseSem(SEM_ID);
-
   return 0;
 }
 
@@ -75,6 +72,9 @@ uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
     sysWaitPid(pids[i]);
     sysWaitPid(pids[i + TOTAL_PAIR_PROCESSES]);
   }
+
+  sysCloseSem(SEM_ID);
+
   printf("Processes WAITED\n", 0,0,0);
   printf("Final value: %d\n", global, 0,0);
 
