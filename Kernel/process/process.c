@@ -186,7 +186,7 @@ void wait_process_by_pid(uint8_t pid){
 void put_children_mpid_init(uint8_t m_pid) {
     for(int i = 0; i < MAX_PROCESSES; i++) {
         if (pcb_array[i] != NULL && pcb_array[i]->m_pid == m_pid) {
-            pcb_array[i]->m_pid = 0;    // 0 es el pid de la madre
+            pcb_array[i]->m_pid = 0;    // 0 es el pid de la nueva madre
         }
     }
 }

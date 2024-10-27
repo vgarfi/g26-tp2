@@ -1,5 +1,7 @@
 #include <string.h>
 #include <stdint.h>
+#include <stdlib.h>
+#include <videoDriver.h>
 
 int strlen(const char *str) {
     int length = 0;
@@ -41,6 +43,9 @@ void itoa(int value, char* str, int base) {
 }
 
 int strcmp(const char * str1, const char * str2){
+    if(str1 == NULL || str2 == NULL){
+        return 0;
+    }
     int i = 0;
     while(str1[i]!='\0' && (str1[i] == str2[i])){
         i++;
