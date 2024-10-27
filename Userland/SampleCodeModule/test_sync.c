@@ -62,12 +62,9 @@ uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
 
   uint64_t i;
   for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
-    printf("Creating process %d...", i, 0,0);
     pids[i] = sysCreateProcess("my_process_inc", 4, argvDec, my_process_inc);
-    printf(" CREATED\n", i, 0,0);
-    printf("Creating process %d...", i+TOTAL_PAIR_PROCESSES, 0,0);
     pids[i + TOTAL_PAIR_PROCESSES] = sysCreateProcess("my_process_inc", 4, argvInc, my_process_inc);
-    printf(" CREATED\n", i, 0,0);
+
     sysNice(pids[i], 10);
     sysNice(pids[i + TOTAL_PAIR_PROCESSES], 10);
   }

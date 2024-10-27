@@ -5,7 +5,6 @@
 #include <structures/queueADT.h>
 #include <scheduler/scheduler.h>
 #include <process/process.h>
-#include <videoDriver.h>
 
 extern MemoryManagerADT memory_manager;
 
@@ -131,6 +130,8 @@ void delete_sem(char* name) {
     }
 
     destroy_queue(looked_semaphore->waiting_processes);
+
+    remove_element(semaphore_list, looked_semaphore);
     
     free_mm(memory_manager, looked_semaphore->name);
     free_mm(memory_manager, looked_semaphore);
