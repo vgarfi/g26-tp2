@@ -11,8 +11,8 @@ extern MemoryManagerADT memory_manager;
 
 TListADT semaphore_list;
 
-void acquire(uint8_t lock);
-void release(uint8_t lock);
+void acquire(uint8_t* lock);
+void release(uint8_t* lock);
 
 uint8_t create_lock = 1;
 

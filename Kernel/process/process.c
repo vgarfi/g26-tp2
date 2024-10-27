@@ -37,6 +37,7 @@ int yield_process(void) {
     if (pcb_to_yield == NULL){
         return -1;
     }
+    pcb_to_yield->state = READY;
     remove_pcb_from_queue(pcb_to_yield);
     for (uint8_t i = pcb_to_yield->priority; i > 0; i--) {
         enqueue(pcb_readies_queue, pcb_to_yield);
@@ -64,11 +65,10 @@ int unblock_process(uint8_t pid) {
     if (pcb_to_unblock == NULL){
         return -1;
     }
+    pcb_to_unblock->state = READY;
     for (uint8_t i = pcb_to_unblock->priority; i > 0; i--) {
         enqueue(pcb_readies_queue, pcb_to_unblock);
     }
-    pcb_to_unblock->state = READY;
-
     return EXIT_SUCCESS;
 }
 
@@ -183,7 +183,7 @@ void wait_process_by_pid(uint8_t pid){
 
 void put_children_mpid_init(uint8_t m_pid) {
     for(int i = 0; i < MAX_PROCESSES; i++) {
-        if (pcb_array[i]->m_pid == m_pid) {
+        if (pcb_array[i] != NULL && pcb_array[i]->m_pid == m_pid) {
             pcb_array[i]->m_pid = 0;    // 0 es el pid de la madre
         }
     }
@@ -267,7 +267,7 @@ int64_t init_process(int argc, char** argv) {
     uint64_t init_pid = get_current_pid();
     while(1) {
         for(int i = init_pid+1; i < MAX_PROCESSES; i++) {
-            if (pcb_array[i] != NULL && pcb_array[i]->m_pid == 0 && pcb_array[i]->state == ZOMBIE) {
+            if (pcb_array[i] != NULL && pcb_array[i]->m_pid == init_pid && pcb_array[i]->state == ZOMBIE) {
                 pcb_array[i]->state = KILLED;
                 free_process(pcb_array[i]);
             }
