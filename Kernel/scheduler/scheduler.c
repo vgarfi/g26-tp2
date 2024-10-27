@@ -34,7 +34,7 @@ uint64_t* schedule(uint64_t* rsp) {
             enqueue(pcb_readies_queue, running_pcb);
         }
     }
-    running_pcb->state = READY;
+    if(running_pcb->state != ZOMBIE) running_pcb->state = READY;
     next->state = RUNNING;
     running_pcb = next;
     return running_pcb->rsp;
@@ -42,7 +42,7 @@ uint64_t* schedule(uint64_t* rsp) {
 
 uint8_t get_current_pid(void) {
     if (running_pcb == NULL) return 0;
-    return running_pcb->pid;    
+    return running_pcb->pid;
 }
 
 TPCB* get_running_pcb(void) {

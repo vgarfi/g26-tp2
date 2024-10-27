@@ -140,8 +140,9 @@ void memory_test(){
     sysCreateProcess(TEST_MEMORY, 2, test_args_memory, (int64_t (*)(int, char**))test_mm);
 }
 
-static char * sync_args_memory[] = {TEST_SYNC, "5", "1", 0};
+static char * sync_args_memory[] = {TEST_SYNC, "5", "0", 0};
 
 void sync_test(){
-    sysCreateProcess(TEST_SYNC, 3, sync_args_memory,  (int64_t (*)(int, char**))test_sync);
+    int testPid = sysCreateProcess(TEST_SYNC, 3, sync_args_memory,  (int64_t (*)(int, char**))test_sync);
+    sysNice(testPid, 5);
 }

@@ -4,7 +4,7 @@
 #define KERNEL_MANAGEMENT_H
 
 #define INIT_PROCESS       "init"
-#define INIT_PRIORITY       5
+#define INIT_PRIORITY       1
 
 #define IDLE_PROCESS       "idle"
 #define IDLE_PRIORITY       1

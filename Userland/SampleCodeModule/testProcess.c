@@ -122,6 +122,7 @@ void test_priorities(void) {
   sysPs();
   printf("\ntest_priorities: Process priorities tested succesfully\n",0,0,0);
   finish_testing();
+  return 0;
 }
 
 void finish_testing() {
@@ -155,5 +156,5 @@ void finish_testing() {
     print("> ");
     sysShowCursor();
     bussy_wait(WAIT);
-    sysKillProcess(sysGetCurrentPid());
+    // sysKillProcess(sysGetCurrentPid());
 }

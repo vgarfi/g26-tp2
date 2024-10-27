@@ -169,7 +169,9 @@ int get_available_pid() {
 
 void wrapper(uint64_t argc, char* argv[], int64_t (*code)(int, char**)) {
     code(argc, argv);
-    kill_process(get_current_pid());
+    int current_pid = get_current_pid();
+    // if (pids[current_pid] == AVAILABLE_PID) return;
+    kill_process(current_pid);
 }
 
 void wait_process_by_pid(uint8_t pid){
@@ -198,9 +200,7 @@ int kill_process(uint8_t pid) {
     post_sem(process_pcb->semaphore->name);
     TState process_state = process_pcb->state;
     process_pcb->state = ZOMBIE;
-    pids[pid] = AVAILABLE_PID;
     put_children_mpid_init(pid);
-
     if (process_state == RUNNING) {
         requestSchedule();
     }
@@ -270,6 +270,7 @@ int64_t init_process(int argc, char** argv) {
             if (pcb_array[i] != NULL && pcb_array[i]->m_pid == init_pid && pcb_array[i]->state == ZOMBIE) {
                 pcb_array[i]->state = KILLED;
                 free_process(pcb_array[i]);
+                pids[i] = AVAILABLE_PID;
             }
         }
     }
