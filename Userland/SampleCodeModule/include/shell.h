@@ -48,8 +48,8 @@ static char* helpText[]  __attribute__((unused)) = { "Command information is dis
 "REGISTERS           ->      Prints registers values. To do this, first you need to save\n",
 "                            your registers by pressing ALT.\n",
 "PS                  ->      Prints current ongoing processes with their information\n "
-"----------------------------------- TESTING -----------------------------------\n"
-"TESTP               ->      Tests functionalities required for proces administration.\n",
+"\n----------------------------------- TESTING -----------------------------------\n\n"
+"TESTP               ->      Tests functionalities required for process administration.\n",
 "TESTPRIO            ->      Tests processes priorities creation.\n",
 "TESTMEM             ->      Tests memory manager required functionalities.\n",
 "TESTSYNC            ->      Tests synchronization required functionalities.\n",

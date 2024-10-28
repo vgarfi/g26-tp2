@@ -150,11 +150,8 @@ void finish_testing() {
     printf(".", 0,0,0);
     bussy_wait(WAIT);
     printf(".", 0,0,0);
-    sysClearScreen();
-    sysClearKbEntry();
-    printColor("$", 0x0000FF00);
+    printColor("\n$", 0x0000FF00);
     print("> ");
     sysShowCursor();
-    bussy_wait(WAIT);
     // sysKillProcess(sysGetCurrentPid());
 }

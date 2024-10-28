@@ -13,6 +13,7 @@ void slowInc(int64_t *p, int64_t inc) {
   sysYield(); // This makes the race condition highly probable
   aux += inc;
   *p = aux;
+  printf(".",0,0,0);
 }
 
 uint64_t my_process_inc(uint64_t argc, char *argv[]) {
@@ -53,7 +54,7 @@ uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
   printf("test_sync: CREATED\n", 0,0,0);
 
   if (argc <= 2)
-    return -1;  // no puede devolver un negativo si devuelve un uint64_t
+    return 1;
 
   char *argvDec[] = {"my_process_inc", argv[1], "-1", argv[2], 0};
   char *argvInc[] = {"my_process_inc", argv[1], "1", argv[2], 0};
@@ -69,7 +70,7 @@ uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
     sysNice(pids[i + TOTAL_PAIR_PROCESSES], 10);
   }
   printf("Processes INCs CREATED\n", 0,0,0);
-
+  printf("Slowing incrementating", 0,0,0);
 
   for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
     sysWaitPid(pids[i]);
@@ -78,8 +79,11 @@ uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
 
   sysCloseSem(SEM_ID);
 
-  printf("Processes WAITED\n", 0,0,0);
-  printf("Final value: %d\n", global, 0,0);
+  printf("\nProcesses WAITED\n", 0,0,0);
+  printf("Final value: %d", global, 0,0);
+  printColor("\n$", 0x0000FF00);
+  print("> ");
+  sysShowCursor();
 
   return 0;
 }

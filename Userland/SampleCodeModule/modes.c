@@ -140,9 +140,32 @@ void memory_test(){
     sysCreateProcess(TEST_MEMORY, 2, test_args_memory, (int64_t (*)(int, char**))test_mm);
 }
 
-static char * sync_args_memory[] = {TEST_SYNC, "5", "1", 0};
+static char * sync_args_memory_sem[] = {TEST_SYNC, "5", "1", 0};
+static char * sync_args_memory_not_sem[] = {TEST_SYNC, "5", "0", 0};
+
 
 void sync_test(){
-    int testPid = sysCreateProcess(TEST_SYNC, 3, sync_args_memory,  (int64_t (*)(int, char**))test_sync);
+    printf("\nWould you like to use semaphores for testing? [Y/N]: ",0,0,0);
+    char option[5];
+    scanf(option, 5);
+    while (strcasecmp(option, "y") != 0 && strcasecmp(option, "n") != 0) {
+        printColor("ERROR: ",0x00FF0000);
+        printf(option,0,0,0);
+        printf(" is not a valid option",0,0,0);
+        printf("\nWould you like to use semaphores for testing? [Y/N]: ",0,0,0);
+        scanf(option, 5);
+    }
+    
+    printf("\nYou decided ",0,0,0);
+    if (strcasecmp(option, "n") == 0) printf("not ",0,0,0);
+    printf("to use semaphores. Starting tests...\n",0,0,0);
+
+    int testPid;
+
+    if (strcasecmp(option, "n") == 0) {
+        testPid = sysCreateProcess(TEST_SYNC, 3, sync_args_memory_not_sem,  (int64_t (*)(int, char**))test_sync);
+    } else {
+        testPid = sysCreateProcess(TEST_SYNC, 3, sync_args_memory_sem,  (int64_t (*)(int, char**))test_sync);
+    }
     sysNice(testPid, 5);
 }
