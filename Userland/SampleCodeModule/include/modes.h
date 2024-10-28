@@ -19,4 +19,7 @@ void priorities_test();
 void memory_test();
 void sync_test();
 void ps_printing(void);
+void killp();
+void blockp();
+void unblockp();
 #endif

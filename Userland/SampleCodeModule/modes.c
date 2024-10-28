@@ -169,3 +169,39 @@ void sync_test(){
     }
     sysNice(testPid, 5);
 }
+
+void killp(){
+    printf("\nEnter PID of process to ", 0,0,0);
+    printColor("KILL", 0x00FF0000);
+    printf(": ", 0,0,0);
+    char option[5];
+    scanf(option, 5);
+    int pid = atoi(option);
+    printColor("\nKILLING ", 0x00FF0000);
+    printf("process with PID: %d (if exists)\n", pid,0,0);
+    sysKillProcess((uint8_t)pid);
+}
+
+void unblockp(){
+    printf("\nEnter PID of process to ", 0,0,0);
+    printColor("UNBLOCK", 0x00FFE47B);
+    printf(": ", 0,0,0);
+    char option[5];
+    scanf(option, 5);
+    int pid = atoi(option);
+    printColor("\nUNBLOCKING ", 0x00FFE47B);
+    printf("process with PID: %d (if exists)\n", pid,0,0);
+    sysUnblockProcess((uint8_t)pid);
+}
+
+void blockp(){
+    printf("\nEnter PID of process to ", 0,0,0);
+    printColor("BLOCK", 0x00C72C29);
+    printf(": ", 0,0,0);
+    char option[5];
+    scanf(option, 5);
+    int pid = atoi(option);
+    printColor("\nBLOCKING ", 0x00C72C29);
+    printf("process with PID: %d (if exists)\n", pid,0,0);
+    sysBlockProcess((uint8_t)pid);
+}

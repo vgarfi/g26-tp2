@@ -171,7 +171,7 @@ int get_available_pid() {
 void wrapper(uint64_t argc, char* argv[], int64_t (*code)(int, char**)) {
     code(argc, argv);
     int current_pid = get_current_pid();
-    // if (pids[current_pid] == AVAILABLE_PID) return;
+    if (pids[current_pid] == AVAILABLE_PID) return;
     kill_process(current_pid);
 }
 

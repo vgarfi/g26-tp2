@@ -8,6 +8,7 @@
 int init(){
     printColor("Welcome to Shell! Type HELP for command information.\n\n", YELLOW);
     char commandPrompt[32]={0};
+    char buffer[10];
     while(IDLE_MODE) {
         sysClearKbEntry();
         printColor("$", GREEN);
@@ -30,6 +31,9 @@ int init(){
         else if(strcasecmp(commandPrompt, modes[PS_MODE]) == SELECTED_MODE) ps_printing();
         else if(strcasecmp(commandPrompt, modes[TESTMEM_MODE]) == SELECTED_MODE) memory_test();
         else if(strcasecmp(commandPrompt, modes[TEST_SYNC_MODE]) == SELECTED_MODE) sync_test();
+        else if(strcasecmp(commandPrompt, modes[BLOCKP_MODE]) == SELECTED_MODE) blockp();
+        else if(strcasecmp(commandPrompt, modes[UNBLOCKP_MODE]) == SELECTED_MODE) unblockp();
+        else if(strcasecmp(commandPrompt, modes[KILLP_MODE]) == SELECTED_MODE) killp();
         else notFound(commandPrompt);
     }
 }

@@ -24,11 +24,15 @@
 #define PS_MODE             15
 #define TESTMEM_MODE        16
 #define TEST_SYNC_MODE      17
+#define BLOCKP_MODE         18
+#define UNBLOCKP_MODE       19
+#define KILLP_MODE          20
+
 
 
 static const char* modes[]  __attribute__((unused)) = {
     "shell", "idle", "help", "divbyzero", "invalidopcode", "zoomin", "zoomout", "time", "date", "eliminator", "clear", "registers", "easteregg",
-    "testp", "testprio", "ps", "testmem", "testsync"
+    "testp", "testprio", "ps", "testmem", "testsync", "blockp", "unblockp", "killp"
 };
 
 static char* helpText[]  __attribute__((unused)) = { "Command information is displayed below:\n\n",
@@ -47,7 +51,10 @@ static char* helpText[]  __attribute__((unused)) = { "Command information is dis
 "CLEAR               ->      Clears the screen\n",
 "REGISTERS           ->      Prints registers values. To do this, first you need to save\n",
 "                            your registers by pressing ALT.\n",
-"PS                  ->      Prints current ongoing processes with their information\n "
+"PS                  ->      Prints current ongoing processes with their information\n",
+"BLOCKP              ->      Blocks a process given it's PID\n",
+"UNBLOCK             ->      Unblocks a process given it's PID\n",
+"KILLP               ->      Kills a process given it's PID\n",
 "\n----------------------------------- TESTING -----------------------------------\n\n"
 "TESTP               ->      Tests functionalities required for process administration.\n",
 "TESTPRIO            ->      Tests processes priorities creation.\n",

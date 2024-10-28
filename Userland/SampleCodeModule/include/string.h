@@ -32,4 +32,17 @@ int strcasecmp(const char * str1, const char * str2);
 */
 char * strcpy(char *dest, const char *src);
 
+/**
+ * Recieves a numeric value, a buffer and the base
+ * Transforms the number to its ASCII value and places it into the buffer
+*/
+void itoa(int value, char* str, int base);
+
+/**
+ * Recieves a stirng containing a number
+ * Transforms the string to its numeric value and
+ * Returns the numeric value
+*/
+int atoi(char *str);
+
 #endif
