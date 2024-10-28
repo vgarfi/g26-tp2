@@ -182,6 +182,7 @@ void wait_process_by_pid(uint8_t pid){
     }
     wait_sem(pcb_to_wait->semaphore->name);
     free_process(pcb_to_wait);
+    pids[pid] = AVAILABLE_PID;
 }
 
 void put_children_mpid_init(uint8_t m_pid) {
