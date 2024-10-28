@@ -13,6 +13,7 @@ extern TQueueADT pcb_readies_queue;
 TPCB* pcb_array[MAX_PROCESSES];
 
 void free_process(TPCB* pcb);
+uint32_t get_state_color(TState state);
 
 int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**)) {
     char* ptr = malloc_mm(memory_manager, PROCESS_SIZE);
@@ -233,35 +234,65 @@ void free_process(TPCB* pcb){
     free_mm(memory_manager, pcb);
 }
 
+
+uint32_t get_state_color(TState state) {
+    switch (state)
+    {
+    case BLOCKED:
+        return 0x00C72C29;
+        break;
+        
+    case READY:
+        return 0x00FFE47B;
+        break;
+
+    case RUNNING:
+        return 0x005BD608;
+        break;
+
+    case KILLED:
+        return 0x00AB0707;
+        break;
+
+    case ZOMBIE:
+        return 0x0021851E;
+        break;
+    
+    default:
+        return 0x00FFFFFF;
+    }
+}
+
 int processes_information(void){
     char buffer[10];
     char* states_labels[] = {"BLOCKED","READY","RUNNING","KILLED","ZOMBIE"};
     for(int i = 0; i < MAX_PROCESSES; i++) {
         if (pcb_array[i] != NULL && pids[i] == NOT_AVAILABLE_PID) {
-            vdPrint("\nPID: ", 0x00FFFFFF);
+            vdPrint("\n(", 0x00FFFFFF);
+            vdPrint(pcb_array[i]->name, 0x0000D4C1);
+            vdPrint("): PID: ", 0x00FFFFFF);
             itoa(i, buffer, 10);
             vdPrint(buffer, 0x00FFFFFF);
             vdPrint(" - MOTHER PID: ", 0x00FFFFFF);
             itoa(pcb_array[i]->m_pid, buffer, 10);
             vdPrint(buffer, 0x00FFFFFF);
-            vdPrint(" - NAME: ", 0x00FFFFFF);
-            vdPrint(pcb_array[i]->name, 0x00FFFFFF);
-            vdPrint(" - PRIORITY: ", 0x00FFFFFF);
+            vdPrint(" - PRIO: ", 0x00FFFFFF);
             itoa(pcb_array[i]->priority, buffer, 10);
             vdPrint(buffer, 0x00FFFFFF);
-            vdPrint(" - SP: ", 0x00FFFFFF);
+            vdPrint(" - SP: 0x", 0x00FFFFFF);
             itoa64((uint64_t) pcb_array[i]->rsp, buffer, 16);
             vdPrint(buffer, 0x00FFFFFF);
-            vdPrint(" - BP: ", 0x00FFFFFF);
+            vdPrint(" - BP: 0x", 0x00FFFFFF);
             itoa64((uint64_t) pcb_array[i]->stack_base, buffer, 16);
             vdPrint(buffer, 0x00FFFFFF);
             vdPrint(" - STATE: ", 0x00FFFFFF);
-            vdPrint(states_labels[pcb_array[i]->state], 0x00FFFFFF);
+            vdPrint(states_labels[pcb_array[i]->state], get_state_color(pcb_array[i]->state));
         }
     }
     vdPrint("\n",0x00FFFFFF);
     return EXIT_SUCCESS;
 }
+
 
 int64_t init_process(int argc, char** argv) {
     uint64_t init_pid = get_current_pid();
