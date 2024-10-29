@@ -14,8 +14,9 @@
 #include "fonts.h"
 
 extern MemoryManagerADT memory_manager;
+char* loop_args[] = {LOOP_PROCESS, 0};
 
-#define HANDLER_SIZE 46
+#define HANDLER_SIZE 47
 
 static int (*syscallHandlers[])()={
     // Syscalls de Arqui
@@ -27,7 +28,7 @@ static int (*syscallHandlers[])()={
     getCurrentPid, exitProcess, createProcess, (int (*)())blockProcess, (int (*)())unblockProcess, (int (*)())killProcess, (int (*)())nice, ps,
     memoryMalloc, memoryFree, memoryStatus,
     yield, createSem, getSem, postSem, waitSem, closeSem,
-    waitPid
+    waitPid, loopProcess
 };
 
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
@@ -233,7 +234,7 @@ int memoryFree(void* ptr) {
     return 0;
 }
 
-int memoryStatus(void){
+int memoryStatus(void) {
     // TODO preguntar si estas funciones deberian imprimir por su cuenta (a nivel kernel) o hacer que userland imprima
     get_diagnostic_mm(memory_manager);
     return 0;
@@ -272,5 +273,10 @@ int closeSem(char* name){
 
 int waitPid(uint8_t pid){
     wait_process_by_pid(pid);
+    return EXIT_SUCCESS;
+}
+
+int loopProcess(void){
+    create_process(LOOP_PROCESS, 1, loop_args, LOOP_PRIORITY, loop_processs);
     return EXIT_SUCCESS;
 }

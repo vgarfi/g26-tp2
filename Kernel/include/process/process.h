@@ -51,6 +51,7 @@ typedef struct TCodeFrame {
 } TCodeFrame;
 
 int64_t init_process(int argc, char** argv);
+int64_t loop_processs(int argc, char** argv);
 
 int get_available_pid(void);
 void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* stack_base, uint8_t pid, uint8_t priority, int64_t (*code)(int, char**));

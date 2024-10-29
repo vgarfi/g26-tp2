@@ -27,12 +27,14 @@
 #define BLOCKP_MODE         18
 #define UNBLOCKP_MODE       19
 #define KILLP_MODE          20
+#define LOOP_MODE           21
+
 
 
 
 static const char* modes[]  __attribute__((unused)) = {
     "shell", "idle", "help", "divbyzero", "invalidopcode", "zoomin", "zoomout", "time", "date", "eliminator", "clear", "registers", "easteregg",
-    "testp", "testprio", "ps", "testmem", "testsync", "blockp", "unblockp", "killp"
+    "testp", "testprio", "ps", "testmem", "testsync", "blockp", "unblockp", "killp", "loop"
 };
 
 static char* helpText[]  __attribute__((unused)) = { "Command information is displayed below:\n\n",
@@ -55,6 +57,7 @@ static char* helpText[]  __attribute__((unused)) = { "Command information is dis
 "BLOCKP              ->      Blocks a process given it's PID\n",
 "UNBLOCK             ->      Unblocks a process given it's PID\n",
 "KILLP               ->      Kills a process given it's PID\n",
+"LOOP                ->      Prints its PID and a greeting in loop\n",
 "\n----------------------------------- TESTING -----------------------------------\n\n"
 "TESTP               ->      Tests functionalities required for process administration.\n",
 "TESTPRIO            ->      Tests processes priorities creation.\n",

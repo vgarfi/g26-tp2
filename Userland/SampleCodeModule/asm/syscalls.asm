@@ -54,6 +54,8 @@ GLOBAL sysPostSem
 GLOBAL sysWaitSem
 GLOBAL sysCloseSem
 GLOBAL sysWaitPid
+GLOBAL sysLoop
+
 
 section .text
 
@@ -289,5 +291,10 @@ sysCloseSem:
 
 sysWaitPid:
     mov rax, 45
+    int 80h
+    ret
+
+sysLoop:
+    mov rax, 46
     int 80h
     ret

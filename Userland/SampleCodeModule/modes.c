@@ -205,3 +205,7 @@ void blockp(){
     printf("process with PID: %d (if exists)\n", pid,0,0);
     sysBlockProcess((uint8_t)pid);
 }
+
+ void loop(){
+    sysLoop();
+ }

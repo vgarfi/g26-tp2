@@ -64,4 +64,6 @@ int postSem(char* name);
 int waitSem(char* name);
 int closeSem(char* name);
 
+int loopProcess(void);
+
 #endif

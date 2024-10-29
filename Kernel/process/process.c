@@ -4,6 +4,7 @@
 #include <interrupts.h>
 #include <videoDriver.h>
 #include <string.h>
+#include <time.h>
 
 extern MemoryManagerADT memory_manager;
 
@@ -306,4 +307,22 @@ int64_t init_process(int argc, char** argv) {
             }
         }
     }
+}
+
+int64_t loop_processs(int argc, char** argv) {
+    char buffer[5];
+    itoa(get_current_pid(), buffer, 10);
+    vdPrint("\n", 0x00FFFFFF);
+    while(1) {
+        basic_sleep();
+        vdPrint("Hello (from ", 0x00FFFFFF);
+        vdPrint(get_running_pcb()->name, 0x0000D4C1);
+        vdPrint(") with PID: ", 0x00FFFFFF);
+        vdPrint(buffer, 0x00FFFFFF);
+        vdPrint("\n", 0x00FFFFFF);
+    }
+}
+
+void basic_sleep(){
+    for (int i = 0; i < 20000000; i++);
 }

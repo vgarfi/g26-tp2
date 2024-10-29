@@ -22,4 +22,6 @@ void ps_printing(void);
 void killp();
 void blockp();
 void unblockp();
+
+void loop();
 #endif

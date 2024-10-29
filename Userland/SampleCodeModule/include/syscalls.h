@@ -62,4 +62,6 @@ int sysPostSem(char* name);
 int sysWaitSem(char* name);
 int sysCloseSem(char* name);
 
+int sysLoop(void);
+
 #endif

@@ -9,5 +9,6 @@ void itoa(int value, char* str, int base);
 void itoa64(uint64_t value, char* str, int base);
 int strcmp(const char * str1, const char * str2);
 char* strconcat(char* dest, const char* str1, const char* str2);
+int64_t satoi(char *str);
 
 #endif
