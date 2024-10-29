@@ -215,7 +215,7 @@ int unblockProcess(uint8_t pid){
 }
 
 int killProcess(uint8_t pid) {
-    return kill_process(pid);
+    return forced_kill_process(pid);
 }
 
 int nice(uint8_t pid, uint8_t newPriority){

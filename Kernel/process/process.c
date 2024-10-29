@@ -210,6 +210,24 @@ int kill_process(uint8_t pid) {
     return EXIT_SUCCESS;
 }
 
+int forced_kill_process(uint8_t pid) {
+    TPCB* process_pcb  = get_pcb_by_pid(pid);
+    if (process_pcb == NULL) {
+        return -1;
+    }
+    remove_pcb_from_queue(process_pcb);
+    post_sem(process_pcb->semaphore->name);
+    TState process_state = process_pcb->state;
+    process_pcb->state = KILLED;
+    put_children_mpid_init(pid);
+    free_process(process_pcb);
+    pids[pid] = AVAILABLE_PID;
+    if (process_state == RUNNING) {
+        requestSchedule();
+    }
+    return EXIT_SUCCESS;
+}
+
 void free_process(TPCB* pcb){
     if (pcb == NULL) return;
     
