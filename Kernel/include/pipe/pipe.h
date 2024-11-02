@@ -5,6 +5,8 @@
 
 #define MAX_BUFFER_SIZE     2048
 #define MAX_PIPES           256
+#define PIPE_AVAILABLE      1
+#define PIPE_UNAVAILABLE    0
 
 typedef struct pipe {
     char* name;
@@ -15,6 +17,10 @@ typedef struct pipe {
     TSemaphore* semw;
 } TPipe;
 
-static TPipe pipes[MAX_PIPES];
+extern TPipe* pipes[MAX_PIPES];
+extern int available_pipes[MAX_PIPES];
+
+void initialize_pipes(void);
+int create_pipe(char* name);
 
 #endif
