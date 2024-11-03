@@ -16,6 +16,8 @@ typedef struct pipe {
     char buffer[MAX_BUFFER_SIZE];
     TSemaphore* sem_r;
     TSemaphore* sem_w;
+    int read_cursor_index;      // Index del último caracter leido
+    int write_cursor_index;     // Index del último caracter escrito
 } TPipe;
 
 extern TPipe* pipes[MAX_PIPES];
@@ -23,5 +25,7 @@ extern int available_pipes[MAX_PIPES];
 
 void initialize_pipes(void);
 int create_pipe(char* name);
+int read_pipe(int pipe_index, char * buf, uint64_t count);
+int write_pipe(int pipe_index, char * buf, uint64_t count);
 
 #endif

@@ -51,6 +51,7 @@ typedef struct TCodeFrame {
 } TCodeFrame;
 
 int64_t init_process(int argc, char** argv);
+int64_t idle_process(int argc, char** argv);
 int64_t loop_processs(int argc, char** argv);
 
 int get_available_pid(void);
@@ -70,4 +71,8 @@ void wait_process_by_pid(uint8_t pid);
 int yield_process(void);
 
 int processes_information(void);
+
+void set_read_filedescriptor(uint8_t pid, int fd);
+void set_write_filedescriptor(uint8_t pid, int fd);
+
 #endif

@@ -113,6 +113,9 @@ void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* s
     new_pcb->state = READY;
     new_pcb->priority = priority;
 
+    new_pcb->fd_r = STDIN;
+    new_pcb->fd_w = STDOUT;
+
     int name_lenght = strlen(name);
     char sem_name[name_lenght+5];
     char pid_name[5];
@@ -192,6 +195,22 @@ void put_children_mpid_init(uint8_t m_pid) {
             pcb_array[i]->m_pid = 0;    // 0 es el pid de la nueva madre
         }
     }
+}
+
+
+void set_read_filedescriptor(uint8_t pid, int fd) {
+    TPCB* process_pcb  = get_pcb_by_pid(pid);
+    if (process_pcb == NULL) {
+        return -1;
+    }
+    process_pcb->fd_r = fd;
+}
+void set_write_filedescriptor(uint8_t pid, int fd) {
+    TPCB* process_pcb  = get_pcb_by_pid(pid);
+    if (process_pcb == NULL) {
+        return -1;
+    }
+    process_pcb->fd_w = fd;
 }
 
 int kill_process(uint8_t pid) {
@@ -313,6 +332,11 @@ int processes_information(void){
     return EXIT_SUCCESS;
 }
 
+int64_t idle_process(int argc, char** argv) {
+    while (1) {
+        _hlt();
+    }
+}
 
 int64_t init_process(int argc, char** argv) {
     uint64_t init_pid = get_current_pid();
@@ -326,6 +350,7 @@ int64_t init_process(int argc, char** argv) {
         }
     }
 }
+
 
 int64_t loop_processs(int argc, char** argv) {
     char buffer[5];

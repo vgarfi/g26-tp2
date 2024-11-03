@@ -30,6 +30,8 @@ typedef struct TPCB {
     uint64_t* rsp;
     uint8_t priority;
     TSemaphore* semaphore;
+    int fd_r;
+    int fd_w;
 } TPCB;
 
 extern TPCB* pcb_array[MAX_PROCESSES];

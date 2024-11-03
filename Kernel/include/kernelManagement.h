@@ -19,6 +19,9 @@
 #define MEMORY_SIZE         (1024*1024*512)
 #define MEMORY_BLOCK_SIZE   (1024*8)
 
+#define STDIN               0
+#define STDOUT              1
+
 void initialize_management(void);
 int64_t idle_process(int argc, char** argv);
 

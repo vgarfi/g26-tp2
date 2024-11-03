@@ -4,6 +4,7 @@
 #include "include/time.h"
 #include <keyboard.h>
 #include <scheduler/scheduler.h>
+#include <pipe/pipe.h>
 #include <synchro/synchro.h>
 #include <interrupts.h>
 #include <lib.h>
@@ -41,28 +42,30 @@ uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r1
 
 // TODO read debe poder ser bloqueante. Manejarlo con semáforos
 int read(uint64_t fd, char * buf, uint64_t count) {
-    if(fd!=STDIN) {   // Only can read from standard input
-        return 0;
+    if (fd == STDIN) {
+        uint64_t sizeRead=0;
+        unsigned char lastRead='\0';
+        while(sizeRead!=count && !kbisBufferEmpty()){
+                lastRead = kbreadBuf();
+                buf[sizeRead++] = lastRead;
+        }
+        return sizeRead == count? count : sizeRead;    // If we return sizeRead-1 it means we stopped at '\n'    
     }
-    uint64_t sizeRead=0;
-    unsigned char lastRead='\0';
-    while(sizeRead!=count && !kbisBufferEmpty()){
-            lastRead = kbreadBuf();
-            buf[sizeRead++] = lastRead;
-    }
-    return sizeRead == count? count : sizeRead;    // If we return sizeRead-1 it means we stopped at '\n'
+    return write_pipe(fd/2, buf, count);
+    
 }
 
 int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor){
-    if(fd != STDOUT)  // Only can write in STDOUT
-        return 0;
     int i;
     char toPrint[2]={0,0};
-    for(i=0; i<count; i++){
-        toPrint[0]=buf[i];
-        vdPrint(toPrint, hexColor);
-    }
+    if (fd == STDOUT) {
+        for(i=0; i<count; i++){
+            toPrint[0]=buf[i];
+            vdPrint(toPrint, hexColor); 
+        }
     return i;
+    }
+    return write_pipe(fd/2, buf, count);
 }
 
 int incSize(){
