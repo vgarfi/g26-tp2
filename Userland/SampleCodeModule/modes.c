@@ -267,9 +267,6 @@ void pipe_processes(char* input) {
     p2_fds[0] = pipe_fds[1];
     p2_fds[1] = STDOUT;
     
-    printf("p1_fds: [%d, %d]\n", p1_fds[0], p1_fds[1], 0);
-    printf("p2_fds: [%d, %d]\n", p2_fds[0], p2_fds[1], 0);
-    
     process_one(p1_fds);
     process_two(p2_fds);
 }
