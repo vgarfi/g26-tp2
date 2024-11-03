@@ -43,10 +43,16 @@ uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r1
 
 // TODO read debe poder ser bloqueante. Manejarlo con semáforos
 int read(uint64_t fd, char * buf, uint64_t count) {
+     if (is_initialized()) {
+        TPCB* pcb = get_running_pcb();
+        if (pcb != NULL) {
+            fd = pcb->fd_r;
+        }
+    }
     if (fd == STDIN) {
-        uint64_t sizeRead=0;
-        unsigned char lastRead='\0';
-        while(sizeRead!=count && !kbisBufferEmpty()){
+        uint64_t sizeRead = 0;
+        unsigned char lastRead = '\0';
+        while(sizeRead != count && !kbisBufferEmpty()){
                 lastRead = kbreadBuf();
                 buf[sizeRead++] = lastRead;
         }
@@ -59,6 +65,12 @@ int read(uint64_t fd, char * buf, uint64_t count) {
 int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor){
     int i;
     char toPrint[2]={0,0};
+    if (is_initialized()) {
+        TPCB* pcb = get_running_pcb();
+        if (pcb != NULL) {
+            fd = pcb->fd_w;
+        }
+    }
     if (fd == STDOUT) {
         for(i=0; i<count; i++){
             toPrint[0]=buf[i];

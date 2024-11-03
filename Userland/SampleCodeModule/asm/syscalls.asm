@@ -1,5 +1,5 @@
-GLOBAL sysWriteScreen
-GLOBAL sysReadScreen
+GLOBAL sysWrite
+GLOBAL sysRead
 GLOBAL sysClearScreen
 GLOBAL sysClearKbEntry
 
@@ -61,12 +61,12 @@ GLOBAL sysCreatePipe
 
 section .text
 
-sysReadScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToRead
+sysRead:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToRead
     mov rax, 0
     int 80h
     ret
 
-sysWriteScreen:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToPrint, R10: colorHex
+sysWrite:         ; RDI: fileDescriptor, RSI: buffer, RDX: sizeToPrint, R10: colorHex
     mov r10, rcx
     mov rax, 1
     int 80h

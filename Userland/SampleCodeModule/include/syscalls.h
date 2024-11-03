@@ -2,8 +2,8 @@
 #define __SYSCALLS_H_
 #include <stdint.h>
 
-int sysWriteScreen(uint64_t fd, unsigned char* buffer, uint64_t len, uint64_t hexColor);
-int sysReadScreen(uint64_t fd, unsigned char* buffer, uint64_t len);
+int sysWrite(uint64_t fd, unsigned char* buffer, uint64_t len, uint64_t hexColor);
+int sysRead(uint64_t fd, unsigned char* buffer, uint64_t len);
 void sysSleep(uint64_t secs, uint64_t ms);
 int sysClearScreen();
 int sysClearKbEntry();

@@ -13,11 +13,11 @@
  * getChar returned with no value read because of timeout
  * or not
 */
-static int readSizeFlag=0;
+static int readSizeFlag = 0;
 
-static int ctrlFlag=0, checkZoomFlag;
+static int ctrlFlag = 0, checkZoomFlag;
 
-static uint64_t hexcol=DEFAULT;   // default shell color
+static uint64_t hexcol = DEFAULT;   // default shell color
 
 static int isPrintable(unsigned char c);
 static int isVerticalArrow(unsigned char c);
@@ -26,13 +26,13 @@ static char inputs[MAX_INPUTS_STORE][MAXBUFLEN];
 static int inputIndex = 0;
 
 unsigned char getchar(void){
-    unsigned char read=0;
-    readSizeFlag=sysReadScreen(STDIN, &read, 1);
+    unsigned char read = 0;
+    readSizeFlag = sysRead(STDIN, &read, 1);
     return read;
 }
 
 unsigned char putchar(unsigned char c){
-    sysWriteScreen(STDOUT, &c, 1, hexcol);
+    sysWrite(STDOUT, &c, 1, hexcol);
     return c;
 }
 
