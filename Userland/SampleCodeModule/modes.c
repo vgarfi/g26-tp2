@@ -17,6 +17,19 @@
 char* dateTimeAux;
 int zoomAux, regAux;
 
+char* pipeable_modes[]  = {
+    "testp", "testprio", "ps", "testmem", "testsync", "loop"
+};
+
+void (*mode_functions[])(int*) = {
+    process_test,
+    priorities_test,
+    ps_printing,
+    memory_test,
+    sync_test,
+    loop
+};
+
 void help (void) {
     for(int i=0; strcasecmp(helpText[i], "end")!=0; i++){
         printColor(helpText[i], YELLOW);
@@ -206,38 +219,58 @@ void blockp(){
     sysBlockProcess((uint8_t)pid);
 }
 
-void loop(){
-    sysLoop();
+void loop(int* fds){
+    sysLoop(fds);
 }
 
-int pipeable_mode(char* mode) {
-    return (strcasecmp(mode, modes[HELP_MODE]) == SELECTED_MODE ||
-    strcasecmp(mode, modes[TIME_MODE]) == SELECTED_MODE ||
-    strcasecmp(mode, modes[DATE_MODE]) == SELECTED_MODE ||
-    strcasecmp(mode, modes[REGISTERS_MODE]) == SELECTED_MODE ||
-    strcasecmp(mode, modes[TESTP_MODE]) == SELECTED_MODE ||
-    strcasecmp(mode, modes[TESTPRIO_MODE]) == SELECTED_MODE ||
-    strcasecmp(mode, modes[PS_MODE]) == SELECTED_MODE ||
-    strcasecmp(mode, modes[TESTMEM_MODE]) == SELECTED_MODE ||
-    strcasecmp(mode, modes[TEST_SYNC_MODE]) == SELECTED_MODE ||
-    strcasecmp(mode, modes[LOOP_MODE]) == SELECTED_MODE);
+void (*get_pipeable_mode(const char* mode))(int*) {
+    for (int i = 0; i < sizeof(modes) / sizeof(modes[0]); i++) {
+        if (strcasecmp(mode, pipeable_modes[i]) == SELECTED_MODE) {
+            return mode_functions[i];
+        }
+    }
+    return 0;
 }
 
 void pipe_processes(char* input) {
-    char p1[30], p2[30];
+    char p1[15], p2[15];
     strsplit(input, '!', p1, p2);
     strtrim(p1);
     strtrim(p2);
-    if (!pipeable_mode(p1)) {
-        printf("\nERROR: ", 0,0,0);
-        printf(p1, 0,0,0);
-        printf("no es un proceso pipeable", 0,0,0);
+    void(*process_one)(int*) = get_pipeable_mode(p1);
+    void(*process_two)(int*) = get_pipeable_mode(p2);
+
+    if (process_one == 0 || process_two == 0) {
+        // TODO claramente mejorar los mensajes de error
+        if (process_one == 0) {
+            printf("\nERROR: ", 0,0,0);
+            printf(p1, 0,0,0);
+            printf("no es un proceso pipeable", 0,0,0);
+        }
+        else {
+            printf("\nERROR: ", 0,0,0);
+            printf(p2, 0,0,0);
+            printf("no es un proceso pipeable", 0,0,0);
+        }
+        return;
     }
-    if (!pipeable_mode(p2)) {
-        printf("\nERROR: ", 0,0,0);
-        printf(p2, 0,0,0);
-        printf("no es un proceso pipeable", 0,0,0);
-    }
+
+    int pipe_fds[2];
+    char pipe_name[32];
+    strconcat(pipe_name, p1, "-");
+    strconcat(pipe_name, pipe_name, p2);
+    sysCreatePipe(pipe_name, pipe_fds);
     
+    int p1_fds[2], p2_fds[2];
+    p1_fds[0] = STDIN;
+    p1_fds[1] = pipe_fds[0];
+    p2_fds[0] = pipe_fds[1];
+    p2_fds[1] = STDOUT;
+    
+    printf("p1_fds: [%d, %d]\n", p1_fds[0], p1_fds[1], 0);
+    printf("p2_fds: [%d, %d]\n", p2_fds[0], p2_fds[1], 0);
+    
+    process_one(p1_fds);
+    process_two(p2_fds);
 }
 

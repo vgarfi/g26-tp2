@@ -23,8 +23,7 @@ void killp();
 void blockp();
 void unblockp();
 
-void loop();
-
+void loop(int* fds);
 void pipe_processes(char* input);
 
 #endif

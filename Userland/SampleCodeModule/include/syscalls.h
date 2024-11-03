@@ -62,7 +62,7 @@ int sysPostSem(char* name);
 int sysWaitSem(char* name);
 int sysCloseSem(char* name);
 
-int sysLoop(void);
+int sysLoop(int* fds);
 
 int sysCreatePipe(char* name, int* fds);
 

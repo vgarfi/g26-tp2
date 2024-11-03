@@ -16,7 +16,6 @@
 
 extern MemoryManagerADT memory_manager;
 char* loop_args[] = {LOOP_PROCESS, 0};
-int fds[] = {STDIN, STDOUT};
 
 #define HANDLER_SIZE 48
 
@@ -281,7 +280,7 @@ int waitPid(uint8_t pid){
     return EXIT_SUCCESS;
 }
 
-int loopProcess(void){
+int loopProcess(int* fds){
     create_process(LOOP_PROCESS, 1, loop_args, LOOP_PRIORITY, loop_processs, fds);
     return EXIT_SUCCESS;
 }

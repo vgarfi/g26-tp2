@@ -64,7 +64,7 @@ int postSem(char* name);
 int waitSem(char* name);
 int closeSem(char* name);
 
-int loopProcess(void);
+int loopProcess(int* fds);
 
 int createPipe(char* name, int* fds);
 

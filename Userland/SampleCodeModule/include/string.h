@@ -64,4 +64,10 @@ int strsplit(const char* str, char delimiter, char* res1, char* res2);
  * Trims white spaces before and after it
 */
 void strtrim(char* str);
+
+/**
+ * Recieves three strings
+ * Concatenates the second and third one, and inserts it into the first one 
+**/
+char* strconcat(char* dest, const char* str1, const char* str2);
 #endif
