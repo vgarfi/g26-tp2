@@ -23,6 +23,5 @@
 #define STDOUT              1
 
 void initialize_management(void);
-int64_t idle_process(int argc, char** argv);
 
 #endif

@@ -57,4 +57,11 @@ int contains(char* str, char c);
  * Splits the string into two substrings separated by the delimiter
 */
 int strsplit(const char* str, char delimiter, char* res1, char* res2);
+
+
+/**
+ * Recieves a string
+ * Trims white spaces before and after it
+*/
+void strtrim(char* str);
 #endif

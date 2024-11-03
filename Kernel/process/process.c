@@ -16,7 +16,7 @@ TPCB* pcb_array[MAX_PROCESSES];
 void free_process(TPCB* pcb);
 uint32_t get_state_color(TState state);
 
-int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**)) {
+int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**), int* fds) {
     char* ptr = malloc_mm(memory_manager, PROCESS_SIZE);
     if (ptr == NULL) {
         return -1;
@@ -28,7 +28,9 @@ int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, in
     }
 
     void* stack_base = ptr + STACK_SIZE;
-    add_pcb(name, argc, argv, ptr, stack_base, (uint8_t) pid, priority, code);
+
+
+    add_pcb(name, argc, argv, ptr, stack_base, (uint8_t) pid, priority, code, fds);
     
     pids[pid] = NOT_AVAILABLE_PID;
     return pid;
@@ -83,7 +85,7 @@ int change_priority(uint8_t pid, uint8_t new_priority){
     return EXIT_SUCCESS;
 }
 
-void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* stack_base, uint8_t pid, uint8_t priority, int64_t (*code)(int, char**)) {
+void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* stack_base, uint8_t pid, uint8_t priority, int64_t (*code)(int, char**), int* fds) {
     if (name == NULL || argc < 0 || argv == NULL || stack_base == NULL) {
         return;
     }
@@ -113,8 +115,8 @@ void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* s
     new_pcb->state = READY;
     new_pcb->priority = priority;
 
-    new_pcb->fd_r = STDIN;
-    new_pcb->fd_w = STDOUT;
+    new_pcb->fd_r = fds[0];
+    new_pcb->fd_w = fds[1];
 
     int name_lenght = strlen(name);
     char sem_name[name_lenght+5];

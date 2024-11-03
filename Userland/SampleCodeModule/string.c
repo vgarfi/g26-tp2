@@ -122,3 +122,25 @@ void itoa(int value, char* str, int base) {
         *ptr-- = tmp;
     }
 }
+
+void strtrim(char* str) {
+    char* end;
+    char* trimmed_str = str;
+    char* dest = str;
+    while (*trimmed_str == ' ') trimmed_str++;
+
+    if (*trimmed_str == 0) {
+        *str = '\0';
+        return;
+    }
+
+    end = trimmed_str + strlen(trimmed_str) - 1;
+    while (end > trimmed_str && *end == ' ') end--;
+
+    *(end + 1) = '\0';
+
+    while (*trimmed_str != '\0') {
+        *dest++ = *trimmed_str++;
+    }
+    *dest = '\0';
+}

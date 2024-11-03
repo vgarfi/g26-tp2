@@ -120,14 +120,14 @@ void playEasterEgg(){
 
 static char * test_args_proc[] = {TEST_PROCESSES, "5", 0};
 
-void process_test() {
-  sysCreateProcess(TEST_PROCESSES, 2, test_args_proc, (int64_t (*)(int, char**))test_processes);
+void process_test(int* fds) {
+  sysCreateProcess(TEST_PROCESSES, 2, test_args_proc, (int64_t (*)(int, char**))test_processes, fds);
 }
 
 static char * test_args_prio[] = {TEST_PRIORITY, 0};
 
-void priorities_test(){
-    sysCreateProcess(TEST_PRIORITY, 1, test_args_prio, (int64_t (*)(int, char**))test_priorities);
+void priorities_test(int* fds){
+    sysCreateProcess(TEST_PRIORITY, 1, test_args_prio, (int64_t (*)(int, char**))test_priorities, fds);
 }
 
 void ps_printing(){
@@ -136,15 +136,15 @@ void ps_printing(){
 
 static char * test_args_memory[] = {TEST_MEMORY, "1024", 0};
 
-void memory_test(){
-    sysCreateProcess(TEST_MEMORY, 2, test_args_memory, (int64_t (*)(int, char**))test_mm);
+void memory_test(int* fds){
+    sysCreateProcess(TEST_MEMORY, 2, test_args_memory, (int64_t (*)(int, char**))test_mm, fds);
 }
 
 static char * sync_args_memory_sem[] = {TEST_SYNC, "5", "1", 0};
 static char * sync_args_memory_not_sem[] = {TEST_SYNC, "5", "0", 0};
 
 
-void sync_test(){
+void sync_test(int* fds){
     printf("\nWould you like to use semaphores for testing? [Y/N]: ",0,0,0);
     char option[5];
     scanf(option, 5);
@@ -163,9 +163,9 @@ void sync_test(){
     int testPid;
 
     if (strcasecmp(option, "n") == 0) {
-        testPid = sysCreateProcess(TEST_SYNC, 3, sync_args_memory_not_sem,  (int64_t (*)(int, char**))test_sync);
+        testPid = sysCreateProcess(TEST_SYNC, 3, sync_args_memory_not_sem,  (int64_t (*)(int, char**))test_sync, fds);
     } else {
-        testPid = sysCreateProcess(TEST_SYNC, 3, sync_args_memory_sem,  (int64_t (*)(int, char**))test_sync);
+        testPid = sysCreateProcess(TEST_SYNC, 3, sync_args_memory_sem,  (int64_t (*)(int, char**))test_sync, fds);
     }
     sysNice(testPid, 5);
 }
@@ -210,7 +210,34 @@ void loop(){
     sysLoop();
 }
 
+int pipeable_mode(char* mode) {
+    return (strcasecmp(mode, modes[HELP_MODE]) == SELECTED_MODE ||
+    strcasecmp(mode, modes[TIME_MODE]) == SELECTED_MODE ||
+    strcasecmp(mode, modes[DATE_MODE]) == SELECTED_MODE ||
+    strcasecmp(mode, modes[REGISTERS_MODE]) == SELECTED_MODE ||
+    strcasecmp(mode, modes[TESTP_MODE]) == SELECTED_MODE ||
+    strcasecmp(mode, modes[TESTPRIO_MODE]) == SELECTED_MODE ||
+    strcasecmp(mode, modes[PS_MODE]) == SELECTED_MODE ||
+    strcasecmp(mode, modes[TESTMEM_MODE]) == SELECTED_MODE ||
+    strcasecmp(mode, modes[TEST_SYNC_MODE]) == SELECTED_MODE ||
+    strcasecmp(mode, modes[LOOP_MODE]) == SELECTED_MODE);
+}
+
 void pipe_processes(char* input) {
-    char p1[30], p2[30]; 
+    char p1[30], p2[30];
+    strsplit(input, '!', p1, p2);
+    strtrim(p1);
+    strtrim(p2);
+    if (!pipeable_mode(p1)) {
+        printf("\nERROR: ", 0,0,0);
+        printf(p1, 0,0,0);
+        printf("no es un proceso pipeable", 0,0,0);
+    }
+    if (!pipeable_mode(p2)) {
+        printf("\nERROR: ", 0,0,0);
+        printf(p2, 0,0,0);
+        printf("no es un proceso pipeable", 0,0,0);
+    }
+    
 }
 

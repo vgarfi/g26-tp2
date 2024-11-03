@@ -14,10 +14,10 @@ void eliminator(void);
 void notFound(char* commandNotFound);
 void playEasterEgg();
 
-void process_test();
-void priorities_test();
-void memory_test();
-void sync_test();
+void process_test(int* fds);
+void priorities_test(int* fds);
+void memory_test(int* fds);
+void sync_test(int* fds);
 void ps_printing(void);
 void killp();
 void blockp();
@@ -26,4 +26,5 @@ void unblockp();
 void loop();
 
 void pipe_processes(char* input);
+
 #endif

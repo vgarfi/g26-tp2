@@ -43,7 +43,7 @@ int isctrlPressed(void);
 
 int getCurrentPid(void);
 int exitProcess(void);
-int createProcess(char* name, uint64_t argc, char *argv[], int64_t (*code)(int, char**));
+int createProcess(char* name, uint64_t argc, char *argv[], int64_t (*code)(int, char**), int* fds);
 int blockProcess(uint8_t pid);
 int unblockProcess(uint8_t pid);
 int killProcess(uint8_t pid);
@@ -65,5 +65,7 @@ int waitSem(char* name);
 int closeSem(char* name);
 
 int loopProcess(void);
+
+int createPipe(char* name, int* fds);
 
 #endif

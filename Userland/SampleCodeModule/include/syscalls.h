@@ -37,7 +37,7 @@ int sysPrintCursor();
 int sysHideCursor();
 int sysShowCursor();
 
-int sysCreateProcess(char* name, uint64_t argc, char *argv[], int64_t (*code)(int, char**));
+int sysCreateProcess(char* name, uint64_t argc, char *argv[], int64_t (*code)(int, char**), int* fds);
 uint8_t sysGetCurrentPid(void);
 int sysExit(void);
 

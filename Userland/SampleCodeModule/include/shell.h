@@ -4,7 +4,6 @@
 /**
  * Initializes Shell 
 */
-
 #define SELECTED_MODE       0
 
 #define IDLE_MODE           1
@@ -30,12 +29,13 @@
 #define LOOP_MODE           21
 
 
-
-
 static const char* modes[]  __attribute__((unused)) = {
     "shell", "idle", "help", "divbyzero", "invalidopcode", "zoomin", "zoomout", "time", "date", "eliminator", "clear", "registers", "easteregg",
     "testp", "testprio", "ps", "testmem", "testsync", "blockp", "unblockp", "killp", "loop"
 };
+
+// !
+static const int standard_fds[] = {0, 1};
 
 static char* helpText[]  __attribute__((unused)) = { "Command information is displayed below:\n\n",
 "HELP                ->      Shows a description on each available command.\n",

@@ -16,6 +16,7 @@
 
 extern MemoryManagerADT memory_manager;
 char* loop_args[] = {LOOP_PROCESS, 0};
+int fds[] = {STDIN, STDOUT};
 
 #define HANDLER_SIZE 48
 
@@ -206,8 +207,8 @@ int exitProcess(){
     return kill_process(getCurrentPid());
 }
 
-int createProcess(char* name, uint64_t argc, char *argv[], int64_t (*code)(int, char**)){
-    return create_process(name, argc, argv, 1, code);
+int createProcess(char* name, uint64_t argc, char *argv[], int64_t (*code)(int, char**), int* fds){
+    return create_process(name, argc, argv, 1, code, fds);
 }
 
 int blockProcess(uint8_t pid){
@@ -281,7 +282,7 @@ int waitPid(uint8_t pid){
 }
 
 int loopProcess(void){
-    create_process(LOOP_PROCESS, 1, loop_args, LOOP_PRIORITY, loop_processs);
+    create_process(LOOP_PROCESS, 1, loop_args, LOOP_PRIORITY, loop_processs, fds);
     return EXIT_SUCCESS;
 }
 

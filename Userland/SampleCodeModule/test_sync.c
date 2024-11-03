@@ -52,6 +52,8 @@ uint64_t my_process_inc(uint64_t argc, char *argv[]) {
 uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
   uint64_t pids[2 * TOTAL_PAIR_PROCESSES];
   printf("test_sync: CREATED\n", 0,0,0);
+  // TODO ver si por default hacemos que al crear un proceso, los FDs sean el de tu madre o si siempre es STDIN-STDPUT (pq en caso de testeos, que crean otros procesos, el wrapper de testeo tiene cambiado pero no los sub test que se crean)
+  int fds[] =  {0,1}; 
 
   if (argc <= 2)
     return 1;
@@ -63,8 +65,8 @@ uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
 
   uint64_t i;
   for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
-    pids[i] = sysCreateProcess("my_process_inc", 4, argvDec, my_process_inc);
-    pids[i + TOTAL_PAIR_PROCESSES] = sysCreateProcess("my_process_inc", 4, argvInc, my_process_inc);
+    pids[i] = sysCreateProcess("my_process_inc", 4, argvDec, my_process_inc, fds);
+    pids[i + TOTAL_PAIR_PROCESSES] = sysCreateProcess("my_process_inc", 4, argvInc, my_process_inc, fds);
 
     sysNice(pids[i], 10);
     sysNice(pids[i + TOTAL_PAIR_PROCESSES], 10);
