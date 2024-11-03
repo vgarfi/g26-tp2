@@ -64,4 +64,6 @@ int sysCloseSem(char* name);
 
 int sysLoop(void);
 
+int sysCreatePipe(char* name, int* fds);
+
 #endif

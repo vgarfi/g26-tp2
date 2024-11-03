@@ -21,7 +21,11 @@ int getFreePipeIndex() {
     }
 }
 
-int create_pipe(char* name){
+int create_pipe(char* name, int* fds){
+    if (fds[0] == NULL || fds[1] == NULL) {
+        return -1;
+    }
+
     TPipe* new_pipe = (TPipe*)malloc_mm(memory_manager, sizeof(TPipe));
     if(new_pipe == NULL)
         return -1;
@@ -41,6 +45,9 @@ int create_pipe(char* name){
     new_pipe->fd_r = pipe_index*2;
     new_pipe->fd_w = (pipe_index*2) + 1;
 
+    fds[0] = new_pipe->fd_r;
+    fds[1] = new_pipe->fd_w;
+
     new_pipe->read_cursor_index = 0;
     new_pipe->write_cursor_index = 0;
 
@@ -54,6 +61,8 @@ int create_pipe(char* name){
     itoa(new_pipe->fd_w, sem_name_w, 10);
     strconcat(pipe_name_w, "pipe_w_", sem_name_w);
     new_pipe->sem_w = create_sem(pipe_name_w, 1);
+
+    return pipe_index;
 }
 
 

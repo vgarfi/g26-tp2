@@ -39,6 +39,36 @@ int strcasecmp(const char * str1, const char * str2){
     return strcmp(s1,s2);
 }
 
+int contains(char* str, char c) {
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (str[i] == c) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int strsplit(const char* str, char delimiter, char* res1, char* res2) {
+    int i, j;
+
+    for (i = 0; str[i] != '\0' && str[i] != delimiter; i++) {
+        res1[i] = str[i];
+    }
+    res1[i] = '\0';
+
+    if (str[i] == delimiter) {
+        i++;
+        for (j = 0; str[i] != '\0'; i++, j++) {
+            res2[j] = str[i];
+        }
+        res2[j] = '\0';
+    } else {
+        res2[0] = '\0';
+    }
+    return 1;
+}
+
+
 
 /**
  * Turns str received as a parameter to lowerCase

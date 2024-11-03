@@ -206,6 +206,11 @@ void blockp(){
     sysBlockProcess((uint8_t)pid);
 }
 
- void loop(){
+void loop(){
     sysLoop();
- }
+}
+
+void pipe_processes(char* input) {
+    char p1[30], p2[30]; 
+}
+

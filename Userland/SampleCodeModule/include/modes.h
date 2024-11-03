@@ -24,4 +24,6 @@ void blockp();
 void unblockp();
 
 void loop();
+
+void pipe_processes(char* input);
 #endif

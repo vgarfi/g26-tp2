@@ -55,6 +55,8 @@ GLOBAL sysWaitSem
 GLOBAL sysCloseSem
 GLOBAL sysWaitPid
 GLOBAL sysLoop
+GLOBAL sysCreatePipe
+
 
 
 section .text
@@ -296,5 +298,10 @@ sysWaitPid:
 
 sysLoop:
     mov rax, 46
+    int 80h
+    ret
+
+sysCreatePipe:
+    mov rax, 47
     int 80h
     ret

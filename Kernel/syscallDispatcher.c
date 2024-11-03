@@ -17,7 +17,7 @@
 extern MemoryManagerADT memory_manager;
 char* loop_args[] = {LOOP_PROCESS, 0};
 
-#define HANDLER_SIZE 47
+#define HANDLER_SIZE 48
 
 static int (*syscallHandlers[])()={
     // Syscalls de Arqui
@@ -29,7 +29,8 @@ static int (*syscallHandlers[])()={
     getCurrentPid, exitProcess, createProcess, (int (*)())blockProcess, (int (*)())unblockProcess, (int (*)())killProcess, (int (*)())nice, ps,
     memoryMalloc, memoryFree, memoryStatus,
     yield, createSem, getSem, postSem, waitSem, closeSem,
-    waitPid, loopProcess
+    waitPid, loopProcess,
+    createPipe
 };
 
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
@@ -282,4 +283,8 @@ int waitPid(uint8_t pid){
 int loopProcess(void){
     create_process(LOOP_PROCESS, 1, loop_args, LOOP_PRIORITY, loop_processs);
     return EXIT_SUCCESS;
+}
+
+int createPipe(char* name, int* fds) {
+    return create_pipe(name, fds);
 }

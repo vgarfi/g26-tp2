@@ -45,4 +45,16 @@ void itoa(int value, char* str, int base);
 */
 int atoi(char *str);
 
+/**
+ * Recieves a char and a string
+ * Returns 1 if the string contains the character.
+*/
+int contains(char* str, char c);
+
+
+/**
+ * Recieves a string, a char delimiter and two buffers
+ * Splits the string into two substrings separated by the delimiter
+*/
+int strsplit(const char* str, char delimiter, char* res1, char* res2);
 #endif
