@@ -19,12 +19,13 @@ int getFreePipeIndex() {
         if(available_pipes[i] == PIPE_AVAILABLE)
             return i;
     }
+    return -1;
 }
 
 int create_pipe(char* name, int* fds){
-    if (fds[0] == NULL || fds[1] == NULL) {
+    /*if (fds[0] == NULL || fds[1] == NULL) { // no pueden ser NULL un numero
         return -1;
-    }
+    }*/
 
     TPipe* new_pipe = (TPipe*)malloc_mm(memory_manager, sizeof(TPipe));
     if(new_pipe == NULL)
@@ -38,6 +39,8 @@ int create_pipe(char* name, int* fds){
     strcpy(new_pipe->name, name);
 
     int pipe_index = getFreePipeIndex();
+
+    if(pipe_index == -1) return -1;
 
     pipes[pipe_index] = new_pipe;
     available_pipes[pipe_index] = PIPE_UNAVAILABLE;
@@ -77,7 +80,7 @@ int read_pipe(int pipe_index, char * buf, uint64_t count) {
         wait_sem(pipe->sem_r->name);
         buf[i] = pipe->buffer[pipe->read_cursor_index % MAX_BUFFER_SIZE];
         pipe->read_cursor_index++;
-        sem_post(pipe->sem_w->name);
+        post_sem(pipe->sem_w->name);
     }
 
     return 0;
@@ -94,7 +97,7 @@ int write_pipe(int pipe_index, char * buf, uint64_t count) {
         wait_sem(pipe->sem_w->name);
         pipe->buffer[pipe->write_cursor_index % MAX_BUFFER_SIZE] = buf[i];
         pipe->write_cursor_index++;
-        sem_post(pipe->sem_r->name);
+        post_sem(pipe->sem_r->name);
     }
     
     return 0;

@@ -126,7 +126,7 @@ void test_priorities(void) {
   sysPs();
   printf("\ntest_priorities: Process priorities tested succesfully\n",0,0,0);
   finish_testing();
-  return 0;
+  return;
 }
 
 void finish_testing() {
