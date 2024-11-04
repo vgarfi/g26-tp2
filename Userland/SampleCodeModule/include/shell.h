@@ -34,9 +34,6 @@ static const char* modes[]  __attribute__((unused)) = {
     "testp", "testprio", "ps", "testmem", "testsync", "blockp", "unblockp", "killp", "loop"
 };
 
-// !
-static const int standard_fds[] = {0, 1};
-
 static char* helpText[]  __attribute__((unused)) = { "Command information is displayed below:\n\n",
 "HELP                ->      Shows a description on each available command.\n",
 "DIVBYZERO           ->      Shows handling in case of division by zero.\n",

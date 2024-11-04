@@ -10,8 +10,6 @@ char* init_args[] = {INIT_PROCESS, 0};
 char* idle_args[] = {IDLE_PROCESS, 0};
 char* shell_args[] = {SHELL_PROCESS, 0};
 
-int standard_fds[] = {STDIN, STDOUT};
-
 MemoryManagerADT memory_manager;
 
 typedef int64_t (*EntryPoint)(int, char**);
@@ -26,7 +24,7 @@ void initialize_management(void){
 	initialize_synchro();
     initialize_scheduling();
     initialize_pipes();
-    create_process(INIT_PROCESS, 1, init_args, INIT_PRIORITY, (int64_t (*)(int, char**)) init_process, standard_fds);
-    create_process(IDLE_PROCESS, 1, idle_args, IDLE_PRIORITY, (int64_t (*)(int, char**)) idle_process, standard_fds);
-    create_process(SHELL_PROCESS, 3, shell_args, SHELL_PRIORITY, sampleCodeModuleAddress, standard_fds);
+    create_process(INIT_PROCESS, 1, init_args, INIT_PRIORITY, (int64_t (*)(int, char**)) init_process);
+    create_process(IDLE_PROCESS, 1, idle_args, IDLE_PRIORITY, (int64_t (*)(int, char**)) idle_process);
+    create_process(SHELL_PROCESS, 3, shell_args, SHELL_PRIORITY, sampleCodeModuleAddress);
 }

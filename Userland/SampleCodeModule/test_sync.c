@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "include/syscalls.h"
+#include "include/test_sync.h"
 #include <test_util.h>
 
 #define SEM_ID "sem"
@@ -52,9 +53,7 @@ uint64_t my_process_inc(uint64_t argc, char *argv[]) {
 uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
   uint64_t pids[2 * TOTAL_PAIR_PROCESSES];
   printf("test_sync: CREATED\n", 0,0,0);
-  // TODO ver si por default hacemos que al crear un proceso, los FDs sean el de tu madre o si siempre es STDIN-STDPUT (pq en caso de testeos, que crean otros procesos, el wrapper de testeo tiene cambiado pero no los sub test que se crean)
-  int fds[] =  {0,1}; 
-
+  
   if (argc <= 2)
     return 1;
 
@@ -65,8 +64,8 @@ uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
 
   uint64_t i;
   for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
-    pids[i] = sysCreateProcess("my_process_inc", 4, argvDec, my_process_inc, fds);
-    pids[i + TOTAL_PAIR_PROCESSES] = sysCreateProcess("my_process_inc", 4, argvInc, my_process_inc, fds);
+    pids[i] = sysCreateProcess("my_process_inc", 4, argvDec, my_process_inc);
+    pids[i + TOTAL_PAIR_PROCESSES] = sysCreateProcess("my_process_inc", 4, argvInc, my_process_inc);
 
     sysNice(pids[i], 10);
     sysNice(pids[i + TOTAL_PAIR_PROCESSES], 10);
@@ -88,4 +87,33 @@ uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
   sysShowCursor();
 
   return 0;
+}
+
+static char * sync_args_memory_sem[] = {TEST_SYNC, "5", "1", 0};
+static char * sync_args_memory_not_sem[] = {TEST_SYNC, "5", "0", 0};
+
+uint64_t initialize_sync_testing(uint64_t argc, char *argv[]) {
+  printf("\nWould you like to use semaphores for testing? [Y/N]: ",0,0,0);
+    char option[5];
+    scanf(option, 5);
+    while (strcasecmp(option, "y") != 0 && strcasecmp(option, "n") != 0) {
+        printColor("ERROR: ",0x00FF0000);
+        printf(option,0,0,0);
+        printf(" is not a valid option",0,0,0);
+        printf("\nWould you like to use semaphores for testing? [Y/N]: ",0,0,0);
+        scanf(option, 5);
+    }
+    
+    printf("\nYou decided ",0,0,0);
+    if (strcasecmp(option, "n") == 0) printf("not ",0,0,0);
+    printf("to use semaphores. Starting tests...\n",0,0,0);
+
+    int testPid;
+
+    if (strcasecmp(option, "n") == 0) {
+        testPid = sysCreateProcess(TEST_SYNC, 3, sync_args_memory_not_sem,  (int64_t (*)(int, char**))test_sync);
+    } else {
+        testPid = sysCreateProcess(TEST_SYNC, 3, sync_args_memory_sem,  (int64_t (*)(int, char**))test_sync);
+    }
+    sysNice(testPid, 5);
 }

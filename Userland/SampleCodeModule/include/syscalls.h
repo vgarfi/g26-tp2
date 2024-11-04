@@ -37,7 +37,7 @@ int sysPrintCursor();
 int sysHideCursor();
 int sysShowCursor();
 
-int sysCreateProcess(char* name, uint64_t argc, char *argv[], int64_t (*code)(int, char**), int* fds);
+int sysCreateProcess(char* name, uint64_t argc, char *argv[], int64_t (*code)(int, char**));
 uint8_t sysGetCurrentPid(void);
 int sysExit(void);
 
@@ -62,8 +62,8 @@ int sysPostSem(char* name);
 int sysWaitSem(char* name);
 int sysCloseSem(char* name);
 
-int sysLoop(int* fds);
-
 int sysCreatePipe(char* name, int* fds);
+int sysSetReadFileDescriptor(uint8_t pid, int fd);
+int sysSetWriteFileDescriptor(uint8_t pid, int fd);
 
 #endif

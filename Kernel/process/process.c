@@ -16,7 +16,7 @@ TPCB* pcb_array[MAX_PROCESSES];
 void free_process(TPCB* pcb);
 uint32_t get_state_color(TState state);
 
-int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**), int* fds) {
+int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**)) {
     char* ptr = malloc_mm(memory_manager, PROCESS_SIZE);
     if (ptr == NULL) {
         return -1;
@@ -30,7 +30,7 @@ int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, in
     void* stack_base = ptr + STACK_SIZE;
 
 
-    add_pcb(name, argc, argv, ptr, stack_base, (uint8_t) pid, priority, code, fds);
+    add_pcb(name, argc, argv, ptr, stack_base, (uint8_t) pid, priority, code);
     
     pids[pid] = NOT_AVAILABLE_PID;
     return pid;
@@ -85,7 +85,7 @@ int change_priority(uint8_t pid, uint8_t new_priority){
     return EXIT_SUCCESS;
 }
 
-void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* stack_base, uint8_t pid, uint8_t priority, int64_t (*code)(int, char**), int* fds) {
+void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* stack_base, uint8_t pid, uint8_t priority, int64_t (*code)(int, char**)) {
     if (name == NULL || argc < 0 || argv == NULL || stack_base == NULL) {
         return;
     }
@@ -115,9 +115,14 @@ void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* s
     new_pcb->state = READY;
     new_pcb->priority = priority;
 
-    new_pcb->fd_r = fds[0];
-    new_pcb->fd_w = fds[1];
-
+    TPCB * mother_pcb = get_running_pcb();
+    if (mother_pcb != NULL) {        
+        new_pcb->fd_r = mother_pcb->fd_r;
+        new_pcb->fd_w = mother_pcb->fd_w;
+    } else {
+        new_pcb->fd_r = STDIN;
+        new_pcb->fd_w = STDOUT;
+    }
     int name_lenght = strlen(name);
     char sem_name[name_lenght+5];
     char pid_name[5];
@@ -199,20 +204,21 @@ void put_children_mpid_init(uint8_t m_pid) {
     }
 }
 
-
-void set_read_filedescriptor(uint8_t pid, int fd) {
+int set_read_filedescriptor(uint8_t pid, int fd) {
     TPCB* process_pcb  = get_pcb_by_pid(pid);
     if (process_pcb == NULL) {
         return -1;
     }
     process_pcb->fd_r = fd;
+    return 0;
 }
-void set_write_filedescriptor(uint8_t pid, int fd) {
+int set_write_filedescriptor(uint8_t pid, int fd) {
     TPCB* process_pcb  = get_pcb_by_pid(pid);
     if (process_pcb == NULL) {
         return -1;
     }
     process_pcb->fd_w = fd;
+    return 0;
 }
 
 int kill_process(uint8_t pid) {
@@ -231,6 +237,7 @@ int kill_process(uint8_t pid) {
     return EXIT_SUCCESS;
 }
 
+// TODO preguntar si esta función debería aniquilar también a los hijos. Se puede hacer poniendolos zombies tambien
 int forced_kill_process(uint8_t pid) {
     TPCB* process_pcb  = get_pcb_by_pid(pid);
     if (process_pcb == NULL) {
@@ -328,6 +335,13 @@ int processes_information(void){
             vdPrint(buffer, 0x00FFFFFF);
             vdPrint(" - STATE: ", 0x00FFFFFF);
             vdPrint(states_labels[pcb_array[i]->state], get_state_color(pcb_array[i]->state));
+            vdPrint(" - FDs: [", 0x00FFFFFF);
+            itoa(pcb_array[i]->fd_r, buffer, 10);
+            vdPrint(buffer, 0x00FFFFFF);
+            vdPrint(",", 0x00FFFFFF);
+            itoa(pcb_array[i]->fd_w, buffer, 10);
+            vdPrint(buffer, 0x00FFFFFF);
+            vdPrint("]", 0x00FFFFFF);
         }
     }
     vdPrint("\n",0x00FFFFFF);
@@ -351,23 +365,4 @@ int64_t init_process(int argc, char** argv) {
             }
         }
     }
-}
-
-
-int64_t loop_processs(int argc, char** argv) {
-    char buffer[5];
-    itoa(get_current_pid(), buffer, 10);
-    vdPrint("\n", 0x00FFFFFF);
-    while(1) {
-        basic_sleep();
-        vdPrint("Hello (from ", 0x00FFFFFF);
-        vdPrint(get_running_pcb()->name, 0x0000D4C1);
-        vdPrint(") with PID: ", 0x00FFFFFF);
-        vdPrint(buffer, 0x00FFFFFF);
-        vdPrint("\n", 0x00FFFFFF);
-    }
-}
-
-void basic_sleep(){
-    for (int i = 0; i < 20000000; i++);
 }

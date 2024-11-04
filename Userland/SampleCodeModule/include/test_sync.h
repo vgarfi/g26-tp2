@@ -2,4 +2,4 @@
 
 #define TEST_SYNC   "synchro"
 
-uint64_t test_sync(uint64_t argc, char *argv[]);
+uint64_t initialize_sync_testing(uint64_t argc, char *argv[]);

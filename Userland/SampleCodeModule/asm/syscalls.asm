@@ -54,8 +54,10 @@ GLOBAL sysPostSem
 GLOBAL sysWaitSem
 GLOBAL sysCloseSem
 GLOBAL sysWaitPid
-GLOBAL sysLoop
 GLOBAL sysCreatePipe
+GLOBAL sysSetReadFileDescriptor
+GLOBAL sysSetWriteFileDescriptor
+
 
 
 
@@ -296,12 +298,15 @@ sysWaitPid:
     int 80h
     ret
 
-sysLoop:
+sysCreatePipe:
     mov rax, 46
     int 80h
     ret
-
-sysCreatePipe:
+sysSetReadFileDescriptor:
     mov rax, 47
+    int 80h
+    ret
+sysSetWriteFileDescriptor:
+    mov rax, 48
     int 80h
     ret

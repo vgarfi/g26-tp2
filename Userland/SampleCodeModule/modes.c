@@ -12,19 +12,18 @@
 #include "include/test_proc.h"
 #include "include/test_mm.h"
 #include "include/test_sync.h"
-
+#include "include/loop.h"
 
 char* dateTimeAux;
 int zoomAux, regAux;
 
 char* pipeable_modes[]  = {
-    "testp", "testprio", "ps", "testmem", "testsync", "loop"
+    "testp", "testprio", "testmem", "testsync", "loop"
 };
 
-void (*mode_functions[])(int*) = {
+int (*mode_functions[])() = {
     process_test,
     priorities_test,
-    ps_printing,
     memory_test,
     sync_test,
     loop
@@ -133,14 +132,14 @@ void playEasterEgg(){
 
 static char * test_args_proc[] = {TEST_PROCESSES, "5", 0};
 
-void process_test(int* fds) {
-  sysCreateProcess(TEST_PROCESSES, 2, test_args_proc, (int64_t (*)(int, char**))test_processes, fds);
+int process_test() {
+  return sysCreateProcess(TEST_PROCESSES, 2, test_args_proc, (int64_t (*)(int, char**))test_processes);
 }
 
 static char * test_args_prio[] = {TEST_PRIORITY, 0};
 
-void priorities_test(int* fds){
-    sysCreateProcess(TEST_PRIORITY, 1, test_args_prio, (int64_t (*)(int, char**))test_priorities, fds);
+int priorities_test(){
+    return sysCreateProcess(TEST_PRIORITY, 1, test_args_prio, (int64_t (*)(int, char**))test_priorities);
 }
 
 void ps_printing(){
@@ -149,38 +148,13 @@ void ps_printing(){
 
 static char * test_args_memory[] = {TEST_MEMORY, "1024", 0};
 
-void memory_test(int* fds){
-    sysCreateProcess(TEST_MEMORY, 2, test_args_memory, (int64_t (*)(int, char**))test_mm, fds);
+int memory_test(){
+    return sysCreateProcess(TEST_MEMORY, 2, test_args_memory, (int64_t (*)(int, char**))test_mm);
 }
 
-static char * sync_args_memory_sem[] = {TEST_SYNC, "5", "1", 0};
-static char * sync_args_memory_not_sem[] = {TEST_SYNC, "5", "0", 0};
-
-
-void sync_test(int* fds){
-    printf("\nWould you like to use semaphores for testing? [Y/N]: ",0,0,0);
-    char option[5];
-    scanf(option, 5);
-    while (strcasecmp(option, "y") != 0 && strcasecmp(option, "n") != 0) {
-        printColor("ERROR: ",0x00FF0000);
-        printf(option,0,0,0);
-        printf(" is not a valid option",0,0,0);
-        printf("\nWould you like to use semaphores for testing? [Y/N]: ",0,0,0);
-        scanf(option, 5);
-    }
-    
-    printf("\nYou decided ",0,0,0);
-    if (strcasecmp(option, "n") == 0) printf("not ",0,0,0);
-    printf("to use semaphores. Starting tests...\n",0,0,0);
-
-    int testPid;
-
-    if (strcasecmp(option, "n") == 0) {
-        testPid = sysCreateProcess(TEST_SYNC, 3, sync_args_memory_not_sem,  (int64_t (*)(int, char**))test_sync, fds);
-    } else {
-        testPid = sysCreateProcess(TEST_SYNC, 3, sync_args_memory_sem,  (int64_t (*)(int, char**))test_sync, fds);
-    }
-    sysNice(testPid, 5);
+static char * test_sync_args[] = {TEST_SYNC, 0};
+int sync_test(){
+    return sysCreateProcess(TEST_SYNC, 1, test_sync_args, (int64_t (*)(int, char**))initialize_sync_testing);
 }
 
 void killp(){
@@ -219,11 +193,28 @@ void blockp(){
     sysBlockProcess((uint8_t)pid);
 }
 
-void loop(int* fds){
-    sysLoop(fds);
+void basic_sleep(){
+    for (int i = 0; i < 20000000; i++);
 }
 
-void (*get_pipeable_mode(const char* mode))(int*) {
+
+int64_t loop_process(int argc, char** argv) {
+    printf("\n",0,0,0);
+    while(1) {
+        basic_sleep();
+        printf("Hello (from ", 0,0,0);
+        printColor("LOOP", 0x0000D4C1);
+        printf(") with PID: %d ", sysGetCurrentPid(),0,0);
+       printf("\n",0,0,0);
+    }
+}
+
+static char * loop_args[] = {LOOP, 0};
+int loop() {
+    return sysCreateProcess(LOOP, 1, loop_args, loop_process);
+}
+
+int (*get_pipeable_mode(const char* mode))(void) {
     for (int i = 0; i < sizeof(modes) / sizeof(modes[0]); i++) {
         if (strcasecmp(mode, pipeable_modes[i]) == SELECTED_MODE) {
             return mode_functions[i];
@@ -237,8 +228,8 @@ void pipe_processes(char* input) {
     strsplit(input, '!', p1, p2);
     strtrim(p1);
     strtrim(p2);
-    void(*process_one)(int*) = get_pipeable_mode(p1);
-    void(*process_two)(int*) = get_pipeable_mode(p2);
+    int(*process_one)() = get_pipeable_mode(p1);
+    int(*process_two)() = get_pipeable_mode(p2);
 
     if (process_one == 0 || process_two == 0) {
         // TODO claramente mejorar los mensajes de error
@@ -259,15 +250,17 @@ void pipe_processes(char* input) {
     char pipe_name[32];
     strconcat(pipe_name, p1, "-");
     strconcat(pipe_name, pipe_name, p2);
-    sysCreatePipe(pipe_name, pipe_fds);
     
-    int p1_fds[2], p2_fds[2];
-    p1_fds[0] = STDIN;
-    p1_fds[1] = pipe_fds[0];
-    p2_fds[0] = pipe_fds[1];
-    p2_fds[1] = STDOUT;
     
-    process_one(p1_fds);
-    process_two(p2_fds);
+    if (sysCreatePipe(pipe_name, pipe_fds) == -1) {
+        printf("\nError creando pipes entre procesos",0,0,0);
+        return;
+    }
+    
+    
+    int p1Pid = process_one();
+    int p2Pid = process_two();
+    sysSetWriteFileDescriptor(p1Pid, pipe_fds[1]);
+    sysSetReadFileDescriptor(p2Pid, pipe_fds[0]);
 }
 

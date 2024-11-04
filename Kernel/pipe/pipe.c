@@ -23,9 +23,9 @@ int getFreePipeIndex() {
 }
 
 int create_pipe(char* name, int* fds){
-    /*if (fds[0] == NULL || fds[1] == NULL) { // no pueden ser NULL un numero
+    if (fds == NULL) {
         return -1;
-    }*/
+    }
 
     TPipe* new_pipe = (TPipe*)malloc_mm(memory_manager, sizeof(TPipe));
     if(new_pipe == NULL)

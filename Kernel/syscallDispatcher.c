@@ -15,9 +15,8 @@
 #include "fonts.h"
 
 extern MemoryManagerADT memory_manager;
-char* loop_args[] = {LOOP_PROCESS, 0};
 
-#define HANDLER_SIZE 48
+#define HANDLER_SIZE 49
 
 static int (*syscallHandlers[])()={
     // Syscalls de Arqui
@@ -29,8 +28,8 @@ static int (*syscallHandlers[])()={
     getCurrentPid, exitProcess, createProcess, (int (*)())blockProcess, (int (*)())unblockProcess, (int (*)())killProcess, (int (*)())nice, ps,
     memoryMalloc, memoryFree, memoryStatus,
     yield, createSem, getSem, postSem, waitSem, closeSem,
-    waitPid, loopProcess,
-    createPipe
+    waitPid,
+    createPipe, setReadFileDescriptor, setWriteFileDescriptor
 };
 
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
@@ -218,8 +217,8 @@ int exitProcess(){
     return kill_process(getCurrentPid());
 }
 
-int createProcess(char* name, uint64_t argc, char *argv[], int64_t (*code)(int, char**), int* fds){
-    return create_process(name, argc, argv, 1, code, fds);
+int createProcess(char* name, uint64_t argc, char *argv[], int64_t (*code)(int, char**)){
+    return create_process(name, argc, argv, 1, code);
 }
 
 int blockProcess(uint8_t pid){
@@ -292,11 +291,14 @@ int waitPid(uint8_t pid){
     return EXIT_SUCCESS;
 }
 
-int loopProcess(int* fds){
-    create_process(LOOP_PROCESS, 1, loop_args, LOOP_PRIORITY, loop_processs, fds);
-    return EXIT_SUCCESS;
-}
-
 int createPipe(char* name, int* fds) {
     return create_pipe(name, fds);
+}
+
+int setReadFileDescriptor(uint8_t pid, int fd) {
+    return set_read_filedescriptor(pid, fd);
+}
+
+int setWriteFileDescriptor(uint8_t pid, int fd) {
+    return set_write_filedescriptor(pid, fd);
 }
