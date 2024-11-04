@@ -99,3 +99,21 @@ int write_pipe(int pipe_index, char * buf, uint64_t count) {
     
     return 0;
 }
+
+int close_pipe(int pipe_index){
+    if (pipe_index < 0 || pipe_index >= MAX_PIPES || available_pipes[pipe_index] == PIPE_AVAILABLE) {
+		return -1;
+	}
+
+    free_mm(memory_manager, pipes[pipe_index]->name);
+
+    delete_sem(pipes[pipe_index]->sem_r->name);
+
+    delete_sem(pipes[pipe_index]->sem_w->name);
+
+    free_mm(memory_manager, pipes[pipe_index]);
+
+    available_pipes[pipe_index] = PIPE_AVAILABLE;
+
+    return 0;
+}

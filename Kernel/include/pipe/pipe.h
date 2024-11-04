@@ -27,5 +27,6 @@ void initialize_pipes(void);
 int create_pipe(char* name, int* fds);
 int read_pipe(int pipe_index, char * buf, uint64_t count);
 int write_pipe(int pipe_index, char * buf, uint64_t count);
+int close_pipe(int pipe_index);
 
 #endif
