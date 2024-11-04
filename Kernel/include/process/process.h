@@ -73,5 +73,7 @@ int processes_information(void);
 
 int set_read_filedescriptor(uint8_t pid, int fd);
 int set_write_filedescriptor(uint8_t pid, int fd);
+int get_read_filedescriptor(uint8_t pid);
+int get_write_filedescriptor(uint8_t pid);
 
 #endif

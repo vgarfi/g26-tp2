@@ -30,10 +30,7 @@ GLOBAL sysPrintCursor
 GLOBAL sysHideCursor
 GLOBAL sysShowCursor
 GLOBAL sysSetCursorPosition
-
 GLOBAL sysCtrlPressed
-
-
 GLOBAL sysGetCurrentPid
 GLOBAL sysExit
 GLOBAL sysCreateProcess
@@ -42,12 +39,10 @@ GLOBAL sysUnblockProcess
 GLOBAL sysKillProcess
 GLOBAL sysNice
 GLOBAL sysPs
-
 GLOBAL sysMalloc
 GLOBAL sysFree
 GLOBAL sysMem
 GLOBAL sysYield
-
 GLOBAL sysCreateSem
 GLOBAL sysGetSem
 GLOBAL sysPostSem
@@ -57,9 +52,8 @@ GLOBAL sysWaitPid
 GLOBAL sysCreatePipe
 GLOBAL sysSetReadFileDescriptor
 GLOBAL sysSetWriteFileDescriptor
-
-
-
+GLOBAL sysGetReadFileDescriptor
+GLOBAL sysGetWriteFileDescriptor
 
 section .text
 
@@ -308,5 +302,15 @@ sysSetReadFileDescriptor:
     ret
 sysSetWriteFileDescriptor:
     mov rax, 48
+    int 80h
+    ret
+
+sysGetReadFileDescriptor:
+    mov rax, 49
+    int 80h
+    ret
+
+sysGetWriteFileDescriptor:
+    mov rax, 50
     int 80h
     ret

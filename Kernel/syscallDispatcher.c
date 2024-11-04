@@ -16,7 +16,7 @@
 
 extern MemoryManagerADT memory_manager;
 
-#define HANDLER_SIZE 49
+#define HANDLER_SIZE 51
 
 static int (*syscallHandlers[])()={
     // Syscalls de Arqui
@@ -29,7 +29,7 @@ static int (*syscallHandlers[])()={
     memoryMalloc, memoryFree, memoryStatus,
     yield, createSem, getSem, postSem, waitSem, closeSem,
     waitPid,
-    createPipe, setReadFileDescriptor, setWriteFileDescriptor
+    createPipe, setReadFileDescriptor, setWriteFileDescriptor, getReadFileDescriptor, getWriteFileDescriptor
 };
 
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
@@ -42,12 +42,6 @@ uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r1
 
 // TODO read debe poder ser bloqueante. Manejarlo con semáforos
 int read(uint64_t fd, char * buf, uint64_t count) {
-     if (is_initialized()) {
-        TPCB* pcb = get_running_pcb();
-        if (pcb != NULL) {
-            fd = pcb->fd_r;
-        }
-    }
     if (fd == STDIN) {
         uint64_t sizeRead = 0;
         unsigned char lastRead = '\0';
@@ -58,18 +52,11 @@ int read(uint64_t fd, char * buf, uint64_t count) {
         return sizeRead == count? count : sizeRead;    // If we return sizeRead-1 it means we stopped at '\n'    
     }
     return write_pipe(fd/2, buf, count);
-    
 }
 
 int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor){
     int i;
     char toPrint[2]={0,0};
-    if (is_initialized()) {
-        TPCB* pcb = get_running_pcb();
-        if (pcb != NULL) {
-            fd = pcb->fd_w;
-        }
-    }
     if (fd == STDOUT) {
         for(i=0; i<count; i++){
             toPrint[0]=buf[i];
@@ -301,4 +288,12 @@ int setReadFileDescriptor(uint8_t pid, int fd) {
 
 int setWriteFileDescriptor(uint8_t pid, int fd) {
     return set_write_filedescriptor(pid, fd);
+}
+
+int getReadFileDescriptor(uint8_t pid) {
+    return get_read_filedescriptor(pid);
+}
+
+int getWriteFileDescriptor(uint8_t pid) {
+    return get_write_filedescriptor(pid);
 }

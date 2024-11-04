@@ -35,7 +35,7 @@ int init(){
         else if(strcasecmp(commandPrompt, modes[UNBLOCKP_MODE]) == SELECTED_MODE) unblockp();
         else if(strcasecmp(commandPrompt, modes[KILLP_MODE]) == SELECTED_MODE) killp();
         else if(strcasecmp(commandPrompt, modes[LOOP_MODE]) == SELECTED_MODE) loop();
-        else if(contains(commandPrompt, '!')) pipe_processes(commandPrompt);
+        else if(contains(commandPrompt, '|')) pipe_processes(commandPrompt);
         else notFound(commandPrompt);
     }
 }

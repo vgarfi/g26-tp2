@@ -68,4 +68,6 @@ int createPipe(char* name, int* fds);
 int setReadFileDescriptor(uint8_t pid, int fd);
 int setWriteFileDescriptor(uint8_t pid, int fd);
 
+int getReadFileDescriptor(uint8_t pid);
+int getWriteFileDescriptor(uint8_t pid);
 #endif

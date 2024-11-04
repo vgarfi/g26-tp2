@@ -223,9 +223,11 @@ int (*get_pipeable_mode(const char* mode))(void) {
     return 0;
 }
 
+
+
 void pipe_processes(char* input) {
     char p1[15], p2[15];
-    strsplit(input, '!', p1, p2);
+    strsplit(input, '|', p1, p2);
     strtrim(p1);
     strtrim(p2);
     int(*process_one)() = get_pipeable_mode(p1);
@@ -256,7 +258,6 @@ void pipe_processes(char* input) {
         printf("\nError creando pipes entre procesos",0,0,0);
         return;
     }
-    
     
     int p1Pid = process_one();
     int p2Pid = process_two();

@@ -221,6 +221,22 @@ int set_write_filedescriptor(uint8_t pid, int fd) {
     return 0;
 }
 
+int get_read_filedescriptor(uint8_t pid) {
+    TPCB* process_pcb  = get_pcb_by_pid(pid);
+    if (process_pcb == NULL) {
+        return -1;
+    }
+    return process_pcb->fd_r ;
+}
+
+int get_write_filedescriptor(uint8_t pid) {
+    TPCB* process_pcb  = get_pcb_by_pid(pid);
+    if (process_pcb == NULL) {
+        return -1;
+    }
+    return process_pcb->fd_w;
+}
+
 int kill_process(uint8_t pid) {
     TPCB* process_pcb  = get_pcb_by_pid(pid);
     if (process_pcb == NULL) {

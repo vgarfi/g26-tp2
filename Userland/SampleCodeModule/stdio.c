@@ -27,12 +27,20 @@ static int inputIndex = 0;
 
 unsigned char getchar(void){
     unsigned char read = 0;
-    readSizeFlag = sysRead(STDIN, &read, 1);
+    int fd = sysGetReadFileDescriptor(sysGetCurrentPid());
+    if (fd == -1) {
+        return 0;
+    }
+    readSizeFlag = sysRead(fd, &read, 1);
     return read;
 }
 
 unsigned char putchar(unsigned char c){
-    sysWrite(STDOUT, &c, 1, hexcol);
+    int fd = sysGetWriteFileDescriptor(sysGetCurrentPid());
+    if (fd == -1) {
+        return 0;
+    }
+    sysWrite(fd, &c, 1, hexcol);
     return c;
 }
 
