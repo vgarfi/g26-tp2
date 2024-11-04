@@ -51,7 +51,7 @@ int read(uint64_t fd, char * buf, uint64_t count) {
         }
         return sizeRead == count? count : sizeRead;    // If we return sizeRead-1 it means we stopped at '\n'    
     }
-    return write_pipe(fd/2, buf, count);
+    return read_pipe(fd/2, buf, count);
 }
 
 int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor){
@@ -62,7 +62,7 @@ int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor){
             toPrint[0]=buf[i];
             vdPrint(toPrint, hexColor); 
         }
-    return i;
+        return i;
     }
     return write_pipe(fd/2, buf, count);
 }

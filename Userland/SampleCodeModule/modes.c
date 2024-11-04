@@ -199,13 +199,13 @@ void basic_sleep(){
 
 
 int64_t loop_process(int argc, char** argv) {
-    printf("\n",0,0,0);
+    // printf("\n",0,0,0);
     while(1) {
         basic_sleep();
         printf("Hello (from ", 0,0,0);
         printColor("LOOP", 0x0000D4C1);
         printf(") with PID: %d ", sysGetCurrentPid(),0,0);
-       printf("\n",0,0,0);
+        printf("\n",0,0,0);
     }
 }
 
@@ -222,6 +222,26 @@ int (*get_pipeable_mode(const char* mode))(void) {
     }
     return 0;
 }
+
+void niky(){
+
+}
+static char * dummy_args[] = {"dummy", 0};
+int64_t dummy_process(int argc, char** argv) {
+    char buf[200] = {'\0'};
+    while(1) {
+        niky();
+        scanf(buf, 200);
+        // char c = getchar();
+        printf("\nConsegui: ",0,0,0);
+        // putchar(c);
+        if (buf == '\n') {
+            print("es barra n");
+        }
+        print(buf);
+    }
+}
+
 
 
 
@@ -260,7 +280,8 @@ void pipe_processes(char* input) {
     }
     
     int p1Pid = process_one();
-    int p2Pid = process_two();
+    // int p2Pid = process_two();
+    int p2Pid = sysCreateProcess("dummy", 1, dummy_args, dummy_process);
     sysSetWriteFileDescriptor(p1Pid, pipe_fds[1]);
     sysSetReadFileDescriptor(p2Pid, pipe_fds[0]);
 }

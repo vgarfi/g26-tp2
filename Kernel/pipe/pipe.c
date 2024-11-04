@@ -1,5 +1,6 @@
 #include <pipe/pipe.h>
 #include <string.h>
+#include <videoDriver.h>
 #include <synchro/synchro.h>
 #include <memory/memoryManagerADT.h>
 
@@ -69,14 +70,18 @@ int create_pipe(char* name, int* fds){
 }
 
 
+void niky3(){
+
+}
+
 int read_pipe(int pipe_index, char * buf, uint64_t count) {
 	if (pipe_index < 0 || pipe_index >= MAX_PIPES || available_pipes[pipe_index] == PIPE_AVAILABLE) {
 		return -1;
 	}
 
     TPipe* pipe = pipes[pipe_index];
-
-    for(int i = 0; i < count; i++){
+    niky3();
+    for(int i = 0; i < count; i++) {
         wait_sem(pipe->sem_r->name);
         buf[i] = pipe->buffer[pipe->read_cursor_index % MAX_BUFFER_SIZE];
         pipe->read_cursor_index++;
@@ -93,7 +98,7 @@ int write_pipe(int pipe_index, char * buf, uint64_t count) {
 
     TPipe* pipe = pipes[pipe_index];
 
-    for (int i = 0; buf[0] != 0; i++){
+    for (int i = 0; i < count; i++){
         wait_sem(pipe->sem_w->name);
         pipe->buffer[pipe->write_cursor_index % MAX_BUFFER_SIZE] = buf[i];
         pipe->write_cursor_index++;

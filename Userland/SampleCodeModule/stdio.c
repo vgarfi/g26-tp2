@@ -45,12 +45,12 @@ unsigned char putchar(unsigned char c){
 }
 
 int printColor(char* str, uint64_t hexColor){
-    hexcol=hexColor;
+    hexcol = hexColor;
     int i;
     for(i=0;str[i]!='\0';i++){
         putchar(str[i]);
     }
-    hexcol=DEFAULT;
+    hexcol = DEFAULT;
     return i;
 }
 
@@ -90,8 +90,12 @@ int printf(char *str, int first, int sec, int third) {
 }
 
 int scanf(char * buffer, int size){
-    if(size==0)
+    
+    if(size == 0) {
         return 0;
+    }
+    
+    
     unsigned char read=0;
     int readSize=0, printedSize=0;
     while(read!='\n'){
