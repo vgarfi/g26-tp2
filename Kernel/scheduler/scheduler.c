@@ -34,7 +34,7 @@ uint64_t* schedule(uint64_t* rsp) {
             enqueue(pcb_readies_queue, running_pcb);
         }
     }
-    if(running_pcb->state != ZOMBIE) running_pcb->state = READY;
+    if(running_pcb->state != ZOMBIE && running_pcb->state != BLOCKED) running_pcb->state = READY;
     next->state = RUNNING;
     running_pcb = next;
     return running_pcb->rsp;

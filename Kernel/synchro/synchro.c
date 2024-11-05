@@ -5,6 +5,7 @@
 #include <structures/queueADT.h>
 #include <scheduler/scheduler.h>
 #include <process/process.h>
+#include <videoDriver.h>
 
 extern MemoryManagerADT memory_manager;
 

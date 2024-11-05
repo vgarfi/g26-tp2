@@ -202,10 +202,10 @@ int64_t loop_process(int argc, char** argv) {
     // printf("\n",0,0,0);
     while(1) {
         basic_sleep();
-        printf("Hello (from ", 0,0,0);
-        printColor("LOOP", 0x0000D4C1);
-        printf(") with PID: %d ", sysGetCurrentPid(),0,0);
-        printf("\n",0,0,0);
+        // printf("Hello (from ", 0,0,0);
+        // printColor("LOOP", 0x0000D4C1);
+        // printf(") with PID: %d ", sysGetCurrentPid(),0,0);
+        // printf("\n",0,0,0);
     }
 }
 
