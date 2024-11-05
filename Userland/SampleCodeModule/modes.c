@@ -223,27 +223,15 @@ int (*get_pipeable_mode(const char* mode))(void) {
     return 0;
 }
 
-void niky(){
-
-}
 static char * dummy_args[] = {"dummy", 0};
 int64_t dummy_process(int argc, char** argv) {
-    char buf[200] = {'\0'};
+    char buf[256];
     while(1) {
-        niky();
-        scanf(buf, 200);
-        // char c = getchar();
-        printf("\nConsegui: ",0,0,0);
-        // putchar(c);
-        if (buf == '\n') {
-            print("es barra n");
-        }
+        scanf(buf, 256);
+        print("\nLeido desde el pipe: ");
         print(buf);
     }
 }
-
-
-
 
 void pipe_processes(char* input) {
     char p1[15], p2[15];
@@ -256,14 +244,14 @@ void pipe_processes(char* input) {
     if (process_one == 0 || process_two == 0) {
         // TODO claramente mejorar los mensajes de error
         if (process_one == 0) {
-            printf("\nERROR: ", 0,0,0);
+            printf("\nERROR: '", 0,0,0);
             printf(p1, 0,0,0);
-            printf("no es un proceso pipeable", 0,0,0);
+            printf("' no es un proceso pipeable", 0,0,0);
         }
         else {
-            printf("\nERROR: ", 0,0,0);
+            printf("\nERROR: '", 0,0,0);
             printf(p2, 0,0,0);
-            printf("no es un proceso pipeable", 0,0,0);
+            printf("' no es un proceso pipeable", 0,0,0);
         }
         return;
     }
@@ -280,8 +268,8 @@ void pipe_processes(char* input) {
     }
     
     int p1Pid = process_one();
-    // int p2Pid = process_two();
-    int p2Pid = sysCreateProcess("dummy", 1, dummy_args, dummy_process);
+    int p2Pid = process_two();
+    // int p2Pid = sysCreateProcess("dummy", 1, dummy_args, dummy_process);
     sysSetWriteFileDescriptor(p1Pid, pipe_fds[1]);
     sysSetReadFileDescriptor(p2Pid, pipe_fds[0]);
 }

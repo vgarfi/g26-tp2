@@ -91,20 +91,20 @@ int printf(char *str, int first, int sec, int third) {
 
 int scanf(char * buffer, int size){
     
-    if(size == 0) {
+    int fd = sysGetReadFileDescriptor(sysGetCurrentPid());
+    if(size == 0 || fd == -1) {
         return 0;
     }
     
-    
-    unsigned char read=0;
-    int readSize=0, printedSize=0;
-    while(read!='\n'){
+    unsigned char read = 0;
+    int readSize = 0, printedSize = 0;
+    while(read != '\n'){
         ctrlFlag = sysCtrlPressed();
-        read=getchar();
+        read = getchar();
         if(!readSizeFlag)
             continue;
         
-        if(ctrlFlag){
+        if(ctrlFlag && fd == STDIN){
             if(read == 'i'){
                 checkZoomFlag = incTextSize();
                 if(checkZoomFlag){
@@ -136,16 +136,16 @@ int scanf(char * buffer, int size){
         }
         else{
             if(read=='\n'){
-                buffer[readSize]=0;
+                buffer[readSize] = 0;
                 if (readSize > 0) strcpy(inputs[inputIndex++ % MAX_INPUTS_STORE], buffer);
-                putchar(read);  // Newline
+                if (fd == STDIN) putchar(read);  // Newline
             }
             else if(read=='\b' && readSize!=0){
                 if(readSize>=printedSize){
                     readSize--;
                     buffer[readSize]=0;
                 }
-                putchar(read);  // Backspace
+                if (fd == STDIN) putchar(read);  // Backspace
                 printedSize--;
             }
             else if (isVerticalArrow(read)) {
@@ -160,16 +160,18 @@ int scanf(char * buffer, int size){
                 }
                 strcpy(buffer, inputs[inputIndex % MAX_INPUTS_STORE]);
                 int commandLen = strlen(buffer);
-                for(int i=0; i<printedSize; i++)
-                    putchar('\b');
+                if (fd == STDIN) {
+                    for(int i=0; i<printedSize; i++)
+                        putchar('\b');
+                }
                 printedSize = commandLen;
                 readSize = commandLen;
                 print(buffer);
             }
             else if(isPrintable(read)){       // Printable Character
                 if(readSize!=size)
-                    buffer[readSize++]=read;
-                putchar(read);
+                    buffer[readSize++] = read;
+                if (fd == STDIN) putchar(read);
                 printedSize++;
             }
         }
