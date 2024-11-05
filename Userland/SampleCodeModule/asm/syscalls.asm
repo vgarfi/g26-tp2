@@ -54,6 +54,7 @@ GLOBAL sysSetReadFileDescriptor
 GLOBAL sysSetWriteFileDescriptor
 GLOBAL sysGetReadFileDescriptor
 GLOBAL sysGetWriteFileDescriptor
+GLOBAL sysGetScope
 
 section .text
 
@@ -312,5 +313,9 @@ sysGetReadFileDescriptor:
 
 sysGetWriteFileDescriptor:
     mov rax, 50
+    int 80h
+    ret
+sysGetScope:
+    mov rax, 51
     int 80h
     ret

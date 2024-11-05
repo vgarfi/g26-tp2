@@ -16,7 +16,7 @@ TPCB* pcb_array[MAX_PROCESSES];
 void free_process(TPCB* pcb);
 uint32_t get_state_color(TState state);
 
-int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**)) {
+int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**), TScope scope) {
     char* ptr = malloc_mm(memory_manager, PROCESS_SIZE);
     if (ptr == NULL) {
         return -1;
@@ -30,7 +30,7 @@ int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, in
     void* stack_base = ptr + STACK_SIZE;
 
 
-    add_pcb(name, argc, argv, ptr, stack_base, (uint8_t) pid, priority, code);
+    add_pcb(name, argc, argv, ptr, stack_base, (uint8_t) pid, priority, code, scope);
     
     pids[pid] = NOT_AVAILABLE_PID;
     return pid;
@@ -87,7 +87,15 @@ int change_priority(uint8_t pid, uint8_t new_priority){
     return EXIT_SUCCESS;
 }
 
-void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* stack_base, uint8_t pid, uint8_t priority, int64_t (*code)(int, char**)) {
+int get_process_scope(uint8_t pid) {
+    TPCB* process_pcb = get_pcb_by_pid(pid);
+    if (process_pcb == NULL){
+        return -1;
+    }
+    return process_pcb->scope;
+}
+
+void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* stack_base, uint8_t pid, uint8_t priority, int64_t (*code)(int, char**), TScope scope) {
     if (name == NULL || argc < 0 || argv == NULL || stack_base == NULL) {
         return;
     }
@@ -125,6 +133,9 @@ void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* s
         new_pcb->fd_r = STDIN;
         new_pcb->fd_w = STDOUT;
     }
+
+    new_pcb->scope = scope;
+
     int name_lenght = strlen(name);
     char sem_name[name_lenght+5];
     char pid_name[5];

@@ -21,7 +21,7 @@ char* pipeable_modes[]  = {
     "testp", "testprio", "testmem", "testsync", "loop"
 };
 
-int (*mode_functions[])() = {
+int (*mode_functions[])(TScope) = {
     process_test,
     priorities_test,
     memory_test,
@@ -132,14 +132,14 @@ void playEasterEgg(){
 
 static char * test_args_proc[] = {TEST_PROCESSES, "5", 0};
 
-int process_test() {
-  return sysCreateProcess(TEST_PROCESSES, 2, test_args_proc, (int64_t (*)(int, char**))test_processes);
+int process_test(TScope scope) {
+  return sysCreateProcess(TEST_PROCESSES, 2, test_args_proc, (int64_t (*)(int, char**))test_processes, scope);
 }
 
 static char * test_args_prio[] = {TEST_PRIORITY, 0};
 
-int priorities_test(){
-    return sysCreateProcess(TEST_PRIORITY, 1, test_args_prio, (int64_t (*)(int, char**))test_priorities);
+int priorities_test(TScope scope){
+    return sysCreateProcess(TEST_PRIORITY, 1, test_args_prio, (int64_t (*)(int, char**))test_priorities, scope);
 }
 
 void ps_printing(){
@@ -148,13 +148,13 @@ void ps_printing(){
 
 static char * test_args_memory[] = {TEST_MEMORY, "1024", 0};
 
-int memory_test(){
-    return sysCreateProcess(TEST_MEMORY, 2, test_args_memory, (int64_t (*)(int, char**))test_mm);
+int memory_test(TScope scope){
+    return sysCreateProcess(TEST_MEMORY, 2, test_args_memory, (int64_t (*)(int, char**))test_mm, scope);
 }
 
 static char * test_sync_args[] = {TEST_SYNC, 0};
-int sync_test(){
-    return sysCreateProcess(TEST_SYNC, 1, test_sync_args, (int64_t (*)(int, char**))initialize_sync_testing);
+int sync_test(TScope scope){
+    return sysCreateProcess(TEST_SYNC, 1, test_sync_args, (int64_t (*)(int, char**))initialize_sync_testing, scope);
 }
 
 void killp(){
@@ -209,11 +209,11 @@ int64_t loop_process(int argc, char** argv) {
 }
 
 static char * loop_args[] = {LOOP, 0};
-int loop() {
-    return sysCreateProcess(LOOP, 1, loop_args, loop_process);
+int loop(TScope scope) {
+    return sysCreateProcess(LOOP, 1, loop_args, loop_process, scope);
 }
 
-int (*get_pipeable_mode(const char* mode))(void) {
+int (*get_pipeable_mode(const char* mode))(int) {
     for (int i = 0; i < sizeof(modes) / sizeof(modes[0]); i++) {
         if (strcasecmp(mode, pipeable_modes[i]) == SELECTED_MODE) {
             return mode_functions[i];
@@ -266,8 +266,8 @@ void pipe_processes(char* input) {
         return;
     }
     
-    int p1Pid = process_one();
-    int p2Pid = process_two();
+    int p1Pid = process_one(FOREGROUND);
+    int p2Pid = process_two(FOREGROUND);
     // int p2Pid = sysCreateProcess("dummy", 1, dummy_args, dummy_process);
     sysSetWriteFileDescriptor(p1Pid, pipe_fds[1]);
     sysSetReadFileDescriptor(p2Pid, pipe_fds[0]);

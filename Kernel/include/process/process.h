@@ -7,13 +7,8 @@
 #define PROCESS_H
 
 #include <memory/memoryManagerADT.h>
+#include <scheduler/scheduler.h>
 #include <kernelManagement.h>
-
-#define STACK_SIZE          2048
-
-#define PROCESS_SIZE        STACK_SIZE
-
-#define MAX_PROCESSES       (MEMORY_SIZE/PROCESS_SIZE)/1024
 
 #define AVAILABLE_PID       0
 #define NOT_AVAILABLE_PID   1
@@ -54,8 +49,8 @@ int64_t init_process(int argc, char** argv);
 int64_t idle_process(int argc, char** argv);
 
 int get_available_pid(void);
-void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* stack_base, uint8_t pid, uint8_t priority, int64_t (*code)(int, char**));
-int create_process (char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**));
+void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* stack_base, uint8_t pid, uint8_t priority, int64_t (*code)(int, char**), TScope scope);
+int create_process (char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**), TScope scope);
 int block_process(uint8_t pid);
 int unblock_process(uint8_t pid);
 int forced_kill_process(uint8_t pid);
@@ -68,6 +63,7 @@ int kill_process(uint8_t pid);
 
 void wait_process_by_pid(uint8_t pid);
 int yield_process(void);
+int get_process_scope(uint8_t pid);
 
 int processes_information(void);
 

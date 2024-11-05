@@ -3,6 +3,10 @@
 #ifndef KERNEL_MANAGEMENT_H
 #define KERNEL_MANAGEMENT_H
 
+#define STACK_SIZE          2048
+#define PROCESS_SIZE        STACK_SIZE
+#define MAX_PROCESSES       (MEMORY_SIZE/PROCESS_SIZE)/1024
+
 #define INIT_PROCESS       "init"
 #define INIT_PRIORITY       1
 

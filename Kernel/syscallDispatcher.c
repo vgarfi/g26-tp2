@@ -203,8 +203,8 @@ int exitProcess(){
     return kill_process(getCurrentPid());
 }
 
-int createProcess(char* name, uint64_t argc, char *argv[], int64_t (*code)(int, char**)){
-    return create_process(name, argc, argv, 1, code);
+int createProcess(char* name, uint64_t argc, char *argv[], int64_t (*code)(int, char**), TScope scope){
+    return create_process(name, argc, argv, 1, code, scope);
 }
 
 int blockProcess(uint8_t pid){
@@ -217,6 +217,10 @@ int unblockProcess(uint8_t pid){
 
 int killProcess(uint8_t pid) {
     return forced_kill_process(pid);
+}
+
+int getScope(uint8_t pid) {
+    return get_process_scope(pid);
 }
 
 int nice(uint8_t pid, uint8_t newPriority){

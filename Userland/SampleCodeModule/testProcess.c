@@ -12,6 +12,7 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
   uint8_t action;
   uint64_t max_processes;
   char *argvAux[] = {0};
+  TScope test_scope = sysGetScope(sysGetCurrentPid());
   
   if (argc != 2)
     return -1;
@@ -23,7 +24,7 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
   printf("test_processes: Testing process administration...",0,0,0);
   while (1) {
     for (rq = 0; rq < max_processes; rq++) {
-      p_rqs[rq].pid = sysCreateProcess("endless_loop", 0, argvAux, (int64_t (*)(int, char**))endless_loop);
+      p_rqs[rq].pid = sysCreateProcess("endless_loop", 0, argvAux, (int64_t (*)(int, char**))endless_loop, test_scope);
       if (p_rqs[rq].pid == -1) {
         printf("test_processes: ERROR creating process\n",0,0,0);
         return -1;
@@ -84,13 +85,13 @@ void test_priorities(void) {
   uint8_t pids[TOTAL_PROCESSES];
   char *argv[] = {0};
   uint64_t i;
-  
+  TScope test_scope = sysGetScope(sysGetCurrentPid());
   int fds[] = {0,1}; 
   
   printf("test_priorities: Testing Process Priorities...",0,0,0);
 
   for (i = 0; i < TOTAL_PROCESSES; i++)
-    pids[i] = sysCreateProcess("endless_loop_print", 0, argv, (int64_t (*)(int, char**))endless_loop_print);
+    pids[i] = sysCreateProcess("endless_loop_print", 0, argv, (int64_t (*)(int, char**))endless_loop_print, test_scope);
 
   bussy_wait(WAIT);
   printf("\nCHANGING PRIORITIES...\n", 0,0,0);

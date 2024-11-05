@@ -53,7 +53,7 @@ uint64_t my_process_inc(uint64_t argc, char *argv[]) {
 uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
   uint64_t pids[2 * TOTAL_PAIR_PROCESSES];
   printf("test_sync: CREATED\n", 0,0,0);
-  
+  TScope test_scope = sysGetScope(sysGetCurrentPid());
   if (argc <= 2)
     return 1;
 
@@ -64,8 +64,8 @@ uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
 
   uint64_t i;
   for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
-    pids[i] = sysCreateProcess("my_process_inc", 4, argvDec, my_process_inc);
-    pids[i + TOTAL_PAIR_PROCESSES] = sysCreateProcess("my_process_inc", 4, argvInc, my_process_inc);
+    pids[i] = sysCreateProcess("my_process_inc", 4, argvDec, my_process_inc, test_scope);
+    pids[i + TOTAL_PAIR_PROCESSES] = sysCreateProcess("my_process_inc", 4, argvInc, my_process_inc, test_scope);
 
     sysNice(pids[i], 10);
     sysNice(pids[i + TOTAL_PAIR_PROCESSES], 10);
@@ -108,12 +108,14 @@ uint64_t initialize_sync_testing(uint64_t argc, char *argv[]) {
     if (strcasecmp(option, "n") == 0) printf("not ",0,0,0);
     printf("to use semaphores. Starting tests...\n",0,0,0);
 
-    int testPid;
+    int test_pid;
+    TScope test_scope = sysGetScope(sysGetCurrentPid());
+
 
     if (strcasecmp(option, "n") == 0) {
-        testPid = sysCreateProcess(TEST_SYNC, 3, sync_args_memory_not_sem,  (int64_t (*)(int, char**))test_sync);
+        test_pid = sysCreateProcess(TEST_SYNC, 3, sync_args_memory_not_sem,  (int64_t (*)(int, char**))test_sync, test_scope);
     } else {
-        testPid = sysCreateProcess(TEST_SYNC, 3, sync_args_memory_sem,  (int64_t (*)(int, char**))test_sync);
+        test_pid = sysCreateProcess(TEST_SYNC, 3, sync_args_memory_sem,  (int64_t (*)(int, char**))test_sync, test_scope);
     }
-    sysNice(testPid, 5);
+    sysNice(test_pid, 5);
 }

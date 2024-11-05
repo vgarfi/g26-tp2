@@ -11,7 +11,6 @@
 #ifndef scheduler_H
 #define scheduler_H
 
-
 typedef enum {
     BLOCKED,
     READY,
@@ -19,6 +18,11 @@ typedef enum {
     KILLED,     // Sabemos que killed y zombie no son estados de procesos
     ZOMBIE,     // pero esto nos permite conocer características de los mismos de una manera organizada
 } TState;
+
+typedef enum {
+    FOREGROUND,
+    BACKGROUND
+} TScope;
 
 typedef struct TPCB {
     uint8_t pid;        // Nuestra maxima cantidad de procesos es 256
@@ -32,6 +36,7 @@ typedef struct TPCB {
     TSemaphore* semaphore;
     int fd_r;
     int fd_w;
+    TScope scope;
 } TPCB;
 
 extern TPCB* pcb_array[MAX_PROCESSES];

@@ -43,10 +43,11 @@ int isctrlPressed(void);
 
 int getCurrentPid(void);
 int exitProcess(void);
-int createProcess(char* name, uint64_t argc, char *argv[], int64_t (*code)(int, char**));
+int createProcess(char* name, uint64_t argc, char *argv[], int64_t (*code)(int, char**), TScope scope);
 int blockProcess(uint8_t pid);
 int unblockProcess(uint8_t pid);
 int killProcess(uint8_t pid);
+int getScope(uint8_t pid);
 int nice(uint8_t pid, uint8_t newPriority);
 int ps(void);
 
