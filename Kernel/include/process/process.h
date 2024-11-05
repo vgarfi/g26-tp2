@@ -7,12 +7,19 @@
 #define PROCESS_H
 
 #include <memory/memoryManagerADT.h>
-#include <scheduler/scheduler.h>
 #include <kernelManagement.h>
+
+#define STACK_SIZE          2048
+
+#define PROCESS_SIZE        STACK_SIZE
+
+#define MAX_PROCESSES       (MEMORY_SIZE/PROCESS_SIZE)/1024
 
 #define AVAILABLE_PID       0
 #define NOT_AVAILABLE_PID   1
 
+
+#include <scheduler/scheduler.h>
 
 typedef struct TStackFrame {
     uint64_t r15;

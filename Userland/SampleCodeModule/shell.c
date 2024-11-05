@@ -26,16 +26,17 @@ int init(){
         else if(strcasecmp(commandPrompt, modes[DIVBYZERO_MODE]) == SELECTED_MODE) divByZero();
         else if(strcasecmp(commandPrompt, modes[INVALIDOPCODE_MODE]) == SELECTED_MODE) invalidOp();
         else if(strcasecmp(commandPrompt, modes[REGISTERS_MODE]) == SELECTED_MODE) registers();
-        else if(strcasecmp(commandPrompt, modes[TESTP_MODE]) == SELECTED_MODE) process_test();
-        else if(strcasecmp(commandPrompt, modes[TESTPRIO_MODE]) == SELECTED_MODE) priorities_test();
+        else if(strcasecmp(commandPrompt, modes[TESTP_MODE]) == SELECTED_MODE) process_test(FOREGROUND);
+        else if(strcasecmp(commandPrompt, modes[TESTPRIO_MODE]) == SELECTED_MODE) priorities_test(FOREGROUND);
         else if(strcasecmp(commandPrompt, modes[PS_MODE]) == SELECTED_MODE) ps_printing();
-        else if(strcasecmp(commandPrompt, modes[TESTMEM_MODE]) == SELECTED_MODE) memory_test();
-        else if(strcasecmp(commandPrompt, modes[TEST_SYNC_MODE]) == SELECTED_MODE) sync_test();
+        else if(strcasecmp(commandPrompt, modes[TESTMEM_MODE]) == SELECTED_MODE) memory_test(FOREGROUND);
+        else if(strcasecmp(commandPrompt, modes[TEST_SYNC_MODE]) == SELECTED_MODE) sync_test(FOREGROUND);
         else if(strcasecmp(commandPrompt, modes[BLOCKP_MODE]) == SELECTED_MODE) blockp();
         else if(strcasecmp(commandPrompt, modes[UNBLOCKP_MODE]) == SELECTED_MODE) unblockp();
         else if(strcasecmp(commandPrompt, modes[KILLP_MODE]) == SELECTED_MODE) killp();
-        else if(strcasecmp(commandPrompt, modes[LOOP_MODE]) == SELECTED_MODE) loop();
+        else if(strcasecmp(commandPrompt, modes[LOOP_MODE]) == SELECTED_MODE) loop(FOREGROUND);
         else if(contains(commandPrompt, '|')) pipe_processes(commandPrompt);
+        else if(contains(commandPrompt, '&')) create_background_process(commandPrompt);
         else notFound(commandPrompt);
     }
 }

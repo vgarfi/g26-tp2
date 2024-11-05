@@ -16,7 +16,7 @@
 
 extern MemoryManagerADT memory_manager;
 
-#define HANDLER_SIZE 51
+#define HANDLER_SIZE 52
 
 static int (*syscallHandlers[])()={
     // Syscalls de Arqui
@@ -29,7 +29,8 @@ static int (*syscallHandlers[])()={
     memoryMalloc, memoryFree, memoryStatus,
     yield, createSem, getSem, postSem, waitSem, closeSem,
     waitPid,
-    createPipe, setReadFileDescriptor, setWriteFileDescriptor, getReadFileDescriptor, getWriteFileDescriptor
+    createPipe, setReadFileDescriptor, setWriteFileDescriptor, getReadFileDescriptor, getWriteFileDescriptor,
+    getScope
 };
 
 uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
@@ -57,7 +58,7 @@ int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor){
     int i;
     char toPrint[2]={0,0};
     if (fd == STDOUT) {
-        for(i=0; i<count; i++){
+        for(i=0; i<count; i++) {
             toPrint[0]=buf[i];
             vdPrint(toPrint, hexColor); 
         }

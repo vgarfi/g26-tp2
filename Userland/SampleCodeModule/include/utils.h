@@ -13,9 +13,10 @@
 #define SI 494
 #define DO_PRIMA 523
 
-typedef enum {
+enum {
     FOREGROUND,
     BACKGROUND
-} TScope;
+};
 
+typedef int TScope;
 #endif

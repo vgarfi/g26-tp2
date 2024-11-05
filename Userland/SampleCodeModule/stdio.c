@@ -27,10 +27,15 @@ static int inputIndex = 0;
 
 unsigned char getchar(void){
     unsigned char read = 0;
-    int fd = sysGetReadFileDescriptor(sysGetCurrentPid());
-    if (fd == -1) {
+    
+    int pid = sysGetCurrentPid();
+    int fd = sysGetReadFileDescriptor(pid);
+    TScope scope = sysGetScope(pid);
+
+    if (fd == -1 || (fd == STDIN && scope == BACKGROUND)) {
         return 0;
     }
+
     readSizeFlag = sysRead(fd, &read, 1);
     return read;
 }
@@ -45,8 +50,17 @@ unsigned char putchar(unsigned char c){
 }
 
 int printColor(char* str, uint64_t hexColor){
+    int pid = sysGetCurrentPid();
+    TScope scope = sysGetScope(pid);
+    if (scope == -1) {
+        return 0;
+    }
     hexcol = hexColor;
     int i;
+    if (scope == BACKGROUND && sysGetWriteFileDescriptor(pid) == STDOUT) {
+        hexcol = LOWKEY;
+        sysWrite(STDOUT, "    ", 5, hexcol); // TODO ver si podemos hacer que esto se imprima por cada vez que se hace nueva linea, y no printf
+    }
     for(i=0;str[i]!='\0';i++){
         putchar(str[i]);
     }

@@ -53,7 +53,7 @@ uint64_t my_process_inc(uint64_t argc, char *argv[]) {
 uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
   uint64_t pids[2 * TOTAL_PAIR_PROCESSES];
   printf("test_sync: CREATED\n", 0,0,0);
-  TScope test_scope = sysGetScope(sysGetCurrentPid());
+  int test_scope = sysGetScope(sysGetCurrentPid());
   if (argc <= 2)
     return 1;
 
@@ -109,8 +109,7 @@ uint64_t initialize_sync_testing(uint64_t argc, char *argv[]) {
     printf("to use semaphores. Starting tests...\n",0,0,0);
 
     int test_pid;
-    TScope test_scope = sysGetScope(sysGetCurrentPid());
-
+    int test_scope = sysGetScope(sysGetCurrentPid());
 
     if (strcasecmp(option, "n") == 0) {
         test_pid = sysCreateProcess(TEST_SYNC, 3, sync_args_memory_not_sem,  (int64_t (*)(int, char**))test_sync, test_scope);

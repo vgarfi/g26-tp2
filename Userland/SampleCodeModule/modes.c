@@ -17,11 +17,11 @@
 char* dateTimeAux;
 int zoomAux, regAux;
 
-char* pipeable_modes[]  = {
+char* interactive_modes[]  = {
     "testp", "testprio", "testmem", "testsync", "loop"
 };
 
-int (*mode_functions[])(TScope) = {
+int (*mode_functions[])(int) = {
     process_test,
     priorities_test,
     memory_test,
@@ -213,9 +213,9 @@ int loop(TScope scope) {
     return sysCreateProcess(LOOP, 1, loop_args, loop_process, scope);
 }
 
-int (*get_pipeable_mode(const char* mode))(int) {
+int (*get_interactive_mode(const char* mode))(int) {
     for (int i = 0; i < sizeof(modes) / sizeof(modes[0]); i++) {
-        if (strcasecmp(mode, pipeable_modes[i]) == SELECTED_MODE) {
+        if (strcasecmp(mode, interactive_modes[i]) == SELECTED_MODE) {
             return mode_functions[i];
         }
     }
@@ -237,8 +237,8 @@ void pipe_processes(char* input) {
     strsplit(input, '|', p1, p2);
     strtrim(p1);
     strtrim(p2);
-    int(*process_one)() = get_pipeable_mode(p1);
-    int(*process_two)() = get_pipeable_mode(p2);
+    int(*process_one)() = get_interactive_mode(p1);
+    int(*process_two)() = get_interactive_mode(p2);
 
     if (process_one == 0 || process_two == 0) {
         // TODO claramente mejorar los mensajes de error
@@ -273,3 +273,10 @@ void pipe_processes(char* input) {
     sysSetReadFileDescriptor(p2Pid, pipe_fds[0]);
 }
 
+void create_background_process(char* input) {
+    char p1[15], p2[1];
+    strsplit(input, '&', p1, p2);
+    strtrim(p1);
+    int(*process)() = get_interactive_mode(p1);
+    process(BACKGROUND);
+}

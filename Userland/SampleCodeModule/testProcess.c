@@ -12,7 +12,7 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
   uint8_t action;
   uint64_t max_processes;
   char *argvAux[] = {0};
-  TScope test_scope = sysGetScope(sysGetCurrentPid());
+  int test_scope = sysGetScope(sysGetCurrentPid());
   
   if (argc != 2)
     return -1;
@@ -85,7 +85,7 @@ void test_priorities(void) {
   uint8_t pids[TOTAL_PROCESSES];
   char *argv[] = {0};
   uint64_t i;
-  TScope test_scope = sysGetScope(sysGetCurrentPid());
+  int test_scope = sysGetScope(sysGetCurrentPid());
   int fds[] = {0,1}; 
   
   printf("test_priorities: Testing Process Priorities...",0,0,0);

@@ -340,9 +340,25 @@ uint32_t get_state_color(TState state) {
     }
 }
 
+
+uint32_t get_scope_color(TScope scope) {
+    switch (scope)
+    {
+    case FOREGROUND:
+        return 0x00F0F0F0;
+        break;
+        
+    case BACKGROUND:
+        return 0x00787878;
+        break;
+    default:
+        return 0x00FFFFFF;
+    }
+}
 int processes_information(void){
     char buffer[10];
     char* states_labels[] = {"BLOCKED","READY","RUNNING","KILLED","ZOMBIE"};
+    char* scope_labels[] = {"FOREGROUND","BACKGROUND"};
     for(int i = 0; i < MAX_PROCESSES; i++) {
         if (pcb_array[i] != NULL && pids[i] == NOT_AVAILABLE_PID) {
             vdPrint("\n(", 0x00FFFFFF);
@@ -371,6 +387,8 @@ int processes_information(void){
             itoa(pcb_array[i]->fd_w, buffer, 10);
             vdPrint(buffer, 0x00FFFFFF);
             vdPrint("]", 0x00FFFFFF);
+            vdPrint(" - Scope: ", 0x00FFFFFF);
+            vdPrint(scope_labels[pcb_array[i]->scope], get_scope_color(pcb_array[i]->scope));
         }
     }
     vdPrint("\n",0x00FFFFFF);

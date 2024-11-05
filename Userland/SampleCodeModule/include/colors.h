@@ -8,6 +8,7 @@
 #define BLACK 0x00000000
 #define BLUE 0x000000FF
 #define YELLOW 0x00FFFF00
+#define LOWKEY 0x00787878
 
 #define DEFAULT GREY
 

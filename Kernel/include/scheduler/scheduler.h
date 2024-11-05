@@ -19,10 +19,12 @@ typedef enum {
     ZOMBIE,     // pero esto nos permite conocer características de los mismos de una manera organizada
 } TState;
 
-typedef enum {
+enum {
     FOREGROUND,
     BACKGROUND
-} TScope;
+};
+
+typedef int TScope;
 
 typedef struct TPCB {
     uint8_t pid;        // Nuestra maxima cantidad de procesos es 256
