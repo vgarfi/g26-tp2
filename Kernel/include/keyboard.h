@@ -12,6 +12,7 @@ uint8_t kbUpArrowValue(void);
 uint8_t kbLeftArrowValue(void);
 uint8_t kbDownArrowValue(void);
 uint8_t kbRightArrowValue(void);
+void initialize_keyboard(void);
 
 int kbisBufferEmpty();
 unsigned char kbreadBuf(void);

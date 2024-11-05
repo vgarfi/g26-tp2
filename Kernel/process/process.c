@@ -58,6 +58,8 @@ int block_process(uint8_t pid) {
     remove_pcb_from_queue(pcb_to_block);
     TState state = pcb_to_block->state; 
     pcb_to_block->state = BLOCKED;
+    // vdPrint("\nBLOCKING PROCESS ",0x00FFFFFF);
+    // vdPrintChar(pid+'0');
     if (state == RUNNING) {
         requestSchedule();
     }

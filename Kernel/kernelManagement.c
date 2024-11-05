@@ -4,6 +4,8 @@
 #include <synchro/synchro.h>
 #include <pipe/pipe.h>
 #include <interrupts.h>
+// ! Se llama keyboard, pero es de keyboarddriver
+#include <keyboard.h>
 #include <string.h>
 
 char* init_args[] = {INIT_PROCESS, 0};
@@ -24,6 +26,7 @@ void initialize_management(void){
 	initialize_synchro();
     initialize_scheduling();
     initialize_pipes();
+    initialize_keyboard();
     create_process(INIT_PROCESS, 1, init_args, INIT_PRIORITY, (int64_t (*)(int, char**)) init_process);
     create_process(IDLE_PROCESS, 1, idle_args, IDLE_PRIORITY, (int64_t (*)(int, char**)) idle_process);
     create_process(SHELL_PROCESS, 3, shell_args, SHELL_PRIORITY, sampleCodeModuleAddress);

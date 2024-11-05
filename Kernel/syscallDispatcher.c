@@ -40,12 +40,11 @@ uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r1
     return syscallHandlers[rax](rdi,rsi,rdx,r10,r8);
 }
 
-// TODO read debe poder ser bloqueante. Manejarlo con semáforos
 int read(uint64_t fd, char * buf, uint64_t count) {
     if (fd == STDIN) {
         uint64_t sizeRead = 0;
         unsigned char lastRead = '\0';
-        while(sizeRead != count && !kbisBufferEmpty()){
+        while(sizeRead != count){
                 lastRead = kbreadBuf();
                 buf[sizeRead++] = lastRead;
         }

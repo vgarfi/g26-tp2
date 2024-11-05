@@ -1,6 +1,8 @@
+#include <synchro/synchro.h>
+#include <videoDriver.h>
 #include <keyboard.h>
 #include <lib.h>
-#include <videoDriver.h>
+
 
 #define MAXSIZE 128
 
@@ -9,11 +11,17 @@
 #define DOWN_ARROW_VAL      0xE2
 #define RIGHT_ARROW_VAL     0xE3
 
+#define KEYBOARD_SEM        "a_kb"
+
 static unsigned char buffer[MAXSIZE] = {0};
 static int bufferPos = 0;
 static int shift = 0;
 static int dataStatus = 0;
 static int ctrlPressed=0;
+
+void initialize_keyboard(void){
+    create_sem(KEYBOARD_SEM, 0);
+}
 
 static unsigned char scancodesChars[SHIFT_VALUES][MAX_SCANCODE] = {
     {
@@ -99,6 +107,7 @@ void updateBuffer() {
         dataStatus = 1;
         char c = (arrowValue != 0)? arrowValue : scancodesChars[shift][scancode];
         buffer[bufferPos++] = c;
+        post_sem(KEYBOARD_SEM);
         if (bufferPos >= MAXSIZE) {
             bufferPos = 0;
         }
@@ -118,8 +127,10 @@ void kbcleanBuffer(){
 }
 
 unsigned char kbreadBuf () {
-    if(kbisBufferEmpty())
+    wait_sem(KEYBOARD_SEM);
+    if(kbisBufferEmpty()) {
         return 0;
+    }
     
     unsigned char ans = buffer[0];
     for(int i=0; i<bufferPos-1; i++)
