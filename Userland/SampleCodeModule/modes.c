@@ -271,6 +271,7 @@ void pipe_processes(char* input) {
     // int p2Pid = sysCreateProcess("dummy", 1, dummy_args, dummy_process);
     sysSetWriteFileDescriptor(p1Pid, pipe_fds[1]);
     sysSetReadFileDescriptor(p2Pid, pipe_fds[0]);
+    sysWaitPid(p2Pid);
 }
 
 void create_background_process(char* input) {
