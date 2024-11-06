@@ -315,6 +315,7 @@ sysGetWriteFileDescriptor:
     mov rax, 50
     int 80h
     ret
+
 sysGetScope:
     mov rax, 51
     int 80h

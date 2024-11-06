@@ -26,7 +26,7 @@ int init(){
         else if(strcasecmp(commandPrompt, modes[DIVBYZERO_MODE]) == SELECTED_MODE) divByZero();
         else if(strcasecmp(commandPrompt, modes[INVALIDOPCODE_MODE]) == SELECTED_MODE) invalidOp();
         else if(strcasecmp(commandPrompt, modes[REGISTERS_MODE]) == SELECTED_MODE) registers();
-        else if(strcasecmp(commandPrompt, modes[TESTP_MODE]) == SELECTED_MODE) sysWaitPid((FOREGROUND));
+        else if(strcasecmp(commandPrompt, modes[TESTP_MODE]) == SELECTED_MODE) sysWaitPid(process_test(FOREGROUND));
         else if(strcasecmp(commandPrompt, modes[TESTPRIO_MODE]) == SELECTED_MODE) sysWaitPid(priorities_test(FOREGROUND));
         else if(strcasecmp(commandPrompt, modes[PS_MODE]) == SELECTED_MODE) ps_printing();
         else if(strcasecmp(commandPrompt, modes[TESTMEM_MODE]) == SELECTED_MODE) sysWaitPid(memory_test(FOREGROUND));
@@ -37,6 +37,7 @@ int init(){
         else if(strcasecmp(commandPrompt, modes[LOOP_MODE]) == SELECTED_MODE) sysWaitPid(loop(FOREGROUND));
         else if(contains(commandPrompt, '|')) pipe_processes(commandPrompt);
         else if(contains(commandPrompt, '&')) create_background_process(commandPrompt);
+        //else if(sysCtrlPressed() && contains(commandPrompt, 'c')) sysKillProcess(sysGetCurrentPid());
         else notFound(commandPrompt);
     }
 }
