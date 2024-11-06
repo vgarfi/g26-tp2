@@ -5,23 +5,22 @@ GCC = gcc
 GCCFLAGS = -Wall -g
 
 INCLUDE = ./include
-KERNEL_INCLUDE = ../Kernel/include/memory
 
 SOURCES = $(wildcard *.c)
-KERNEL_SOURCES = ../Kernel/memory/bitmapMemoryManager.c
+MEMORY_SOURCES = ./memory/buddyMemoryManager.c
 
 OBJECTS = $(SOURCES:.c=.o)
-KERNEL_OBJECTS = $(KERNEL_SOURCES:.c=.o)
+KERNEL_OBJECTS = $(MEMORY_SOURCES:.c=.o)
 
 all: $(MODULE)
 
 $(MODULE): $(OBJECTS) $(KERNEL_OBJECTS)
-	$(GCC) $(GCCFLAGS) -I$(INCLUDE) -I$(KERNEL_INCLUDE) $(OBJECTS) $(KERNEL_OBJECTS) -o $(MODULE) -lc
+	$(GCC) $(GCCFLAGS) -I$(INCLUDE) $(OBJECTS) $(KERNEL_OBJECTS) -o $(MODULE) -lc -lm
 
 %.o: %.c
-	$(GCC) $(GCCFLAGS) -I$(INCLUDE) -I$(KERNEL_INCLUDE) -c $< -o $@
+	$(GCC) $(GCCFLAGS) -I$(INCLUDE) -c $< -o $@
 
 clean:
-	rm -rf *.o $(MODULE)
+	rm -rf *.o $(MODULE) ./memory/bitmapMemoryManager.o ./memory/buddyMemoryManager.o
 
 .PHONY: all clean

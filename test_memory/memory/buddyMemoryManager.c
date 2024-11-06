@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <string.h>
-#include <memory/memoryManagerADT.h>
+#include <memoryManagerADT.h>
 
 #define SPLIT               2
 #define FREE                1
