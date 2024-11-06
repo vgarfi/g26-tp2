@@ -100,6 +100,9 @@ void updateBuffer() {
     else if(scancode==CONTROL){
         ctrlPressed=1;
     }
+    else if(ctrlPressed == 1 && scancode == C){
+        stopRunning();
+    }
     else if(scancode==CONTROL_RELEASED){
         ctrlPressed=0;
     }
@@ -111,9 +114,6 @@ void updateBuffer() {
         if (bufferPos >= MAXSIZE) {
             bufferPos = 0;
         }
-    }
-    else if(ctrlPressed == 1 && scancode == C){
-        stopRunning();
     }
 }
 
