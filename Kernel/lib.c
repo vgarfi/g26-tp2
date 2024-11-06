@@ -105,7 +105,7 @@ int regPrinting(void){
 }
 
 void stopRunning(void) {
-	for(int i = 0; i < MAX_PROCESSES; i++){
+	for(int i = 0; i < 20; i++){
 		TPCB * current = get_pcb_by_pid(i);
 		if(count_occurrences(current->semaphore->waiting_processes, 2) > 0){
 			kill_process(i);
