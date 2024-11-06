@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <videoDriver.h>
 #include <lib.h>
+#include <process/process.h>
 
 void saveRegsInBuffer(void);
 uint64_t* getRegs(void);
@@ -100,4 +101,8 @@ int regPrinting(void){
     }
     vdPrint("\n", 0x00000000);
 	return 0;
+}
+
+void stopRunning(void) {
+	kill_process(get_current_pid());
 }

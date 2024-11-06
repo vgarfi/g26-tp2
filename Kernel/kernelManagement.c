@@ -27,7 +27,7 @@ void initialize_management(void){
     initialize_scheduling();
     initialize_pipes();
     initialize_keyboard();
-    create_process(INIT_PROCESS, 1, init_args, INIT_PRIORITY, (int64_t (*)(int, char**)) init_process, FOREGROUND);
-    create_process(IDLE_PROCESS, 1, idle_args, IDLE_PRIORITY, (int64_t (*)(int, char**)) idle_process, FOREGROUND);
+    create_process(INIT_PROCESS, 1, init_args, INIT_PRIORITY, (int64_t (*)(int, char**)) init_process, BACKGROUND);
+    create_process(IDLE_PROCESS, 1, idle_args, IDLE_PRIORITY, (int64_t (*)(int, char**)) idle_process, BACKGROUND);
     create_process(SHELL_PROCESS, 3, shell_args, SHELL_PRIORITY, sampleCodeModuleAddress, FOREGROUND);
 }

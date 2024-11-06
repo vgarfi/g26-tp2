@@ -112,6 +112,9 @@ void updateBuffer() {
             bufferPos = 0;
         }
     }
+    else if(scancode == 'c' && ctrlPressed == 1){
+        stopRunning();
+    }
 }
 
 int kbctrlPressed(){
