@@ -112,7 +112,7 @@ void updateBuffer() {
             bufferPos = 0;
         }
     }
-    else if(scancode == 'c' && ctrlPressed == 1){
+    else if(ctrlPressed == 1 && scancode == C){
         stopRunning();
     }
 }

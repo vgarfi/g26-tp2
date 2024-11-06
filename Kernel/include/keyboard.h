@@ -30,6 +30,7 @@ enum SPECIALCHARS {
  LEFT_ARROW        = 0x4B,
  DOWN_ARROW        = 0x50,
  RIGHT_ARROW       = 0x4D,
+ C                 = 0X2E,
 };
 
 #endif

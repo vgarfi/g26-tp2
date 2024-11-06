@@ -2,6 +2,7 @@
 #include <videoDriver.h>
 #include <lib.h>
 #include <process/process.h>
+#include <kernelManagement.h>
 
 void saveRegsInBuffer(void);
 uint64_t* getRegs(void);
@@ -104,5 +105,11 @@ int regPrinting(void){
 }
 
 void stopRunning(void) {
-	kill_process(get_current_pid());
+	for(int i = 0; i < MAX_PROCESSES; i++){
+		TPCB * current = get_pcb_by_pid(i);
+		if(count_occurrences(current->semaphore->waiting_processes, 2) > 0){
+			kill_process(i);
+			return;
+		}
+	}
 }
