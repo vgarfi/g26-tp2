@@ -277,6 +277,7 @@ int forced_kill_process(uint8_t pid) {
     TState process_state = process_pcb->state;
     process_pcb->state = KILLED;
     put_children_mpid_init(pid);
+
     free_process(process_pcb);
     pids[pid] = AVAILABLE_PID;
     if (process_state == RUNNING) {

@@ -108,6 +108,12 @@ void stopRunning(void) {
 	for(int i = 0; i < 20; i++){
 		TPCB * current = get_pcb_by_pid(i);
 		if(current->scope == FOREGROUND && count_occurrences(current->semaphore->waiting_processes, 2) > 0){
+			for(int j = i; j < 20; j++){
+				TPCB* child = get_pcb_by_pid(j);
+				if(child->m_pid == i){
+					kill_process(j);
+				}
+			}	
 			kill_process(i);
 			return;
 		}
