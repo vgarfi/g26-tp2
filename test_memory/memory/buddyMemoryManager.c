@@ -237,36 +237,34 @@ void free_mm(MemoryManagerADT mm, void* ptr) {
     merge_brother_buddies(node_offset, mm->root, mm->nodes_qty);
 }
 
-/*void calculate_diagnostic(MemoryDiagnostic* diagnostic, BuddyNode* node, size_t current_size, size_t block_size) {
-    if (node == NULL) {
+void calculate_used_memory(BuddyNode* root, int* used_mem, int* used_bl, int index, int size, int min_size){
+    if((&root[index])->free == NOT_FREE){
+        *used_mem += size;
+        *used_bl += size/min_size;
         return;
     }
-
-    if (node->left == NULL && node->right == NULL) {
-
-        if (node->free) {
-            diagnostic->free_memory += current_size;
-            diagnostic->free_blocks+= current_size/block_size;
-        } else {
-            diagnostic->used_memory += current_size;
-            diagnostic->used_blocks += current_size/block_size;
-        }
-    } else {
-        calculate_diagnostic(diagnostic, node->left, current_size / 2, block_size);
-        calculate_diagnostic(diagnostic, node->right, current_size / 2, block_size);
+    if((&root[index])->free == SPLIT){
+        calculate_used_memory(root, used_mem, used_bl, index * 2 + 1, size/2, min_size);
+        calculate_used_memory(root, used_mem, used_bl, index * 2 + 2, size/2, min_size);
+        return;
     }
-}*/
+}
+
 
 MemoryDiagnostic get_diagnostic_mm(MemoryManagerADT mm) {
     MemoryDiagnostic diagnostic = {0};
     diagnostic.total_memory = mm->total_size;
-    diagnostic.used_memory = 0;
-    diagnostic.free_memory = 0;
     diagnostic.total_blocks = (mm->total_size)/(mm->block_size);
-    diagnostic.used_blocks = 0;
-    diagnostic.free_blocks = 0;
 
-    //calculate_diagnostic(&diagnostic, mm->root, mm->total_size, mm->block_size);
+    int used_mem = 0, used_bl = 0;
+
+    calculate_used_memory(mm->root, &used_mem, &used_bl, 0, mm->total_size, mm->block_size);
+
+    diagnostic.used_memory = used_mem;
+    diagnostic.free_memory = diagnostic.total_memory - diagnostic.used_memory;
+
+    diagnostic.used_blocks = used_bl;
+    diagnostic.free_blocks = diagnostic.total_blocks - diagnostic.used_blocks;
 
     return diagnostic;
 }
