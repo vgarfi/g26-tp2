@@ -10,7 +10,6 @@
 
 typedef struct BuddyNode BuddyNode;
 
-BuddyNode* find_parent(BuddyNode* root, BuddyNode* node);
 size_t get_block_looked_size(size_t real_size);
 void merge_brother_buddies(int node_index, BuddyNode* root, int node_qty);
 
