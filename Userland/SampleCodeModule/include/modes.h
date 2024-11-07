@@ -20,10 +20,11 @@ int process_test(TScope scope);
 int priorities_test(TScope scope);
 int memory_test(TScope scope);
 int sync_test(TScope scope);
-int ps_printing();
-void killp();
-void blockp();
-void unblockp();
+int ps_printing(void);
+int mem(void);
+void killp(void);
+void blockp(void);
+void unblockp(void);
 
 int loop(TScope scope);
 void pipe_processes(char* input);

@@ -39,6 +39,7 @@ int init(){
         else if(strcasecmp(commandPrompt, modes[WC_MODE]) == SELECTED_MODE) sysWaitPid(wc(FOREGROUND));
         else if(strcasecmp(commandPrompt, modes[FILTER_MODE]) == SELECTED_MODE) sysWaitPid(filter(FOREGROUND));
         else if(strcasecmp(commandPrompt, modes[PHYLOS]) == SELECTED_MODE) sysWaitPid(phylosophers(FOREGROUND));
+        else if(strcasecmp(commandPrompt, modes[MEM]) == SELECTED_MODE) mem();
         else if(contains(commandPrompt, '|')) pipe_processes(commandPrompt);
         else if(contains(commandPrompt, '&')) create_background_process(commandPrompt);
         else notFound(commandPrompt);

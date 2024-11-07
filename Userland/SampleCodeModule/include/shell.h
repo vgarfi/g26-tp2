@@ -31,11 +31,12 @@
 #define WC_MODE             23
 #define FILTER_MODE         24
 #define PHYLOS              25
+#define MEM                 26
 
 
 static const char* modes[]  __attribute__((unused)) = {
     "shell", "idle", "help", "divbyzero", "invalidopcode", "zoomin", "zoomout", "time", "date", "eliminator", "clear", "registers", "easteregg",
-    "testp", "testprio", "ps", "testmem", "testsync", "blockp", "unblockp", "killp", "loop", "cat", "wc", "filter", "phylo"
+    "testp", "testprio", "ps", "testmem", "testsync", "blockp", "unblockp", "killp", "loop", "cat", "wc", "filter", "phylo", "mem"
 };
 
 static char* helpText[]  __attribute__((unused)) = { "Command information is displayed below:\n\n",
@@ -55,6 +56,7 @@ static char* helpText[]  __attribute__((unused)) = { "Command information is dis
 "REGISTERS           ->      Prints registers values. To do this, first you need to save\n",
 "                            your registers by pressing ALT.\n",
 "PS                  ->      Prints current ongoing processes with their information\n",
+"MEM                 ->      Prints a memory diagnostic\n",
 "BLOCKP              ->      Blocks a process given it's PID\n",
 "UNBLOCK             ->      Unblocks a process given it's PID\n",
 "KILLP               ->      Kills a process given it's PID\n",

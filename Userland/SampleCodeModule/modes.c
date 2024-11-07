@@ -16,7 +16,6 @@
 #include "include/ipc.h"
 #include "include/phylo.h"
 
-
 char* dateTimeAux;
 int zoomAux, regAux;
 
@@ -151,6 +150,10 @@ int priorities_test(TScope scope){
 
 int ps_printing(void){
     sysPs();
+}
+
+int mem(void){
+    sysMem();
 }
 
 static char * test_args_memory[] = {TEST_MEMORY, "1024", 0};
