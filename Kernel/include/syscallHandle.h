@@ -65,7 +65,7 @@ int postSem(char* name);
 int waitSem(char* name);
 int closeSem(char* name);
 
-int createPipe(int* fds);
+int createPipe(int* fds, char* name);
 int setReadFileDescriptor(uint8_t pid, int fd);
 int setWriteFileDescriptor(uint8_t pid, int fd);
 

@@ -282,8 +282,8 @@ int waitPid(uint8_t pid){
     return EXIT_SUCCESS;
 }
 
-int createPipe(int* fds) {
-    return create_pipe(fds);
+int createPipe(int* fds, char* name) {
+    return create_pipe(fds, name);
 }
 
 int setReadFileDescriptor(uint8_t pid, int fd) {

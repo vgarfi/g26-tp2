@@ -23,7 +23,7 @@ int getFreePipeIndex() {
     return -1;
 }
 
-int create_pipe(int* fds){
+int create_pipe(int* fds, char* name){
     if (fds == NULL) {
         return -1;
     }
@@ -31,6 +31,15 @@ int create_pipe(int* fds){
     TPipe* new_pipe = (TPipe*)malloc_mm(memory_manager, sizeof(TPipe));
     if(new_pipe == NULL)
         return -1;
+
+    if (name != NULL) {
+        new_pipe->name = malloc_mm(memory_manager, strlen(name) + 1);
+        if(new_pipe->name == NULL){
+            free_mm(memory_manager, new_pipe);
+            return -1;
+        }
+        strcpy(new_pipe->name, name);
+    }
 
     int pipe_index = getFreePipeIndex();
 
@@ -62,7 +71,12 @@ int create_pipe(int* fds){
 
     return pipe_index;
 }
-
+char is_anonymous_pipe(int pipe_index) {
+    if (pipes[pipe_index] == NULL || available_pipes[pipe_index] == PIPE_AVAILABLE) {
+        return 1;
+    }
+    return (pipes[pipe_index]->name == NULL);
+}
 int read_pipe(int pipe_index, char * buf, uint64_t count) {
 	if (pipe_index < 0 || pipe_index >= MAX_PIPES || available_pipes[pipe_index] == PIPE_AVAILABLE) {
 		return 0;

@@ -235,19 +235,16 @@ void pipe_processes(char* input) {
     }
 
     int pipe_fds[2];
-    
-    
-    if (sysCreatePipe(pipe_fds) == -1) {
+    char* pipe_name; // NULL
+    if (sysCreatePipe(pipe_fds,  pipe_name) == -1) {
         printf("\nError creando pipes entre procesos",0,0,0);
         return;
     }
-    
     int p1Pid = process_one(FOREGROUND);
     int p2Pid = process_two(FOREGROUND);
     sysSetWriteFileDescriptor(p1Pid, pipe_fds[1]);
     sysSetReadFileDescriptor(p2Pid, pipe_fds[0]);
     sysWaitPid(p1Pid);
-    sysWaitPid(p2Pid);
 }
 
 void create_background_process(char* input) {

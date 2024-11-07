@@ -12,6 +12,7 @@
 
 // TODO preguntar si es correcto que las funciones y variables de kernel sean con snake_case y userland con camelCase
 typedef struct pipe {
+    char* name;
     int fd_r;
     int fd_w;
     char buffer[MAX_BUFFER_SIZE];
@@ -26,7 +27,8 @@ extern TPipe* pipes[MAX_PIPES];
 extern int available_pipes[MAX_PIPES];
 
 void initialize_pipes(void);
-int create_pipe(int* fds);
+int create_pipe(int* fds, char* name);
+char is_anonymous_pipe(int pipe_index);
 int read_pipe(int pipe_index, char * buf, uint64_t count);
 int write_pipe(int pipe_index, char * buf, uint64_t count);
 int finish_pipe(int pipe_index);

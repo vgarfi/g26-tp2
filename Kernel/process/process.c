@@ -1,6 +1,7 @@
 #include <scheduler/scheduler.h>
 #include <kernelManagement.h>
 #include <process/process.h>
+#include <pipe/pipe.h>
 #include <interrupts.h>
 #include <videoDriver.h>
 #include <string.h>
@@ -252,6 +253,7 @@ int kill_process(uint8_t pid) {
     TState process_state = process_pcb->state;
     process_pcb->state = ZOMBIE;
     put_children_mpid_init(pid);
+    destroy_anonymous_pipes(process_pcb->fd_r);
     if (process_state == RUNNING) {
         requestSchedule();
     }
@@ -269,6 +271,7 @@ int forced_kill_process(uint8_t pid) {
     TState process_state = process_pcb->state;
     process_pcb->state = KILLED;
     put_children_mpid_init(pid);
+    destroy_anonymous_pipes(process_pcb->fd_r);
     free_process(process_pcb);
     pids[pid] = AVAILABLE_PID;
 
@@ -276,6 +279,12 @@ int forced_kill_process(uint8_t pid) {
         requestSchedule();
     }
     return EXIT_SUCCESS;
+}
+void destroy_anonymous_pipes(int fd_r){
+    if (!is_anonymous_pipe(fd_r/2)) {
+        return;
+    }
+    close_pipe(fd_r/2);
 }
 
 void forced_kill_children(uint8_t m_pid) {
