@@ -5,11 +5,12 @@
 int64_t loop_process(int argc, char** argv) {
     int printed;
     while(printed != EOF) {
-        sysSleep(2, 0);
+        sysSleep(1, 0);
         print("\n");
         print("Hello (from ");
         printColor("LOOP", 0x0000D4C1);
-        printed = printf(") with PID: %d ", sysGetCurrentPid(),0,0);
+        printf(") with PID: %d ", sysGetCurrentPid(),0,0);
+        printed = print("\0");
     }
     return 0;
 }

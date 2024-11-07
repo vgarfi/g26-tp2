@@ -78,7 +78,7 @@ char is_anonymous_pipe(int pipe_index) {
     return (pipes[pipe_index]->name == NULL);
 }
 int read_pipe(int pipe_index, char * buf, uint64_t count) {
-	if (pipe_index < 0 || pipe_index >= MAX_PIPES || available_pipes[pipe_index] == PIPE_AVAILABLE) {
+	if (pipe_index < 0 || pipe_index >= MAX_PIPES || available_pipes[pipe_index] == PIPE_AVAILABLE || pipes[pipe_index] == NULL) {
 		return 0;
 	}
 
@@ -100,7 +100,7 @@ int read_pipe(int pipe_index, char * buf, uint64_t count) {
 }
 
 int write_pipe(int pipe_index, char * buf, uint64_t count) {
-    if (pipe_index < 0 || pipe_index >= MAX_PIPES || available_pipes[pipe_index] == PIPE_AVAILABLE) {
+    if (pipe_index < 0 || pipe_index >= MAX_PIPES || available_pipes[pipe_index] == PIPE_AVAILABLE || pipes[pipe_index] == NULL) {
 		return 0;
 	}
 

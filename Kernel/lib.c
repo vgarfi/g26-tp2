@@ -115,7 +115,7 @@ void stopRunning(void) {
 		if (current == NULL) continue;
 		if(current->scope == FOREGROUND && count_occurrences(current->semaphore->waiting_processes, shell_pid) > 0) {
 			forced_kill_process(current->pid);
-        	vdPrint("\n", 0x00FF0000);
+        	vdNewLine();
 			return;
 		}
 	}
@@ -127,6 +127,7 @@ void sendEndOfFile(void) {
 		return;
 	}
 	if (current->fd_w == STDOUT) {
+		kbEraseBufferContent();
 		kbInsertNewLine();
     	return;
 	}
