@@ -9,6 +9,8 @@ uint64_t* getRegs(void);
 static int backupDone=0;
 static uint64_t * registers;
 
+extern int shell_pid;
+
 void * memset(void * destination, int32_t c, uint64_t length)
 {
 	uint8_t chr = (uint8_t)c;
@@ -105,11 +107,13 @@ int regPrinting(void){
 }
 
 void stopRunning(void) {
-	for(int i = 0; i < 20; i++){
+	for(int i = 0; i < 20; i++) {
 		TPCB * current = get_pcb_by_pid(i);
-		if(current->scope == FOREGROUND && count_occurrences(current->semaphore->waiting_processes, 2) > 0){
+		if (current == NULL) continue;
+		if(current->scope == FOREGROUND && count_occurrences(current->semaphore->waiting_processes, shell_pid) > 0) {
 			for(int j = i; j < 20; j++){
 				TPCB* child = get_pcb_by_pid(j);
+				if (child == NULL) continue;
 				if(child->m_pid == i){
 					kill_process(j);
 				}
