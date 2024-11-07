@@ -46,7 +46,6 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
   printf("Memory Manager inicializado con éxito.\n");
 
   while (1) {
-    printf("\nInicio de un nuevo ciclo de asignación de memoria.\n");
     rq = 0;
     total = 0;
 
@@ -56,13 +55,9 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
 
       if (mm_rqs[rq].address) {
         total += mm_rqs[rq].size;
-        printf("Bloque %d: Asignado %u bytes en dirección %p\n", rq, mm_rqs[rq].size, mm_rqs[rq].address);
         rq++;
-      } else {
-        //printf("Bloque %d: No se pudo asignar %u bytes\n", rq, mm_rqs[rq].size);
       }
     }
-    printf("Total de memoria asignada en este ciclo: %u bytes\n", total);
 
     // Set
     uint32_t i;
@@ -71,7 +66,6 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
       if (mm_rqs[i].address)
       {
         memset(mm_rqs[i].address, i, mm_rqs[i].size);
-        printf("Bloque %d: Memoria inicializada con valor %d\n", i, i);
       }
     }
 
@@ -81,8 +75,6 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
         if (!memcheck(mm_rqs[i].address, i, mm_rqs[i].size)) {
           printf("test_mm ERROR\n");
           return -1;
-        } else {
-          printf("Bloque %d: Verificación de memoria exitosa en dirección %p\n", i, mm_rqs[i].address);
         }
       }
     }
@@ -91,12 +83,8 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
     for (uint32_t i = 0; i < rq; i++){
       if (mm_rqs[i].address){
         free_mm(memory_manager, mm_rqs[i].address);
-        printf("Bloque %d: Memoria liberada en dirección %p\n", i, mm_rqs[i].address);
       }
     }
-
-    printf("Ciclo de prueba completado, toda la memoria liberada.\n");
-
   }
   free(memory);
 }
