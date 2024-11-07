@@ -173,6 +173,7 @@ picSlaveMask:
 
 ;8254 Timer (Timer Tick)
 _irq00Handler:
+	
 	cli
 
 	pushState
@@ -180,6 +181,8 @@ _irq00Handler:
 	call schedule
 	
 	mov rsp, rax ; Cambio de proceso
+	mov rdi, 0 ; pasaje de parametro
+	call irqDispatcher
 	
 	mov al, 20h ; EOI para el PIC
 	out 20h, al
