@@ -241,8 +241,32 @@ int memoryFree(void* ptr) {
 }
 
 int memoryStatus(void) {
-    // TODO preguntar si estas funciones deberian imprimir por su cuenta (a nivel kernel) o hacer que userland imprima
-    get_diagnostic_mm(memory_manager);
+    MemoryDiagnostic diagnostic = get_diagnostic_mm(memory_manager);
+    char buffer[10];
+    vdPrint("\nTOTAL ", 0x00FFC90E);
+    vdPrint("memory: ", 0x00FFFFFF);
+    itoa64(diagnostic.total_memory, buffer, 10);
+    vdPrint(buffer, 0x00FFFFFF);
+    vdPrint("\nUSED ", 0x00FF440B);
+    vdPrint("memory: ", 0x00FFFFFF);
+    itoa64(diagnostic.used_memory, buffer, 10);
+    vdPrint(buffer, 0x00FFFFFF);
+    vdPrint("\nFREE ", 0x003CBA14);
+    vdPrint("memory: ", 0x00FFFFFF);
+    itoa64(diagnostic.free_memory, buffer, 10);
+    vdPrint(buffer, 0x00FFFFFF);
+    vdPrint("\nTOTAL ", 0x00FFC90E);
+    vdPrint("blocks: ", 0x00FFFFFF);
+    itoa64(diagnostic.total_blocks, buffer, 10);
+    vdPrint(buffer, 0x00FFFFFF);
+    vdPrint("\nUSED ", 0x00FF440B);
+    vdPrint("blocks: ", 0x00FFFFFF);
+    itoa64(diagnostic.used_blocks, buffer, 10);
+    vdPrint(buffer, 0x00FFFFFF);
+    vdPrint("\nFREE ", 0x003CBA14);
+    vdPrint("blocks: ", 0x00FFFFFF);
+    itoa64(diagnostic.free_blocks, buffer, 10);
+    vdPrint(buffer, 0x00FFFFFF);
     return 0;
 }
 
