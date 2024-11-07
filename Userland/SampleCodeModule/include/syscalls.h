@@ -73,5 +73,4 @@ int sysClosePipe(char* name);
 int sysGetReadFileDescriptor(uint8_t pid);
 int sysGetWriteFileDescriptor(uint8_t pid);
 
-
 #endif

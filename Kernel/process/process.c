@@ -356,7 +356,7 @@ uint32_t get_scope_color(TScope scope) {
         return 0x00FFFFFF;
     }
 }
-int processes_information(void){
+int processes_information(void) {
     char buffer[10];
     char* states_labels[] = {"BLOCKED","READY","RUNNING","KILLED","ZOMBIE"};
     char* scope_labels[] = {"FOREGROUND","BACKGROUND"};

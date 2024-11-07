@@ -3,9 +3,15 @@
 
 #include <stdint.h>
 
-#define STDIN 0
-#define STDOUT 1
-#define STDERR 2
+#define STDIN    0
+#define STDOUT   1
+#define STDERR   2
+
+#define EOF     -1
+
+#define MAXBUFLEN 256
+#define MINLEN 2
+#define MAX_INPUTS_STORE    10
 
 //typedef unsigned int size_t;
 

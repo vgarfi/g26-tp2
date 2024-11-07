@@ -20,7 +20,7 @@ int process_test(TScope scope);
 int priorities_test(TScope scope);
 int memory_test(TScope scope);
 int sync_test(TScope scope);
-void ps_printing(void);
+int ps_printing();
 void killp();
 void blockp();
 void unblockp();
@@ -28,4 +28,10 @@ void unblockp();
 int loop(TScope scope);
 void pipe_processes(char* input);
 void create_background_process(char* input);
+
+int cat(TScope scope);
+int wc(TScope scope);
+int filter(TScope scope);
+
+
 #endif

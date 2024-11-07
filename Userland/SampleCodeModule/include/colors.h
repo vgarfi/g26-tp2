@@ -9,6 +9,7 @@
 #define BLUE 0x000000FF
 #define YELLOW 0x00FFFF00
 #define LOWKEY 0x00787878
+#define CYAN   0x0007B6D9
 
 #define DEFAULT GREY
 

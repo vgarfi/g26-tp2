@@ -13,12 +13,14 @@
 #include "include/test_mm.h"
 #include "include/test_sync.h"
 #include "include/loop.h"
+#include "include/ipc.h"
+
 
 char* dateTimeAux;
 int zoomAux, regAux;
 
 char* interactive_modes[]  = {
-    "testp", "testprio", "testmem", "testsync", "loop"
+    "testp", "testprio", "testmem", "testsync", "loop", "cat", "wc", "filter"
 };
 
 int (*mode_functions[])(int) = {
@@ -26,7 +28,10 @@ int (*mode_functions[])(int) = {
     priorities_test,
     memory_test,
     sync_test,
-    loop
+    loop,
+    cat,
+    wc, 
+    filter
 };
 
 void help (void) {
@@ -142,7 +147,7 @@ int priorities_test(TScope scope){
     return sysCreateProcess(TEST_PRIORITY, 1, test_args_prio, (int64_t (*)(int, char**))test_priorities, scope);
 }
 
-void ps_printing(){
+int ps_printing(void){
     sysPs();
 }
 
@@ -193,23 +198,6 @@ void blockp(){
     sysBlockProcess((uint8_t)pid);
 }
 
-void basic_sleep(){
-    for (int i = 0; i < 20000000; i++);
-}
-
-int64_t loop_process(int argc, char** argv) {
-    int printed;
-    while(printed != -1) {
-        basic_sleep();
-        printed = print("\n");
-        print("Hello (from ");
-        printColor("LOOP", 0x0000D4C1);
-        printf(") with PID: %d ", sysGetCurrentPid(),0,0);
-    }
-    return 0;
-}
-
-static char * loop_args[] = {LOOP, 0};
 int loop(TScope scope) {
     return sysCreateProcess(LOOP, 1, loop_args, loop_process, scope);
 }
@@ -221,16 +209,6 @@ int (*get_interactive_mode(const char* mode))(int) {
         }
     }
     return 0;
-}
-
-static char * dummy_args[] = {"dummy", 0};
-int64_t dummy_process(int argc, char** argv) {
-    char buf[256];
-    while(1) {
-        scanf(buf, 256);
-        print("\nLeido desde el pipe: ");
-        print(buf);
-    }
 }
 
 void pipe_processes(char* input) {
@@ -266,9 +244,9 @@ void pipe_processes(char* input) {
     
     int p1Pid = process_one(FOREGROUND);
     int p2Pid = process_two(FOREGROUND);
-    // int p2Pid = sysCreateProcess("dummy", 1, dummy_args, dummy_process);
     sysSetWriteFileDescriptor(p1Pid, pipe_fds[1]);
     sysSetReadFileDescriptor(p2Pid, pipe_fds[0]);
+    sysWaitPid(p1Pid);
     sysWaitPid(p2Pid);
 }
 
@@ -278,4 +256,17 @@ void create_background_process(char* input) {
     strtrim(p1);
     int(*process)() = get_interactive_mode(p1);
     process(BACKGROUND);
+}
+
+// ! Hacer una lista de procesos
+int cat(TScope scope) {
+    return sysCreateProcess(CAT, 1, cat_args, cat_process, scope);
+}
+
+int wc(TScope scope) {
+    return sysCreateProcess(WC, 1, wc_args, wc_process, scope);
+}
+
+int filter(TScope scope) {
+    return sysCreateProcess(FILTER, 1, filter_args, filter_process, scope);
 }

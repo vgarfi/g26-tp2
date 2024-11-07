@@ -49,7 +49,7 @@ int unblockProcess(uint8_t pid);
 int killProcess(uint8_t pid);
 int getScope(uint8_t pid);
 int nice(uint8_t pid, uint8_t newPriority);
-int ps(void);
+int ps();
 
 int waitPid(uint8_t pid);
 

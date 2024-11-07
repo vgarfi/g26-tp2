@@ -35,9 +35,11 @@ int init(){
         else if(strcasecmp(commandPrompt, modes[UNBLOCKP_MODE]) == SELECTED_MODE) unblockp();
         else if(strcasecmp(commandPrompt, modes[KILLP_MODE]) == SELECTED_MODE) killp();
         else if(strcasecmp(commandPrompt, modes[LOOP_MODE]) == SELECTED_MODE) sysWaitPid(loop(FOREGROUND));
+        else if(strcasecmp(commandPrompt, modes[CAT_MODE]) == SELECTED_MODE) sysWaitPid(cat(FOREGROUND));
+        else if(strcasecmp(commandPrompt, modes[WC_MODE]) == SELECTED_MODE) sysWaitPid(wc(FOREGROUND));
+        else if(strcasecmp(commandPrompt, modes[FILTER_MODE]) == SELECTED_MODE) sysWaitPid(filter(FOREGROUND));
         else if(contains(commandPrompt, '|')) pipe_processes(commandPrompt);
         else if(contains(commandPrompt, '&')) create_background_process(commandPrompt);
-        //else if(sysCtrlPressed() && contains(commandPrompt, 'c')) sysKillProcess(sysGetCurrentPid());
         else notFound(commandPrompt);
     }
 }
