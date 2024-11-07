@@ -1,5 +1,6 @@
 #include <pipe/pipe.h>
 #include <string.h>
+#include <videoDriver.h>
 #include <synchro/synchro.h>
 #include <memory/memoryManagerADT.h>
 
@@ -22,7 +23,7 @@ int getFreePipeIndex() {
     return -1;
 }
 
-int create_pipe(char* name, int* fds){
+int create_pipe(int* fds){
     if (fds == NULL) {
         return -1;
     }
@@ -30,13 +31,6 @@ int create_pipe(char* name, int* fds){
     TPipe* new_pipe = (TPipe*)malloc_mm(memory_manager, sizeof(TPipe));
     if(new_pipe == NULL)
         return -1;
-
-    new_pipe->name = malloc_mm(memory_manager, strlen(name) + 1);
-    if(new_pipe->name == NULL){
-        free_mm(memory_manager, new_pipe);
-        return -1;
-    }
-    strcpy(new_pipe->name, name);
 
     int pipe_index = getFreePipeIndex();
 
@@ -53,6 +47,7 @@ int create_pipe(char* name, int* fds){
 
     new_pipe->read_cursor_index = 0;
     new_pipe->write_cursor_index = 0;
+    new_pipe->eof_flag = 0;
 
     char sem_name_r[3], sem_name_w[3];
     char pipe_name_r[10], pipe_name_w[10];
@@ -70,10 +65,15 @@ int create_pipe(char* name, int* fds){
 
 int read_pipe(int pipe_index, char * buf, uint64_t count) {
 	if (pipe_index < 0 || pipe_index >= MAX_PIPES || available_pipes[pipe_index] == PIPE_AVAILABLE) {
-		return -1;
+		return 0;
 	}
 
     TPipe* pipe = pipes[pipe_index];
+
+    if (pipe->eof_flag == EOF) {
+        return EOF;
+    }
+
     int i;
     for(i = 0; i < count; i++) {
         wait_sem(pipe->sem_r->name);
@@ -87,10 +87,15 @@ int read_pipe(int pipe_index, char * buf, uint64_t count) {
 
 int write_pipe(int pipe_index, char * buf, uint64_t count) {
     if (pipe_index < 0 || pipe_index >= MAX_PIPES || available_pipes[pipe_index] == PIPE_AVAILABLE) {
-		return -1;
+		return 0;
 	}
 
     TPipe* pipe = pipes[pipe_index];
+
+    if (pipe->eof_flag == EOF) {
+        return EOF;
+    }
+
     int i;
     for (i = 0; i < count; i++){
         wait_sem(pipe->sem_w->name);
@@ -102,12 +107,20 @@ int write_pipe(int pipe_index, char * buf, uint64_t count) {
     return i;
 }
 
-int close_pipe(int pipe_index){
+int finish_pipe(int pipe_index) {
     if (pipe_index < 0 || pipe_index >= MAX_PIPES || available_pipes[pipe_index] == PIPE_AVAILABLE) {
 		return -1;
 	}
+    delete_sem(pipes[pipe_index]->sem_r->name);
+    delete_sem(pipes[pipe_index]->sem_w->name);
+    pipes[pipe_index]->eof_flag = EOF;
+    return 0;
+}
 
-    free_mm(memory_manager, pipes[pipe_index]->name);
+int close_pipe(int pipe_index) {
+    if (pipe_index < 0 || pipe_index >= MAX_PIPES || available_pipes[pipe_index] == PIPE_AVAILABLE) {
+		return -1;
+	}
     delete_sem(pipes[pipe_index]->sem_r->name);
     delete_sem(pipes[pipe_index]->sem_w->name);
     free_mm(memory_manager, pipes[pipe_index]);

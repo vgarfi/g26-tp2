@@ -7,12 +7,15 @@
 
 void updateBuffer(void);
 void kbcleanBuffer(void);
+void kbInsertNewLine(void);
+void kbEraseBufferContent(void);
 uint8_t getKey(void);
 uint8_t kbUpArrowValue(void);
 uint8_t kbLeftArrowValue(void);
 uint8_t kbDownArrowValue(void);
 uint8_t kbRightArrowValue(void);
 void initialize_keyboard(void);
+
 
 int kbisBufferEmpty();
 unsigned char kbreadBuf(void);
@@ -31,6 +34,7 @@ enum SPECIALCHARS {
  DOWN_ARROW        = 0x50,
  RIGHT_ARROW       = 0x4D,
  C                 = 0X2E,
+ D                 = 0x20
 };
 
 #endif

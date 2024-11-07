@@ -65,9 +65,10 @@ int sysPostSem(char* name);
 int sysWaitSem(char* name);
 int sysCloseSem(char* name);
 
-int sysCreatePipe(char* name, int* fds);
+int sysCreatePipe(int* fds);
 int sysSetReadFileDescriptor(uint8_t pid, int fd);
 int sysSetWriteFileDescriptor(uint8_t pid, int fd);
+int sysClosePipe(char* name);
 
 int sysGetReadFileDescriptor(uint8_t pid);
 int sysGetWriteFileDescriptor(uint8_t pid);

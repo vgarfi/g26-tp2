@@ -2,7 +2,7 @@
 #include <videoDriver.h>
 #include <keyboard.h>
 #include <lib.h>
-
+#include <defs.h>
 
 #define MAXSIZE 128
 
@@ -94,14 +94,17 @@ void updateBuffer() {
     uint8_t scancode = getKey();
     uint8_t arrowValue = isArrow(scancode);
 
-    if(scancode==L_ALT){
+    if(scancode==L_ALT) {
         saveRegs();
     }
-    else if(scancode==CONTROL){
+    else if(scancode==CONTROL) {
         ctrlPressed=1;
     }
-    else if(ctrlPressed == 1 && scancode == C){
+    else if(ctrlPressed == 1 && scancode == C) {
         stopRunning();
+    }
+    else if (ctrlPressed == 1 && scancode == D) {
+        sendEndOfFile();
     }
     else if(scancode==CONTROL_RELEASED){
         ctrlPressed=0;
@@ -117,6 +120,12 @@ void updateBuffer() {
     }
 }
 
+// TODO ver esto
+void kbInsertNewLine(void) {
+    buffer[bufferPos++] = '\n';
+    post_sem(KEYBOARD_SEM);
+}
+
 int kbctrlPressed(){
     return ctrlPressed;
 }
@@ -127,6 +136,13 @@ int kbisBufferEmpty(){
 
 void kbcleanBuffer(){
     bufferPos = 0;
+}
+
+void kbEraseBufferContent(){
+    for (int i = 0; i < MAXSIZE; i++) {
+        buffer[i] = 0;
+    }
+    kbcleanBuffer();
 }
 
 unsigned char kbreadBuf () {

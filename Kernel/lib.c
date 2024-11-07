@@ -3,6 +3,8 @@
 #include <lib.h>
 #include <process/process.h>
 #include <kernelManagement.h>
+#include <keyboard.h>
+#include <pipe/pipe.h>
 
 void saveRegsInBuffer(void);
 uint64_t* getRegs(void);
@@ -113,7 +115,20 @@ void stopRunning(void) {
 		if (current == NULL) continue;
 		if(current->scope == FOREGROUND && count_occurrences(current->semaphore->waiting_processes, shell_pid) > 0){
 			forced_kill_process(current->pid);
+        	vdPrint("\n", 0xFF000000);
 			return;
 		}
 	}
+}
+
+void sendEndOfFile(void) {
+	TPCB* current = get_pcb_by_pid(get_current_pid());
+	if (current == NULL) {
+		return;
+	}
+	if (current->fd_w == STDOUT) {
+		kbInsertNewLine();
+    	return;
+	}
+	finish_pipe(current->fd_w/2);
 }

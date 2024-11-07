@@ -197,15 +197,16 @@ void basic_sleep(){
     for (int i = 0; i < 20000000; i++);
 }
 
-
 int64_t loop_process(int argc, char** argv) {
-    while(1) {
+    int printed;
+    while(printed != -1) {
         basic_sleep();
-        print("\n");
+        printed = print("\n");
         print("Hello (from ");
         printColor("LOOP", 0x0000D4C1);
         printf(") with PID: %d ", sysGetCurrentPid(),0,0);
     }
+    return 0;
 }
 
 static char * loop_args[] = {LOOP, 0};
@@ -237,8 +238,8 @@ void pipe_processes(char* input) {
     strsplit(input, '|', p1, p2);
     strtrim(p1);
     strtrim(p2);
-    int(*process_one)() = get_interactive_mode(p1);
-    int(*process_two)() = get_interactive_mode(p2);
+    int(*process_one)(int) = get_interactive_mode(p1);
+    int(*process_two)(int) = get_interactive_mode(p2);
 
     if (process_one == 0 || process_two == 0) {
         // TODO claramente mejorar los mensajes de error
@@ -256,12 +257,9 @@ void pipe_processes(char* input) {
     }
 
     int pipe_fds[2];
-    char pipe_name[32];
-    strconcat(pipe_name, p1, "-");
-    strconcat(pipe_name, pipe_name, p2);
     
     
-    if (sysCreatePipe(pipe_name, pipe_fds) == -1) {
+    if (sysCreatePipe(pipe_fds) == -1) {
         printf("\nError creando pipes entre procesos",0,0,0);
         return;
     }

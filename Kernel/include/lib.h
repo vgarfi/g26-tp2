@@ -9,6 +9,7 @@ void * memcpy(void * destination, const void * source, uint64_t length);
 void saveRegs(void);
 int regPrinting(void);
 
-void stopRunning();
+void stopRunning(void);
+void sendEndOfFile(void);
 
 #endif

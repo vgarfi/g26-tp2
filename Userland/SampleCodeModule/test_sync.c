@@ -85,7 +85,6 @@ uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
   printColor("\n$", 0x0000FF00);
   print("> ");
   sysShowCursor();
-
   return 0;
 }
 
@@ -95,13 +94,17 @@ static char * sync_args_memory_not_sem[] = {TEST_SYNC, "5", "0", 0};
 uint64_t initialize_sync_testing(uint64_t argc, char *argv[]) {
   printf("\nWould you like to use semaphores for testing? [Y/N]: ",0,0,0);
     char option[5];
-    scanf(option, 5);
-    while (strcasecmp(option, "y") != 0 && strcasecmp(option, "n") != 0) {
+    int read = scanf(option, 5);
+    while (read != -1 && strcasecmp(option, "y") != 0 && strcasecmp(option, "n") != 0) {
         printColor("ERROR: ",0x00FF0000);
         printf(option,0,0,0);
         printf(" is not a valid option",0,0,0);
         printf("\nWould you like to use semaphores for testing? [Y/N]: ",0,0,0);
-        scanf(option, 5);
+        read = scanf(option, 5);
+    }
+
+    if (read == -1) {
+      return 0;
     }
     
     printf("\nYou decided ",0,0,0);

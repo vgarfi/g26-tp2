@@ -8,8 +8,10 @@
 #define MINLEN 2
 #define MAX_INPUTS_STORE    10
 
+#define EOF     -1
+
 /**
- * readSizeFlag is used as a way of identifying whether
+ * readSizeFlag is used as a waiy of identifying whether
  * getChar returned with no value read because of timeout
  * or not
 */
@@ -115,6 +117,11 @@ int scanf(char * buffer, int size){
     while(read != '\n'){
         ctrlFlag = sysCtrlPressed();
         read = getchar();
+        
+        if (readSizeFlag == EOF) {
+            return EOF;
+        }
+
         if(!readSizeFlag)
             continue;
         
