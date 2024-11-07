@@ -209,14 +209,6 @@ void wait_process_by_pid(uint8_t pid){
     pids[pid] = AVAILABLE_PID;
 }
 
-void put_children_mpid_init(uint8_t m_pid) {
-    for(int i = 0; i < MAX_PROCESSES; i++) {
-        if (pcb_array[i] != NULL && pcb_array[i]->m_pid == m_pid) {
-            pcb_array[i]->m_pid = 0;    // 0 es el pid de la nueva madre
-        }
-    }
-}
-
 int set_read_filedescriptor(uint8_t pid, int fd) {
     TPCB* process_pcb  = get_pcb_by_pid(pid);
     if (process_pcb == NULL) {
@@ -266,24 +258,32 @@ int kill_process(uint8_t pid) {
     return EXIT_SUCCESS;
 }
 
-// TODO preguntar si esta función debería aniquilar también a los hijos. Se puede hacer poniendolos zombies tambien
 int forced_kill_process(uint8_t pid) {
     TPCB* process_pcb  = get_pcb_by_pid(pid);
     if (process_pcb == NULL) {
         return -1;
     }
     remove_pcb_from_queue(process_pcb);
+    forced_kill_children(pid);
     post_sem(process_pcb->semaphore->name);
     TState process_state = process_pcb->state;
     process_pcb->state = KILLED;
     put_children_mpid_init(pid);
-
     free_process(process_pcb);
     pids[pid] = AVAILABLE_PID;
+
     if (process_state == RUNNING) {
         requestSchedule();
     }
     return EXIT_SUCCESS;
+}
+
+void forced_kill_children(uint8_t m_pid) {
+    for (int i = 0; i < MAX_PROCESSES; i++) {
+        if (pcb_array[i] != NULL && pcb_array[i]->m_pid == m_pid) {
+            forced_kill_process(pcb_array[i]->pid);
+        }
+    }
 }
 
 void free_process(TPCB* pcb){
