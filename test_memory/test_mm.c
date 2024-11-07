@@ -30,19 +30,23 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
   }
   
   size_t total_memory = 1024 * 1024; // 1 MB
-  size_t block_size = 64; // Bloques de 64 bytes
+  size_t block_size = 1024; // Bloques de 64 bytes
 
   void* memory = malloc(total_memory);
   if(memory == NULL){
+    printf("Error: no se pudo asignar memoria para el Memory Manager.\n");
     return 1;
   }
 
   MemoryManagerADT memory_manager = initialize_mm(memory, total_memory, block_size);
   if(memory_manager == NULL){
+    printf("Error: no se pudo inicializar el Memory Manager.\n");
     return -1;
   }
+  printf("Memory Manager inicializado con éxito.\n");
 
   while (1) {
+    printf("\nInicio de un nuevo ciclo de asignación de memoria.\n");
     rq = 0;
     total = 0;
 
@@ -52,9 +56,13 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
 
       if (mm_rqs[rq].address) {
         total += mm_rqs[rq].size;
+        printf("Bloque %d: Asignado %u bytes en dirección %p\n", rq, mm_rqs[rq].size, mm_rqs[rq].address);
         rq++;
+      } else {
+        //printf("Bloque %d: No se pudo asignar %u bytes\n", rq, mm_rqs[rq].size);
       }
     }
+    printf("Total de memoria asignada en este ciclo: %u bytes\n", total);
 
     // Set
     uint32_t i;
@@ -63,6 +71,7 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
       if (mm_rqs[i].address)
       {
         memset(mm_rqs[i].address, i, mm_rqs[i].size);
+        printf("Bloque %d: Memoria inicializada con valor %d\n", i, i);
       }
     }
 
@@ -72,6 +81,8 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
         if (!memcheck(mm_rqs[i].address, i, mm_rqs[i].size)) {
           printf("test_mm ERROR\n");
           return -1;
+        } else {
+          printf("Bloque %d: Verificación de memoria exitosa en dirección %p\n", i, mm_rqs[i].address);
         }
       }
     }
@@ -80,8 +91,12 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
     for (uint32_t i = 0; i < rq; i++){
       if (mm_rqs[i].address){
         free_mm(memory_manager, mm_rqs[i].address);
+        printf("Bloque %d: Memoria liberada en dirección %p\n", i, mm_rqs[i].address);
       }
     }
+
+    printf("Ciclo de prueba completado, toda la memoria liberada.\n");
+
   }
   free(memory);
 }
