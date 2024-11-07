@@ -100,6 +100,7 @@ BuddyNode* get_free_node(BuddyNode* root, size_t required_size, size_t block_siz
     // Si el nodo es más grande que lo necesario, se necesita dividir
     if (current->free != NOT_FREE && block_size > required_size && height > current_height) {
         current->free = SPLIT; // Marcar nodo como dividido
+        printf("nodo en el indice %d marcado como split\n", *index);
 
         size_t new_block_size = block_size / 2;
 
@@ -125,7 +126,6 @@ BuddyNode* get_free_node(BuddyNode* root, size_t required_size, size_t block_siz
 
 int calculate_offset(int looked_index, int size, int current_index, int* current_offset){
     if(looked_index == current_index){
-        printf("encontre indice: %d\n", current_index);
         return 1;
     }
     if (size == 0)
@@ -151,6 +151,7 @@ void* malloc_mm(MemoryManagerADT mm, size_t size) {
 
     int index = 0;
     BuddyNode* node = get_free_node(mm->root, block_looked_size, mm->total_size, mm->height, &index, 0);
+    printf("indice: %d\n", index);
     if (node == NULL) {
         return NULL; // No hay bloques libres del tamaño adecuado
     }
@@ -161,62 +162,49 @@ void* malloc_mm(MemoryManagerADT mm, size_t size) {
 
     printf("offset calculado para bloque de %ld: %d\n", block_looked_size, offset);
 
+    /*for (int i = 0; i < mm->nodes_qty -100; i++) {
+        BuddyNode* node = &mm->root[i];
+        printf("indice: %d, free: %d\n", i, node->free);
+    }*/
+
     return (void*)((char*)mm->base + offset);
 }
 
-BuddyNode* find_parent(BuddyNode* root, BuddyNode* node) {
-    if (node == root) {
-        return NULL; // La raíz no tiene un padre
-    }
-
-    // Calcular el índice del nodo en el array
-    int node_index = node - root;
-    int parent_index = (node_index - 1) / 2;
-
-    // Retornar el nodo padre
-    return &root[parent_index];
-}
-
-BuddyNode* find_buddy_node(BuddyNode* root, BuddyNode* node) {
-    int node_index = node - root;
-    int buddy_index = node_index ^ 1; // XOR para encontrar el buddy
-    return &root[buddy_index];
-}
-
-void merge_brother_buddies(BuddyNode* node, BuddyNode* root) {
-    while (node->free == FREE) {
-        BuddyNode* buddy = find_buddy_node(root, node);
-
-        if (buddy->free != FREE) {
-            break;
+void merge_brother_buddies(int node_index, BuddyNode* root) {
+    while (node_index > 0) {
+        int buddy_index;
+        if(node_index % 2 == 0){
+            buddy_index = node_index - 1;
+        }else{
+            buddy_index = node_index + 1;
         }
 
-        // Marcar el nodo padre como libre
-        BuddyNode* parent = find_parent(root, node);
-        if (parent == NULL) {
+        // Verifica si el nodo actual y el hermano están libres
+        if (root[node_index].free == FREE && root[buddy_index].free == FREE) {
+            int parent_index = (node_index - 1) / 2;
+            root[parent_index].free = FREE;
+
+            node_index = parent_index;
+        } else {
             break;
         }
-
-        parent->free = FREE;
-        node = parent; // Ahora subimos al nodo padre
     }
 }
 
-int calculate_node_offset(int index, int current_index, int* node_index, BuddyNode* current, int current_size, int block_size){
+int calculate_node_offset(int index, int current_index, int* node_index, BuddyNode* root, int current_size, int block_size){
     if(index == current_index){ // encontre el indice entonces ahora tengo que recorrer todo a la izquierda posible
-        while(current->free != NOT_FREE){
+        while((&root[*node_index])->free == SPLIT){
             *node_index = (*node_index)*2 + 1;
-            current = &current[(*node_index)];
         }
         return 1;
     }
     int node_index_aux = *node_index;
     *node_index = (*node_index) * 2 + 1;
-    if(calculate_node_offset(index, current_index, node_index, &current[*node_index], current_size/2, block_size) == 1){
+    if(calculate_node_offset(index, current_index, node_index, root, current_size/2, block_size) == 1){
         return 1;
     }
     *node_index = node_index_aux * 2 + 2;
-    return calculate_node_offset(index, current_index + (current_size/2)/block_size, node_index, &current[*node_index], current_size/2, block_size);
+    return calculate_node_offset(index, current_index + (current_size/2)/block_size, node_index, root, current_size/2, block_size);
 }
 
 void free_mm(MemoryManagerADT mm, void* ptr) {
@@ -231,13 +219,13 @@ void free_mm(MemoryManagerADT mm, void* ptr) {
     int node_offset = 0;
     calculate_node_offset(index, 0, &node_offset, mm->root, mm->total_size, mm->block_size);
 
-    BuddyNode* node = &mm->root[node_offset];
+    BuddyNode* node = &(mm->root[node_offset]);
 
     // Liberar nodo
     node->free = FREE;
 
     // Intentar fusionar con nodos hermano
-    merge_brother_buddies(node, mm->root);
+    merge_brother_buddies(node_offset, mm->root);
 }
 
 /*void calculate_diagnostic(MemoryDiagnostic* diagnostic, BuddyNode* node, size_t current_size, size_t block_size) {
