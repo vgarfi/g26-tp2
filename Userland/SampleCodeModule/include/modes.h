@@ -33,5 +33,6 @@ int cat(TScope scope);
 int wc(TScope scope);
 int filter(TScope scope);
 
+int phylosophers(TScope scope);
 
 #endif

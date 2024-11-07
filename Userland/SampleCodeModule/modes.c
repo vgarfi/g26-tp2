@@ -14,13 +14,14 @@
 #include "include/test_sync.h"
 #include "include/loop.h"
 #include "include/ipc.h"
+#include "include/phylo.h"
 
 
 char* dateTimeAux;
 int zoomAux, regAux;
 
 char* interactive_modes[]  = {
-    "testp", "testprio", "testmem", "testsync", "loop", "cat", "wc", "filter"
+    "testp", "testprio", "testmem", "testsync", "loop", "cat", "wc", "filter", "phylo"
 };
 
 int (*mode_functions[])(int) = {
@@ -31,7 +32,8 @@ int (*mode_functions[])(int) = {
     loop,
     cat,
     wc, 
-    filter
+    filter,
+    phylosophers
 };
 
 void help (void) {
@@ -266,4 +268,9 @@ int wc(TScope scope) {
 
 int filter(TScope scope) {
     return sysCreateProcess(FILTER, 1, filter_args, filter_process, scope);
+}
+
+static char * phylos_args[] = {PHYLOS, 0};
+int phylosophers(TScope scope) {
+    return sysCreateProcess(PHYLOS, 1, phylos_args, phylos, scope);
 }

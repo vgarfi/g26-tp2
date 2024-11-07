@@ -1,3 +1,5 @@
+#include <phylo.h>
+
 #include <stdint.h>
 #include <stdio.h>
 #include "include/syscalls.h"
@@ -37,7 +39,7 @@ uint64_t filosofo(uint64_t argc, char *argv[]) {
         // Filósofo comiendo
         estado[id] = COMIENDO;
         printf("Filosofo %d ha comenzado a comer.\n", id, 0, 0);
-        sysSleep(2, 0); // Comer
+        sysSleep(1, 0); // Comer
 
         // Filósofo termina de comer
         printf("Filosofo %d ha terminado de comer.\n", id, 0, 0);

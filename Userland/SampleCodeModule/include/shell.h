@@ -30,11 +30,12 @@
 #define CAT_MODE            22
 #define WC_MODE             23
 #define FILTER_MODE         24
+#define PHYLOS              25
 
 
 static const char* modes[]  __attribute__((unused)) = {
     "shell", "idle", "help", "divbyzero", "invalidopcode", "zoomin", "zoomout", "time", "date", "eliminator", "clear", "registers", "easteregg",
-    "testp", "testprio", "ps", "testmem", "testsync", "blockp", "unblockp", "killp", "loop", "cat", "wc", "filter"
+    "testp", "testprio", "ps", "testmem", "testsync", "blockp", "unblockp", "killp", "loop", "cat", "wc", "filter", "phylo"
 };
 
 static char* helpText[]  __attribute__((unused)) = { "Command information is displayed below:\n\n",
@@ -61,6 +62,7 @@ static char* helpText[]  __attribute__((unused)) = { "Command information is dis
 "CAT                 ->      Prints standard input content\n",
 "WC                  ->      Counts lines quantity in standard input\n",
 "FILTER              ->      Prints its standard input, removing vocals\n",
+"PHYLO               ->      Executes phylosophers function as a process\n",
 
 "\n----------------------------------- TESTING -----------------------------------\n\n"
 "TESTP               ->      Tests functionalities required for process administration.\n",
