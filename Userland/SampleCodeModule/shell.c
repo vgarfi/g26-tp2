@@ -7,7 +7,7 @@
 
 int init(){
     printColor("Welcome to Shell! Type HELP for command information.\n\n", YELLOW);
-    char commandPrompt[32]={0};
+    char commandPrompt[32] = {0};
     char buffer[10];
     while(IDLE_MODE) {
         sysClearKbEntry();

@@ -24,7 +24,7 @@ static int (*syscallHandlers[])()={
     rightArrowValue, clearScreen, printSquare, printRect, setCursor, sound, msSleep, hideCursor,
     showCursor, printCursor, getCurrentSeconds, getCurrentMinutes, getCurrentHours, getCurrentDay,
     getCurrentMonth, getCurrentYear, isctrlPressed, cleanKbBuffer,
-    // Syscalls de Procesos
+    // Syscalls de SO
     getCurrentPid, exitProcess, createProcess, (int (*)())blockProcess, (int (*)())unblockProcess, (int (*)())killProcess, (int (*)())nice, ps,
     memoryMalloc, memoryFree, memoryStatus,
     yield, createSem, getSem, postSem, waitSem, closeSem,

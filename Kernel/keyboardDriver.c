@@ -94,22 +94,29 @@ void updateBuffer() {
     uint8_t scancode = getKey();
     uint8_t arrowValue = isArrow(scancode);
 
-    if(scancode==L_ALT) {
+    if(scancode == L_ALT) {
         saveRegs();
     }
     else if(scancode==CONTROL) {
         ctrlPressed=1;
     }
-    else if(ctrlPressed == 1 && scancode == C) {
-        stopRunning();
-    }
-    else if (ctrlPressed == 1 && scancode == D) {
-        sendEndOfFile();
-    }
+    
     else if(scancode==CONTROL_RELEASED){
         ctrlPressed=0;
     }
-    else if(arrowValue || (!shiftHandler(scancode) && scancode < MAX_SCANCODE)) { // We add the characters, with their corresponding modification for a shift
+
+    else if (ctrlPressed) {    
+        if(scancode == C) {
+            stopRunning();
+            ctrlPressed = 0;
+        }
+        else if (scancode == D) {
+            sendEndOfFile();
+            ctrlPressed = 0;
+        }
+    }
+
+    if(arrowValue || (!shiftHandler(scancode) && scancode < MAX_SCANCODE)) { // We add the characters, with their corresponding modification for a shift
         dataStatus = 1;
         char c = (arrowValue != 0)? arrowValue : scancodesChars[shift][scancode];
         buffer[bufferPos++] = c;

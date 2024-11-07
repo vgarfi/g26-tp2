@@ -113,9 +113,9 @@ void stopRunning(void) {
 	for(int i = 0; i < 20; i++) {
 		TPCB * current = get_pcb_by_pid(i);
 		if (current == NULL) continue;
-		if(current->scope == FOREGROUND && count_occurrences(current->semaphore->waiting_processes, shell_pid) > 0){
+		if(current->scope == FOREGROUND && count_occurrences(current->semaphore->waiting_processes, shell_pid) > 0) {
 			forced_kill_process(current->pid);
-        	vdPrint("\n", 0xFF000000);
+        	vdPrint("\n", 0x00FF0000);
 			return;
 		}
 	}
