@@ -39,6 +39,7 @@ typedef struct TPCB {
     int fd_r;
     int fd_w;
     TScope scope;
+    int argc;
     char** argv;
 } TPCB;
 
