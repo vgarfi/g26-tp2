@@ -14,6 +14,8 @@ extern int shell_pid;
 extern TQueueADT pcb_readies_queue;
 TPCB* pcb_array[MAX_PROCESSES];
 
+int max_pid;
+
 void free_process(TPCB* pcb);
 uint32_t get_state_color(TState state);
 
@@ -27,12 +29,14 @@ int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, in
     if (pid == -1) {
         return -1;
     }
+    
+    if (pid > max_pid) {
+        max_pid = pid;
+    }
 
     void* stack_base = ptr + STACK_SIZE;
 
-
-    add_pcb(name, argc, argv, ptr, stack_base, (uint8_t) pid, priority, code, scope);
-    
+    add_pcb(name, argc, argv, ptr, stack_base, (uint8_t) pid, priority, code, scope);    
     pids[pid] = NOT_AVAILABLE_PID;
     return pid;
 }
@@ -59,8 +63,6 @@ int block_process(uint8_t pid) {
     remove_pcb_from_queue(pcb_to_block);
     TState state = pcb_to_block->state; 
     pcb_to_block->state = BLOCKED;
-    // vdPrint("\nBLOCKING PROCESS ",0x00FFFFFF);
-    // vdPrintChar(pid+'0');
     if (state == RUNNING) {
         requestSchedule();
     }
@@ -316,19 +318,18 @@ void destroy_anonymous_pipes(int fd_r){
 
 void force_kill_piped_processes(int fd) {
     char is_write_fd = (fd % 2) != 0;
-    for (int i = shell_pid+1; i < MAX_PROCESSES; i++) {
+    for (int i = shell_pid+1; i <= max_pid; i++) {
         if (pcb_array[i] != NULL) {
             if ((is_write_fd && pcb_array[i]->fd_r == fd-1) || (!is_write_fd && pcb_array[i]->fd_w == fd+1)) {
                 forced_kill_process(pcb_array[i]->pid);
             }
         }
     }
-    
 }
 
 
 void forced_kill_children(uint8_t m_pid) {
-    for (int i = 0; i < MAX_PROCESSES; i++) {
+    for (int i = 0; i <= max_pid; i++) {
         if (pcb_array[i] != NULL && pcb_array[i]->m_pid == m_pid) {
             forced_kill_process(pcb_array[i]->pid);
         }
@@ -418,7 +419,7 @@ int processes_information(void) {
     char buffer[10];
     char* states_labels[] = {"BLOCKED","READY","RUNNING","KILLED","ZOMBIE"};
     char* scope_labels[] = {"FOREGROUND","BACKGROUND"};
-    for(int i = 0; i < MAX_PROCESSES; i++) {
+    for(int i = 0; i <= max_pid; i++) {
         if (pcb_array[i] != NULL && pids[i] == NOT_AVAILABLE_PID) {
             vdPrint("\n(", 0x00FFFFFF);
             vdPrint(pcb_array[i]->name, 0x0000D4C1);
@@ -463,7 +464,7 @@ int64_t idle_process(int argc, char** argv) {
 int64_t init_process(int argc, char** argv) {
     uint64_t init_pid = get_current_pid();
     while(1) {
-        for(int i = init_pid+1; i < MAX_PROCESSES; i++) {
+        for(int i = init_pid+1; i <= max_pid; i++) {
             if (pcb_array[i] != NULL && pcb_array[i]->m_pid == init_pid && pcb_array[i]->state == ZOMBIE) {
                 pcb_array[i]->state = KILLED;
                 free_process(pcb_array[i]);

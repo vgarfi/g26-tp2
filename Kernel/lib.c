@@ -8,10 +8,13 @@
 
 void saveRegsInBuffer(void);
 uint64_t* getRegs(void);
+
+
 static int backupDone=0;
 static uint64_t * registers;
 
 extern int shell_pid;
+extern int max_pid;
 
 void * memset(void * destination, int32_t c, uint64_t length)
 {
@@ -108,9 +111,8 @@ int regPrinting(void){
 	return 0;
 }
 
-// ! MAX PROCESS
 void stopRunning(void) {
-	for(int i = shell_pid+1; i < 20; i++) {
+	for(int i = shell_pid+1; i <= max_pid; i++) {
 		TPCB * current = get_pcb_by_pid(i);
 		if (current == NULL) continue;
 		if(current->scope == FOREGROUND && count_occurrences(current->semaphore->waiting_processes, shell_pid) > 0) {

@@ -1,9 +1,11 @@
 #include <kernelManagement.h>
+#include <process/process.h>
 #include <scheduler/scheduler.h>
 #include <videoDriver.h>
 #include <interrupts.h>
 
 extern TPCB* pcb_array[MAX_PROCESSES];
+extern int max_pid;
 
 TQueueADT pcb_readies_queue;
 TPCB* running_pcb;
@@ -50,7 +52,7 @@ TPCB* get_running_pcb(void) {
 } 
 
 TPCB* get_pcb_by_pid(uint8_t pid) {
-    for(int i = 0; i < MAX_PROCESSES; i++) {
+    for(int i = 0; i <= max_pid; i++) {
         if (pcb_array[i] != NULL && pcb_array[i]->pid == pid) {
             return pcb_array[i];
         }
@@ -59,7 +61,7 @@ TPCB* get_pcb_by_pid(uint8_t pid) {
 }
 
 void put_children_mpid_init(uint8_t m_pid) {
-    for(int i = 0; i < MAX_PROCESSES; i++) {
+    for(int i = 0; i <= max_pid; i++) {
         if (pcb_array[i] != NULL && pcb_array[i]->m_pid == m_pid) {
             pcb_array[i]->m_pid = 0;    // 0 es el pid de la nueva madre
         }
@@ -67,7 +69,7 @@ void put_children_mpid_init(uint8_t m_pid) {
 }
 
 void put_children_zombie(uint8_t m_pid) {
-    for(int i = 0; i < MAX_PROCESSES; i++) {
+    for(int i = 0; i <= max_pid; i++) {
         if (pcb_array[i] != NULL && pcb_array[i]->m_pid == m_pid) {
             pcb_array[i]->state = ZOMBIE;
         }
