@@ -72,6 +72,9 @@ int create_pipe(int* fds, char* name){
     return pipe_index;
 }
 char is_anonymous_pipe(int pipe_index) {
+    if (pipe_index == 0) {
+        return 0;
+    } 
     if (pipes[pipe_index] == NULL || available_pipes[pipe_index] == PIPE_AVAILABLE) {
         return 1;
     }

@@ -110,17 +110,17 @@ int regPrinting(void){
 
 // ! MAX PROCESS
 void stopRunning(void) {
-	for(int i = 0; i < 20; i++) {
+	for(int i = shell_pid+1; i < 20; i++) {
 		TPCB * current = get_pcb_by_pid(i);
 		if (current == NULL) continue;
 		if(current->scope == FOREGROUND && count_occurrences(current->semaphore->waiting_processes, shell_pid) > 0) {
-			forced_kill_process(current->pid);
 			if (is_anonymous_pipe(current->fd_r/2)) {
 				force_kill_piped_processes(current->fd_r);
 			}
 			if (is_anonymous_pipe(current->fd_w/2)) {
 				force_kill_piped_processes(current->fd_w);
 			}
+			forced_kill_process(current->pid);
 			return;
 		}
 	}
@@ -132,8 +132,8 @@ void sendEndOfFile(void) {
 		return;
 	}
 	if (current->fd_w == STDOUT) {
-		// kbEraseBufferContent();
-		// kbInsertNewLine();
+		kbEraseBufferContent();
+		kbInsertNewLine();
     	return;
 	}
 	finish_pipe(current->fd_w/2);
