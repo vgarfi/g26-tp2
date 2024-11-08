@@ -39,6 +39,7 @@ typedef struct TPCB {
     int fd_r;
     int fd_w;
     TScope scope;
+    char** argv;
 } TPCB;
 
 extern TPCB* pcb_array[MAX_PROCESSES];
