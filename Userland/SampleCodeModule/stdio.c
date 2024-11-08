@@ -148,6 +148,15 @@ int scanf(char * buffer, int size){
                     sysPrintCursor();
                 }
             }
+            else if (read == 'c') {
+                putchar('\b');
+                print("^C");
+            }
+
+            else if (read == 'd') {
+                putchar('\b');
+                print("EOF");
+            }
         }
         else{
             if(read=='\n'){
