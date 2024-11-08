@@ -41,8 +41,8 @@ unsigned char putchar(unsigned char c){
     if (fd == -1) {
         return 0;
     }
-    sysWrite(fd, &c, 1, hexcol);
-    return c;
+    int written = sysWrite(fd, &c, 1, hexcol);
+    return written == EOF? EOF : c;
 }
 
 int printColor(char* str, uint64_t hexColor){

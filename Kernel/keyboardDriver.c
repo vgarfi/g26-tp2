@@ -112,6 +112,7 @@ void updateBuffer() {
         }
         else if (scancode == D) {
             sendEndOfFile();
+            ctrlPressed = 0;
         }
     }
 

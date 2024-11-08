@@ -10,7 +10,7 @@
 extern MemoryManagerADT memory_manager;
 
 uint8_t pids[MAX_PROCESSES] = {AVAILABLE_PID};
-
+extern int shell_pid;
 extern TQueueADT pcb_readies_queue;
 TPCB* pcb_array[MAX_PROCESSES];
 
@@ -286,6 +286,19 @@ void destroy_anonymous_pipes(int fd_r){
     }
     close_pipe(fd_r/2);
 }
+
+void force_kill_piped_processes(int fd) {
+    char is_write_fd = (fd % 2) != 0;
+    for (int i = shell_pid+1; i < MAX_PROCESSES; i++) {
+        if (pcb_array[i] != NULL) {
+            if ((is_write_fd && pcb_array[i]->fd_r == fd-1) || (!is_write_fd && pcb_array[i]->fd_w == fd+1)) {
+                forced_kill_process(pcb_array[i]->pid);
+            }
+        }
+    }
+    
+}
+
 
 void forced_kill_children(uint8_t m_pid) {
     for (int i = 0; i < MAX_PROCESSES; i++) {

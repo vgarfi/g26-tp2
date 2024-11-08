@@ -115,7 +115,12 @@ void stopRunning(void) {
 		if (current == NULL) continue;
 		if(current->scope == FOREGROUND && count_occurrences(current->semaphore->waiting_processes, shell_pid) > 0) {
 			forced_kill_process(current->pid);
-        	vdNewLine();
+			if (is_anonymous_pipe(current->fd_r/2)) {
+				force_kill_piped_processes(current->fd_r);
+			}
+			if (is_anonymous_pipe(current->fd_w/2)) {
+				force_kill_piped_processes(current->fd_w);
+			}
 			return;
 		}
 	}
@@ -127,8 +132,8 @@ void sendEndOfFile(void) {
 		return;
 	}
 	if (current->fd_w == STDOUT) {
-		kbEraseBufferContent();
-		kbInsertNewLine();
+		// kbEraseBufferContent();
+		// kbInsertNewLine();
     	return;
 	}
 	finish_pipe(current->fd_w/2);

@@ -17,10 +17,17 @@ int seconds_elapsed() {
 	return ticks / 18;
 }
 
+// ! Arreglar y ver por que on funciona cuando hay multiples procesos
 void sleep(int msToSleep){
 	long start = ticks;
+    // for (int i = 0; i < msToSleep*10000; i++) {
+    //     for (int i = 0; i < msToSleep*80; i++)
+    //     {
+    //         /* code */
+    //     }
+    // }
 	while((ticks-start)!=msToSleep){
-		_hlt();
+        _hlt();
 	}
 }
 

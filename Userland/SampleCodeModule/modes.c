@@ -215,7 +215,9 @@ int (*get_interactive_mode(const char* mode))(int) {
     }
     return 0;
 }
+void niky(){
 
+}
 void pipe_processes(char* input) {
     char p1[15], p2[15];
     strsplit(input, '|', p1, p2);
@@ -240,16 +242,16 @@ void pipe_processes(char* input) {
     }
 
     int pipe_fds[2];
-    char* pipe_name; // NULL
-    if (sysCreatePipe(pipe_fds,  pipe_name) == -1) {
+    if (sysCreatePipe(pipe_fds,  ((void *)0)) == -1) {
         printf("\nError creando pipes entre procesos",0,0,0);
         return;
     }
+    niky();
     int p1Pid = process_one(FOREGROUND);
     int p2Pid = process_two(FOREGROUND);
     sysSetWriteFileDescriptor(p1Pid, pipe_fds[1]);
     sysSetReadFileDescriptor(p2Pid, pipe_fds[0]);
-    sysWaitPid(p1Pid);
+    sysWaitPid(p2Pid);
 }
 
 void create_background_process(char* input) {
