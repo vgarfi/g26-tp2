@@ -120,8 +120,32 @@ void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* s
     new_pcb->stack_limit = (uint64_t*) stack_limit;
 
     new_pcb->rsp = (uint64_t *)(stack_base - sizeof(TStackFrame) + 1);
+
+    char** argv_copy = (char **) malloc_mm(memory_manager, argc * sizeof(char*));
+    if (argv_copy == NULL) {
+        free_mm(memory_manager, new_pcb->name);
+        free_mm(memory_manager, new_pcb);
+        return;
+    }
     
-    create_initial_stack((TStackFrame*) new_pcb->rsp, stack_base, argc, (uint64_t)argv, code);
+    for (int i = 0; i < argc; i++){
+        argv_copy[i] = (char *) malloc_mm(memory_manager, strlen(argv[i]) + 1);
+        
+        if (argv_copy[i] == NULL) {
+            for (int j = 0; j <= i; j++)
+                free_mm(memory_manager, argv_copy[j]);
+
+            free_mm(memory_manager, new_pcb->name);
+            free_mm(memory_manager, new_pcb);
+            return;
+        }
+
+        strcpy(argv_copy[i], argv[i]);
+    }
+
+    new_pcb->argv = argv_copy;
+    
+    create_initial_stack((TStackFrame*) new_pcb->rsp, stack_base, argc, (uint64_t)argv_copy, code);
 
     new_pcb->state = READY;
     new_pcb->priority = priority;
@@ -316,6 +340,15 @@ void free_process(TPCB* pcb){
 
     if(pcb->name != NULL){
         free_mm(memory_manager, pcb->name);
+    }
+
+    if (pcb->argv != NULL) {
+        for (int i = 0; pcb->argv[i] != 0; i++) {
+            if (pcb->argv[i] != NULL) {
+                free_mm(memory_manager, pcb->argv[i]);
+            }
+        }
+        free_mm(memory_manager, pcb->argv);
     }
 
     free_mm(memory_manager, pcb);
