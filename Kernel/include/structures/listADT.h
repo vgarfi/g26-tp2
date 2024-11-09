@@ -15,10 +15,10 @@ typedef struct TListCDT* TListADT;
 /**
  * @brief Creates a new list.
  *
- * @param cmpFunc A comparison function to compare elements in the list.
+ * @param cmp_func A comparison function to compare elements in the list.
  * @return A new initialized TListADT.
  */
-TListADT create_list(int (*cmpFunc)(const void*, const void*));
+TListADT create_list(int (*cmp_func)(const void*, const void*));
 
 /**
  * @brief Inserts an element into the list.

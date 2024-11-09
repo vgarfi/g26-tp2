@@ -44,7 +44,7 @@ TSemaphore* create_sem(char* name, uint64_t initial_value) {
         return NULL;
     }
 
-    new_semaphore->waiting_processes = createQueue();
+    new_semaphore->waiting_processes = create_queue();
     new_semaphore->lock = 1;
 
 	new_semaphore->name = (char *) malloc_mm(memory_manager, strlen(name) + 1);

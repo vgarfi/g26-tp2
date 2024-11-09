@@ -13,7 +13,7 @@
 
 void load_idt(void);
 
-uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax);
+uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax);
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -31,8 +31,7 @@ void clearBSS(void * bssAddress, uint64_t bssSize) {
 	memset(bssAddress, 0, bssSize);
 }
 
-void * getStackBase()
-{
+void * get_stack_base() {
 	return (void*)(
 		(uint64_t)&endOfKernel
 		+ PageSize * 8				//The size of the stack itself, 32KiB
@@ -40,28 +39,23 @@ void * getStackBase()
 	);
 }
 
-void * initializeKernelBinary()
-{
+void * initializeKernelBinary() {
 	void * moduleAddresses[] = {
 		sampleCodeModuleAddress,
 		sampleDataModuleAddress
 	};
 	load_modules(&endOfKernelBinary, moduleAddresses);
 	clearBSS(&bss, &endOfKernel - &bss);
-	return getStackBase();
+	return get_stack_base();
 }
 
 int main() {
 	load_idt();
-	// initialize_timer();
 	intialize_video_driver();
 	init_font_manager();
 	os_logo_boot();
-	vd_clear_screen();
-	_sti();
 	initialize_management();
 	request_schedule();
-
 	vd_print("\nKERNEL EXIT", 0x00FFFFFF);
 	return 0;
 }

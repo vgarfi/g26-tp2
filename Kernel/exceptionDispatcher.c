@@ -14,7 +14,7 @@
 static void zero_division();
 static void invalid_opcode();
 
-void exceptionDispatcher(int exception) {
+void exception_dispatcher(int exception) {
 	save_regs();
 	vd_clear_screen();
 	sys_hide_cursor();

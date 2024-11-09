@@ -4,7 +4,6 @@
 #include <synchro/synchro.h>
 #include <pipe/pipe.h>
 #include <interrupts.h>
-// ! Se llama keyboard, pero es de keyboarddriver
 #include <keyboardDriver.h>
 #include <string.h>
 
@@ -23,8 +22,6 @@ void * memoryBaseAddress = (void*)0x600000;
 int init_pid;
 int idle_pid;
 int shell_pid;
-
-
 
 void initialize_management(void){
 	memory_manager = initialize_mm(memoryBaseAddress, MEMORY_SIZE, MEMORY_BLOCK_SIZE);

@@ -20,7 +20,7 @@ extern MemoryManagerADT memory_manager;
 #define MEMORY_COLUMN_WIDTH 25
 #define BLOCKS_COLUMN_WIDTH 25
 
-static int (*syscallHandlers[])()={
+static int (*syscall_handlers[])()={
     // Syscalls de Arqui
     sys_read, sys_write, sys_print_regs, sys_inc_size, sys_dec_size, sys_get_zoom_level, sys_set_zoom_level, sys_up_arrow_value, sys_left_arrow_value, sys_down_arrow_value,
     sys_right_arrow_value, sys_clear_screen, sys_print_square, sys_print_rect, sys_set_cursor, sys_sound, sys_ms_sleep, sys_hide_cursor,
@@ -35,34 +35,35 @@ static int (*syscallHandlers[])()={
     sys_get_scope
 };
 
-uint64_t syscallDispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
-    // int handlerSize = sizeof(syscallHandlers)/sizeof(syscallHandlers[0]);
+uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
+    // int handlerSize = sizeof(syscall_handlers)/sizeof(syscall_handlers[0]);
     if(rax < 0 || rax > HANDLER_SIZE)
         return -1;
 
-    return syscallHandlers[rax](rdi,rsi,rdx,r10,r8);
+    return syscall_handlers[rax](rdi,rsi,rdx,r10,r8);
 }
 
 int sys_read(uint64_t fd, char * buf, uint64_t count) {
     if (fd == STDIN) {
-        uint64_t sizeRead = 0;
-        char lastRead = '\0';
-        while(sizeRead != count){
-                lastRead = kb_read_buf();
-                buf[sizeRead++] = lastRead;
+        uint64_t size_read = 0;
+        char last_read = '\0';
+        while(size_read != count){
+                last_read = kb_read_buf();
+                buf[size_read++] = last_read;
         }
-        return sizeRead == count? count : sizeRead;    // If we return sizeRead-1 it means we stopped at '\n'    
+        return size_read == count? count : size_read;    // If we return size_read-1 it means we stopped at '\n'    
     }
     return read_pipe(fd/2, buf, count);
 }
 
 int sys_write(uint64_t fd, char * buf, uint64_t count, uint64_t hex_color){
     int i;
-    char toPrint[2]={0,0};
+    char to_print[2] = {0,0};
+
     if (fd == STDOUT) {
-        for(i=0; i<count; i++) {
-            toPrint[0]=buf[i];
-            vd_print(toPrint, hex_color); 
+        for(i=0; i < count; i++) {
+            to_print[0] = buf[i];
+            vd_print(to_print, hex_color); 
         }
         return i;
     }
@@ -70,17 +71,17 @@ int sys_write(uint64_t fd, char * buf, uint64_t count, uint64_t hex_color){
 }
 
 int sys_inc_size(){
-    int zoomFail = size_up();
-    if(!zoomFail)
+    int zoom_fail = size_up();
+    if(!zoom_fail)
         vd_resize();
-    return zoomFail;
+    return zoom_fail;
 }
 
 int sys_dec_size(){
-    int zoomFail = size_down();
-    if(!zoomFail)
+    int zoom_fail = size_down();
+    if(!zoom_fail)
         vd_resize();
-    return zoomFail;
+    return zoom_fail;
 }
 
 int sys_get_zoom_level(){
@@ -114,12 +115,12 @@ int sys_clear_screen() {
 }
 
 int sys_print_rect(int x,int y,int base,int height,uint32_t hex_color) {
-    vd_print_rect(x,y,base,height,hex_color);
+    vd_print_rect(x, y, base, height, hex_color);
     return 0;
 }
 
 int sys_print_square (int x, int y,int side, uint32_t hex_color){
-    vd_print_square(x,y,side, hex_color);
+    vd_print_square(x, y ,side, hex_color);
     return 0;
 }
 
@@ -144,9 +145,9 @@ int sys_sound(uint64_t ms, uint64_t freq){
 int sys_ms_sleep(uint64_t secs, uint64_t ticks){
     if(secs < 0 || ticks < 0)
         return -1;
-    int secondsToTicks = secs*18, msToTicks=ticks;
-    int totalTicks = secondsToTicks + msToTicks;
-    sleep(totalTicks);
+    int seconds_to_ticks = secs*18, ms_to_ticks=ticks;
+    int total_ticks = seconds_to_ticks + ms_to_ticks;
+    sleep(total_ticks);
     return 0;
 }
 

@@ -14,47 +14,47 @@ typedef struct TNode {
 
 typedef struct TListCDT {
     TNode* head;
-    int (*cmpFunc)(const void*, const void*);
+    int (*cmp_func)(const void*, const void*);
 } TListCDT;
 
-TListADT create_list(int (*cmpFunc)(const void*, const void*)) {
-    TListADT newList = (TListADT) malloc_mm(memory_manager, sizeof(TListCDT));
-    if (newList == NULL) {
+TListADT create_list(int (*cmp_func)(const void*, const void*)) {
+    TListADT new_list = (TListADT) malloc_mm(memory_manager, sizeof(TListCDT));
+    if (new_list == NULL) {
         return NULL;
     }
-    newList->head = NULL;
-    newList->cmpFunc = cmpFunc;
-    return newList;
+    new_list->head = NULL;
+    new_list->cmp_func = cmp_func;
+    return new_list;
 }
 
 char insert_element(TListADT list, void* element) {
-    TNode* newNode = (TNode*) malloc_mm(memory_manager, sizeof(TNode));
-    if (newNode == NULL) {
+    TNode* new_node = (TNode*) malloc_mm(memory_manager, sizeof(TNode));
+    if (new_node == NULL) {
         return FALSE; 
     }
-    newNode->data = element;
-    newNode->next = NULL;
+    new_node->data = element;
+    new_node->next = NULL;
 
-    if (list->head != NULL && list->cmpFunc(element, list->head->data) == 0) {
-        free_mm(memory_manager, newNode);
+    if (list->head != NULL && list->cmp_func(element, list->head->data) == 0) {
+        free_mm(memory_manager, new_node);
         return FALSE;
     }
 
-    if (list->head == NULL || list->cmpFunc(element, list->head->data) <= 0) {
-        newNode->next = list->head;
-        list->head = newNode;
+    if (list->head == NULL || list->cmp_func(element, list->head->data) <= 0) {
+        new_node->next = list->head;
+        list->head = new_node;
         return TRUE;
     }
 
     TNode* prev = NULL;
     TNode* current = list->head;
-    while (current != NULL && list->cmpFunc(element, current->data) >= 0) {
+    while (current != NULL && list->cmp_func(element, current->data) >= 0) {
         prev = current;
         current = current->next;
     }
 
-    newNode->next = current;
-    prev->next = newNode;
+    new_node->next = current;
+    prev->next = new_node;
 
     return TRUE;
 }
@@ -67,7 +67,7 @@ char remove_element(TListADT list, void* element) {
     TNode* current = list->head;
     TNode* prev = NULL;
 
-    while (current != NULL && list->cmpFunc(element, current->data) != 0) {
+    while (current != NULL && list->cmp_func(element, current->data) != 0) {
         prev = current;
         current = current->next;
     }
@@ -92,11 +92,11 @@ void* get_element(TListADT list, void* element) {
     }
     TNode* current = list->head;
 
-    while (current != NULL && list->cmpFunc(element, current->data) > 0) {
+    while (current != NULL && list->cmp_func(element, current->data) > 0) {
         current = current->next;
     }
 
-    if (current != NULL && list->cmpFunc(element, current->data) == 0) {
+    if (current != NULL && list->cmp_func(element, current->data) == 0) {
         return current->data;
     }
     return NULL;
@@ -108,12 +108,12 @@ void destroy_list(TListADT list) {
     }
 
     TNode* current = list->head;
-    TNode* nextNode;
+    TNode* next_node;
 
     while (current != NULL) {
-        nextNode = current->next;
+        next_node = current->next;
         free_mm(memory_manager, current);
-        current = nextNode;
+        current = next_node;
     }
 
     free_mm(memory_manager, list);

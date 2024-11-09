@@ -14,10 +14,10 @@
 #define KEYBOARD_SEM        "a_kb"
 
 static unsigned char buffer[MAXSIZE] = {0};
-static int bufferPos = 0;
+static int buffer_pos = 0;
 static int shift = 0;
 static int dataStatus = 0;
-static int ctrlPressed=0;
+static int ctrl_pressed=0;
 
 void initialize_keyboard(void){
     create_sem(KEYBOARD_SEM, 0);
@@ -37,7 +37,7 @@ static unsigned char scancodesChars[SHIFT_VALUES][MAX_SCANCODE] = {
     '*', '\x10', ' ', '\x80', '\x81', '\x82', '\x83', '\x84', '\x85', '\x86', '\x87', '\x88', '\x89'}
 };
 
-int shiftHandler(uint8_t key){
+int shift_handler(uint8_t key){
     switch(key) {
         case L_SHIFT_PRESS:
         case R_SHIFT_PRESS:
@@ -92,61 +92,61 @@ uint8_t kb_right_arrow_value() {
 
 void kb_update_buffer() {
     uint8_t scancode = kb_get_key();
-    uint8_t arrowValue = isArrow(scancode);
+    uint8_t arrow_value = isArrow(scancode);
 
     if(scancode == L_ALT) {
         save_regs();
     }
     else if(scancode==CONTROL) {
-        ctrlPressed=1;
+        ctrl_pressed=1;
     }
     
     else if(scancode==CONTROL_RELEASED){
-        ctrlPressed=0;
+        ctrl_pressed=0;
     }
 
-    else if (ctrlPressed) {    
+    else if (ctrl_pressed) {    
         if(scancode == C) {
             stop_running();
-            ctrlPressed = 0;
+            ctrl_pressed = 0;
         }
         else if (scancode == D) {
             send_end_of_file();
-            ctrlPressed = 0;
+            ctrl_pressed = 0;
         }
     }
 
-    if(arrowValue || (!shiftHandler(scancode) && scancode < MAX_SCANCODE)) { // We add the characters, with their corresponding modification for a shift
+    if(arrow_value || (!shift_handler(scancode) && scancode < MAX_SCANCODE)) { // We add the characters, with their corresponding modification for a shift
         dataStatus = 1;
-        char c = (arrowValue != 0)? arrowValue : scancodesChars[shift][scancode];
-        buffer[bufferPos++] = c;
+        char c = (arrow_value != 0)? arrow_value : scancodesChars[shift][scancode];
+        buffer[buffer_pos++] = c;
         post_sem(KEYBOARD_SEM);
-        if (bufferPos >= MAXSIZE) {
-            bufferPos = 0;
+        if (buffer_pos >= MAXSIZE) {
+            buffer_pos = 0;
         }
     }
 }
 
 // TODO ver esto
 void kb_insert_new_line(void) {
-    buffer[bufferPos++] = '\n';
+    buffer[buffer_pos++] = '\n';
     post_sem(KEYBOARD_SEM);
 }
 
 int kb_ctrl_pressed(){
-    return ctrlPressed;
+    return ctrl_pressed;
 }
 
 int kb_is_buffer_empty(){
-    return bufferPos == 0;
+    return buffer_pos == 0;
 }
 
 void kb_clean_buffer(){
-    bufferPos = 0;
+    buffer_pos = 0;
 }
 
 void kb_end_of_file(){
-    buffer[bufferPos++] = EOF;
+    buffer[buffer_pos++] = EOF;
 }
 
 unsigned char kb_read_buf () {
@@ -156,9 +156,9 @@ unsigned char kb_read_buf () {
     }
     
     char ans = buffer[0];
-    for(int i=0; i<bufferPos-1; i++)
+    for(int i=0; i<buffer_pos-1; i++)
         buffer[i]=buffer[i+1];
 
-    bufferPos--;
+    buffer_pos--;
     return ans;
 }   

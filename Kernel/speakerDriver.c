@@ -1,7 +1,7 @@
 #include <time.h>
 #include <speaker.h>
 
- static void playSound(uint32_t nFrequence) {
+ static void play_sound(uint32_t nFrequence) {
  	uint32_t Div;
  	uint8_t tmp;
  
@@ -22,7 +22,7 @@
  }
  
  void beep(uint64_t ms, uint64_t freq) {
- 	 playSound(freq);
+ 	 play_sound(freq);
  	 sleep(ms);
  	 nosound();
  }

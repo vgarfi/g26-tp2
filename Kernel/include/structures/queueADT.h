@@ -20,7 +20,7 @@ typedef struct TQueueCDT* TQueueADT;
  *
  * @return A new initialized TQueueADT.
  */
-TQueueADT createQueue();
+TQueueADT create_queue();
 
 /**
  * @brief Enqueues a value into the queue.
@@ -71,13 +71,6 @@ int count_occurrences(TQueueADT queue, void* value);
  * @return 1 if the queue is empty, 0 otherwise.
  */
 int is_empty(TQueueADT queue);
-
-/**
- * @brief Dumps the contents of the queue.
- *
- * @param queue The queue.
- */
-void dump(TQueueADT queue);
 
 /**
  * @brief Destroys the queue and frees all associated memory.

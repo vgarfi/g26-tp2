@@ -199,6 +199,7 @@ void os_logo_boot() {
     vd_print_logo(logo, 186, 156);
 	os_sound_boot();
     _sti();
+	vd_clear_screen();
 }
 
 void os_sound_boot() {

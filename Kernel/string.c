@@ -15,7 +15,8 @@ int strlen(const char *str) {
 }
 
 char * strcpy(char *dest, const char *src){
-    int len=strlen(src), i;
+    int len = strlen(src), i;
+    
     for(i=0; i<len; i++){
         dest[i]=src[i];
     }

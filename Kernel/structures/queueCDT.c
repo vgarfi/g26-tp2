@@ -1,6 +1,5 @@
 #include "../include/structures/queueADT.h"
 #include <kernelManagement.h>
-#include <videoDriver.h>
 #include <scheduler/scheduler.h>
 
 
@@ -17,10 +16,9 @@ typedef struct TQueueCDT {
 } TQueueCDT;
 
 
-TQueueADT createQueue() {
+TQueueADT create_queue() {
     TQueueADT queue = (TQueueADT)malloc_mm(memory_manager, sizeof(TQueueCDT));
     if (queue == NULL) {
-        vd_print("\nERROR al create queue", 0x00FF0000);
         return NULL;
     }
     queue->first = queue->last = NULL;
@@ -31,17 +29,17 @@ void enqueue(TQueueADT queue, void* value) {
     if (queue == NULL) {
         return;
     }
-    TQueueNode* newNode = (TQueueNode*)malloc_mm(memory_manager, sizeof(TQueueNode));
-    newNode->value = value;
-    newNode->next = NULL;
+    TQueueNode* new_node = (TQueueNode*)malloc_mm(memory_manager, sizeof(TQueueNode));
+    new_node->value = value;
+    new_node->next = NULL;
 
     if (queue->last == NULL) {
-        queue->first = queue->last = newNode;
+        queue->first = queue->last = new_node;
         return;
     }
 
-    queue->last->next = newNode;
-    queue->last = newNode;
+    queue->last->next = new_node;
+    queue->last = new_node;
 }
 
 void* dequeue(TQueueADT queue) {
@@ -122,30 +120,14 @@ void destroy_queue(TQueueADT queue) {
     }
 
     TQueueNode* current = queue->first;
-    TQueueNode* nextNode;
+    TQueueNode* next_node;
 
     while (current != NULL) {
-        nextNode = current->next;
+        next_node = current->next;
         free_mm(memory_manager, current);
-        current = nextNode;
+        current = next_node;
     }
 
     free_mm(memory_manager, queue);
     return;
-}
-
-
-void dump(TQueueADT queue){
-    if (queue == NULL) {
-        return;
-    }
-    TQueueNode* current = queue->first;
-    while (current != NULL) {
-        uint8_t pid = (uint8_t)current->value;
-        char buffer[10];
-        itoa(pid, buffer, 10);
-        vd_print(buffer, 0x00FFFFFF);
-        vd_print(" - ", 0x00FFFFFF);
-        current = current->next;
-    }
 }

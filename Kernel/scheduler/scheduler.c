@@ -11,7 +11,7 @@ TQueueADT pcb_readies_queue;
 TPCB* running_pcb;
 
 void initialize_scheduling(void) {
-    pcb_readies_queue = createQueue();
+    pcb_readies_queue = create_queue();
 }
 
 int is_initialized(void){

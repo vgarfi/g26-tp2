@@ -18,22 +18,20 @@ GLOBAL _exception0Handler
 GLOBAL _exception6Handler
 GLOBAL _syscallHandler
 
-GLOBAL getRegs
-GLOBAL save_regsInBuffer
+GLOBAL get_regs
+GLOBAL save_regs_in_buffer
 EXTERN kb_get_key
-EXTERN irqDispatcher
-EXTERN exceptionDispatcher
-EXTERN syscallDispatcher
-EXTERN getStackBase
+EXTERN irq_dispatcher
+EXTERN exception_dispatcher
+EXTERN syscall_dispatcher
+EXTERN get_stack_base
 
 EXTERN schedule
-
-
 
 SECTION .text
 
 
-%macro save_regsInBuffer 0	;; Once you enter here, regs[0]=RIP, regs[1]=RFLAGS, regs[2]=RSP
+%macro save_regs_in_buffer 0	;; Once you enter here, regs[0]=RIP, regs[1]=RFLAGS, regs[2]=RSP
     mov [regs + 8*3], rax
     mov [regs + 8*4], rbp
     mov [regs + 8*5], rcx
@@ -99,7 +97,7 @@ SECTION .text
 	pushState
 
 	mov rdi, %1 ; pasaje de parametro
-	call irqDispatcher
+	call irq_dispatcher
 
 	; signal pic EOI (End of Interrupt)
 	mov al, 20h
@@ -127,9 +125,9 @@ SECTION .text
    
 %macro exceptionHandler 1
 	mov rdi, %1 ; pasaje de parametro
-	call exceptionDispatcher
+	call exception_dispatcher
 	
-	call getStackBase
+	call get_stack_base
 
 	mov [rsp+8*3], rax	;; Piso el RFLAGS
 
@@ -182,7 +180,7 @@ _irq00Handler:
 	
 	mov rsp, rax ; Cambio de proceso
 	mov rdi, 0 ; pasaje de parametro
-	call irqDispatcher
+	call irq_dispatcher
 	
 	mov al, 20h ; EOI para el PIC
 	out 20h, al
@@ -200,7 +198,7 @@ _irq01Handler:
 	pop rax
 	jne .continue
 		saveIntRegs
-		save_regsInBuffer
+		save_regs_in_buffer
 		
 .continue:
 	irqHandlerMaster 1
@@ -225,23 +223,23 @@ _irq05Handler:
 ;Zero Division Exception
 _exception0Handler:
 	saveIntRegs
-	save_regsInBuffer
+	save_regs_in_buffer
 	exceptionHandler 0
 
 ;Invalid OpCode Exception
 _exception6Handler:
 	saveIntRegs
-	save_regsInBuffer
+	save_regs_in_buffer
 	exceptionHandler 6
 
-getRegs:
+get_regs:
 	mov rax,regs
 	ret	
 
 
 ;Syscall Handling
 ; _syscallHandler receives parameters in the next order: rax rdi rsi rdx r10 r8 r9
-; syscallDispatcher receives parameters via regs this way: rdi rsi rdx rcx r8 r9
+; syscall_dispatcher receives parameters via regs this way: rdi rsi rdx rcx r8 r9
 ; rax is the last parameters -> r9 = rax
 ; r10 is not a parameter -> rcx = r10
 _syscallHandler:
@@ -251,7 +249,7 @@ _syscallHandler:
 	mov r9, rax
 	; --- ARQUI ---
 	pushStateNoRAX
-	call syscallDispatcher
+	call syscall_dispatcher
 	popStateNoRAX
 	iretq
 

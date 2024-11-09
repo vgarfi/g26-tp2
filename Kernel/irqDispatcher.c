@@ -15,8 +15,7 @@ static void (*irqHandlers[])(void)={
 
 static int handlersSize = sizeof(irqHandlers)/sizeof(irqHandlers[0]);
 
-
-void irqDispatcher(uint64_t irq) {
+void irq_dispatcher(uint64_t irq) {
 	if(irq >=0 && irq < handlersSize && irqHandlers[irq]!=NULL)
 		irqHandlers[irq]();
 	return;
