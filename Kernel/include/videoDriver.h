@@ -65,6 +65,7 @@ void vdPrintSquare(int x, int y,int side,uint32_t hexcolor);
 void vdSetCursorByPixel(int x, int y);
 void vdSetCursorColor(uint32_t color);
 void vdPrintCursor();
+void vd_print_padded(const char *str, uint32_t color, int width);
 
 
 #endif

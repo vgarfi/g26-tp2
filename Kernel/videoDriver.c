@@ -256,3 +256,11 @@ void vdPrintRect(int x,int y,int base, int height, uint32_t hexColor){
 void vdPrintSquare(int x, int y,int side,uint32_t hexColor){
 	vdPrintRect(x,y,side,side,hexColor);
 }
+
+void vd_print_padded(const char *str, uint32_t color, int width) {
+    vdPrint(str, color);
+    int padding = width - strlen(str);
+    for (int i = 0; i < padding; i++) {
+        vdPrint(" ", color);
+    }
+}

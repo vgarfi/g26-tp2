@@ -6,6 +6,9 @@
 #include <videoDriver.h>
 #include <string.h>
 #include <time.h>
+#include <fonts.h>
+
+#define PS_COLUMN_WIDTH 11
 
 extern MemoryManagerADT memory_manager;
 
@@ -18,6 +21,7 @@ int max_pid;
 
 void free_process(TPCB* pcb);
 uint32_t get_state_color(TState state);
+
 
 int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**), TScope scope) {
     char* ptr = malloc_mm(memory_manager, PROCESS_SIZE);
@@ -415,43 +419,63 @@ uint32_t get_scope_color(TScope scope) {
         return 0x00FFFFFF;
     }
 }
-int processes_information(void) {
-    char buffer[10];
+
+int processes_information() {
+    int zoom_level = getZoom();
+    setZoom(2);
+    char buffer[64];
     char* states_labels[] = {"BLOCKED","READY","RUNNING","KILLED","ZOMBIE"};
     char* scope_labels[] = {"FOREGROUND","BACKGROUND"};
-    for(int i = 0; i <= max_pid; i++) {
-        if (pcb_array[i] != NULL && pids[i] == NOT_AVAILABLE_PID) {
-            vdPrint("\n(", 0x00FFFFFF);
-            vdPrint(pcb_array[i]->name, 0x0000D4C1);
-            vdPrint("): \tPID: ", 0x00FFFFFF);
+    vdPrint("\n", 0x00FFFFFF);
+    vd_print_padded("PID", 0x00FFFFFF, PS_COLUMN_WIDTH);
+    vd_print_padded("Name", 0x00FFFFFF, PS_COLUMN_WIDTH);
+    vd_print_padded("Mother PID", 0x00FFFFFF, PS_COLUMN_WIDTH);
+    vd_print_padded("Priority", 0x00FFFFFF, PS_COLUMN_WIDTH);
+    vd_print_padded("SP", 0x00FFFFFF, PS_COLUMN_WIDTH);
+    vd_print_padded("BP", 0x00FFFFFF, PS_COLUMN_WIDTH);
+    vd_print_padded("State", 0x00FFFFFF, PS_COLUMN_WIDTH);
+    vd_print_padded("FDs", 0x00FFFFFF, PS_COLUMN_WIDTH);
+    vd_print_padded("Scope", 0x00FFFFFF, PS_COLUMN_WIDTH);
+    vdPrint("\n", 0x00FFFFFF);
+
+    for (int i = 0; i <= max_pid; i++) {
+        if (pcb_array[i] != NULL) {
             itoa(i, buffer, 10);
-            vdPrint(buffer, 0x00FFFFFF);
-            vdPrint(" - MOTHER PID: ", 0x00FFFFFF);
+            vd_print_padded(buffer, 0x00FFFFFF, PS_COLUMN_WIDTH);
+
+            vd_print_padded(pcb_array[i]->name, 0x0000D4C1, PS_COLUMN_WIDTH);
+
             itoa(pcb_array[i]->m_pid, buffer, 10);
-            vdPrint(buffer, 0x00FFFFFF);
-            vdPrint(" - PRIO: ", 0x00FFFFFF);
+            vd_print_padded(buffer, 0x00FFFFFF, PS_COLUMN_WIDTH);
+
             itoa(pcb_array[i]->priority, buffer, 10);
-            vdPrint(buffer, 0x00FFFFFF);
-            vdPrint(" - SP: 0x", 0x00FFFFFF);
+            vd_print_padded(buffer, 0x00FFFFFF, PS_COLUMN_WIDTH);
+
+            vdPrint("0x", 0x00FFFFFF);
             itoa64((uint64_t) pcb_array[i]->rsp, buffer, 16);
-            vdPrint(buffer, 0x00FFFFFF);
-            vdPrint(" - BP: 0x", 0x00FFFFFF);
+            vd_print_padded(buffer, 0x00FFFFFF, PS_COLUMN_WIDTH - 2);
+
+            vdPrint("0x", 0x00FFFFFF);
             itoa64((uint64_t) pcb_array[i]->stack_base, buffer, 16);
-            vdPrint(buffer, 0x00FFFFFF);
-            vdPrint(" - STATE: ", 0x00FFFFFF);
-            vdPrint(states_labels[pcb_array[i]->state], get_state_color(pcb_array[i]->state));
-            vdPrint(" - FDs: [", 0x00FFFFFF);
+            vd_print_padded(buffer, 0x00FFFFFF, PS_COLUMN_WIDTH - 2);
+
+            vd_print_padded(states_labels[pcb_array[i]->state], get_state_color(pcb_array[i]->state), PS_COLUMN_WIDTH);
+
             itoa(pcb_array[i]->fd_r, buffer, 10);
+            vdPrint("[", 0x00FFFFFF);
             vdPrint(buffer, 0x00FFFFFF);
             vdPrint(",", 0x00FFFFFF);
             itoa(pcb_array[i]->fd_w, buffer, 10);
             vdPrint(buffer, 0x00FFFFFF);
             vdPrint("]", 0x00FFFFFF);
-            vdPrint(" - Scope: ", 0x00FFFFFF);
-            vdPrint(scope_labels[pcb_array[i]->scope], get_scope_color(pcb_array[i]->scope));
+            vd_print_padded("", 0x00FFFFFF, PS_COLUMN_WIDTH - strlen(buffer) - 3);
+
+            vd_print_padded(scope_labels[pcb_array[i]->scope], get_scope_color(pcb_array[i]->scope), PS_COLUMN_WIDTH);
+
+            vdPrint("\n", 0x00FFFFFF);
         }
     }
-    vdPrint("\n",0x00FFFFFF);
+    setZoom(zoom_level);
     return EXIT_SUCCESS;
 }
 
