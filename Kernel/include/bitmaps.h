@@ -3,7 +3,7 @@
 
 #include "bytes.h"
 
-static const unsigned char fontBitMap_16x32[] = {
+static const unsigned char fontBitMap_16x32[] =  {
 //   0 $00 'char0'
 //	width 16, bbx 0, bby -6, bbw 16, bbh 32
 	________,________,

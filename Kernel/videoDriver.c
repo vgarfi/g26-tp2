@@ -170,6 +170,13 @@ void vdPrint(char *characters,uint32_t hexColor){
 				--index;
 			colorsInScreen[index] = BLACK;
 			charsInScreen[index] = ' ';
+		} else if (c == '\t') {
+			int spacesToNextTabStop = 4 - (cursor.posX / (bytesPerPixel * getCurrentFont().size.realWidth)) % 4;
+            for (int j = 0; j < spacesToNextTabStop; j++) {
+                vdPrintChar(' ');
+                colorsInScreen[index] = hexColor;
+                charsInScreen[index++] = ' ';
+            }
 		}
 		else{
 		vdPrintChar(c);

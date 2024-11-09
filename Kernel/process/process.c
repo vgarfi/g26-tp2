@@ -423,7 +423,7 @@ int processes_information(void) {
         if (pcb_array[i] != NULL && pids[i] == NOT_AVAILABLE_PID) {
             vdPrint("\n(", 0x00FFFFFF);
             vdPrint(pcb_array[i]->name, 0x0000D4C1);
-            vdPrint("): PID: ", 0x00FFFFFF);
+            vdPrint("): \tPID: ", 0x00FFFFFF);
             itoa(i, buffer, 10);
             vdPrint(buffer, 0x00FFFFFF);
             vdPrint(" - MOTHER PID: ", 0x00FFFFFF);
