@@ -68,6 +68,6 @@ void vdPrintCursor();
 void vd_print_padded(const char *str, uint32_t color, int width);
 int vd_screen_width();
 int vd_screen_height();
-void vdPrintLogo(uint32_t bitmap[LOGOWIDTH][LOGOHEIGHT], int bitmapWidth, int bitmapHeight);
+void vdPrintLogo(uint32_t bitmap[786][674], int bitmapWidth, int bitmapHeight);
 
 #endif

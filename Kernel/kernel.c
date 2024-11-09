@@ -56,7 +56,7 @@ int main() {
 	// initializeTimer();
 	initializeVideoDriver();
 	initFontManager();
-	os_logo_boot();
+	// os_logo_boot();
 	// os_sound_boot();
 	initialize_management();
 	requestSchedule();
