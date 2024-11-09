@@ -4,20 +4,16 @@ GLOBAL pic_master_mask
 GLOBAL pic_slave_mask
 GLOBAL halt_cpu
 GLOBAL request_schedule
-
 GLOBAL _hlt
-
 GLOBAL _irq00Handler
 GLOBAL _irq01Handler
 GLOBAL _irq02Handler
 GLOBAL _irq03Handler
 GLOBAL _irq04Handler
 GLOBAL _irq05Handler
-
 GLOBAL _exception0Handler
 GLOBAL _exception6Handler
 GLOBAL _syscallHandler
-
 GLOBAL get_regs
 GLOBAL save_regs_in_buffer
 EXTERN kb_get_key
@@ -25,11 +21,8 @@ EXTERN irq_dispatcher
 EXTERN exception_dispatcher
 EXTERN syscall_dispatcher
 EXTERN get_stack_base
-
 EXTERN schedule
-
 SECTION .text
-
 
 %macro save_regs_in_buffer 0	;; Once you enter here, regs[0]=RIP, regs[1]=RFLAGS, regs[2]=RSP
     mov [regs + 8*3], rax
@@ -173,15 +166,14 @@ pic_slave_mask:
 _irq00Handler:
 	
 	cli
-
 	pushState
+	mov rdi, 0 ; pasaje de parametro
+	call irq_dispatcher
+	
 	mov rdi, rsp
 	call schedule
 	
 	mov rsp, rax ; Cambio de proceso
-	mov rdi, 0 ; pasaje de parametro
-	call irq_dispatcher
-	
 	mov al, 20h ; EOI para el PIC
 	out 20h, al
 	popState

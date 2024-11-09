@@ -2,22 +2,23 @@
 #include <stdint.h>
 #include <defs.h>
 
-void timer_handler();
-void kb_update_buffer();
+void timer_handler(void);
+void kb_update_buffer(void);
 
-static void timer_tick_handler();
-static void kb_handler();
+static void timer_tick_handler(void);
+static void kb_handler(void);
 
-static void (*irqHandlers[])(void)={
+static void (*irq_handlers[])(void) = {
 	timer_tick_handler,
 	kb_handler
 };
 
-static int handlersSize = sizeof(irqHandlers)/sizeof(irqHandlers[0]);
+static int handlers_size = sizeof(irq_handlers)/sizeof(irq_handlers[0]);
 
 void irq_dispatcher(uint64_t irq) {
-	if(irq >=0 && irq < handlersSize && irqHandlers[irq]!=NULL)
-		irqHandlers[irq]();
+	if(irq >= 0 && irq < handlers_size && irq_handlers[irq] != NULL) {
+		irq_handlers[irq]();
+	}
 	return;
 }
 
