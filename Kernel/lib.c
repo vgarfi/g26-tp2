@@ -129,14 +129,17 @@ void stopRunning(void) {
 }
 
 void sendEndOfFile(void) {
-	TPCB* current = get_pcb_by_pid(get_current_pid());
-	if (current == NULL) {
-		return;
+	for(int i = shell_pid+1; i <= max_pid; i++) {
+		TPCB * current = get_pcb_by_pid(i);
+		if (current == NULL) continue;
+		if(current->scope == FOREGROUND && count_occurrences(current->semaphore->waiting_processes, shell_pid) > 0) {
+			if (current->fd_r == STDIN) {
+				if (current->fd_w == STDOUT) {
+					kbEndOfFile();
+					return;
+				}
+				finish_pipe(current->fd_w/2);
+			}
+		}
 	}
-	if (current->fd_w == STDOUT) {
-		kbEraseBufferContent();
-		kbInsertNewLine();
-    	return;
-	}
-	finish_pipe(current->fd_w/2);
 }

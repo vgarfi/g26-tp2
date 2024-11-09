@@ -19,7 +19,7 @@
  * Reads STDIN and returns the next char in it.
  * If STDIN buffer is empty, waits for input and returns it
 */
-unsigned char getchar(void);
+char getchar(void);
 
 /**
  * Receives a char and prints it on STDOUT

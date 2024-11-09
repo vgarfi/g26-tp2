@@ -145,11 +145,8 @@ void kbcleanBuffer(){
     bufferPos = 0;
 }
 
-void kbEraseBufferContent(){
-    for (int i = 0; i < MAXSIZE; i++) {
-        buffer[i] = 0;
-    }
-    kbcleanBuffer();
+void kbEndOfFile(){
+    buffer[bufferPos++] = EOF;
 }
 
 unsigned char kbreadBuf () {
@@ -158,7 +155,7 @@ unsigned char kbreadBuf () {
         return 0;
     }
     
-    unsigned char ans = buffer[0];
+    char ans = buffer[0];
     for(int i=0; i<bufferPos-1; i++)
         buffer[i]=buffer[i+1];
 

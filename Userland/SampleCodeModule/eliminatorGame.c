@@ -53,10 +53,10 @@ void eliminatorGame () {
 }
 
 void playAlone(void) {
-    unsigned char finishKey = UP;
-    unsigned char lastKeyPressed = UP;
-    unsigned char keyPressed = lastKeyPressed;
-    unsigned char aux;
+    char finishKey = UP;
+    char lastKeyPressed = UP;
+    char keyPressed = lastKeyPressed;
+    char aux;
     
     while (finishKey != ESC) {
         cleanBoard();

@@ -88,6 +88,7 @@ int read_pipe(int pipe_index, char * buf, uint64_t count) {
     TPipe* pipe = pipes[pipe_index];
 
     if (pipe->eof_flag == EOF) {
+        buf[0] = EOF;
         return EOF;
     }
 

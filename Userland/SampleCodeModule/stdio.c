@@ -21,7 +21,7 @@ static int isVerticalArrow(unsigned char c);
 static char inputs[MAX_INPUTS_STORE][MAXBUFLEN];
 static int inputIndex = 0;
 
-unsigned char getchar(void){
+char getchar(void){
     unsigned char read = 0;
     
     int pid = sysGetCurrentPid();
@@ -57,11 +57,12 @@ int printColor(char* str, uint64_t hexColor){
         hexcol = LOWKEY;
         sysWrite(STDOUT, "    ", 5, hexcol); // TODO ver si podemos hacer que esto se imprima por cada vez que se hace nueva linea, y no printf
     }
+    char c;
     for(i=0;str[i]!='\0';i++){
-        putchar(str[i]);
+        c = putchar(str[i]);
     }
     hexcol = DEFAULT;
-    return i;
+    return c ==  EOF? EOF : i;
 }
 
 int print(char * str){
@@ -147,15 +148,6 @@ int scanf(char * buffer, int size){
                     sysShowCursor();
                     sysPrintCursor();
                 }
-            }
-            else if (read == 'c') {
-                putchar('\b');
-                print("^C");
-            }
-
-            else if (read == 'd') {
-                putchar('\b');
-                print("EOF");
             }
         }
         else{
