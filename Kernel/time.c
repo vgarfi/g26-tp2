@@ -24,7 +24,7 @@ void sleep(int msToSleep){
 	}
 }
 
-void initializeTimer(){
+void initialize_timer(){
 	uint32_t divisor = 1193180 / 1193;
 
     // Set the PIT control word for channel 0

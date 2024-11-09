@@ -3,6 +3,7 @@
 #include <videoDriver.h>
 #include <synchro/synchro.h>
 #include <memory/memoryManagerADT.h>
+#include <kernelManagement.h>
 
 extern MemoryManagerADT memory_manager;
 
@@ -144,7 +145,36 @@ int close_pipe(int pipe_index) {
 	}
     delete_sem(pipes[pipe_index]->sem_r->name);
     delete_sem(pipes[pipe_index]->sem_w->name);
-    // free_mm(memory_manager, pipes[pipe_index]);
+    // !
+    // free_pipe(pipe_index);
     available_pipes[pipe_index] = PIPE_AVAILABLE;
     return 0;
+}
+
+int free_pipe(int pipe_index) {
+    if (pipe_index < 0 || pipe_index >= MAX_PIPES || available_pipes[pipe_index] == PIPE_AVAILABLE) {
+		return -1;
+	}
+
+    TPipe* pipe = pipes[pipe_index];
+
+    if (pipe == NULL) {
+        return -1;
+    }
+
+    if (pipe->name != NULL) {
+        free_mm(memory_manager, pipe->name);
+    }
+
+    if (pipe->sem_r != NULL) {
+        free_mm(memory_manager, pipe->sem_r);
+    }
+    if (pipe->sem_w != NULL) {
+        free_mm(memory_manager, pipe->sem_w);
+    }
+
+    free_mm(memory_manager, pipe);
+
+    pipes[pipe_index] = NULL;
+    available_pipes[pipe_index] = PIPE_AVAILABLE;
 }

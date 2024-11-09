@@ -23,7 +23,7 @@ uint32_t colorsInScreen[MAXCHARSINSCREEN];
 static int index;
 static int scrollkb_update_buffer;
 
-void initializeVideoDriver(){
+void intialize_video_driver(){
 	framebuffer = (uint8_t *)(uintptr_t) VBE_mode_info->framebuffer;
 	widthScreen = 	VBE_mode_info->width;
 	heightScreen = VBE_mode_info->height;
@@ -37,106 +37,106 @@ void initializeVideoDriver(){
 
 void vdPrintLine(uint64_t offset,uint32_t fgColor,uint32_t bgColor ,uint8_t mask,int limit,int step){
 	uint64_t off = offset;
-	uint32_t hexColor;
+	uint32_t hex_color;
 	for(int i=0; i < limit; i++,off+=step){
 		if (mask & (1 << (BYTE_LENGHT - 1 - i))) {
-			hexColor = fgColor;
+			hex_color = fgColor;
 		} 
 		else{
-			hexColor = bgColor;
+			hex_color = bgColor;
 		}
-		vdPutPixel(off,hexColor);
+		vd_put_pixel(off,hex_color);
 	}
 }
 
-void vdSetCursorColor(uint32_t hexcolor){
+void vd_set_cursor_color(uint32_t hexcolor){
 	cursor.color = hexcolor;
 }
 
-void vdUpdateCursor(int x, int y){
+void vd_update_cursor(int x, int y){
 	int offsetX = x * bytesPerPixel * (get_current_font().size.real_width);
 	int offsetY = y * pitch * (get_current_font().size.height); 
 
-	if(cursor.posY + offsetY >= 0){
-		if (cursor.posX + offsetX >= widthScreen*bytesPerPixel)
+	if(cursor.pos_y + offsetY >= 0){
+		if (cursor.pos_x + offsetX >= widthScreen*bytesPerPixel)
 		{
 			offsetX = 0;
-			cursor.posX = 0;
+			cursor.pos_x = 0;
 			offsetY += (pitch * get_current_font().size.height);
 		}
-		else if(cursor.posX + offsetX < 0){
+		else if(cursor.pos_x + offsetX < 0){
 			offsetX = 0;
-			cursor.posX = (widthScreen - get_current_font().size.real_width) * bytesPerPixel;
+			cursor.pos_x = (widthScreen - get_current_font().size.real_width) * bytesPerPixel;
 			offsetY -= pitch * get_current_font().size.height;
 		}
 
-		if (cursor.posY + offsetY >= heightScreen * pitch)
+		if (cursor.pos_y + offsetY >= heightScreen * pitch)
 		{
-			vdScroll(1);
+			vd_scroll(1);
 			offsetY += -pitch * get_current_font().size.height;
 			
 		}
-		else if (cursor.posY + offsetY < 0)
+		else if (cursor.pos_y + offsetY < 0)
 		{
 			offsetY = 0;
 		}
-		cursor.posX += offsetX;
-		cursor.posY += offsetY;
+		cursor.pos_x += offsetX;
+		cursor.pos_y += offsetY;
 	}
 
 }
 
-void vdPrintCursor(){
-	if (cursor.posX + (get_current_font().size.real_width*bytesPerPixel) >= widthScreen*bytesPerPixel)
+void vd_print_cursor(){
+	if (cursor.pos_x + (get_current_font().size.real_width*bytesPerPixel) >= widthScreen*bytesPerPixel)
 	{
-		vdUpdateCursor(1,0);
+		vd_update_cursor(1,0);
 	}
-	if (cursor.posY + (get_current_font().size.height*pitch) >= heightScreen*pitch)
+	if (cursor.pos_y + (get_current_font().size.height*pitch) >= heightScreen*pitch)
 	{
-		vdScroll(1);
-		cursor.posY -= pitch *get_current_font().size.height;
+		vd_scroll(1);
+		cursor.pos_y -= pitch *get_current_font().size.height;
 	}
-	vdPrintRect(cursor.posX/bytesPerPixel,cursor.posY/pitch,get_current_font().size.real_width,get_current_font().size.height,cursor.color);
+	vd_print_rect(cursor.pos_x/bytesPerPixel,cursor.pos_y/pitch,get_current_font().size.real_width,get_current_font().size.height,cursor.color);
 }
 
-void vdSetCursorByPixel(int x, int y){
-	int posX = x * bytesPerPixel;
-	int posY = y * pitch;
-	if(posX < widthScreen*bytesPerPixel && posX >= 0 && posY >= 0 && posY < pitch * heightScreen){
-		cursor.posX = posX;
-		cursor.posY = posY;
-	}
-}
-
-void vdSetCursor(int x, int y){
-	int posX = x * bytesPerPixel * get_current_font().size.real_width;
-	int posY = y * pitch * get_current_font().size.height;
-	if(posX < widthScreen*bytesPerPixel && posX >= 0 && posY >= 0 && posY < pitch * heightScreen){
-		cursor.posX = posX;
-		cursor.posY = posY;
+void vd_set_cursor_by_pixel(int x, int y){
+	int pos_x = x * bytesPerPixel;
+	int pos_y = y * pitch;
+	if(pos_x < widthScreen*bytesPerPixel && pos_x >= 0 && pos_y >= 0 && pos_y < pitch * heightScreen){
+		cursor.pos_x = pos_x;
+		cursor.pos_y = pos_y;
 	}
 }
 
-void vdNewLine(){
-	vdPrintRect(cursor.posX/bytesPerPixel,cursor.posY/pitch,get_current_font().size.real_width,get_current_font().size.height,BLACK);
-	cursor.posX = 0;
-	vdUpdateCursor(0,1);
-	vdPrintCursor();
+void vd_set_cursor(int x, int y){
+	int pos_x = x * bytesPerPixel * get_current_font().size.real_width;
+	int pos_y = y * pitch * get_current_font().size.height;
+	if(pos_x < widthScreen*bytesPerPixel && pos_x >= 0 && pos_y >= 0 && pos_y < pitch * heightScreen){
+		cursor.pos_x = pos_x;
+		cursor.pos_y = pos_y;
+	}
 }
 
-void vdPutPixel(uint64_t offset,uint32_t hexColor){
-	framebuffer[offset]     =  (hexColor) & 0xFF;
-    framebuffer[offset+1]   =  (hexColor >> BYTE_LENGHT) & 0xFF; 
-    framebuffer[offset+2]   =  (hexColor >> TWO_BYTE_LENGHT) & 0xFF;
+void vd_new_line(){
+	vd_print_rect(cursor.pos_x/bytesPerPixel,cursor.pos_y/pitch,get_current_font().size.real_width,get_current_font().size.height,BLACK);
+	cursor.pos_x = 0;
+	vd_update_cursor(0,1);
+	vd_print_cursor();
 }
 
-void vdPrintChar(unsigned char c) {
+void vd_put_pixel(uint64_t offset,uint32_t hex_color){
+	framebuffer[offset]     =  (hex_color) & 0xFF;
+    framebuffer[offset+1]   =  (hex_color >> BYTE_LENGHT) & 0xFF; 
+    framebuffer[offset+2]   =  (hex_color >> TWO_BYTE_LENGHT) & 0xFF;
+}
+
+void vd_print_char(unsigned char c) {
 	FontBitmap fontBitMap = get_current_font();
 	unsigned const char* bitmap = fontBitMap.bitmap;
 	int width = fontBitMap.size.width;
 	int height = fontBitMap.size.height;
 
-	uint64_t offset = cursor.posX + cursor.posY;
+	uint64_t offset = cursor.pos_x + cursor.pos_y;
 
 	if (width == BYTE_LENGHT) {
 		
@@ -150,73 +150,73 @@ void vdPrintChar(unsigned char c) {
 			vdPrintLine(offset+(width*bytesPerPixel/2),fgColor,bgColor,bitmap[y_pos + (c-31) * height*2 + 1],BYTE_LENGHT,bytesPerPixel);
 		}
 	}
-	vdUpdateCursor(1,0);
-	vdPrintCursor();
+	vd_update_cursor(1,0);
+	vd_print_cursor();
 }
 
-void vdPrint(char *characters,uint32_t hexColor){
-	fgColor = hexColor;
+void vd_print(char *characters,uint32_t hex_color){
+	fgColor = hex_color;
 	for(int i=0;characters[i] != 0;i++){
 		char c = characters[i];
 
 		if(c == '\n'){
 			colorsInScreen[index] = BLACK;
 			charsInScreen[index++] = '\n';
-			vdNewLine();
+			vd_new_line();
 		}
 
 		else if(c == '\b'){
-			vdDeleteChar();
+			vd_delete_char();
 			if(index != 0)
 				--index;
 			colorsInScreen[index] = BLACK;
 			charsInScreen[index] = ' ';
 		} else if (c == '\t') {
-			int spacesToNextTabStop = 4 - (cursor.posX / (bytesPerPixel * get_current_font().size.real_width)) % 4;
+			int spacesToNextTabStop = 4 - (cursor.pos_x / (bytesPerPixel * get_current_font().size.real_width)) % 4;
             for (int j = 0; j < spacesToNextTabStop; j++) {
-                vdPrintChar(' ');
-                colorsInScreen[index] = hexColor;
+                vd_print_char(' ');
+                colorsInScreen[index] = hex_color;
                 charsInScreen[index++] = ' ';
             }
 		}
 		else{
-		vdPrintChar(c);
-		colorsInScreen[index] = hexColor;
+		vd_print_char(c);
+		colorsInScreen[index] = hex_color;
 		charsInScreen[index++] = c;
 		}
 	}
 }
 
-void vdDeleteChar(){
-	vdPrintRect(cursor.posX/bytesPerPixel,cursor.posY/pitch,get_current_font().size.real_width,get_current_font().size.height,BLACK);
-	vdUpdateCursor(-1,0);
-	vdPrintRect(cursor.posX/bytesPerPixel,cursor.posY/pitch,get_current_font().size.real_width,get_current_font().size.height,BLACK);
-	vdPrintCursor();
+void vd_delete_char(){
+	vd_print_rect(cursor.pos_x/bytesPerPixel,cursor.pos_y/pitch,get_current_font().size.real_width,get_current_font().size.height,BLACK);
+	vd_update_cursor(-1,0);
+	vd_print_rect(cursor.pos_x/bytesPerPixel,cursor.pos_y/pitch,get_current_font().size.real_width,get_current_font().size.height,BLACK);
+	vd_print_cursor();
 }
 
-void vdResize(){
-	vdClearScreen();
+void vd_resize(){
+	vd_clear_screen();
 	scrollkb_update_buffer = 0;
 	char c;
 	for(int j=0;j<index;j++){
 		c = charsInScreen[j];
 		if(c == '\n'){
-			vdNewLine();
+			vd_new_line();
 		}
 		else{
 			fgColor = colorsInScreen[j];	
-			vdPrintChar(c);
+			vd_print_char(c);
 			}	
 	}
 	scrollkb_update_buffer = 1;
 }
 
-void vdClearScreen(){
+void vd_clear_screen(){
 	memset(framebuffer,0,bytesPerPixel * heightScreen * widthScreen);
-	vdSetCursor(0,0);
+	vd_set_cursor(0,0);
 }
 
-void vdClearBuffer(){
+void vd_clean_buffer(){
 	memset(charsInScreen,' ',MAXCHARSINSCREEN);
 	memset(colorsInScreen,0,4*MAXCHARSINSCREEN);
 	index = 0;
@@ -229,7 +229,7 @@ void updateCharsInScreen(int lines){
 	}
 }
 
-void vdScroll(int lines) {
+void vd_scroll(int lines) {
     int fontHeight = get_current_font().size.height;
     int offset = lines * fontHeight * widthScreen * bytesPerPixel;
     int frameSize = bytesPerPixel * widthScreen * (heightScreen - lines * (fontHeight));
@@ -244,25 +244,25 @@ void vdScroll(int lines) {
 	}
 }
 
-void vdPrintRect(int x,int y,int base, int height, uint32_t hexColor){
+void vd_print_rect(int x,int y,int base, int height, uint32_t hex_color){
 	uint64_t offsetX = x * bytesPerPixel;
-	uint64_t posX = offsetX;
+	uint64_t pos_x = offsetX;
 	uint64_t offsetY = y * pitch;
 	for(int y=0;y < height;y++,offsetY += pitch) {
-		for(int x = 0,offsetX = posX; x < base;x++, offsetX += bytesPerPixel)
-			vdPutPixel(offsetX + offsetY,hexColor);
+		for(int x = 0,offsetX = pos_x; x < base;x++, offsetX += bytesPerPixel)
+			vd_put_pixel(offsetX + offsetY,hex_color);
 	}
 }
 
-void vdPrintSquare(int x, int y,int side,uint32_t hexColor){
-	vdPrintRect(x,y,side,side,hexColor);
+void vd_print_square(int x, int y,int side,uint32_t hex_color){
+	vd_print_rect(x,y,side,side,hex_color);
 }
 
 void vd_print_padded(const char *str, uint32_t color, int width) {
-    vdPrint(str, color);
+    vd_print(str, color);
     int padding = width - strlen(str);
     for (int i = 0; i < padding; i++) {
-        vdPrint(" ", color);
+        vd_print(" ", color);
     }
 }
 
@@ -275,7 +275,7 @@ int vd_screen_height() {
 }
 
 
-void vdPrintLogo(uint32_t bitmap[186][156], int bitmapWidth, int bitmapHeight) {
+void vd_print_logo(uint32_t bitmap[186][156], int bitmapWidth, int bitmapHeight) {
 	if (bitmapWidth <= 0 || bitmapHeight <= 0) {
 		return;
 	}
@@ -285,13 +285,13 @@ void vdPrintLogo(uint32_t bitmap[186][156], int bitmapWidth, int bitmapHeight) {
 
 	for (int x = 0; x < bitmapWidth; x++) {
 		for (int y = 0; y < bitmapHeight; y++) {
-			uint32_t hexColor = bitmap[x][y];
+			uint32_t hex_color = bitmap[x][y];
 
-			int posX = (startX + x) * bytesPerPixel;
-			int posY = (startY + y) * pitch;
+			int pos_x = (startX + x) * bytesPerPixel;
+			int pos_y = (startY + y) * pitch;
 
-			if (posX < widthScreen * bytesPerPixel && posY < heightScreen * pitch) {
-				vdPutPixel(posX + posY, hexColor);
+			if (pos_x < widthScreen * bytesPerPixel && pos_y < heightScreen * pitch) {
+				vd_put_pixel(pos_x + pos_y, hex_color);
 			}
 		}
 	}

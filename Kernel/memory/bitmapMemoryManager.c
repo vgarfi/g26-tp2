@@ -23,7 +23,7 @@ typedef struct MemoryManagerCDT {
 MemoryManagerADT initialize_mm(void* base, size_t memory_size, size_t block_size) {
     MemoryManagerADT mm = (MemoryManagerADT)base;
     size_t max_num_blocks = memory_size / block_size;
-    size_t bitmap_size = (max_num_blocks + 7) / 8; // TODO usar funcion ceil si podemos incluir de math
+    size_t bitmap_size = (max_num_blocks + 7) / 8;
 
     mm->memory_size = memory_size - bitmap_size - sizeof(MemoryManagerCDT);
     mm->block_size = block_size;
@@ -72,7 +72,7 @@ void* malloc_mm(MemoryManagerADT mm, size_t size) {
         }
     }
 
-    vdPrint("\nKERNEL: OUT OF MEMEORY. Possible errors may ocurr", 0x00FF0000);
+    vd_print("\nKERNEL: OUT OF MEMEORY. Possible errors may ocurr", 0x00FF0000);
     return NULL;  // No hay bloques libres
 }
 

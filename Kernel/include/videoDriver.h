@@ -4,8 +4,8 @@
 #include <stdint.h>
 
 typedef struct{
-	int posX;
-	int posY;
+	int pos_x;
+	int pos_y;
 	uint32_t color;
 }Cursor;
 
@@ -48,26 +48,25 @@ struct vbe_mode_info_structure {
 } __attribute__ ((packed));
 
 
-void vdPrintChar(unsigned char c);
-void vdPutPixel(uint64_t offset,uint32_t hexcolor);
-void vdPrint(char *characters,uint32_t hexColor);
-void vdClearScreen();
-void vdScroll(int lines);
-void initializeVideoDriver();
-void vdSetCursor(int x,int y);
-void vdUpdateCursor(int x,int y);
-void vdDeleteChar();
-void vdNewLine();
-void vdClearBuffer();
-void vdResize();
-void vdPrintRect(int x,int y,int base,int height,uint32_t hexcolor);
-void vdPrintSquare(int x, int y,int side,uint32_t hexcolor);
-void vdSetCursorByPixel(int x, int y);
-void vdSetCursorColor(uint32_t color);
-void vdPrintCursor();
+void intialize_video_driver();
+void vd_print_char(unsigned char c);
+void vd_put_pixel(uint64_t offset,uint32_t hexcolor);
+void vd_print(char *characters,uint32_t hex_color);
+void vd_clear_screen();
+void vd_scroll(int lines);
+void vd_set_cursor(int x,int y);
+void vd_update_cursor(int x,int y);
+void vd_delete_char();
+void vd_new_line();
+void vd_clean_buffer();
+void vd_resize();
+void vd_print_rect(int x,int y,int base,int height,uint32_t hexcolor);
+void vd_print_square(int x, int y,int side,uint32_t hexcolor);
+void vd_set_cursor_by_pixel(int x, int y);
+void vd_set_cursor_color(uint32_t color);
+void vd_print_cursor();
 void vd_print_padded(const char *str, uint32_t color, int width);
 int vd_screen_width();
 int vd_screen_height();
-void vdPrintLogo(uint32_t bitmap[186][156], int bitmapWidth, int bitmapHeight);
-
+void vd_print_logo(uint32_t bitmap[186][156], int bitmapWidth, int bitmapHeight);
 #endif

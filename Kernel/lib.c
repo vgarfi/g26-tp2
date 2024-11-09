@@ -95,19 +95,19 @@ int reg_printing(void){
         "R10:    ", "R11:       ", "R12:    ", "R13:       ", "R14:    ", "R15:       "};
     for(int i=0; i<18; i++){
         value=hexToString(registers[i]);
-        vdPrint(regFormat[i], 0x00FFFFFF);
-        vdPrint("0x", 0x00FFFFFF);
-        vdPrint(value, 0x00FFFFFF);
+        vd_print(regFormat[i], 0x00FFFFFF);
+        vd_print("0x", 0x00FFFFFF);
+        vd_print(value, 0x00FFFFFF);
         count++;
         if(count==2){
-            vdPrint("\n", 0x00000000);
+            vd_print("\n", 0x00000000);
             count=0;
         }
         else{
-            vdPrint("  ", 0x00000000);
+            vd_print("  ", 0x00000000);
         }
     }
-    vdPrint("\n", 0x00000000);
+    vd_print("\n", 0x00000000);
 	return 0;
 }
 

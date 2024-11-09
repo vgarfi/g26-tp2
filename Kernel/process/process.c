@@ -426,7 +426,7 @@ int processes_information() {
     char buffer[64];
     char* states_labels[] = {"BLOCKED","READY","RUNNING","KILLED","ZOMBIE"};
     char* scope_labels[] = {"FOREGROUND","BACKGROUND"};
-    vdPrint("\n", 0x00FFFFFF);
+    vd_print("\n", 0x00FFFFFF);
     vd_print_padded("PID", 0x00FFFFFF, PS_COLUMN_WIDTH);
     vd_print_padded("Name", 0x00FFFFFF, PS_COLUMN_WIDTH);
     vd_print_padded("Mother PID", 0x00FFFFFF, PS_COLUMN_WIDTH);
@@ -436,7 +436,7 @@ int processes_information() {
     vd_print_padded("State", 0x00FFFFFF, PS_COLUMN_WIDTH);
     vd_print_padded("FDs", 0x00FFFFFF, PS_COLUMN_WIDTH);
     vd_print_padded("Scope", 0x00FFFFFF, PS_COLUMN_WIDTH);
-    vdPrint("\n", 0x00FFFFFF);
+    vd_print("\n", 0x00FFFFFF);
 
     for (int i = 0; i <= max_pid; i++) {
         if (pcb_array[i] != NULL) {
@@ -451,28 +451,28 @@ int processes_information() {
             itoa(pcb_array[i]->priority, buffer, 10);
             vd_print_padded(buffer, 0x00FFFFFF, PS_COLUMN_WIDTH);
 
-            vdPrint("0x", 0x00FFFFFF);
+            vd_print("0x", 0x00FFFFFF);
             itoa64((uint64_t) pcb_array[i]->rsp, buffer, 16);
             vd_print_padded(buffer, 0x00FFFFFF, PS_COLUMN_WIDTH - 2);
 
-            vdPrint("0x", 0x00FFFFFF);
+            vd_print("0x", 0x00FFFFFF);
             itoa64((uint64_t) pcb_array[i]->stack_base, buffer, 16);
             vd_print_padded(buffer, 0x00FFFFFF, PS_COLUMN_WIDTH - 2);
 
             vd_print_padded(states_labels[pcb_array[i]->state], get_state_color(pcb_array[i]->state), PS_COLUMN_WIDTH);
 
             itoa(pcb_array[i]->fd_r, buffer, 10);
-            vdPrint("[", 0x00FFFFFF);
-            vdPrint(buffer, 0x00FFFFFF);
-            vdPrint(",", 0x00FFFFFF);
+            vd_print("[", 0x00FFFFFF);
+            vd_print(buffer, 0x00FFFFFF);
+            vd_print(",", 0x00FFFFFF);
             itoa(pcb_array[i]->fd_w, buffer, 10);
-            vdPrint(buffer, 0x00FFFFFF);
-            vdPrint("]", 0x00FFFFFF);
+            vd_print(buffer, 0x00FFFFFF);
+            vd_print("]", 0x00FFFFFF);
             vd_print_padded("", 0x00FFFFFF, PS_COLUMN_WIDTH - strlen(buffer) - 3);
 
             vd_print_padded(scope_labels[pcb_array[i]->scope], get_scope_color(pcb_array[i]->scope), PS_COLUMN_WIDTH);
 
-            vdPrint("\n", 0x00FFFFFF);
+            vd_print("\n", 0x00FFFFFF);
         }
     }
     set_zoom(zoom_level);

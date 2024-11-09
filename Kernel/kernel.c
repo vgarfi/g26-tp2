@@ -53,15 +53,15 @@ void * initializeKernelBinary()
 
 int main() {
 	load_idt();
-	// initializeTimer();
-	initializeVideoDriver();
+	// initialize_timer();
+	intialize_video_driver();
 	init_font_manager();
 	os_logo_boot();
-	vdClearScreen();
+	vd_clear_screen();
 	_sti();
 	initialize_management();
 	request_schedule();
 
-	vdPrint("\nKERNEL EXIT", 0x00FFFFFF);
+	vd_print("\nKERNEL EXIT", 0x00FFFFFF);
 	return 0;
 }

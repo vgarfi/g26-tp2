@@ -88,4 +88,12 @@ int finish_pipe(int pipe_index);
  */
 int close_pipe(int pipe_index);
 
+/**
+ * @brief Frres a pipe.
+ *
+ * @param pipe_index Index of the pipe.
+ * @return 0 on success, -1 on failure.
+ */
+int free_pipe(int pipe_index);
+
 #endif

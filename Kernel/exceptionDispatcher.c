@@ -16,11 +16,11 @@ static void invalid_opcode();
 
 void exceptionDispatcher(int exception) {
 	save_regs();
-	vdClearScreen();
+	vd_clear_screen();
 	sys_hide_cursor();
 	set_current_font(DEFAULT_FONT);
-	for(int i=0; i<10; i++) vdPrint("\n", COMMENTCOL);
-	vdPrint("ERROR: An exception has occurred during runtime. More information:\n\n", ERRORCOL);
+	for(int i=0; i<10; i++) vd_print("\n", COMMENTCOL);
+	vd_print("ERROR: An exception has occurred during runtime. More information:\n\n", ERRORCOL);
 
 	switch (exception){
 		case ZERO_EXCEPTION_ID:
@@ -31,9 +31,9 @@ void exceptionDispatcher(int exception) {
 			break;
 	}
 	reg_printing();
-	vdPrint("\n", COMMENTCOL);
+	vd_print("\n", COMMENTCOL);
 	sys_ms_sleep(3, 5);
-	vdPrint("Press any key to recover...\n",COMMENTCOL);
+	vd_print("Press any key to recover...\n",COMMENTCOL);
 	int flag=0;
 	char key;
 	kb_clean_buffer();
@@ -41,14 +41,14 @@ void exceptionDispatcher(int exception) {
 	while(!flag){
 		flag=sys_read(STDIN, &key, 1);
 	}
-	vdClearScreen();
-	vdClearBuffer();
+	vd_clear_screen();
+	vd_clean_buffer();
 }
 
 static void zero_division() {
-	vdPrint("Arithmetic exception: division by zero\n",COMMENTCOL);
+	vd_print("Arithmetic exception: division by zero\n",COMMENTCOL);
 }
 
 static void invalid_opcode(){
-	vdPrint("Invalid Opcode exception: command not recognised\n",COMMENTCOL);
+	vd_print("Invalid Opcode exception: command not recognised\n",COMMENTCOL);
 }

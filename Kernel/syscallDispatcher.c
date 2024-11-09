@@ -56,13 +56,13 @@ int sys_read(uint64_t fd, char * buf, uint64_t count) {
     return read_pipe(fd/2, buf, count);
 }
 
-int sys_write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor){
+int sys_write(uint64_t fd, char * buf, uint64_t count, uint64_t hex_color){
     int i;
     char toPrint[2]={0,0};
     if (fd == STDOUT) {
         for(i=0; i<count; i++) {
             toPrint[0]=buf[i];
-            vdPrint(toPrint, hexColor); 
+            vd_print(toPrint, hex_color); 
         }
         return i;
     }
@@ -72,14 +72,14 @@ int sys_write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor){
 int sys_inc_size(){
     int zoomFail = size_up();
     if(!zoomFail)
-        vdResize();
+        vd_resize();
     return zoomFail;
 }
 
 int sys_dec_size(){
     int zoomFail = size_down();
     if(!zoomFail)
-        vdResize();
+        vd_resize();
     return zoomFail;
 }
 
@@ -108,23 +108,23 @@ int sys_right_arrow_value() {
 }
 
 int sys_clear_screen() {
-    vdClearScreen();
-    vdClearBuffer();
+    vd_clear_screen();
+    vd_clean_buffer();
     return 0;
 }
 
-int sys_print_rect(int x,int y,int base,int height,uint32_t hexColor) {
-    vdPrintRect(x,y,base,height,hexColor);
+int sys_print_rect(int x,int y,int base,int height,uint32_t hex_color) {
+    vd_print_rect(x,y,base,height,hex_color);
     return 0;
 }
 
-int sys_print_square (int x, int y,int side, uint32_t hexColor){
-    vdPrintSquare(x,y,side, hexColor);
+int sys_print_square (int x, int y,int side, uint32_t hex_color){
+    vd_print_square(x,y,side, hex_color);
     return 0;
 }
 
 int sys_set_cursor(uint64_t x, uint64_t y) {
-    vdSetCursor(x, y);
+    vd_set_cursor(x, y);
     return 0;
 }
 
@@ -151,17 +151,17 @@ int sys_ms_sleep(uint64_t secs, uint64_t ticks){
 }
 
 int sys_hide_cursor(){
-    vdSetCursorColor(0x00000000);
+    vd_set_cursor_color(0x00000000);
     return 0;
 }
 
 int sys_show_cursor(){
-    vdSetCursorColor(0x00F0F0F0);
+    vd_set_cursor_color(0x00F0F0F0);
     return 0;
 }
 
 int sys_print_cursor(){
-    vdPrintCursor();
+    vd_print_cursor();
     return 0;
 }
 
@@ -226,8 +226,8 @@ int sys_get_scope(uint8_t pid) {
     return get_process_scope(pid);
 }
 
-int sys_nice(uint8_t pid, uint8_t newPriority){
-    return change_priority(pid, newPriority);
+int sys_nice(uint8_t pid, uint8_t new_priority){
+    return change_priority(pid, new_priority);
 }
 
 int sys_ps(void){
@@ -248,11 +248,11 @@ int sys_memory_status(void) {
     MemoryDiagnostic diagnostic = get_diagnostic_mm(memory_manager);
     char buffer[64];
 
-    vdPrint("\n", 0x00FFFFFF);
+    vd_print("\n", 0x00FFFFFF);
     vd_print_padded("Type", 0x00FFFFFF, MEMORY_COLUMN_WIDTH);
     vd_print_padded("Memory (bytes)", 0x00FFFFFF, MEMORY_COLUMN_WIDTH);
     vd_print_padded("Blocks", 0x00FFFFFF, BLOCKS_COLUMN_WIDTH);
-    vdPrint("\n", 0x00FFFFFF);
+    vd_print("\n", 0x00FFFFFF);
 
     vd_print_padded("TOTAL", 0x00FFC90E, MEMORY_COLUMN_WIDTH);
 
@@ -262,7 +262,7 @@ int sys_memory_status(void) {
     itoa64(diagnostic.total_blocks, buffer, 10);
     vd_print_padded(buffer, 0x00FFFFFF, BLOCKS_COLUMN_WIDTH);
 
-    vdPrint("\n", 0x00FFFFFF);
+    vd_print("\n", 0x00FFFFFF);
 
     vd_print_padded("USED", 0x00FF440B, MEMORY_COLUMN_WIDTH);
 
@@ -272,7 +272,7 @@ int sys_memory_status(void) {
     itoa64(diagnostic.used_blocks, buffer, 10);
     vd_print_padded(buffer, 0x00FFFFFF, BLOCKS_COLUMN_WIDTH);
 
-    vdPrint("\n", 0x00FFFFFF);
+    vd_print("\n", 0x00FFFFFF);
 
     vd_print_padded("FREE", 0x003CBA14, MEMORY_COLUMN_WIDTH);
 
@@ -282,7 +282,7 @@ int sys_memory_status(void) {
     itoa64(diagnostic.free_blocks, buffer, 10);
     vd_print_padded(buffer, 0x00FFFFFF, BLOCKS_COLUMN_WIDTH);
 
-    vdPrint("\n", 0x00FFFFFF);
+    vd_print("\n", 0x00FFFFFF);
     set_zoom(zoom_level);
     return 0;
 }
@@ -291,8 +291,8 @@ int sys_yield(void){
     return yield_process();
 }
 
-int sys_create_sem(char* name, uint64_t initialValue){
-    TSemaphore* result = create_sem(name, initialValue);
+int sys_create_sem(char* name, uint64_t initial_value){
+    TSemaphore* result = create_sem(name, initial_value);
     if (result == NULL) {
         return -1;
     }

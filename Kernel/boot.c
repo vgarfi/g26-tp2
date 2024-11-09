@@ -196,7 +196,7 @@ uint32_t logo[186][156] = {
 
 void os_logo_boot() {
 	_cli();
-    vdPrintLogo(logo, 186, 156);
+    vd_print_logo(logo, 186, 156);
 	os_sound_boot();
     _sti();
 }

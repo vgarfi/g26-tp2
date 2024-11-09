@@ -20,7 +20,7 @@ typedef struct TQueueCDT {
 TQueueADT createQueue() {
     TQueueADT queue = (TQueueADT)malloc_mm(memory_manager, sizeof(TQueueCDT));
     if (queue == NULL) {
-        vdPrint("\nERROR al create queue", 0x00FF0000);
+        vd_print("\nERROR al create queue", 0x00FF0000);
         return NULL;
     }
     queue->first = queue->last = NULL;
@@ -144,8 +144,8 @@ void dump(TQueueADT queue){
         uint8_t pid = (uint8_t)current->value;
         char buffer[10];
         itoa(pid, buffer, 10);
-        vdPrint(buffer, 0x00FFFFFF);
-        vdPrint(" - ", 0x00FFFFFF);
+        vd_print(buffer, 0x00FFFFFF);
+        vd_print(" - ", 0x00FFFFFF);
         current = current->next;
     }
 }
