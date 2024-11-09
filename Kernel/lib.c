@@ -123,7 +123,6 @@ void stopRunning(void) {
 				force_kill_piped_processes(current->fd_w);
 			}
 			forced_kill_process(current->pid);
-			return;
 		}
 	}
 }

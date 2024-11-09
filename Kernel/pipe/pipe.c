@@ -32,13 +32,16 @@ int create_pipe(int* fds, char* name){
     if(new_pipe == NULL)
         return -1;
 
-    if (name != NULL) {
-        new_pipe->name = malloc_mm(memory_manager, strlen(name) + 1);
+    int pipe_name_len = strlen(name);
+    if (pipe_name_len != 0) {
+        new_pipe->name = malloc_mm(memory_manager, pipe_name_len + 1);
         if(new_pipe->name == NULL){
             free_mm(memory_manager, new_pipe);
             return -1;
         }
         strcpy(new_pipe->name, name);
+    } else {
+        new_pipe->name = NULL;
     }
 
     int pipe_index = getFreePipeIndex();

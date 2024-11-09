@@ -242,7 +242,8 @@ void pipe_processes(char* input) {
     }
 
     int pipe_fds[2];
-    if (sysCreatePipe(pipe_fds,  ((void *)0)) == -1) {
+    char pipe_name; // Anonymous pipe
+    if (sysCreatePipe(pipe_fds, pipe_name) == -1) {
         printf("\nError creando pipes entre procesos",0,0,0);
         return;
     }

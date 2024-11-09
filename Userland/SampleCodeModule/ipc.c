@@ -33,7 +33,7 @@ int64_t wc_process(int argc, char** argv) {
     char numBuf[10];
     itoa(count, numBuf, 10);
     printColor(numBuf, CYAN);
-    print(" lines in input buffer");
+    print(" lines in input buffer\n");
     return 0;
 }
 

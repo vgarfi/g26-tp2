@@ -303,7 +303,7 @@ int forced_kill_process(uint8_t pid) {
     destroy_anonymous_pipes(process_pcb->fd_r);
     free_process(process_pcb);
     pids[pid] = AVAILABLE_PID;
-
+    pcb_array[pid] = NULL;
     if (process_state == RUNNING) {
         requestSchedule();
     }
@@ -468,6 +468,7 @@ int64_t init_process(int argc, char** argv) {
             if (pcb_array[i] != NULL && pcb_array[i]->m_pid == init_pid && pcb_array[i]->state == ZOMBIE) {
                 pcb_array[i]->state = KILLED;
                 free_process(pcb_array[i]);
+                pcb_array[i] = NULL;
                 pids[i] = AVAILABLE_PID;
             }
         }

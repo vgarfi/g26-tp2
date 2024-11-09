@@ -4,6 +4,9 @@
 #include <videoDriver.h>
 
 int strlen(const char *str) {
+    if (str == NULL) {
+        return 0;
+    }
     int length = 0;
     while (str[length] != '\0') {
         length++;
