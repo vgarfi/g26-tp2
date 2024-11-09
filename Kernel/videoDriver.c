@@ -275,7 +275,7 @@ int vd_screen_height() {
 }
 
 
-void vdPrintLogo(uint32_t bitmap[786][674], int bitmapWidth, int bitmapHeight) {
+void vdPrintLogo(uint32_t bitmap[186][156], int bitmapWidth, int bitmapHeight) {
 	if (bitmapWidth <= 0 || bitmapHeight <= 0) {
 		return;
 	}
