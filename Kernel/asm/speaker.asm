@@ -1,6 +1,5 @@
 GLOBAL outb
 GLOBAL inb
-
 section .text
 inb:
     mov rdx, rdi

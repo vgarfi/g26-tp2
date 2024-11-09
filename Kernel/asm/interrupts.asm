@@ -20,7 +20,7 @@ GLOBAL _syscallHandler
 
 GLOBAL getRegs
 GLOBAL saveRegsInBuffer
-EXTERN getKey
+EXTERN get_key
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 EXTERN syscallDispatcher
@@ -195,7 +195,7 @@ _irq00Handler:
 ;Keyboard
 _irq01Handler:
 	push rax
-	call getKey
+	call get_key
 	cmp al, 0x38
 	pop rax
 	jne .continue

@@ -1,7 +1,5 @@
 GLOBAL create_initial_stack_asm
-
 create_initial_stack_asm:
-
 create_initial_stack_asm: 
 	mov r8, rsp
 	mov rsp, rdi

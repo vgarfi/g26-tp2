@@ -9,7 +9,7 @@ void updateBuffer(void);
 void kbcleanBuffer(void);
 void kbInsertNewLine(void);
 void kbEndOfFile(void);
-uint8_t getKey(void);
+uint8_t get_key(void);
 uint8_t kbUpArrowValue(void);
 uint8_t kbLeftArrowValue(void);
 uint8_t kbDownArrowValue(void);

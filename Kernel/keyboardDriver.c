@@ -91,7 +91,7 @@ uint8_t kbRightArrowValue() {
 }
 
 void updateBuffer() {
-    uint8_t scancode = getKey();
+    uint8_t scancode = get_key();
     uint8_t arrowValue = isArrow(scancode);
 
     if(scancode == L_ALT) {
