@@ -15,13 +15,15 @@
 #define LOOP_PROCESS        "loop"
 #define LOOP_PRIORITY       1
 
-
 #define MEMORY_SIZE         (1024*1024*512)
 #define MEMORY_BLOCK_SIZE   (1024*8)
 
 #define STDIN               0
 #define STDOUT              1
 
+/**
+ * @brief Initializes the kernel management system.
+ */
 void initialize_management(void);
 
 #endif

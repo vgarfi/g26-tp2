@@ -3,10 +3,10 @@
 #include <lib.h>
 #include <process/process.h>
 #include <kernelManagement.h>
-#include <keyboard.h>
+#include <keyboardDriver.h>
 #include <pipe/pipe.h>
 
-void saveRegsInBuffer(void);
+void save_regsInBuffer(void);
 uint64_t* getRegs(void);
 
 
@@ -65,7 +65,7 @@ void * memcpy(void * destination, const void * source, uint64_t length)
 	return destination;
 }
 
-void saveRegs(void){
+void save_regs(void){
 	backupDone=1;
 }
 
@@ -85,7 +85,7 @@ static char* hexToString(uint64_t value) {
     return str;
 }
 
-int regPrinting(void){	
+int reg_printing(void){	
 	if(!backupDone)
 		return 1;
 	registers=getRegs();
@@ -111,7 +111,7 @@ int regPrinting(void){
 	return 0;
 }
 
-void stopRunning(void) {
+void stop_running(void) {
 	for(int i = shell_pid+1; i <= max_pid; i++) {
 		TPCB * current = get_pcb_by_pid(i);
 		if (current == NULL) continue;
@@ -127,14 +127,14 @@ void stopRunning(void) {
 	}
 }
 
-void sendEndOfFile(void) {
+void send_end_of_file(void) {
 	for(int i = shell_pid+1; i <= max_pid; i++) {
 		TPCB * current = get_pcb_by_pid(i);
 		if (current == NULL) continue;
 		if(current->scope == FOREGROUND && count_occurrences(current->semaphore->waiting_processes, shell_pid) > 0) {
 			if (current->fd_r == STDIN) {
 				if (current->fd_w == STDOUT) {
-					kbEndOfFile();
+					kb_end_of_file();
 					return;
 				}
 				finish_pipe(current->fd_w/2);

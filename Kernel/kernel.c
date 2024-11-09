@@ -46,7 +46,7 @@ void * initializeKernelBinary()
 		sampleCodeModuleAddress,
 		sampleDataModuleAddress
 	};
-	loadModules(&endOfKernelBinary, moduleAddresses);
+	load_modules(&endOfKernelBinary, moduleAddresses);
 	clearBSS(&bss, &endOfKernel - &bss);
 	return getStackBase();
 }
@@ -60,7 +60,7 @@ int main() {
 	vdClearScreen();
 	_sti();
 	initialize_management();
-	requestSchedule();
+	request_schedule();
 
 	vdPrint("\nKERNEL EXIT", 0x00FFFFFF);
 	return 0;

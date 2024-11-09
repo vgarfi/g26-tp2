@@ -1,9 +1,9 @@
 GLOBAL _cli
 GLOBAL _sti
-GLOBAL picMasterMask
-GLOBAL picSlaveMask
-GLOBAL haltcpu
-GLOBAL requestSchedule
+GLOBAL pic_master_mask
+GLOBAL pic_slave_mask
+GLOBAL halt_cpu
+GLOBAL request_schedule
 
 GLOBAL _hlt
 
@@ -19,8 +19,8 @@ GLOBAL _exception6Handler
 GLOBAL _syscallHandler
 
 GLOBAL getRegs
-GLOBAL saveRegsInBuffer
-EXTERN get_key
+GLOBAL save_regsInBuffer
+EXTERN kb_get_key
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 EXTERN syscallDispatcher
@@ -33,7 +33,7 @@ EXTERN schedule
 SECTION .text
 
 
-%macro saveRegsInBuffer 0	;; Once you enter here, regs[0]=RIP, regs[1]=RFLAGS, regs[2]=RSP
+%macro save_regsInBuffer 0	;; Once you enter here, regs[0]=RIP, regs[1]=RFLAGS, regs[2]=RSP
     mov [regs + 8*3], rax
     mov [regs + 8*4], rbp
     mov [regs + 8*5], rcx
@@ -154,7 +154,7 @@ _sti:
 	sti
 	ret
 
-picMasterMask:
+pic_master_mask:
 	push rbp
     mov rbp, rsp
     mov ax, di
@@ -162,7 +162,7 @@ picMasterMask:
     pop rbp
     retn
 
-picSlaveMask:
+pic_slave_mask:
 	push    rbp
     mov     rbp, rsp
     mov     ax, di  ; ax = mascara de 16 bits
@@ -195,12 +195,12 @@ _irq00Handler:
 ;Keyboard
 _irq01Handler:
 	push rax
-	call get_key
+	call kb_get_key
 	cmp al, 0x38
 	pop rax
 	jne .continue
 		saveIntRegs
-		saveRegsInBuffer
+		save_regsInBuffer
 		
 .continue:
 	irqHandlerMaster 1
@@ -225,13 +225,13 @@ _irq05Handler:
 ;Zero Division Exception
 _exception0Handler:
 	saveIntRegs
-	saveRegsInBuffer
+	save_regsInBuffer
 	exceptionHandler 0
 
 ;Invalid OpCode Exception
 _exception6Handler:
 	saveIntRegs
-	saveRegsInBuffer
+	save_regsInBuffer
 	exceptionHandler 6
 
 getRegs:
@@ -255,12 +255,12 @@ _syscallHandler:
 	popStateNoRAX
 	iretq
 
-haltcpu:
+halt_cpu:
 	cli
 	hlt
 	ret
 
-requestSchedule:
+request_schedule:
 	int 20h
 	ret
 

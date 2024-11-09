@@ -3,7 +3,7 @@
 #include <defs.h>
 
 void timer_handler();
-void updateBuffer();
+void kb_update_buffer();
 
 static void timer_tick_handler();
 static void kb_handler();
@@ -23,7 +23,7 @@ void irqDispatcher(uint64_t irq) {
 }
 
 void kb_handler(){
-	updateBuffer();
+	kb_update_buffer();
 }
 
 void timer_tick_handler() {

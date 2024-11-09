@@ -21,7 +21,7 @@ const uint32_t bgColor = BLACK;
 char charsInScreen[MAXCHARSINSCREEN];
 uint32_t colorsInScreen[MAXCHARSINSCREEN];
 static int index;
-static int scrollUpdateBuffer;
+static int scrollkb_update_buffer;
 
 void initializeVideoDriver(){
 	framebuffer = (uint8_t *)(uintptr_t) VBE_mode_info->framebuffer;
@@ -31,7 +31,7 @@ void initializeVideoDriver(){
 	bytesPerPixel = VBE_mode_info->bpp/BYTE_LENGHT;
 	memset(charsInScreen,' ',MAXCHARSINSCREEN);
 	memset(colorsInScreen,0,4*MAXCHARSINSCREEN);
-	scrollUpdateBuffer = 1;
+	scrollkb_update_buffer = 1;
 	index = 0;
 }
 
@@ -196,7 +196,7 @@ void vdDeleteChar(){
 
 void vdResize(){
 	vdClearScreen();
-	scrollUpdateBuffer = 0;
+	scrollkb_update_buffer = 0;
 	char c;
 	for(int j=0;j<index;j++){
 		c = charsInScreen[j];
@@ -208,7 +208,7 @@ void vdResize(){
 			vdPrintChar(c);
 			}	
 	}
-	scrollUpdateBuffer = 1;
+	scrollkb_update_buffer = 1;
 }
 
 void vdClearScreen(){
@@ -236,7 +236,7 @@ void vdScroll(int lines) {
     int clearSize = bytesPerPixel * widthScreen * lines * fontHeight;
     memcpy(framebuffer, framebuffer + offset, frameSize);
     memset(framebuffer + frameSize, 0, clearSize);
-	if(scrollUpdateBuffer == 1 && index >= MAXCHARSINSCREEN){
+	if(scrollkb_update_buffer == 1 && index >= MAXCHARSINSCREEN){
 		if(index - lines * (widthScreen/get_current_font().size.real_width) >=0){
 			index -= lines * (widthScreen/get_current_font().size.real_width);
 		}

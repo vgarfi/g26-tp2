@@ -1,7 +1,8 @@
 #define ZERO_EXCEPTION_ID 0
 #define INVALID_OPCODE_ID 6
 #include <videoDriver.h>
-#include <keyboard.h>
+#include <keyboardDriver.h>
+#include <syscallDispatcher.h>
 #include <interrupts.h>
 #include <fonts.h>
 #include <lib.h>
@@ -10,17 +11,13 @@
 #define ERRORCOL 0x00FF0000
 #define COMMENTCOL 0x00FFFFFF
 
-int msSleep(uint64_t rdi, uint64_t rsi);
-int read(uint64_t fd, char * buf, uint64_t count);
-
 static void zero_division();
 static void invalid_opcode();
-int hideCursor();
 
 void exceptionDispatcher(int exception) {
-	saveRegs();
+	save_regs();
 	vdClearScreen();
-	hideCursor();
+	sys_hide_cursor();
 	set_current_font(DEFAULT_FONT);
 	for(int i=0; i<10; i++) vdPrint("\n", COMMENTCOL);
 	vdPrint("ERROR: An exception has occurred during runtime. More information:\n\n", ERRORCOL);
@@ -33,16 +30,16 @@ void exceptionDispatcher(int exception) {
 			invalid_opcode();
 			break;
 	}
-	regPrinting();
+	reg_printing();
 	vdPrint("\n", COMMENTCOL);
-	msSleep(3, 5);
+	sys_ms_sleep(3, 5);
 	vdPrint("Press any key to recover...\n",COMMENTCOL);
 	int flag=0;
 	char key;
-	kbcleanBuffer();
+	kb_clean_buffer();
 	
 	while(!flag){
-		flag=read(STDIN, &key, 1);
+		flag=sys_read(STDIN, &key, 1);
 	}
 	vdClearScreen();
 	vdClearBuffer();

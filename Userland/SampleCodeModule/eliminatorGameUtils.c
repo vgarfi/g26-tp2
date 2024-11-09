@@ -280,18 +280,18 @@ int directionIsHorizontal (int direction) {
     return direction == LEFT || direction == RIGHT;
 }
 
-int decideSnakeDirection (int lastDirection, int upArrowValue, int downArrowValue, int leftArrowValue, int rightArrowValue, unsigned char keyPressed) {
+int decideSnakeDirection (int lastDirection, int sys_up_arrow_value, int sys_down_arrow_value, int sys_left_arrow_value, int sys_right_arrow_value, unsigned char keyPressed) {
     if (directionIsHorizontal(lastDirection)) {
-        if (keyPressed == upArrowValue) {
+        if (keyPressed == sys_up_arrow_value) {
             return UP;
-        } else if (keyPressed == downArrowValue) {
+        } else if (keyPressed == sys_down_arrow_value) {
             return DOWN;
         }
         else return lastDirection;
     } else {
-        if (keyPressed == leftArrowValue) {
+        if (keyPressed == sys_left_arrow_value) {
             return LEFT;
-        } else if (keyPressed == rightArrowValue) {
+        } else if (keyPressed == sys_right_arrow_value) {
             return RIGHT;
         }
         else return lastDirection;

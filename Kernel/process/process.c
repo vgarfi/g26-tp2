@@ -55,7 +55,7 @@ int yield_process(void) {
     for (uint8_t i = pcb_to_yield->priority; i > 0; i--) {
         enqueue(pcb_readies_queue, pcb_to_yield);
     }
-    requestSchedule();
+    request_schedule();
     return 0;
 }
 
@@ -68,7 +68,7 @@ int block_process(uint8_t pid) {
     TState state = pcb_to_block->state; 
     pcb_to_block->state = BLOCKED;
     if (state == RUNNING) {
-        requestSchedule();
+        request_schedule();
     }
     return EXIT_SUCCESS;
 }
@@ -288,7 +288,7 @@ int kill_process(uint8_t pid) {
     put_children_mpid_init(pid);
     destroy_anonymous_pipes(process_pcb->fd_r);
     if (process_state == RUNNING) {
-        requestSchedule();
+        request_schedule();
     }
     return EXIT_SUCCESS;
 }
@@ -309,7 +309,7 @@ int forced_kill_process(uint8_t pid) {
     pids[pid] = AVAILABLE_PID;
     pcb_array[pid] = NULL;
     if (process_state == RUNNING) {
-        requestSchedule();
+        request_schedule();
     }
     return EXIT_SUCCESS;
 }

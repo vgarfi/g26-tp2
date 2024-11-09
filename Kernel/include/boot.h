@@ -12,7 +12,7 @@
 void os_logo_boot(void);
 
 /**
- * @brief Plays the operating system sound during boot.
+ * @brief Plays the operating system sys_sound during boot.
  */
 void os_sound_boot(void);
 

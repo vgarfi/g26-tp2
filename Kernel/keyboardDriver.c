@@ -1,6 +1,6 @@
 #include <synchro/synchro.h>
 #include <videoDriver.h>
-#include <keyboard.h>
+#include <keyboardDriver.h>
 #include <lib.h>
 #include <defs.h>
 
@@ -74,28 +74,28 @@ uint8_t isArrow (uint8_t key) {
     }    
 }
 
-uint8_t kbUpArrowValue() {
+uint8_t kb_up_arrow_value() {
     return UP_ARROW_VAL;
 }
 
-uint8_t kbLeftArrowValue() {
+uint8_t kb_left_arrow_value() {
     return LEFT_ARROW_VAL;
 }
 
-uint8_t kbDownArrowValue() {
+uint8_t kb_down_arrow_value() {
     return DOWN_ARROW_VAL;
 }
 
-uint8_t kbRightArrowValue() {
+uint8_t kb_right_arrow_value() {
     return RIGHT_ARROW_VAL;
 }
 
-void updateBuffer() {
-    uint8_t scancode = get_key();
+void kb_update_buffer() {
+    uint8_t scancode = kb_get_key();
     uint8_t arrowValue = isArrow(scancode);
 
     if(scancode == L_ALT) {
-        saveRegs();
+        save_regs();
     }
     else if(scancode==CONTROL) {
         ctrlPressed=1;
@@ -107,11 +107,11 @@ void updateBuffer() {
 
     else if (ctrlPressed) {    
         if(scancode == C) {
-            stopRunning();
+            stop_running();
             ctrlPressed = 0;
         }
         else if (scancode == D) {
-            sendEndOfFile();
+            send_end_of_file();
             ctrlPressed = 0;
         }
     }
@@ -128,30 +128,30 @@ void updateBuffer() {
 }
 
 // TODO ver esto
-void kbInsertNewLine(void) {
+void kb_insert_new_line(void) {
     buffer[bufferPos++] = '\n';
     post_sem(KEYBOARD_SEM);
 }
 
-int kbctrlPressed(){
+int kb_ctrl_pressed(){
     return ctrlPressed;
 }
 
-int kbisBufferEmpty(){
+int kb_is_buffer_empty(){
     return bufferPos == 0;
 }
 
-void kbcleanBuffer(){
+void kb_clean_buffer(){
     bufferPos = 0;
 }
 
-void kbEndOfFile(){
+void kb_end_of_file(){
     buffer[bufferPos++] = EOF;
 }
 
-unsigned char kbreadBuf () {
+unsigned char kb_read_buf () {
     wait_sem(KEYBOARD_SEM);
-    if(kbisBufferEmpty()) {
+    if(kb_is_buffer_empty()) {
         return 0;
     }
     
