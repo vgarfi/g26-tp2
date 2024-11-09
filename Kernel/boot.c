@@ -194,21 +194,15 @@ uint32_t logo[186][156] = {
 };
 
 void os_logo_boot() {
-    vdPrintLogo(logo, 786, 674);
+    vdPrintLogo(logo, 186, 156);
 }
 
 void os_sound_boot() {
-    beep(6, 523);
-    sleep(1);
-    beep(6, 659);
-    sleep(1);
+    beep(2, 523);
+    beep(4, 659);
+    beep(2, 784);
+    beep(2, 659);
+    beep(4, 784);
+    beep(3, 880);
     beep(6, 784);
-    sleep(1);
-    beep(6, 1047);
-    sleep(1);
-    beep(6, 784);
-    sleep(1);
-    beep(6, 659);
-    sleep(1);
-    beep(6, 523);
 }
