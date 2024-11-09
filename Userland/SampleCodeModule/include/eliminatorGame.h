@@ -4,6 +4,8 @@
 #ifndef __ELIMINATOR_GAME_H__
 #define __ELIMINATOR_GAME_H__
 
+#define ELIMINATOR_PROCESS  "eliminator"
+
 #define ELIMINATOR_EXEC         1
 #define TICKS_PER_FRAME         1
 #define MS_PER_FRAME            180000

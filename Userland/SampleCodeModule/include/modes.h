@@ -12,7 +12,6 @@ void time(void);
 void date(void);
 void clear(void);
 void registers(void);
-void eliminator(void);
 void notFound(char* commandNotFound);
 void playEasterEgg();
 
@@ -35,5 +34,7 @@ int wc(TScope scope);
 int filter(TScope scope);
 
 int phylosophers(TScope scope);
+
+int playEliminator(void);
 
 #endif

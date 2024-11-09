@@ -5,14 +5,7 @@
 int64_t loopProcess(int argc, char** argv) {
     int printed;
     while(printed != EOF) {
-        // sysBeepSound(2, 450);
-        sysSleep(0, 2);
-        // for (int i = 0; i < 18*3000; i++) {
-        // for (int i = 0; i < 18*80; i++)
-        //     {
-        //         /* code */
-        //     }
-        // }
+        sysSleep(1, 1);
         print("Hello (from ");
         printColor("LOOP", 0x0000D4C1);
         printf(") with PID: %d ", sysGetCurrentPid(),0,0);

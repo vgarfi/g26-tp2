@@ -41,13 +41,6 @@ void help (void) {
     }
 }
 
-void eliminator() {
-    sysHideCursor();
-    print("\nLoading eliminator...");
-    sysSleep(2,0);
-    eliminatorGame();
-}
-
 void clear (void) {
     sysClearScreen();
 }
@@ -134,6 +127,14 @@ void playEasterEgg(){
 
     sysShowCursor();
     sysPrintCursor();
+}
+
+static char * eliminator_args[] = {ELIMINATOR_PROCESS, 0};
+int playEliminator() {
+    sysHideCursor();
+    print("\nLoading eliminator...");
+    sysSleep(2,0);
+    return sysCreateProcess(ELIMINATOR_PROCESS, 1, eliminator_args, (int64_t (*)(int, char**))eliminatorGame, FOREGROUND);
 }
 
 static char * test_args_proc[] = {TEST_PROCESSES, "5", 0};
