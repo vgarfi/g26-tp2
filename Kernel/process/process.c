@@ -421,8 +421,8 @@ uint32_t get_scope_color(TScope scope) {
 }
 
 int processes_information() {
-    int zoom_level = getZoom();
-    setZoom(2);
+    int zoom_level = get_zoom();
+    set_zoom(2);
     char buffer[64];
     char* states_labels[] = {"BLOCKED","READY","RUNNING","KILLED","ZOMBIE"};
     char* scope_labels[] = {"FOREGROUND","BACKGROUND"};
@@ -475,7 +475,7 @@ int processes_information() {
             vdPrint("\n", 0x00FFFFFF);
         }
     }
-    setZoom(zoom_level);
+    set_zoom(zoom_level);
     return EXIT_SUCCESS;
 }
 

@@ -1,6 +1,6 @@
 /**
  * @file memoryManagerADT.h
- * @brief Definición del MemoryManagerADT para el memory manager.
+ * @brief Memory Manager ADT definition for memory management.
  */
 
 #ifndef memoryManagerADT_H
@@ -11,13 +11,13 @@
 
 /**
  * @typedef MemoryManagerADT
- * @brief Un puntero a una estructura concreta que representa el memory manager.
+ * @brief A pointer to a concrete structure representing the memory manager.
  */
 typedef struct MemoryManagerCDT* MemoryManagerADT;
 
 /**
  * @typedef MemoryDiagnostic
- * @brief Estructura que encapsula la información del estado de un memory manager.
+ * @brief Structure that encapsulates the state information of a memory manager.
  */
 typedef struct {
     size_t total_memory;
@@ -29,38 +29,38 @@ typedef struct {
 } MemoryDiagnostic;
 
 /**
- * @brief Inicializa el memory manager.
+ * @brief Initializes the memory manager.
  *
- * @param base Puntero a la base de la memoria a gestionar.
- * @param size Tamaño total de la memoria a gestionar.
- * @param block_size Tamaño de cada bloque de memoria.
- * @return Un nuevo MemoryManagerADT inicializado.
+ * @param base Pointer to the base of the memory to be managed.
+ * @param size Total size of the memory to be managed.
+ * @param block_size Size of each memory block.
+ * @return A new initialized MemoryManagerADT.
  */
 MemoryManagerADT initialize_mm(void* base, size_t size, size_t block_size);
 
 /**
- * @brief Asigna memoria para alojar el tamaño deseado.
+ * @brief Allocates memory to accommodate the desired size.
  *
- * @param mm El memory amnager.
- * @param size El tamaño de memoria a asignar.
- * @return Un puntero al bloque de memoria asignado, o NULL si no hay suficiente memoria.
+ * @param mm The memory manager.
+ * @param size The size of memory to allocate.
+ * @return A pointer to the allocated memory block, or NULL if there is not enough memory.
  */
 void* malloc_mm(MemoryManagerADT mm, size_t size);
 
 /**
- * @brief Libera un bloque de memoria previamente asignado.
+ * @brief Frees a previously allocated memory block.
  *
- * @param mm El memory manager.
- * @param ptr Puntero al bloque de memoria a liberar.
+ * @param mm The memory manager.
+ * @param ptr Pointer to the memory block to free.
  */
 void free_mm(MemoryManagerADT mm, void* ptr);
 
 /**
- * @brief Obtiene información relevante sobre la memoria.
+ * @brief Obtains relevant information about the memory.
  *
- * @param mm El memory manager.
- * @return El diagnostico de memoria del memory manager.
+ * @param mm The memory manager.
+ * @return The memory diagnostic of the memory manager.
  */
-
 MemoryDiagnostic get_diagnostic_mm(MemoryManagerADT mm);
+
 #endif

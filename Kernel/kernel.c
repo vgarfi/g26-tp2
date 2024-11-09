@@ -55,7 +55,7 @@ int main() {
 	load_idt();
 	// initializeTimer();
 	initializeVideoDriver();
-	initFontManager();
+	init_font_manager();
 	os_logo_boot();
 	vdClearScreen();
 	_sti();

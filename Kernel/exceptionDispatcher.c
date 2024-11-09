@@ -21,7 +21,7 @@ void exceptionDispatcher(int exception) {
 	saveRegs();
 	vdClearScreen();
 	hideCursor();
-	setCurrentFont(DEFAULT_FONT);
+	set_current_font(DEFAULT_FONT);
 	for(int i=0; i<10; i++) vdPrint("\n", COMMENTCOL);
 	vdPrint("ERROR: An exception has occurred during runtime. More information:\n\n", ERRORCOL);
 

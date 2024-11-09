@@ -9,43 +9,43 @@ Size sizes[7] = {{6,8,12},{8,8,14},{10,16,18},{11,16,22},{12,16,24},{14,16,28}, 
 static FontManager global_font_manager;
 
 // Function to initialize FontManager
-void initFontManager() {
+void init_font_manager() {
     for (int i = 0; i < FONTS_QUANTITY; i++) {
         global_font_manager.fonts[i].bitmap = fonts[i];
         global_font_manager.fonts[i].size.width = sizes[i].width;
         global_font_manager.fonts[i].size.height = sizes[i].height;
-        global_font_manager.fonts[i].size.realWidth = sizes[i].realWidth;
+        global_font_manager.fonts[i].size.real_width = sizes[i].real_width;
     }
 	
-    global_font_manager.currentFontIndex = DEFAULT_FONT;
+    global_font_manager.current_font_index = DEFAULT_FONT;
 }
 
 // Funtion to select a font
-int setCurrentFont(int index) {
+int set_current_font(int index) {
     if (index >= 0 && index < FONTS_QUANTITY) {
-        global_font_manager.currentFontIndex = index;
+        global_font_manager.current_font_index = index;
         return 0;
     }
     return 1; 
 }
 
 // Function to get the current font
-FontBitmap getCurrentFont() {
-    return global_font_manager.fonts[global_font_manager.currentFontIndex];
+FontBitmap get_current_font() {
+    return global_font_manager.fonts[global_font_manager.current_font_index];
 }
 
-int sizeUp(){
-    return setCurrentFont(global_font_manager.currentFontIndex+1);
+int size_up(){
+    return set_current_font(global_font_manager.current_font_index+1);
 }
 
-int sizeDown(){
-    return setCurrentFont(global_font_manager.currentFontIndex-1);
+int size_down(){
+    return set_current_font(global_font_manager.current_font_index-1);
 }
 
-int getZoom(){
-    return global_font_manager.currentFontIndex;
+int get_zoom(){
+    return global_font_manager.current_font_index;
 }
 
-int setZoom(int zoomLevel){
-    return setCurrentFont(zoomLevel);
+int set_zoom(int zoom_level){
+    return set_current_font(zoom_level);
 }

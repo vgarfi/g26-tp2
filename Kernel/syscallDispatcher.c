@@ -22,7 +22,7 @@ extern MemoryManagerADT memory_manager;
 
 static int (*syscallHandlers[])()={
     // Syscalls de Arqui
-    read, write, printRegs, incSize, decSize, getZoomLevel, setZoomLevel, upArrowValue, leftArrowValue, downArrowValue,
+    read, write, printRegs, incSize, decSize, get_zoom_level, set_zoom_level, upArrowValue, leftArrowValue, downArrowValue,
     rightArrowValue, clearScreen, printSquare, printRect, setCursor, sound, msSleep, hideCursor,
     showCursor, printCursor, getCurrentSeconds, getCurrentMinutes, getCurrentHours, getCurrentDay,
     getCurrentMonth, getCurrentYear, isctrlPressed, cleanKbBuffer,
@@ -70,25 +70,25 @@ int write(uint64_t fd, char * buf, uint64_t count, uint64_t hexColor){
 }
 
 int incSize(){
-    int zoomFail = sizeUp();
+    int zoomFail = size_up();
     if(!zoomFail)
         vdResize();
     return zoomFail;
 }
 
 int decSize(){
-    int zoomFail = sizeDown();
+    int zoomFail = size_down();
     if(!zoomFail)
         vdResize();
     return zoomFail;
 }
 
-int getZoomLevel(){
-    return getZoom();
+int get_zoom_level(){
+    return get_zoom();
 }
 
-int setZoomLevel(int zoomLevel) {
-    return setZoom(zoomLevel);
+int set_zoom_level(int zoom_level) {
+    return set_zoom(zoom_level);
 }
 
 int upArrowValue() {    
@@ -243,8 +243,8 @@ int memoryFree(void* ptr) {
 }
 
 int memoryStatus(void) {
-    int zoom_level = getZoom();
-    setZoom(2);
+    int zoom_level = get_zoom();
+    set_zoom(2);
     MemoryDiagnostic diagnostic = get_diagnostic_mm(memory_manager);
     char buffer[64];
 
@@ -283,7 +283,7 @@ int memoryStatus(void) {
     vd_print_padded(buffer, 0x00FFFFFF, BLOCKS_COLUMN_WIDTH);
 
     vdPrint("\n", 0x00FFFFFF);
-    setZoom(zoom_level);
+    set_zoom(zoom_level);
     return 0;
 }
 

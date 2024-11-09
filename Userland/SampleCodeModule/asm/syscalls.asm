@@ -24,8 +24,8 @@ GLOBAL sysGetYear
 GLOBAL sysBeepSound
 GLOBAL sysZoomIn
 GLOBAL sysZoomOut
-GLOBAL sysGetZoomLevel
-GLOBAL sysSetZoomLevel
+GLOBAL sysget_zoom_level
+GLOBAL sysset_zoom_level
 GLOBAL sysPrintCursor
 GLOBAL sysHideCursor
 GLOBAL sysShowCursor
@@ -84,12 +84,12 @@ sysZoomOut:
     int 80h
     ret
 
-sysGetZoomLevel:
+sysget_zoom_level:
     mov rax, 5
     int 80h
     ret
 
-sysSetZoomLevel:
+sysset_zoom_level:
     mov rax, 6
     int 80h
     ret

@@ -11,12 +11,12 @@ static int shellFontLevel;
 
 void initializeEliminator(void){
     sysClearScreen();
-    shellFontLevel = sysGetZoomLevel();
-    sysSetZoomLevel(ELIMINATOR_FONT_LEVEL);
+    shellFontLevel = sysget_zoom_level();
+    sysset_zoom_level(ELIMINATOR_FONT_LEVEL);
 }
 
 void eliminatorReturn(void) {
-    sysSetZoomLevel(shellFontLevel);
+    sysset_zoom_level(shellFontLevel);
     sysClearScreen();
     sysShowCursor();
 }

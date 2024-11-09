@@ -31,8 +31,8 @@ int sysGetYear(void);
 
 int sysZoomIn(void);
 int sysZoomOut(void);
-int sysGetZoomLevel(void);
-int sysSetZoomLevel(int zoomLevel);
+int sysget_zoom_level(void);
+int sysset_zoom_level(int zoom_level);
 
 int sysPrintRegs(void);
 int sysPrintCursor();
