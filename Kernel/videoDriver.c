@@ -2,6 +2,7 @@
 #include <defs.h>
 #include <fonts.h>
 #include <lib.h>
+#include <boot.h>
 
 #define MAXCHARSINSCREEN 10880	// chars per row * chars per column (with minimum size)
 #define GREY 0x00F0F0F0
@@ -263,4 +264,36 @@ void vd_print_padded(const char *str, uint32_t color, int width) {
     for (int i = 0; i < padding; i++) {
         vdPrint(" ", color);
     }
+}
+
+int vd_screen_width() {
+	return widthScreen;
+}
+
+int vd_screen_height() {
+	return heightScreen;
+}
+
+
+void vdPrintLogo(uint32_t bitmap[LOGOWIDTH][LOGOHEIGHT], int bitmapWidth, int bitmapHeight)
+{
+	if (bitmapWidth <= 0 || bitmapHeight <= 0) {
+		return;
+	}
+
+	int startX = (widthScreen - bitmapWidth) / 2;
+	int startY = (heightScreen - bitmapHeight) / 2;
+
+	for (int x = 0; x < bitmapWidth; x++) {
+		for (int y = 0; y < bitmapHeight; y++) {
+			uint32_t hexColor = bitmap[x][y];
+
+			int posX = (startX + x) * bytesPerPixel;
+			int posY = (startY + y) * pitch;
+
+			if (posX < widthScreen * bytesPerPixel && posY < heightScreen * pitch) {
+				vdPutPixel(posX + posY, hexColor);
+			}
+		}
+	}
 }

@@ -7,6 +7,7 @@
 #include <time.h>
 #include <defs.h>
 #include <interrupts.h>
+#include <boot.h>
 #include <kernelManagement.h>
 #include <process/process.h>
 
@@ -55,6 +56,8 @@ int main() {
 	// initializeTimer();
 	initializeVideoDriver();
 	initFontManager();
+	os_logo_boot();
+	// os_sound_boot();
 	initialize_management();
 	requestSchedule();
 
