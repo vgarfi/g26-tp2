@@ -25,8 +25,7 @@ uint64_t filosofo(uint64_t argc, char *argv[]) {
     while (1) {
         // Filósofo pensando
         estado[id] = PENSANDO;
-        //sysSleep(3, 0); // Pensar
-        for(int i = 0; i < 9999999; i++);
+        sysSleep(0, 1); // Pensar
 
         if (id % 2 == 0) {  // Filósofo par
             sysWaitSem(tenedores[tenedor_der]);
@@ -50,8 +49,7 @@ uint64_t filosofo(uint64_t argc, char *argv[]) {
         printf("\n", 0, 0, 0);
 
         //printf("Filosofo %d ha comenzado a comer.\n", id, 0, 0);
-        //sysSleep(1, 0); // Comer
-        for(int i = 0; i < 9999999; i++);
+        sysSleep(0, 1); // Comer
 
         // Filósofo termina de comer
         //printf("Filosofo %d ha terminado de comer.\n", id, 0, 0);
@@ -60,7 +58,7 @@ uint64_t filosofo(uint64_t argc, char *argv[]) {
         sysPostSem(tenedores[tenedor_der]);
         
         estado[id] = PENSANDO;
-        //sysSleep(3, 0);
+        sysSleep(0, 1);
     }
 }
 
