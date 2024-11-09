@@ -25,17 +25,17 @@ Para la compilación y compilación de los testeos necesarios, existen dos alter
 
 #### Por fuera de la shell
 
-1. Localizar el archivo `test_mm.c` (ubicado en el directorio `Kernel/memory`).
-2. Compilar mediante `gcc` haciendo uso de los archivos `memoryManagerADT.h`, `test_util.c`, `test_util.h`, `bitmapMemoryManager.c` y `syscall.c`:
+1. Localizar el archivo `testMm.c` (ubicado en el directorio `Kernel/memory`).
+2. Compilar mediante `gcc` haciendo uso de los archivos `memoryManagerADT.h`, `testUtil.c`, `testUtil.h`, `bitmapMemoryManager.c` y `syscall.c`:
 
     ```sh
-    gcc -I../include/memory -o test_mm test_mm.c test_util.c bitmapMemoryManager.c syscall.c
+    gcc -I../include/memory -o testMm testMm.c testUtil.c bitmapMemoryManager.c syscall.c
     ```
 
-3. Ejecutar el archivo generado `test_mm` ingresando como argumento la memoria máxima a almacenar:
+3. Ejecutar el archivo generado `testMm` ingresando como argumento la memoria máxima a almacenar:
 
     ```sh
-    ./test_mm <memoria_maxima>
+    ./testMm <memoria_maxima>
     ```
 
 #### Dentro de la shell
@@ -46,10 +46,10 @@ Para correr los testeos usando el entorno del kernel desarrollado en Arquitectur
 	./compile.sh
 ```
 
-Esto generará el archivo `test_mm` en la carpeta de `Kernel/memory`. Ejecutarlo ingresando como argumento el número de bytes solicitados:
+Esto generará el archivo `testMm` en la carpeta de `Kernel/memory`. Ejecutarlo ingresando como argumento el número de bytes solicitados:
 
 ```sh
-	./test_mm <memoria_maxima>
+	./testMm <memoria_maxima>
 ```
 Brindar los permisos necesarios de ejecución de los mismos mediante chmod +x a los ejecutables que lo requieran.
 

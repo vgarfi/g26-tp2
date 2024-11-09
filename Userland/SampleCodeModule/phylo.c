@@ -3,8 +3,8 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "include/syscalls.h"
-#include "include/test_sync.h"
-#include <test_util.h>
+#include "include/testSync.h"
+#include <testUtil.h>
 #include <string.h>
 
 #define NUM_FILOSOFOS 10

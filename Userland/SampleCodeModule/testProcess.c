@@ -1,12 +1,12 @@
-#include <test_proc.h>
-#include <test_util.h>
+#include <testProc.h>
+#include <testUtil.h>
 #include <syscalls.h>
 #include <stdio.h>
 
 uint8_t prio[TOTAL_PROCESSES] = {LOWEST, MEDIUM, HIGHEST};
 void finish_testing();
 
-int64_t test_processes(uint64_t argc, char *argv[]) {
+int64_t testProcesses(uint64_t argc, char *argv[]) {
   uint8_t rq;
   uint8_t alive = 0;
   uint8_t action;
@@ -21,12 +21,12 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
     return -1;
 
   p_rq p_rqs[max_processes];
-  printf("test_processes: Testing process administration...",0,0,0);
+  printf("testProcesses: Testing process administration...",0,0,0);
   while (1) {
     for (rq = 0; rq < max_processes; rq++) {
-      p_rqs[rq].pid = sysCreateProcess("endless_loop", 0, argvAux, (int64_t (*)(int, char**))endless_loop, test_scope);
+      p_rqs[rq].pid = sysCreateProcess("endlessLoop", 0, argvAux, (int64_t (*)(int, char**))endlessLoop, test_scope);
       if (p_rqs[rq].pid == -1) {
-        printf("test_processes: ERROR creating process\n",0,0,0);
+        printf("testProcesses: ERROR creating process\n",0,0,0);
         return -1;
       } else {
         p_rqs[rq].state = RUNNING;
@@ -45,7 +45,7 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
           case 0:
             if (p_rqs[rq].state == RUNNING || p_rqs[rq].state == BLOCKED) {
               if (sysKillProcess(p_rqs[rq].pid) == -1) {
-                printf("test_processes: ERROR killing process\n",0,0,0);
+                printf("testProcesses: ERROR killing process\n",0,0,0);
                 return -1;
               }
               p_rqs[rq].state = KILLED;
@@ -56,7 +56,7 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
           case 1:
             if (p_rqs[rq].state == RUNNING) {
               if (sysBlockProcess(p_rqs[rq].pid) == -1) {
-                printf("test_processes: ERROR blocking process\n",0,0,0);
+                printf("testProcesses: ERROR blocking process\n",0,0,0);
                 return -1;
               }
               p_rqs[rq].state = BLOCKED;
@@ -69,7 +69,7 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
       for (rq = 0; rq < max_processes; rq++){
         if (p_rqs[rq].state == BLOCKED && GetUniform(100) % 2) {
           if (sysUnblockProcess(p_rqs[rq].pid) == -1) {
-            printf("test_processes: ERROR unblocking process\n",0,0,0);
+            printf("testProcesses: ERROR unblocking process\n",0,0,0);
             return -1;
           }
           p_rqs[rq].state = RUNNING;
@@ -81,25 +81,25 @@ int64_t test_processes(uint64_t argc, char *argv[]) {
   }
 }
 
-void test_priorities(void) {
+void testPriorities(void) {
   uint8_t pids[TOTAL_PROCESSES];
   char *argv[] = {0};
   uint64_t i;
   TScope test_scope = sysGetScope(sysGetCurrentPid());
   int fds[] = {0,1}; 
   
-  printf("test_priorities: Testing Process Priorities...",0,0,0);
+  printf("testPriorities: Testing Process Priorities...",0,0,0);
 
   for (i = 0; i < TOTAL_PROCESSES; i++)
-    pids[i] = sysCreateProcess("endless_loop_print", 0, argv, (int64_t (*)(int, char**))endless_loop_print, test_scope);
+    pids[i] = sysCreateProcess("endlessLoopPrint", 0, argv, (int64_t (*)(int, char**))endlessLoopPrint, test_scope);
 
-  bussy_wait(WAIT);
+  bussyWait(WAIT);
   printf("\nCHANGING PRIORITIES...\n", 0,0,0);
 
   for (i = 0; i < TOTAL_PROCESSES; i++)
     sysNice(pids[i], prio[i]);
 
-  bussy_wait(WAIT);
+  bussyWait(WAIT);
   printf("\nBLOCKING...\n",0,0,0);
 
   for (i = 0; i < TOTAL_PROCESSES; i++)
@@ -115,43 +115,43 @@ void test_priorities(void) {
   for (i = 0; i < TOTAL_PROCESSES; i++)
     sysUnblockProcess(pids[i]);
 
-  bussy_wait(WAIT);
+  bussyWait(WAIT);
   printf("\nKILLING...\n",0,0,0);
 
   for (i = 0; i < TOTAL_PROCESSES; i++)
     sysKillProcess(pids[i]);
 
-  bussy_wait(WAIT);
+  bussyWait(WAIT);
   sysPs();
-  printf("\ntest_priorities: Process priorities tested succesfully\n",0,0,0);
+  printf("\ntestPriorities: Process priorities tested succesfully\n",0,0,0);
   finish_testing();
   return;
 }
 
 void finish_testing() {
-    bussy_wait(WAIT*3);
+    bussyWait(WAIT*3);
     printf("\nFinishing testing in 3", 0,0,0);
-    bussy_wait(WAIT);
+    bussyWait(WAIT);
     printf(".", 0,0,0);
-    bussy_wait(WAIT);
+    bussyWait(WAIT);
     printf(".", 0,0,0);
-    bussy_wait(WAIT);
+    bussyWait(WAIT);
     printf(".", 0,0,0);
-    bussy_wait(WAIT);
+    bussyWait(WAIT);
     printf(" 2",0,0,0);
-    bussy_wait(WAIT);
+    bussyWait(WAIT);
     printf(".", 0,0,0);
-    bussy_wait(WAIT);
+    bussyWait(WAIT);
     printf(".", 0,0,0);
-    bussy_wait(WAIT);
+    bussyWait(WAIT);
     printf(".", 0,0,0);
-    bussy_wait(WAIT);
+    bussyWait(WAIT);
     printf(" 1",0,0,0);
-    bussy_wait(WAIT);
+    bussyWait(WAIT);
     printf(".", 0,0,0);
-    bussy_wait(WAIT);
+    bussyWait(WAIT);
     printf(".", 0,0,0);
-    bussy_wait(WAIT);
+    bussyWait(WAIT);
     printf(".", 0,0,0);
     printColor("\n$", 0x0000FF00);
     print("> ");

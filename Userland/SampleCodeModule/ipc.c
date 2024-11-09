@@ -13,12 +13,12 @@ int is_vocal(unsigned char c);
 int is_printable(unsigned char c);
 
 
-int64_t cat_process(int argc, char** argv) {
+int64_t catProcess(int argc, char** argv) {
     print_buffer(NO_FILTER_VOCALS);
 	return 0;
 }
 
-int64_t wc_process(int argc, char** argv) {
+int64_t wcProcess(int argc, char** argv) {
     char c;
     int count = 0;
 	while ((c = getchar()) != EOF) {
@@ -37,7 +37,7 @@ int64_t wc_process(int argc, char** argv) {
     return 0;
 }
 
-int64_t filter_process(int argc, char** argv) {
+int64_t filterProcess(int argc, char** argv) {
     print_buffer(FILTER_VOCALS);
     return;
 }

@@ -9,9 +9,9 @@
 #include "include/dateTime.h"
 #include "include/colors.h"
 #include "include/utils.h"
-#include "include/test_proc.h"
-#include "include/test_mm.h"
-#include "include/test_sync.h"
+#include "include/testProc.h"
+#include "include/testMm.h"
+#include "include/testSync.h"
 #include "include/loop.h"
 #include "include/ipc.h"
 #include "include/phylo.h"
@@ -24,10 +24,10 @@ char* interactive_modes[]  = {
 };
 
 int (*mode_functions[])(int) = {
-    process_test,
-    priorities_test,
-    memory_test,
-    sync_test,
+    processTest,
+    prioritiesTest,
+    memoryTest,
+    syncTest,
     loop,
     cat,
     wc, 
@@ -138,17 +138,17 @@ void playEasterEgg(){
 
 static char * test_args_proc[] = {TEST_PROCESSES, "5", 0};
 
-int process_test(TScope scope) {
-  return sysCreateProcess(TEST_PROCESSES, 2, test_args_proc, (int64_t (*)(int, char**))test_processes, scope);
+int processTest(TScope scope) {
+  return sysCreateProcess(TEST_PROCESSES, 2, test_args_proc, (int64_t (*)(int, char**))testProcesses, scope);
 }
 
 static char * test_args_prio[] = {TEST_PRIORITY, 0};
 
-int priorities_test(TScope scope){
-    return sysCreateProcess(TEST_PRIORITY, 1, test_args_prio, (int64_t (*)(int, char**))test_priorities, scope);
+int prioritiesTest(TScope scope){
+    return sysCreateProcess(TEST_PRIORITY, 1, test_args_prio, (int64_t (*)(int, char**))testPriorities, scope);
 }
 
-int ps_printing(void){
+int psPrinting(void){
     sysPs();
 }
 
@@ -158,13 +158,13 @@ int mem(void){
 
 static char * test_args_memory[] = {TEST_MEMORY, "1024", 0};
 
-int memory_test(TScope scope){
-    return sysCreateProcess(TEST_MEMORY, 2, test_args_memory, (int64_t (*)(int, char**))test_mm, scope);
+int memoryTest(TScope scope){
+    return sysCreateProcess(TEST_MEMORY, 2, test_args_memory, (int64_t (*)(int, char**))testMm, scope);
 }
 
 static char * test_sync_args[] = {TEST_SYNC, 0};
-int sync_test(TScope scope){
-    return sysCreateProcess(TEST_SYNC, 1, test_sync_args, (int64_t (*)(int, char**))initialize_sync_testing, scope);
+int syncTest(TScope scope){
+    return sysCreateProcess(TEST_SYNC, 1, test_sync_args, (int64_t (*)(int, char**))initialize_syncTesting, scope);
 }
 
 void killp(){
@@ -204,7 +204,7 @@ void blockp(){
 }
 
 int loop(TScope scope) {
-    return sysCreateProcess(LOOP, 1, loop_args, loop_process, scope);
+    return sysCreateProcess(LOOP, 1, loop_args, loopProcess, scope);
 }
 
 int (*get_interactive_mode(const char* mode))(int) {
@@ -218,7 +218,7 @@ int (*get_interactive_mode(const char* mode))(int) {
 void niky(){
 
 }
-void pipe_processes(char* input) {
+void pipeProcesses(char* input) {
     char p1[15], p2[15];
     strsplit(input, '|', p1, p2);
     strtrim(p1);
@@ -255,7 +255,7 @@ void pipe_processes(char* input) {
     sysWaitPid(p1Pid);
 }
 
-void create_background_process(char* input) {
+void createBackgroundProcess(char* input) {
     char p1[15], p2[1];
     strsplit(input, '&', p1, p2);
     strtrim(p1);
@@ -265,15 +265,15 @@ void create_background_process(char* input) {
 
 // ! Hacer una lista de procesos
 int cat(TScope scope) {
-    return sysCreateProcess(CAT, 1, cat_args, cat_process, scope);
+    return sysCreateProcess(CAT, 1, cat_args, catProcess, scope);
 }
 
 int wc(TScope scope) {
-    return sysCreateProcess(WC, 1, wc_args, wc_process, scope);
+    return sysCreateProcess(WC, 1, wc_args, wcProcess, scope);
 }
 
 int filter(TScope scope) {
-    return sysCreateProcess(FILTER, 1, filter_args, filter_process, scope);
+    return sysCreateProcess(FILTER, 1, filter_args, filterProcess, scope);
 }
 
 static char * phylos_args[] = {PHYLOS, 0};

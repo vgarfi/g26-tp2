@@ -2,7 +2,7 @@
 #include "include/syscalls.h"
 #include "include/stdio.h"
 
-int64_t loop_process(int argc, char** argv) {
+int64_t loopProcess(int argc, char** argv) {
     int printed;
     while(printed != EOF) {
         // sysSleep(1, 0);
