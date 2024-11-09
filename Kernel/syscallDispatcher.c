@@ -17,6 +17,8 @@
 extern MemoryManagerADT memory_manager;
 
 #define HANDLER_SIZE 52
+#define MEMORY_COLUMN_WIDTH 25
+#define BLOCKS_COLUMN_WIDTH 25
 
 static int (*syscallHandlers[])()={
     // Syscalls de Arqui
@@ -241,32 +243,47 @@ int memoryFree(void* ptr) {
 }
 
 int memoryStatus(void) {
+    int zoom_level = getZoom();
+    setZoom(2);
     MemoryDiagnostic diagnostic = get_diagnostic_mm(memory_manager);
-    char buffer[10];
-    vdPrint("\nTOTAL ", 0x00FFC90E);
-    vdPrint("memory: ", 0x00FFFFFF);
+    char buffer[64];
+
+    vdPrint("\n", 0x00FFFFFF);
+    vd_print_padded("Type", 0x00FFFFFF, MEMORY_COLUMN_WIDTH);
+    vd_print_padded("Memory (bytes)", 0x00FFFFFF, MEMORY_COLUMN_WIDTH);
+    vd_print_padded("Blocks", 0x00FFFFFF, BLOCKS_COLUMN_WIDTH);
+    vdPrint("\n", 0x00FFFFFF);
+
+    vd_print_padded("TOTAL", 0x00FFC90E, MEMORY_COLUMN_WIDTH);
+
     itoa64(diagnostic.total_memory, buffer, 10);
-    vdPrint(buffer, 0x00FFFFFF);
-    vdPrint("\nUSED ", 0x00FF440B);
-    vdPrint("memory: ", 0x00FFFFFF);
-    itoa64(diagnostic.used_memory, buffer, 10);
-    vdPrint(buffer, 0x00FFFFFF);
-    vdPrint("\nFREE ", 0x003CBA14);
-    vdPrint("memory: ", 0x00FFFFFF);
-    itoa64(diagnostic.free_memory, buffer, 10);
-    vdPrint(buffer, 0x00FFFFFF);
-    vdPrint("\nTOTAL ", 0x00FFC90E);
-    vdPrint("blocks: ", 0x00FFFFFF);
+    vd_print_padded(buffer, 0x00FFFFFF, MEMORY_COLUMN_WIDTH);
+
     itoa64(diagnostic.total_blocks, buffer, 10);
-    vdPrint(buffer, 0x00FFFFFF);
-    vdPrint("\nUSED ", 0x00FF440B);
-    vdPrint("blocks: ", 0x00FFFFFF);
+    vd_print_padded(buffer, 0x00FFFFFF, BLOCKS_COLUMN_WIDTH);
+
+    vdPrint("\n", 0x00FFFFFF);
+
+    vd_print_padded("USED", 0x00FF440B, MEMORY_COLUMN_WIDTH);
+
+    itoa64(diagnostic.used_memory, buffer, 10);
+    vd_print_padded(buffer, 0x00FFFFFF, MEMORY_COLUMN_WIDTH);
+
     itoa64(diagnostic.used_blocks, buffer, 10);
-    vdPrint(buffer, 0x00FFFFFF);
-    vdPrint("\nFREE ", 0x003CBA14);
-    vdPrint("blocks: ", 0x00FFFFFF);
+    vd_print_padded(buffer, 0x00FFFFFF, BLOCKS_COLUMN_WIDTH);
+
+    vdPrint("\n", 0x00FFFFFF);
+
+    vd_print_padded("FREE", 0x003CBA14, MEMORY_COLUMN_WIDTH);
+
+    itoa64(diagnostic.free_memory, buffer, 10);
+    vd_print_padded(buffer, 0x00FFFFFF, MEMORY_COLUMN_WIDTH);
+
     itoa64(diagnostic.free_blocks, buffer, 10);
-    vdPrint(buffer, 0x00FFFFFF);
+    vd_print_padded(buffer, 0x00FFFFFF, BLOCKS_COLUMN_WIDTH);
+
+    vdPrint("\n", 0x00FFFFFF);
+    setZoom(zoom_level);
     return 0;
 }
 
