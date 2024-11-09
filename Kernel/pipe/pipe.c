@@ -144,7 +144,7 @@ int close_pipe(int pipe_index) {
 	}
     delete_sem(pipes[pipe_index]->sem_r->name);
     delete_sem(pipes[pipe_index]->sem_w->name);
-    free_mm(memory_manager, pipes[pipe_index]);
+    // free_mm(memory_manager, pipes[pipe_index]);
     available_pipes[pipe_index] = PIPE_AVAILABLE;
     return 0;
 }
