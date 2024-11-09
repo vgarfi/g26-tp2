@@ -8,6 +8,6 @@
 .vscode
 .gdbinit
 *.elf
-test_mm
+testMm
 .gdb_history
 .bash_history

@@ -16,19 +16,19 @@ void eliminator(void);
 void notFound(char* commandNotFound);
 void playEasterEgg();
 
-int process_test(TScope scope);
-int priorities_test(TScope scope);
-int memory_test(TScope scope);
-int sync_test(TScope scope);
-int ps_printing(void);
+int processTest(TScope scope);
+int prioritiesTest(TScope scope);
+int memoryTest(TScope scope);
+int syncTest(TScope scope);
+int psPrinting(void);
 int mem(void);
 void killp(void);
 void blockp(void);
 void unblockp(void);
 
 int loop(TScope scope);
-void pipe_processes(char* input);
-void create_background_process(char* input);
+void pipeProcesses(char* input);
+void createBackgroundProcess(char* input);
 
 int cat(TScope scope);
 int wc(TScope scope);

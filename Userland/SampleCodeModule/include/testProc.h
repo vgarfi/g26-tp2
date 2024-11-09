@@ -27,7 +27,7 @@ typedef struct P_rq {
 } p_rq;
 
 
-void test_priorities(void);
-int64_t test_processes(uint64_t argc, char *argv[]);
+void testPriorities(void);
+int64_t testProcesses(uint64_t argc, char *argv[]);
 
 #endif

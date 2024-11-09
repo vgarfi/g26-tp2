@@ -11,8 +11,8 @@ static char * cat_args[] = {CAT, 0};
 static char * wc_args[] = {WC, 0};
 static char * filter_args[] = {FILTER, 0};
 
-int64_t cat_process(int argc, char** argv);
-int64_t wc_process(int argc, char** argv);
-int64_t filter_process(int argc, char** argv);
+int64_t catProcess(int argc, char** argv);
+int64_t wcProcess(int argc, char** argv);
+int64_t filterProcess(int argc, char** argv);
 
 #endif

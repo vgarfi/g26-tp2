@@ -4,4 +4,4 @@
 
 static char * loop_args[] = {LOOP, 0};
 
-int64_t loop_process(int argc, char** argv);
+int64_t loopProcess(int argc, char** argv);

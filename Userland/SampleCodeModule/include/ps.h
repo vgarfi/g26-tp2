@@ -7,6 +7,6 @@
 
 static char * ps_args[] = {PS, 0};
 
-int64_t ps_process(int argc, char** argv);
+int64_t psProcess(int argc, char** argv);
 
 #endif
