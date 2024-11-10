@@ -229,7 +229,6 @@ int get_available_pid() {
 void wrapper(uint64_t argc, char* argv[], int64_t (*code)(int, char**)) {
     code(argc, argv);
     int current_pid = get_current_pid();
-    if (pids[current_pid] == AVAILABLE_PID) return;
     kill_process(current_pid);
 }
 
@@ -238,7 +237,9 @@ void wait_process_by_pid(uint8_t pid){
     if (pcb_to_wait == NULL){
         return;
     }
-    wait_sem(pcb_to_wait->semaphore->name);
+    if (pcb_to_wait->semaphore != NULL && pcb_to_wait->semaphore->name != NULL) {
+        wait_sem(pcb_to_wait->semaphore->name);
+    }
     free_process(pcb_to_wait);
     pids[pid] = AVAILABLE_PID;
 }
@@ -282,7 +283,9 @@ int kill_process(uint8_t pid) {
         return -1;
     }
     remove_pcb_from_queue(process_pcb);
-    post_sem(process_pcb->semaphore->name);
+    if (process_pcb->semaphore != NULL && process_pcb->semaphore->name != NULL) {
+        post_sem(process_pcb->semaphore->name);
+    }
     TState process_state = process_pcb->state;
     process_pcb->state = ZOMBIE;
     put_children_mpid_init(pid);
@@ -300,10 +303,11 @@ int forced_kill_process(uint8_t pid) {
     }
     remove_pcb_from_queue(process_pcb);
     forced_kill_children(pid);
-    post_sem(process_pcb->semaphore->name);
+    if (process_pcb->semaphore != NULL && process_pcb->semaphore != NULL) {
+        post_sem(process_pcb->semaphore->name);
+    }
     TState process_state = process_pcb->state;
     process_pcb->state = KILLED;
-    put_children_mpid_init(pid);
     destroy_anonymous_pipes(process_pcb->fd_r);
     free_process(process_pcb);
     pids[pid] = AVAILABLE_PID;

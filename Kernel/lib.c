@@ -115,7 +115,7 @@ void stop_running(void) {
 		if (current == NULL) {
 			continue;	
 		}
-		if(current->scope == FOREGROUND && count_occurrences(current->semaphore->waiting_processes, shell_pid) > 0) {
+		if(current->scope == FOREGROUND && current->semaphore != NULL && current->semaphore->name != NULL && count_occurrences(current->semaphore->waiting_processes, shell_pid) > 0) {
 			if (is_anonymous_pipe(current->fd_r/2)) {
 				force_kill_piped_processes(current->fd_r);
 			}
@@ -123,6 +123,7 @@ void stop_running(void) {
 				force_kill_piped_processes(current->fd_w);
 			}
 			forced_kill_process(current->pid);
+			return;
 		}
 	}
 }
@@ -133,7 +134,7 @@ void send_end_of_file(void) {
 		if (current == NULL) {
 			continue;
 		}
-		if(current->scope == FOREGROUND && count_occurrences(current->semaphore->waiting_processes, shell_pid) > 0) {
+		if(current->scope == FOREGROUND && current->semaphore != NULL && current->semaphore->name != NULL && count_occurrences(current->semaphore->waiting_processes, shell_pid) > 0) {
 			if (current->fd_r == STDIN) {
 				if (current->fd_w == STDOUT) {
 					kb_end_of_file();

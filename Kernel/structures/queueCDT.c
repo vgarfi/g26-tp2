@@ -30,6 +30,11 @@ void enqueue(TQueueADT queue, void* value) {
         return;
     }
     TQueueNode* new_node = (TQueueNode*)malloc_mm(memory_manager, sizeof(TQueueNode));
+    
+    if (new_node == NULL) {
+        return;
+    }
+    
     new_node->value = value;
     new_node->next = NULL;
 
