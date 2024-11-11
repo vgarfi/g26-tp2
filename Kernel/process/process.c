@@ -23,7 +23,7 @@ int max_pid;
 
 void free_process(TPCB* pcb);
 uint32_t get_state_color(TState state);
-void destroy_anonymous_pipes(int fd_r);
+void destroy_anonymous_pipes(int fd);
 int forced_kill_process(uint8_t pid);
 void forced_kill_children(uint8_t m_pid);
 
@@ -315,6 +315,7 @@ int forced_kill_process(uint8_t pid) {
     process_pcb->state = KILLED;
 
     destroy_anonymous_pipes(process_pcb->fd_r);
+    destroy_anonymous_pipes(process_pcb->fd_w);
     
     free_process(process_pcb);
 
@@ -326,11 +327,11 @@ int forced_kill_process(uint8_t pid) {
     }
     return EXIT_SUCCESS;
 }
-void destroy_anonymous_pipes(int fd_r){
-    if (!is_anonymous_pipe(fd_r/2)) {
+void destroy_anonymous_pipes(int fd){
+    if (!is_anonymous_pipe(fd/2)) {
         return;
     }
-    close_pipe(fd_r/2);
+    close_pipe(fd/2);
 }
 
 void force_kill_piped_processes(int fd) {

@@ -94,7 +94,9 @@ void wait_sem(char* name) {
         release(&looked_semaphore->lock);
         block_process(current_pid);
         return;
-    } else looked_semaphore->value--;
+    } else {
+        looked_semaphore->value--;
+    }
 
     release(&looked_semaphore->lock);
 
@@ -112,7 +114,9 @@ void post_sem(char* name) {
     if(!is_empty(looked_semaphore->waiting_processes)){
         uint8_t first_pid = (uint8_t)(uintptr_t)dequeue(looked_semaphore->waiting_processes);
         unblock_process(first_pid);
-    } else looked_semaphore->value++;
+    } else {
+        looked_semaphore->value++;
+    }
 
     release(&looked_semaphore->lock);
 
@@ -126,8 +130,7 @@ void delete_sem(char* name) {
     }
 
     acquire(&looked_semaphore->lock);
-    while (!is_empty(looked_semaphore->waiting_processes))
-    {
+    while (!is_empty(looked_semaphore->waiting_processes)) {
         uint8_t first_pid = (uint8_t)(uintptr_t)dequeue(looked_semaphore->waiting_processes);
         unblock_process(first_pid);
     }

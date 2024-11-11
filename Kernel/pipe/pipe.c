@@ -18,7 +18,7 @@ void initialize_pipes(){
     }
 }
 
-int getFreePipeIndex() {
+int get_free_pipe_index() {
     for(int i = 1; i < MAX_PIPES; i++){
         if(available_pipes[i] == PIPE_AVAILABLE)
             return i;
@@ -47,9 +47,11 @@ int create_pipe(int* fds, char* name){
         new_pipe->name = NULL;
     }
 
-    int pipe_index = getFreePipeIndex();
+    int pipe_index = get_free_pipe_index();
 
-    if(pipe_index == -1) return -1;
+    if(pipe_index == -1) {
+        return -1;   
+    }
 
     pipes[pipe_index] = new_pipe;
     available_pipes[pipe_index] = PIPE_UNAVAILABLE;
@@ -67,9 +69,9 @@ int create_pipe(int* fds, char* name){
     char sem_name_r[3], sem_name_w[3];
     char pipe_name_r[10], pipe_name_w[10];
 
-    itoa( new_pipe->fd_r, sem_name_r, 10);
+    itoa(new_pipe->fd_r, sem_name_r, 10);
     strconcat(pipe_name_r, "pipe_r_", sem_name_r);
-    new_pipe->sem_r = create_sem(sem_name_r, 0);
+    new_pipe->sem_r = create_sem(pipe_name_r, 0);
 
     itoa(new_pipe->fd_w, sem_name_w, 10);
     strconcat(pipe_name_w, "pipe_w_", sem_name_w);
@@ -77,6 +79,7 @@ int create_pipe(int* fds, char* name){
 
     return pipe_index;
 }
+
 char is_anonymous_pipe(int pipe_index) {
     if (pipe_index == 0) {
         return 0;
@@ -86,6 +89,7 @@ char is_anonymous_pipe(int pipe_index) {
     }
     return (pipes[pipe_index]->name == NULL);
 }
+
 int read_pipe(int pipe_index, char * buf, uint64_t count) {
 	if (pipe_index < 0 || pipe_index >= MAX_PIPES || available_pipes[pipe_index] == PIPE_AVAILABLE || pipes[pipe_index] == NULL) {
 		return 0;
@@ -132,7 +136,7 @@ int write_pipe(int pipe_index, char * buf, uint64_t count) {
 }
 
 int finish_pipe(int pipe_index) {
-    if (pipe_index < 0 || pipe_index >= MAX_PIPES || available_pipes[pipe_index] == PIPE_AVAILABLE) {
+    if (pipe_index < 0 || pipe_index >= MAX_PIPES || available_pipes[pipe_index] == PIPE_AVAILABLE || pipes[pipe_index] == NULL) {
 		return -1;
 	}
     delete_sem(pipes[pipe_index]->sem_r->name);
@@ -142,14 +146,12 @@ int finish_pipe(int pipe_index) {
 }
 
 int close_pipe(int pipe_index) {
-    if (pipe_index < 0 || pipe_index >= MAX_PIPES || available_pipes[pipe_index] == PIPE_AVAILABLE) {
+    if (pipe_index < 0 || pipe_index >= MAX_PIPES || available_pipes[pipe_index] == PIPE_AVAILABLE || pipes[pipe_index] == NULL) {
 		return -1;
 	}
     delete_sem(pipes[pipe_index]->sem_r->name);
     delete_sem(pipes[pipe_index]->sem_w->name);
-    // !
-    // free_pipe(pipe_index);
-    available_pipes[pipe_index] = PIPE_AVAILABLE;
+    free_pipe(pipe_index);
     return 0;
 }
 
@@ -168,16 +170,12 @@ int free_pipe(int pipe_index) {
         free_mm(memory_manager, pipe->name);
     }
 
-    if (pipe->sem_r != NULL) {
-        free_mm(memory_manager, pipe->sem_r);
+    if (pipe->sem_r != NULL && pipe->sem_r->name != NULL) {
+        delete_sem(pipe->sem_r->name);
     }
-    if (pipe->sem_w != NULL) {
-        free_mm(memory_manager, pipe->sem_w);
+    if (pipe->sem_w != NULL && pipe->sem_w->name != NULL) {
+        delete_sem(pipe->sem_w->name);
     }
-
-    free_mm(memory_manager, pipe);
-
     pipes[pipe_index] = NULL;
-    available_pipes[pipe_index] = PIPE_AVAILABLE;
     return 0;
 }
