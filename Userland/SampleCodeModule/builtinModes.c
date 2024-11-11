@@ -150,6 +150,7 @@ void unblockp(void) {
     printf("process with PID: %d (if exists)\n", pid,0,0);
     sysUnblockProcess((uint8_t)pid);
 }
+
 void nicep(void) {
     printf("\nEnter PID of process to ", 0,0,0);
     printColor("CHANGE PRIORITY", 0x00146DFA);
