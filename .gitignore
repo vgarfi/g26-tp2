@@ -8,7 +8,7 @@
 .vscode
 .gdbinit
 *.elf
-testMm
+test_mm
 .gdb_history
 .bash_history
 PVS-Studio.log
