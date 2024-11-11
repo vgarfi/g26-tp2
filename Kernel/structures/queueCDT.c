@@ -49,7 +49,7 @@ void enqueue(TQueueADT queue, void* value) {
 
 void* dequeue(TQueueADT queue) {
     if (queue == NULL || queue->first == NULL) {
-        return;
+        return NULL;
     }
 
     TQueueNode* temp = queue->first;
@@ -65,7 +65,7 @@ void* dequeue(TQueueADT queue) {
 }
 void* dequeue_value(TQueueADT queue, void* value) {
     if (queue == NULL) {
-        return;
+        return NULL;
     }
     TQueueNode * current = queue->first;
 	TQueueNode * previous = NULL;
@@ -96,7 +96,7 @@ void* dequeue_value(TQueueADT queue, void* value) {
 
 int count_occurrences(TQueueADT queue, void* value) {
     if (queue == NULL) {
-        return;
+        return 0;
     }
     int count = 0;
     TQueueNode* current = queue->first;

@@ -55,7 +55,7 @@ int printColor(char* str, uint64_t hexColor){
     int i;
     if (scope == BACKGROUND && sysGetWriteFileDescriptor(pid) == STDOUT) {
         hexcol = LOWKEY;
-        sysWrite(STDOUT, "    ", 5, hexcol); // TODO ver si podemos hacer que esto se imprima por cada vez que se hace nueva linea, y no printf
+        sysWrite(STDOUT, (unsigned char*)"    ", 5, hexcol); // TODO ver si podemos hacer que esto se imprima por cada vez que se hace nueva linea, y no printf
     }
     char c;
     for(i=0;str[i]!='\0';i++){

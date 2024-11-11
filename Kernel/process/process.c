@@ -21,7 +21,9 @@ int max_pid;
 
 void free_process(TPCB* pcb);
 uint32_t get_state_color(TState state);
-
+void destroy_anonymous_pipes(int fd_r);
+int forced_kill_process(uint8_t pid);
+void forced_kill_children(uint8_t m_pid);
 
 int create_process(char* name, uint64_t argc, char *argv[], uint8_t priority, int64_t (*code)(int, char**), TScope scope) {
     char* ptr = malloc_mm(memory_manager, PROCESS_SIZE);

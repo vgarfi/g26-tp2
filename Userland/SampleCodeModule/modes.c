@@ -151,10 +151,12 @@ int prioritiesTest(TScope scope){
 
 int psPrinting(void){
     sysPs();
+    return 0;
 }
 
 int mem(void){
     sysMem();
+    return 0;
 }
 
 static char * test_args_memory[] = {TEST_MEMORY, "1024", 0};
@@ -204,6 +206,8 @@ void blockp(){
     sysBlockProcess((uint8_t)pid);
 }
 
+static char * loop_args[] = {LOOP, 0};
+
 int loop(TScope scope) {
     return sysCreateProcess(LOOP, 1, loop_args, loopProcess, scope);
 }
@@ -243,7 +247,8 @@ void pipeProcesses(char* input) {
     }
 
     int pipe_fds[2];
-    char pipe_name; // Anonymous pipe
+    char* pipe_name; // Anonymous pipe
+    pipe_name = 00;
     if (sysCreatePipe(pipe_fds, pipe_name) == -1) {
         printf("\nError creando pipes entre procesos",0,0,0);
         return;
@@ -263,6 +268,11 @@ void createBackgroundProcess(char* input) {
     int(*process)() = get_interactive_mode(p1);
     process(BACKGROUND);
 }
+
+
+static char * cat_args[] = {CAT, 0};
+static char * wc_args[] = {WC, 0};
+static char * filter_args[] = {FILTER, 0};
 
 // ! Hacer una lista de procesos
 int cat(TScope scope) {

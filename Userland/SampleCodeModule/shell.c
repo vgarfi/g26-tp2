@@ -8,7 +8,6 @@
 int init(){
     printColor("Welcome to Shell! Type HELP for command information.\n\n", YELLOW);
     char commandPrompt[32] = {0};
-    char buffer[10];
     while(IDLE_MODE) {
         sysClearKbEntry();
         printColor("$", GREEN);
@@ -38,7 +37,7 @@ int init(){
         else if(strcasecmp(commandPrompt, modes[CAT_MODE]) == SELECTED_MODE) sysWaitPid(cat(FOREGROUND));
         else if(strcasecmp(commandPrompt, modes[WC_MODE]) == SELECTED_MODE) sysWaitPid(wc(FOREGROUND));
         else if(strcasecmp(commandPrompt, modes[FILTER_MODE]) == SELECTED_MODE) sysWaitPid(filter(FOREGROUND));
-        else if(strcasecmp(commandPrompt, modes[PHYLOS]) == SELECTED_MODE) sysWaitPid(phylosophers(FOREGROUND));
+        else if(strcasecmp(commandPrompt, modes[PHYLOS_MODE]) == SELECTED_MODE) sysWaitPid(phylosophers(FOREGROUND));
         else if(strcasecmp(commandPrompt, modes[MEM]) == SELECTED_MODE) mem();
         else if(contains(commandPrompt, '|')) pipeProcesses(commandPrompt);
         else if(contains(commandPrompt, '&')) createBackgroundProcess(commandPrompt);

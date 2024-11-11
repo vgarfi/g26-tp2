@@ -3,6 +3,7 @@
 #include <fonts.h>
 #include <lib.h>
 #include <boot.h>
+#include <string.h>
 
 #define MAXCHARSINSCREEN 10880	// chars per row * chars per column (with minimum size)
 #define GREY 0x00F0F0F0
@@ -259,7 +260,7 @@ void vd_print_square(int x, int y,int side,uint32_t hex_color){
 }
 
 void vd_print_padded(const char *str, uint32_t color, int width) {
-    vd_print(str, color);
+    vd_print((char *)str, color);
     int padding = width - strlen(str);
     for (int i = 0; i < padding; i++) {
         vd_print(" ", color);

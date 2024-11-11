@@ -2,4 +2,4 @@
 
 #define PHYLOS "phylos"
 
-uint64_t phylos(uint64_t argc, char *argv[]);
+int64_t phylos(int argc, char *argv[]);

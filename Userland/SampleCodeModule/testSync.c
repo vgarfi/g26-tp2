@@ -3,6 +3,7 @@
 #include "include/syscalls.h"
 #include "include/testSync.h"
 #include <testUtil.h>
+#include <string.h>
 
 #define SEM_ID "sem"
 #define TOTAL_PAIR_PROCESSES 2
@@ -17,7 +18,7 @@ void slowInc(int64_t *p, int64_t inc) {
   printf(".",0,0,0);
 }
 
-uint64_t my_process_inc(uint64_t argc, char *argv[]) {
+int64_t my_process_inc(int argc, char *argv[]) {
   uint64_t n;
   int8_t inc;
   int8_t use_sem;

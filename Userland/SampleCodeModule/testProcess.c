@@ -86,7 +86,6 @@ void testPriorities(void) {
   char *argv[] = {0};
   uint64_t i;
   TScope test_scope = sysGetScope(sysGetCurrentPid());
-  int fds[] = {0,1}; 
   
   printf("testPriorities: Testing Process Priorities...",0,0,0);
 

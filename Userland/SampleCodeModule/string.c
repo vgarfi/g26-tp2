@@ -147,7 +147,6 @@ void strtrim(char* str) {
 
 char* strconcat(char* dest, const char* str1, const char* str2) {
     int len1 = strlen(str1);
-    int len2 = strlen(str2);
     strcpy(dest, str1);
     strcpy(dest+len1, str2);
     return dest;

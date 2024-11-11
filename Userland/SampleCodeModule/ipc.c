@@ -39,7 +39,7 @@ int64_t wcProcess(int argc, char** argv) {
 
 int64_t filterProcess(int argc, char** argv) {
     print_buffer(FILTER_VOCALS);
-    return;
+    return 0;
 }
 
 void print_buffer(int filter_vocals) {
@@ -73,7 +73,6 @@ void print_buffer(int filter_vocals) {
     if (sysGetReadFileDescriptor(sysGetCurrentPid()) == STDIN) {
         sysClearKbEntry();
     }
-    return 0;
 }
 
 int is_vocal(unsigned char c) {

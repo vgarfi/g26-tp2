@@ -28,11 +28,11 @@ static int (*syscall_handlers[])()={
     sys_get_current_month, sys_get_current_year, sys_is_ctrl_pressed, sys_clean_kb_buffer,
     // Syscalls de SO
     sys_get_current_pid, sys_exit_process, sys_create_process, (int (*)())sys_block_process, (int (*)())sys_unblock_process, (int (*)())sys_kill_process, (int (*)())sys_nice, sys_ps,
-    sys_memory_malloc, sys_memory_free, sys_memory_status,
+    (int (*)())sys_memory_malloc, sys_memory_free, sys_memory_status,
     sys_yield, sys_create_sem, sys_get_sem, sys_post_sem, sys_wait_sem, sys_close_sem,
-    sys_wait_pid,
-    sys_create_pipe, sys_set_read_file_descriptor, sys_set_write_file_descriptor, sys_get_read_file_descriptor, sys_get_write_file_descriptor,
-    sys_get_scope
+    (int (*)())sys_wait_pid,
+    sys_create_pipe, (int (*)())sys_set_read_file_descriptor, (int (*)())sys_set_write_file_descriptor, (int (*)())sys_get_read_file_descriptor, (int (*)())sys_get_write_file_descriptor,
+    (int (*)())sys_get_scope
 };
 
 uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         

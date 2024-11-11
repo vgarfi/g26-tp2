@@ -30,7 +30,7 @@
 #define CAT_MODE            22
 #define WC_MODE             23
 #define FILTER_MODE         24
-#define PHYLOS              25
+#define PHYLOS_MODE         25
 #define MEM                 26
 
 

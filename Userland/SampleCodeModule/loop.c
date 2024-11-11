@@ -3,7 +3,7 @@
 #include "include/stdio.h"
 
 int64_t loopProcess(int argc, char** argv) {
-    int printed;
+    int printed = 0;
     while(printed != EOF) {
         sysSleep(1, 1);
         print("Hello (from ");

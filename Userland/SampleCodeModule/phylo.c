@@ -17,8 +17,8 @@ int* states;
 #define THINKING 0
 #define EATING 1
 
-uint64_t philosopher(uint64_t argc, char *argv[]) {
-    char id = atoi(argv[1]);
+int64_t philosopher(int argc, char *argv[]) {
+    int id = atoi(argv[1]);
 
     int leftFork = id;
     int rightFork = (id + 1) % PHYLOS_QTY;
@@ -70,9 +70,8 @@ void generateForkName(char *buffer, int id) {
     strconcat(buffer, buffer, timestampBuffer);
 }
 
-uint64_t phylos(uint64_t argc, char *argv[]) {
+int64_t phylos(int argc, char *argv[]) {
     int phylos_scope = sysGetScope(sysGetCurrentPid());
-    int pids[PHYLOS_QTY];
 
     // Initialize semaphores (forks)
     for (int i = 0; i < PHYLOS_QTY; i++) {
@@ -82,12 +81,11 @@ uint64_t phylos(uint64_t argc, char *argv[]) {
     }
 
     for (int i = 0; i < PHYLOS_QTY; i++) {
-        char id_string[PHYLOS_QTY][3];
+        char id_string[3];
         itoa(i, id_string, 10);
         char *argv[] = {"philosopher", id_string, 0};
 
-        int pid = sysCreateProcess("philosopher", 2, argv, philosopher, phylos_scope);
-        pids[i] = pid;
+        sysCreateProcess("philosopher", 2, argv, philosopher, phylos_scope);
     }
 
     sysBlockProcess(sysGetCurrentPid()); // Phylo process has nothing else to do
