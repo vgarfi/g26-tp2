@@ -19,6 +19,7 @@ void (*builtinFunctions[])(void) = {
     mem,
     blockp,
     unblockp,
+    nicep,
     killp
 };
 
@@ -148,6 +149,24 @@ void unblockp(void) {
     printColor("\nUNBLOCKING ", 0x00FFE47B);
     printf("process with PID: %d (if exists)\n", pid,0,0);
     sysUnblockProcess((uint8_t)pid);
+}
+void nicep(void) {
+    printf("\nEnter PID of process to ", 0,0,0);
+    printColor("CHANGE PRIORITY", 0x00146DFA);
+    printf(": ", 0,0,0);
+    char option[5];
+    scanf(option, 5);
+    int pid = atoi(option);
+    printf("Now enter the ", 0,0,0);
+    printColor("new", 0x00146DFA);
+    printf(" priority: ", 0,0,0);;
+    char option2[5];
+    scanf(option2, 5);
+    int newPriority = atoi(option2);
+    if (newPriority < 1) {
+        return;
+    }
+    sysNice((uint8_t)pid, (uint8_t)newPriority);
 }
 
 void blockp(void) {

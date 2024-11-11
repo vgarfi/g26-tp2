@@ -83,9 +83,9 @@ static void toLower(char * str){
     }
 }
 int atoi(char *str) {
-  uint64_t i = 0;
-  int64_t res = 0;
-  int8_t sign = 1;
+  int i = 0;
+  int res = 0;
+  int sign = 1;
 
   if (!str)
     return 0;

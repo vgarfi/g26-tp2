@@ -6,7 +6,7 @@
 
 static const char* builtinModes[] __attribute__((unused)) = {
     "help", "easteregg", "divbyzero", "invalidopcode", "zoomin", "zoomout", "time", "date", "clear", "registers",
-    "ps", "mem", "blockp", "unblockp", "killp"
+    "ps", "mem", "blockp", "unblockp", "nicep", "killp"
 };
 
 static const char* processModes[] __attribute__((unused)) = {
@@ -37,6 +37,7 @@ static char* helpText[]  __attribute__((unused)) = { "Command information is dis
 "MEM                 ->      Prints a memory diagnostic\n",
 "BLOCKP              ->      Blocks a process given it's PID\n",
 "UNBLOCK             ->      Unblocks a process given it's PID\n",
+"NICEP               ->      Changes the process' priority given it's PID\n"
 "KILLP               ->      Kills a process given it's PID\n",
 "LOOP                ->      Prints its PID and a greeting in loop\n",
 "CAT                 ->      Prints standard input content\n",

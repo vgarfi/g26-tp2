@@ -25,6 +25,7 @@ void psPrinting(void);
 void mem(void);
 void blockp(void);
 void unblockp(void);
+void nicep(void);
 void killp(void);
 
 #endif
