@@ -38,6 +38,6 @@ $(LOADEROBJECT):
 	$(ASM) $(ASMFLAGS) $(LOADERSRC) -o $(LOADEROBJECT)
 
 clean:
-	rm -rf *.bin *.o ./structures/*.o ./scheduler/*.o ./process/*.o ./memory/*.o
+	rm -rf *.bin *.o ./structures/*.o ./scheduler/*.o ./process/*.o ./memory/*.o ./asm/*.o
 	
 .PHONY: all clean
