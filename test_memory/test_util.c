@@ -71,7 +71,7 @@ void endlessLoopPrint(uint64_t wait) {
   int64_t pid = my_getpid();
 
   while (1) {
-    printf("%d ", (int)pid, 0,0);
+    printf("%d ", (int)pid);
     bussyWait(wait);
   }
 }

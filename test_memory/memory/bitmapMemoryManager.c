@@ -24,7 +24,7 @@ typedef struct MemoryManagerCDT {
 MemoryManagerADT initialize_mm(void* base, size_t memory_size, size_t block_size) {
     MemoryManagerADT mm = (MemoryManagerADT)base;
     size_t max_num_blocks = memory_size / block_size;
-    size_t bitmap_size = (max_num_blocks + 7) / 8; // TODO usar funcion ceil si podemos incluir de math
+    size_t bitmap_size = (max_num_blocks + 7) / 8;
 
     mm->memory_size = memory_size - bitmap_size - sizeof(MemoryManagerCDT);
     mm->block_size = block_size;
@@ -89,7 +89,7 @@ size_t get_used_memory(MemoryManagerADT mm) {
     return mm->used_blocks * mm->block_size;
 }
 
-MemoryDiagnostic get_diagnostic_mm(MemoryManagerADT mm) { // TODO ver si trunca
+MemoryDiagnostic get_diagnostic_mm(MemoryManagerADT mm) {
     MemoryDiagnostic diagnostic;
     diagnostic.total_memory = mm->memory_size;
     diagnostic.used_memory = (mm->used_blocks * mm->block_size);

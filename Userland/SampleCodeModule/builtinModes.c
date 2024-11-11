@@ -7,8 +7,6 @@
 void (*builtinFunctions[])(void) = {
     help,
     playEasterEgg,
-    divByZero,
-    invalidOp,
     zoomin,
     zoomout,
     time,
@@ -77,14 +75,6 @@ void registers()  {
     if(regAux){
         print("You need to save registers first by pressing ALT\n");
     }
-}
-
-void invalidOp(void){
-    invalidOpcode();
-}
-
-void divByZero() {
-    divZero();
 }
 
 void zoomout() {

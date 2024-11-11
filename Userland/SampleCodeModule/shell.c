@@ -22,6 +22,7 @@ int init(){
         print("> ");
         sysShowCursor();
         scanf(commandPrompt, 32);
+        strtrim(commandPrompt);
         for(int b = 0; !found && b < sizeof(builtinModes) / sizeof(builtinModes[0]); b++) {
             if (strcasecmp(commandPrompt, builtinModes[b]) == SELECTED_MODE) {
                 builtinFunctions[b]();

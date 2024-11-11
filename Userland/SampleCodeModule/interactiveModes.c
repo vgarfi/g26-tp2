@@ -33,17 +33,10 @@ void pipeProcesses(char* input) {
     int(*process_two)(int) = get_interactive_mode(p2);
 
     if (process_one == 0 || process_two == 0) {
-        // TODO claramente mejorar los mensajes de error
-        if (process_one == 0) {
-            printf("\nERROR: '", 0,0,0);
-            printf(p1, 0,0,0);
-            printf("' no es un proceso pipeable", 0,0,0);
-        }
-        else {
-            printf("\nERROR: '", 0,0,0);
-            printf(p2, 0,0,0);
-            printf("' no es un proceso pipeable", 0,0,0);
-        }
+        printColor("\nERROR: ", 0x00FF0000);
+        print("'");
+        print(process_one == 0? p1 : p2);        
+        print("' is not a pipeable mode\n");
         return;
     }
 
@@ -51,7 +44,7 @@ void pipeProcesses(char* input) {
     char* pipe_name; // Anonymous pipe
     pipe_name = 00;
     if (sysCreatePipe(pipe_fds, pipe_name) == -1) {
-        printf("\nError creando pipes entre procesos",0,0,0);
+        print("\nError creating pipe between processes");
         return;
     }
     int p1Pid = process_one(FOREGROUND);
@@ -66,5 +59,12 @@ void createBackgroundProcess(char* input) {
     strsplit(input, '&', p1, p2);
     strtrim(p1);
     int(*process)() = get_interactive_mode(p1);
+    if (process == 0){
+        printColor("\nERROR: ", 0x00FF0000);
+        print("'");
+        print(p1);        
+        print("' does not allow to run in background\n");
+        return;
+    }
     process(BACKGROUND);
 }

@@ -92,7 +92,7 @@ size_t get_used_memory(MemoryManagerADT mm) {
     return mm->used_blocks * mm->block_size;
 }
 
-MemoryDiagnostic get_diagnostic_mm(MemoryManagerADT mm) { // TODO ver si trunca
+MemoryDiagnostic get_diagnostic_mm(MemoryManagerADT mm) {
     MemoryDiagnostic diagnostic;
     diagnostic.total_memory = mm->memory_size;
     diagnostic.used_memory = (mm->used_blocks * mm->block_size);

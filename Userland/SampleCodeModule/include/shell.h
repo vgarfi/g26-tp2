@@ -13,7 +13,7 @@
  * @brief List of built-in shell commands.
  */
 static const char* builtinModes[] __attribute__((unused)) = {
-    "help", "easteregg", "divbyzero", "invalidopcode", "zoomin", "zoomout", "time", "date", "clear", "registers",
+    "help", "easteregg", "zoomin", "zoomout", "time", "date", "clear", "registers",
     "ps", "mem", "blockp", "unblockp", "nicep", "killp"
 };
 
@@ -36,8 +36,6 @@ static const char* interactiveModes[] __attribute__((unused)) = {
  */
 static char* helpText[]  __attribute__((unused)) = { "Command information is displayed below:\n\n",
 "HELP                ->      Shows a description on each available command.\n",
-"DIVBYZERO           ->      Shows handling in case of division by zero.\n",
-"INVALIDOPCODE       ->      Shows handling in case of an invalid operation code.\n",
 "ZOOMIN              ->      Enlarges text size on screen. In case maximum size is reached,\n",
 "                            it is properly indicated without making any changes.\n",
 "                            Can be alternatively activated with CTRL + i\n",

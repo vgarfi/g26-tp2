@@ -38,7 +38,7 @@ int get_max_size(size_t size, size_t block_size){
 
 int get_height(size_t size, size_t block_size){
     if (block_size == 0) {
-        return -1; // o un valor adecuado de error
+        return -1;
     }
     return log2(size/block_size);
 }

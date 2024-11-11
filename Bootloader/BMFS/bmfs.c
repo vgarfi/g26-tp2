@@ -761,7 +761,6 @@ void read(char *filename)
 			for (tint=0; tint<tempentry.FileSize; tint++)
 			{
 				putc(getc(disk), tfile);			// This is really terrible.
-				// TODO: Rework with fread and fwrite (ideally with a 2MiB buffer)
 			}
 			fclose(tfile);
 			printf("Complete\n");
@@ -804,7 +803,6 @@ void write(char *filename)
 				for (tint=0; tint<tempfilesize; tint++)
 				{
 					putc(getc(tfile), disk);			// This is really terrible.
-					// TODO: Rework with fread and fwrite (ideally with a 2MiB buffer)
 				}
 				// Update directory
 				memcpy(Directory+(slot*64)+48, &tempfilesize, 8);
