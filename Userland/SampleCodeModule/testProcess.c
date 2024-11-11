@@ -154,5 +154,4 @@ void finish_testing() {
     printf(".", 0,0,0);
     bussyWait(WAIT);
     printf(".\n", 0,0,0);
-    // sysKillProcess(sysGetCurrentPid());
 }

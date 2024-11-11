@@ -302,8 +302,10 @@ int kill_process(uint8_t pid) {
 }
 
 int forced_kill_process(uint8_t pid) {
+    _cli();
     TPCB* process_pcb  = get_pcb_by_pid(pid);
     if (process_pcb == NULL) {
+        _sti();
         return -1;
     }
     remove_pcb_from_queue(process_pcb);
@@ -321,7 +323,7 @@ int forced_kill_process(uint8_t pid) {
 
     pids[pid] = AVAILABLE_PID;
     pcb_array[pid] = NULL;
-
+    _sti();
     if (process_state == RUNNING) {
         request_schedule();
     }

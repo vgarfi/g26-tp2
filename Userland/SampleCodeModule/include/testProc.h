@@ -16,9 +16,9 @@
 #define WAIT 10000000      /**< Wait time to make the wait long enough to see these processes being run at least twice */
 
 #define TOTAL_PROCESSES 5
-#define LOWEST 1  /**< Lowest priority */
-#define MEDIUM 2  /**< Medium priority */
-#define HIGHEST 3 /**< Highest priority */
+#define LOWEST 3  /**< Lowest priority */
+#define MEDIUM 6  /**< Medium priority */
+#define HIGHEST 10 /**< Highest priority */
 
 /**
  * @enum State
