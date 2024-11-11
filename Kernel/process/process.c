@@ -351,16 +351,8 @@ void free_process(TPCB* pcb){
         delete_sem(pcb->semaphore->name);
     }
     
-    if(pcb->stack_limit != NULL){
+    if (pcb->stack_limit != NULL){
         free_mm(memory_manager, pcb->stack_limit);
-    }
-
-    if (pcb->rsp != NULL){
-        free_mm(memory_manager, pcb->rsp);
-    }
-    
-    if (pcb->stack_base != NULL){
-        free_mm(memory_manager, pcb->stack_base);
     }
 
     if(pcb->name != NULL){

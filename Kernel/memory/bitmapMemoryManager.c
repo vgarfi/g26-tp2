@@ -83,6 +83,7 @@ void free_mm(MemoryManagerADT mm, void* ptr) {
     int block_index = ((char*)ptr - mm->memory_base) / mm->block_size;
     set_bit(mm->bitmap, block_index, 1);
     mm->used_blocks--;
+    ptr = NULL;
 }
 
 size_t get_used_memory(MemoryManagerADT mm) {
