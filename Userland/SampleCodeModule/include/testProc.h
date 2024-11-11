@@ -1,33 +1,56 @@
+/**
+ * @file testProc.h
+ * @brief Definition of process test functions and related constants.
+ */
+
 #ifndef TEST_PROC_H
 #define TEST_PROC_H
 
 #include <stdint.h>
 
-#define TEST_PROCESSES        "process"
-#define TEST_PRIORITY        "priority"
-#define TEST_MEMORY           "memory"
+#define TEST_PROCESSES        "process"  /**< Command name for the process test */
+#define TEST_PRIORITY         "priority" /**< Command name for the priority test */
+#define TEST_MEMORY           "memory"   /**< Command name for the memory test */
 
-#define MINOR_WAIT 1000000 // TODO: Change this value to prevent a process from flooding the screen
-#define WAIT 10000000      // TODO: Change this value to make the wait long enough to see theese processes beeing run at least twice
+#define MINOR_WAIT 1000000 /**< Minor wait time to prevent a process from flooding the screen */
+#define WAIT 10000000      /**< Wait time to make the wait long enough to see these processes being run at least twice */
 
 #define TOTAL_PROCESSES 5
-#define LOWEST 1  // TODO: Change as required
-#define MEDIUM 2  // TODO: Change as required
-#define HIGHEST 3 // TODO: Change as required
+#define LOWEST 1  /**< Lowest priority */
+#define MEDIUM 2  /**< Medium priority */
+#define HIGHEST 3 /**< Highest priority */
 
+/**
+ * @enum State
+ * @brief Enumeration of process states.
+ */
 enum State {
   RUNNING,
   BLOCKED,
   KILLED
 };
 
+/**
+ * @struct P_rq
+ * @brief Structure representing a process request.
+ */
 typedef struct P_rq {
-  int pid;
-  enum State state;
+  int pid;           /**< Process ID */
+  enum State state;  /**< State of the process */
 } p_rq;
 
-
+/**
+ * @brief Tests process priorities.
+ */
 void testPriorities(void);
+
+/**
+ * @brief Executes the process test.
+ *
+ * @param argc Argument count.
+ * @param argv Argument vector.
+ * @return Status code of the test.
+ */
 int64_t testProcesses(uint64_t argc, char *argv[]);
 
 #endif

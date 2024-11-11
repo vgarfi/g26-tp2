@@ -1,22 +1,39 @@
+/**
+ * @file shell.h
+ * @brief Definition of shell modes, commands, and related functions.
+ */
+
 #ifndef __SHELL_H_
 #define __SHELL_H_
 
 #define SHELL_MODE      1
 #define SELECTED_MODE   0
 
+/**
+ * @brief List of built-in shell commands.
+ */
 static const char* builtinModes[] __attribute__((unused)) = {
     "help", "easteregg", "divbyzero", "invalidopcode", "zoomin", "zoomout", "time", "date", "clear", "registers",
     "ps", "mem", "blockp", "unblockp", "nicep", "killp"
 };
 
+/**
+ * @brief List of process commands.
+ */
 static const char* processModes[] __attribute__((unused)) = {
     "eliminator", "testp", "testprio", "testmem", "testsync", "loop", "cat", "wc", "filter", "phylo"
 };
 
+/**
+ * @brief List of interactive modes.
+ */
 static const char* interactiveModes[] __attribute__((unused)) = {
     "testp", "testprio", "testmem", "testsync", "loop", "cat", "wc", "filter", "phylo"
 };
 
+/**
+ * @brief Help text for shell commands.
+ */
 static char* helpText[]  __attribute__((unused)) = { "Command information is displayed below:\n\n",
 "HELP                ->      Shows a description on each available command.\n",
 "DIVBYZERO           ->      Shows handling in case of division by zero.\n",
@@ -35,15 +52,15 @@ static char* helpText[]  __attribute__((unused)) = { "Command information is dis
 "                            your registers by pressing ALT.\n",
 "PS                  ->      Prints current ongoing processes with their information\n",
 "MEM                 ->      Prints a memory diagnostic\n",
-"BLOCKP              ->      Blocks a process given it's PID\n",
-"UNBLOCK             ->      Unblocks a process given it's PID\n",
-"NICEP               ->      Changes the process' priority given it's PID\n"
-"KILLP               ->      Kills a process given it's PID\n",
+"BLOCKP              ->      Blocks a process given its PID\n",
+"UNBLOCK             ->      Unblocks a process given its PID\n",
+"NICEP               ->      Changes the process' priority given its PID\n",
+"KILLP               ->      Kills a process given its PID\n",
 "LOOP                ->      Prints its PID and a greeting in loop\n",
 "CAT                 ->      Prints standard input content\n",
 "WC                  ->      Counts lines quantity in standard input\n",
 "FILTER              ->      Prints its standard input, removing vocals\n",
-"PHYLO               ->      Executes phylosophers function as a process\n",
+"PHYLO               ->      Executes philosophers function as a process\n",
 
 "\n----------------------------------- TESTING -----------------------------------\n\n"
 "TESTP               ->      Tests functionalities required for process administration.\n",
@@ -53,6 +70,11 @@ static char* helpText[]  __attribute__((unused)) = { "Command information is dis
 "end" 
 };
 
+/**
+ * @brief Initializes the shell.
+ *
+ * @return Status code of the initialization.
+ */
 int init();
 
 #endif

@@ -1,6 +1,10 @@
+/**
+ * @file eliminatorGame.h
+ * @brief Definition of constants, structures, and functions for the Eliminator game.
+ */
+
 #include <stdint.h>
 
-// Includes del juego de eliminador
 #ifndef __ELIMINATOR_GAME_H__
 #define __ELIMINATOR_GAME_H__
 
@@ -36,7 +40,6 @@
 #define P2_LEFT_KEY         'a'
 #define P2_RIGHT_KEY        'd'
 
-
 #define ESC                 27
 #define SPACE               ' '
 #define ONE_PLAYER          '1'
@@ -47,21 +50,53 @@
 #define B_OPTION            'b'
 #define C_OPTION            'c'
 
-
+/**
+ * @enum Direction
+ * @brief Enumeration of possible directions for the snake.
+ */
 enum Direction {UP, DOWN, LEFT, RIGHT};
+
+/**
+ * @enum Player
+ * @brief Enumeration of player types.
+ */
 enum Player {CPU, HUMAN};
 
-
+/**
+ * @struct SnakeHead
+ * @brief Structure representing the head of the snake.
+ */
 typedef struct {
-    uint8_t x;
-    uint8_t y;
-    uint32_t color;
+    uint8_t x;          /**< X-coordinate of the snake head */
+    uint8_t y;          /**< Y-coordinate of the snake head */
+    uint32_t color;     /**< Color of the snake head */
 } SnakeHead;
 
+/**
+ * @brief Starts the Eliminator game.
+ */
 void eliminatorGame(void);
+
+/**
+ * @brief Starts a single-player game.
+ */
 void playAlone(void);
+
+/**
+ * @brief Starts a two-player game.
+ *
+ * @param player2 The type of the second player (CPU or HUMAN).
+ */
 void playTwoPlayers(int player2);
+
+/**
+ * @brief Cleans the game board.
+ */
 void cleanBoard(void);
+
+/**
+ * @brief Prints the game wall.
+ */
 void printWall(void);
 
 #endif
