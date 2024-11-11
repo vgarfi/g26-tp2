@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <defs.h>
 #include <videoDriver.h>
-#include "include/time.h"
+#include <time.h>
 #include <keyboardDriver.h>
 #include <scheduler/scheduler.h>
 #include <pipe/pipe.h>
@@ -13,8 +13,8 @@
 #include <stdio.h>
 #include <syscallDispatcher.h>
 #include <kernelManagement.h>
-#include "speaker.h"
-#include "fonts.h"
+#include <speaker.h>
+#include <fonts.h>
 
 extern MemoryManagerADT memory_manager;
 

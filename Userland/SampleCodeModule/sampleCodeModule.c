@@ -2,9 +2,9 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 /* sampleCodeModule.c */
 #include <stdint.h>
-#include "include/syscalls.h"
-#include "include/stdio.h"
-#include "include/shell.h"
+#include <syscalls.h>
+#include <stdio.h>
+#include <shell.h>
 
 int main() {
 	init();

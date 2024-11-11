@@ -2,8 +2,8 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <stdint.h>
 #include <stdio.h>
-#include "include/syscalls.h"
-#include "include/testSync.h"
+#include <syscalls.h>
+#include <testSync.h>
 #include <testUtil.h>
 #include <string.h>
 

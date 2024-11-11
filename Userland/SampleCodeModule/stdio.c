@@ -1,10 +1,10 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
-#include "include/stdio.h"
-#include "include/syscalls.h"
-#include "include/colors.h"
-#include "include/string.h"
-#include "include/lib.h"
+#include <stdio.h>
+#include <syscalls.h>
+#include <colors.h>
+#include <string.h>
+#include <lib.h>
 
 /**
  * readSizeFlag is used as a waiy of identifying whether

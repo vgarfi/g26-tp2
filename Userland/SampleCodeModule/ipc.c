@@ -1,10 +1,10 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
-#include "include/ipc.h"
-#include "include/stdio.h"
-#include "include/colors.h"
-#include "include/string.h"
-#include "include/syscalls.h"
+#include <ipc.h>
+#include <stdio.h>
+#include <colors.h>
+#include <string.h>
+#include <syscalls.h>
 
 
 #define FILTER_VOCALS       1

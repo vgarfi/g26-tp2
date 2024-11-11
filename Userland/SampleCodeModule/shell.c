@@ -1,13 +1,13 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
-#include "include/shell.h"
-#include "include/interactiveModes.h"
-#include "include/colors.h"
-#include "include/syscalls.h"
-#include "include/stdio.h"
-#include "include/string.h"
-#include "include/builtinModes.h"
-#include "include/processModes.h"
+#include <shell.h>
+#include <interactiveModes.h>
+#include <colors.h>
+#include <syscalls.h>
+#include <stdio.h>
+#include <string.h>
+#include <builtinModes.h>
+#include <processModes.h>
 
 extern int (*processFunctions[])(int);
 extern void (*builtinFunctions[])(void);
