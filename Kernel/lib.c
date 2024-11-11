@@ -122,16 +122,6 @@ void stop_running(void) {
 			if (is_anonymous_pipe(current->fd_w/2)) {
 				force_kill_piped_processes(current->fd_w);
 			}
-			for (int j = shell_pid+1; j <= max_pid; j++) {
-				TPCB * aux = get_pcb_by_pid(j);
-				if (aux == NULL){
-					continue;
-				}
-				else if (aux->m_pid = current->pid && aux->semaphore != NULL && aux->semaphore->name != NULL &&  count_occurrences(aux->semaphore->waiting_processes, current->pid) > 0) {
-					
-					forced_kill_process(aux->pid);
-				}	
-			}
 			forced_kill_process(current->pid);
 			return;
 		}

@@ -7,7 +7,7 @@
 #include <testUtil.h>
 #include <string.h>
 
-#define NUM_FILOSOFOS 10
+#define NUM_FILOSOFOS 5
 
 char tenedores[NUM_FILOSOFOS][20];   // Semáforos para los tenedores
 int* estado;        // Estados de los filósofos
@@ -67,6 +67,7 @@ void generar_nombre_tenedor(char *buffer, int id) {
     strcpy(buffer, nombre_base);
     int len = strlen(buffer);
     buffer[len] = '0' + id;
+
     buffer[len + 1] = '\0';
 }
 
@@ -91,14 +92,15 @@ uint64_t phylos(uint64_t argc, char *argv[]) {
         pids[i] = pid;
     }
 
-    //while(1) {}
+    sysBlockProcess(sysGetCurrentPid());
+    // // while(1) {}
 
-    for (int i = 0; i < NUM_FILOSOFOS; i++) {
-        sysWaitPid(pids[i]);
-    }
+    // for (int i = 0; i < NUM_FILOSOFOS; i++) {
+    //     sysWaitPid(pids[i]);
+    // }
 
-    for (int i = 0; i < NUM_FILOSOFOS; i++) {
-        sysCloseSem(tenedores[i]);
-    }
+    // for (int i = 0; i < NUM_FILOSOFOS; i++) {
+    //     sysCloseSem(tenedores[i]);
+    // }
     return 0;
 }

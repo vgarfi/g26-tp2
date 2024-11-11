@@ -81,7 +81,7 @@ uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
   sysCloseSem(SEM_ID);
 
   printf("\nProcesses WAITED\n", 0,0,0);
-  printf("Final value: %d", global, 0,0);
+  printf("Final value: %d\n", global, 0,0);
   return 0;
 }
 
