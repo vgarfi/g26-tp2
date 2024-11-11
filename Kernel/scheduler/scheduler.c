@@ -24,20 +24,22 @@ int is_inside_process_boundaries(uint64_t* rsp) {
 
 uint64_t* schedule(uint64_t* rsp) {
     if (!is_initialized() || !is_inside_process_boundaries(rsp)) return rsp;
-    running_pcb->rsp = rsp; // Lo dejamos con el RSP donde me lo haya dejado
-
+    if(running_pcb != NULL){
+        running_pcb->rsp = rsp; // Lo dejamos con el RSP donde me lo haya dejado
+    }
+    
     TPCB* next = (TPCB*) dequeue(pcb_readies_queue);
     if (next == NULL) {
         return pcb_array[0]->rsp;
     }
 
-    if (running_pcb->state == RUNNING && count_occurrences(pcb_readies_queue, running_pcb) == 0) {
+    if (running_pcb != NULL && running_pcb->state == RUNNING && count_occurrences(pcb_readies_queue, running_pcb) == 0) {
         for (uint8_t i = running_pcb->priority; i > 0; i--) {
             enqueue(pcb_readies_queue, running_pcb);
         }
     }
 
-    if (running_pcb->state != ZOMBIE && running_pcb->state != BLOCKED){
+    if (running_pcb != NULL && running_pcb->state != ZOMBIE && running_pcb->state != BLOCKED){
         running_pcb->state = READY;   
     }
     
