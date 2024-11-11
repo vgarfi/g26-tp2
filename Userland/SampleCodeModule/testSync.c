@@ -82,9 +82,6 @@ uint64_t test_sync(uint64_t argc, char *argv[]) { //{n, use_sem, 0}
 
   printf("\nProcesses WAITED\n", 0,0,0);
   printf("Final value: %d", global, 0,0);
-  printColor("\n$", 0x0000FF00);
-  print("> ");
-  sysShowCursor();
   return 0;
 }
 
@@ -120,4 +117,6 @@ uint64_t initialize_syncTesting(uint64_t argc, char *argv[]) {
         test_pid = sysCreateProcess(TEST_SYNC, 3, sync_args_memory_sem,  (int64_t (*)(int, char**))test_sync, test_scope);
     }
     sysNice(test_pid, 5);
+    sysWaitPid(test_pid);
+    return 0;
 }
