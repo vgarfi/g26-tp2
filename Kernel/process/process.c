@@ -303,13 +303,16 @@ int forced_kill_process(uint8_t pid) {
     }
     remove_pcb_from_queue(process_pcb);
     forced_kill_children(pid);
-    if (process_pcb->semaphore != NULL && process_pcb->semaphore != NULL) {
+    if (process_pcb->semaphore != NULL && process_pcb->semaphore->name != NULL) {
         post_sem(process_pcb->semaphore->name);
     }
     TState process_state = process_pcb->state;
     process_pcb->state = KILLED;
     destroy_anonymous_pipes(process_pcb->fd_r);
-    free_process(process_pcb);
+
+    if(process_pcb->semaphore != NULL && is_empty(process_pcb->semaphore->waiting_processes))
+        free_process(process_pcb);
+
     pids[pid] = AVAILABLE_PID;
     pcb_array[pid] = NULL;
     if (process_state == RUNNING) {
@@ -351,16 +354,8 @@ void free_process(TPCB* pcb){
         delete_sem(pcb->semaphore->name);
     }
     
-    if(pcb->stack_limit != NULL){
+    if (pcb->stack_limit != NULL){
         free_mm(memory_manager, pcb->stack_limit);
-    }
-
-    if (pcb->rsp != NULL){
-        free_mm(memory_manager, pcb->rsp);
-    }
-    
-    if (pcb->stack_base != NULL){
-        free_mm(memory_manager, pcb->stack_base);
     }
 
     if(pcb->name != NULL){

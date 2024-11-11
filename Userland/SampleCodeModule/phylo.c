@@ -91,14 +91,14 @@ uint64_t phylos(uint64_t argc, char *argv[]) {
         pids[i] = pid;
     }
 
-    while(1) {}
+    //while(1) {}
 
-    // for (int i = 0; i < NUM_FILOSOFOS; i++) {
-    //     sysWaitPid(pids[i]);
-    // }
+    for (int i = 0; i < NUM_FILOSOFOS; i++) {
+        sysWaitPid(pids[i]);
+    }
 
-    // for (int i = 0; i < NUM_FILOSOFOS; i++) {
-    //     sysCloseSem(tenedores[i]);
-    // }
+    for (int i = 0; i < NUM_FILOSOFOS; i++) {
+        sysCloseSem(tenedores[i]);
+    }
     return 0;
 }

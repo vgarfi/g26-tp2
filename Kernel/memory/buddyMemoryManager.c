@@ -235,6 +235,7 @@ void free_mm(MemoryManagerADT mm, void* ptr) {
 
     // Intentar fusionar con nodos hermano
     merge_brother_buddies(node_offset, mm->root, mm->nodes_qty);
+    ptr = NULL;
 }
 
 
