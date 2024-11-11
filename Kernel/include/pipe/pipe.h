@@ -13,7 +13,9 @@
 #define PIPE_AVAILABLE      1
 #define PIPE_UNAVAILABLE    0
 
+#ifndef EOF
 #define EOF                 -1
+#endif
 
 typedef struct pipe {
     char* name;

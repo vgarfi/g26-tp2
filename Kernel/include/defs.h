@@ -28,6 +28,8 @@
 #define BYTE_LENGHT      8
 #define TWO_BYTE_LENGHT  16
 
+#ifndef NULL
 #define NULL 00
+#endif
 
 #endif

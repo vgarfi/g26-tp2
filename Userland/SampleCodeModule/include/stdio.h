@@ -7,7 +7,9 @@
 #define STDOUT   1
 #define STDERR   2
 
+#ifndef EOF
 #define EOF     -1
+#endif
 
 #define MAXBUFLEN 256
 #define MINLEN 2
