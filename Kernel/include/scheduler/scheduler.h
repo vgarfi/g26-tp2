@@ -5,8 +5,8 @@
 
 #include <process/process.h>
 #include <synchro/synchro.h>
-#include "string.h"
-#include "../include/structures/queueADT.h"
+#include <string.h>
+#include <structures/queueADT.h>
 
 #ifndef scheduler_H
 #define scheduler_H
