@@ -38,6 +38,21 @@ char getchar(void){
     return read;
 }
 
+char getcharNoBlock(void){
+    unsigned char read = 0;
+    
+    int pid = sysGetCurrentPid();
+    int fd = sysGetReadFileDescriptor(pid);
+    TScope scope = sysGetScope(pid);
+
+    if (fd != STDIN || (fd == STDIN && scope == BACKGROUND)) {
+        return 0;
+    }
+
+    readSizeFlag = sysReadNoBlock(fd, &read, 1);
+    return read;
+}
+
 unsigned char putchar(unsigned char c){
     int fd = sysGetWriteFileDescriptor(sysGetCurrentPid());
     if (fd == -1) {

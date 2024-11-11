@@ -109,7 +109,6 @@ void printEliminatorTitle(void) {
 
         int y = startY;
 
-        sysSleep(0, TICKS_PER_FRAME);
         for (int i = 0; letters[l][i] != '\0'; i++) {
             if (letters[l][i] == '1') {
                 sysPrintSquare(x*LETTERS_THICK, y*LETTERS_THICK, LETTERS_THICK, RED);

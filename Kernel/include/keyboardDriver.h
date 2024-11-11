@@ -31,6 +31,13 @@ int kb_is_buffer_empty(void);
 unsigned char kb_read_buf(void);
 
 /**
+ * @brief Reads a character from the keyboard buffer without blocking the process.
+ *
+ * @return The character read from the buffer.
+ */
+unsigned char kb_read_buf_no_block(void);
+
+/**
  * @brief Cleans the keyboard buffer.
  */
 void kb_clean_buffer(void);

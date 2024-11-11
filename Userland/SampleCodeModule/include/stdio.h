@@ -24,6 +24,12 @@
 char getchar(void);
 
 /**
+ * Reads STDIN and returns the next char in it without blocking the process.
+ * If STDIN buffer is empty, waits for input and returns it
+*/
+char getcharNoBlock(void);
+
+/**
  * Receives a char and prints it on STDOUT
  * Returns the character written.
 */

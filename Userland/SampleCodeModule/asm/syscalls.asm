@@ -1,5 +1,7 @@
 GLOBAL sysWrite
 GLOBAL sysRead
+GLOBAL sysReadNoBlock
+
 GLOBAL sysClearScreen
 GLOBAL sysClearKbEntry
 
@@ -318,5 +320,9 @@ sysGetWriteFileDescriptor:
 
 sysGetScope:
     mov rax, 51
+    int 80h
+    ret
+sysReadNoBlock:
+    mov rax, 52
     int 80h
     ret

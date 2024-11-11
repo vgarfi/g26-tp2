@@ -15,6 +15,9 @@
 
 #define KEYBOARD_SEM        "a_kb"
 
+#define BLOCKING            1
+#define NON_BLOCKING        0
+
 static unsigned char buffer[MAXSIZE] = {0};
 static int buffer_pos = 0;
 static int shift = 0;
@@ -129,7 +132,6 @@ void kb_update_buffer() {
     }
 }
 
-// TODO ver esto
 void kb_insert_new_line(void) {
     buffer[buffer_pos++] = '\n';
     post_sem(KEYBOARD_SEM);
@@ -151,8 +153,12 @@ void kb_end_of_file(){
     buffer[buffer_pos++] = EOF;
 }
 
-unsigned char kb_read_buf () {
+unsigned char kb_read(char blocking) {
+    if (!blocking) {
+        post_sem(KEYBOARD_SEM);
+    }
     wait_sem(KEYBOARD_SEM);
+
     if(kb_is_buffer_empty()) {
         return 0;
     }
@@ -163,4 +169,12 @@ unsigned char kb_read_buf () {
 
     buffer_pos--;
     return ans;
+}
+
+unsigned char kb_read_buf () {
+    return kb_read(BLOCKING);
+}
+
+unsigned char kb_read_buf_no_block () {
+    return kb_read(NON_BLOCKING);
 }   

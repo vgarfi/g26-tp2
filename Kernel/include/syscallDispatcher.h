@@ -212,6 +212,16 @@ int sys_set_zoom_level(int zoom_level);
 int sys_read(uint64_t fd, char *buf, uint64_t count);
 
 /**
+ * @brief Reads from a file descriptor without blocking the process.
+ *
+ * @param fd The file descriptor to read from.
+ * @param buf The buffer to store the read data.
+ * @param count The number of bytes to read.
+ * @return The number of bytes read, or -1 on failure.
+ */
+int sys_read_no_block(uint64_t fd, char *buf, uint64_t count);
+
+/**
  * @brief Writes to a file descriptor.
  *
  * @param fd The file descriptor to write to.

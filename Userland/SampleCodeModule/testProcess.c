@@ -153,9 +153,6 @@ void finish_testing() {
     bussyWait(WAIT);
     printf(".", 0,0,0);
     bussyWait(WAIT);
-    printf(".", 0,0,0);
-    printColor("\n$", 0x0000FF00);
-    print("> ");
-    sysShowCursor();
+    printf(".\n", 0,0,0);
     // sysKillProcess(sysGetCurrentPid());
 }

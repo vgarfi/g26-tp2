@@ -3,7 +3,7 @@
 #ifndef __ELIMINATOR_GAME__UTILS_H__
 #define __ELIMINATOR_GAME_UTILS_H__
 
-#define DEBOUNCER   100000
+#define DEBOUNCER   3200
 
 #define MAP_A       0
 #define MAP_B       1

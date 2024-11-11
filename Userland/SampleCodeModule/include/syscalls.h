@@ -6,6 +6,7 @@
 
 int sysWrite(uint64_t fd, unsigned char* buffer, uint64_t len, uint64_t hexColor);
 int sysRead(uint64_t fd, unsigned char* buffer, uint64_t len);
+int sysReadNoBlock(uint64_t fd, unsigned char* buffer, uint64_t len);
 void sysSleep(uint64_t secs, uint64_t ms);
 int sysClearScreen();
 int sysClearKbEntry();

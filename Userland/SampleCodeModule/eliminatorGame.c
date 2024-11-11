@@ -80,7 +80,7 @@ void playAlone(void) {
             
             for(int i=0; i< DEBOUNCER; i++){
                 if(keyPressed == lastKeyPressed){
-                    aux = getchar();
+                    aux = getcharNoBlock();
                     if(aux!=0)
                         keyPressed=aux;
                 }
@@ -97,7 +97,7 @@ void playAlone(void) {
         didP1Crashed = !CRASHED;
 
         while (finishKey != ESC && finishKey != RESET && finishKey != SPACE) {
-            finishKey = getchar();
+            finishKey = getcharNoBlock();
         }
 
         if (finishKey != ESC) {
@@ -151,7 +151,7 @@ void playTwoPlayers(int player2) {
 
             for(int i=0; i< DEBOUNCER; i++){
                 if(keyPressed==lastKeyPressed){
-                    aux=getchar();
+                    aux=getcharNoBlock();
                     if(aux!=0){
                         keyPressed=aux;
                     }
@@ -174,7 +174,7 @@ void playTwoPlayers(int player2) {
         
 
         while (finishKey != ESC && finishKey != RESET && finishKey != SPACE) {
-            finishKey = getchar();
+            finishKey = getcharNoBlock();
         }
 
         if (finishKey != ESC) {

@@ -44,7 +44,10 @@ int playEliminator(TScope scope) {
     sysHideCursor();
     print("\nLoading eliminator...");
     sysSleep(2,0);
-    return sysCreateProcess(ELIMINATOR_PROCESS, 1, eliminator_args, (int64_t (*)(int, char**))eliminatorGame, FOREGROUND);
+    int eliminatorPid = sysCreateProcess(ELIMINATOR_PROCESS, 1, eliminator_args, (int64_t (*)(int, char**))eliminatorGame, FOREGROUND);
+    sysNice(eliminatorPid, 20);
+    return eliminatorPid;
+
 }
 
 int processTest(TScope scope) {

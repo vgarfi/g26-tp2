@@ -18,7 +18,7 @@
 
 extern MemoryManagerADT memory_manager;
 
-#define HANDLER_SIZE 52
+#define HANDLER_SIZE 53
 #define MEMORY_COLUMN_WIDTH 25
 #define BLOCKS_COLUMN_WIDTH 25
 
@@ -34,7 +34,7 @@ static int (*syscall_handlers[])()={
     sys_yield, sys_create_sem, sys_get_sem, sys_post_sem, sys_wait_sem, sys_close_sem,
     (int (*)())sys_wait_pid,
     sys_create_pipe, (int (*)())sys_set_read_file_descriptor, (int (*)())sys_set_write_file_descriptor, (int (*)())sys_get_read_file_descriptor, (int (*)())sys_get_write_file_descriptor,
-    (int (*)())sys_get_scope
+    (int (*)())sys_get_scope, sys_read_no_block
 };
 
 uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
@@ -56,6 +56,20 @@ int sys_read(uint64_t fd, char * buf, uint64_t count) {
         return size_read == count? count : size_read;    // If we return size_read-1 it means we stopped at '\n'    
     }
     return read_pipe(fd/2, buf, count);
+}
+
+
+int sys_read_no_block(uint64_t fd, char * buf, uint64_t count) {
+    if (fd == STDIN) {
+        uint64_t size_read = 0;
+        char last_read = '\0';
+        while(size_read != count){
+                last_read = kb_read_buf_no_block();
+                buf[size_read++] = last_read;
+        }
+        return size_read == count? count : size_read;    // If we return size_read-1 it means we stopped at '\n'    
+    }
+    return 0;
 }
 
 int sys_write(uint64_t fd, char * buf, uint64_t count, uint64_t hex_color){
