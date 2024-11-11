@@ -1,42 +1,20 @@
 #ifndef __SHELL_H_
 #define __SHELL_H_
 
-/**
- * Initializes Shell 
-*/
-#define SELECTED_MODE       0
+#define SHELL_MODE      1
+#define SELECTED_MODE   0
 
-#define IDLE_MODE           1
-#define HELP_MODE           2
-#define DIVBYZERO_MODE      3
-#define INVALIDOPCODE_MODE  4
-#define ZOOMIN_MODE         5
-#define ZOOMOUT_MODE        6
-#define TIME_MODE           7
-#define DATE_MODE           8
-#define ELIMINATOR_MODE     9
-#define CLEAR_MODE          10
-#define REGISTERS_MODE      11
-#define EASTEREGG_MODE      12
-#define TESTP_MODE          13
-#define TESTPRIO_MODE       14
-#define PS_MODE             15
-#define TESTMEM_MODE        16
-#define TEST_SYNC_MODE      17
-#define BLOCKP_MODE         18
-#define UNBLOCKP_MODE       19
-#define KILLP_MODE          20
-#define LOOP_MODE           21
-#define CAT_MODE            22
-#define WC_MODE             23
-#define FILTER_MODE         24
-#define PHYLOS_MODE         25
-#define MEM                 26
+static const char* builtinModes[] __attribute__((unused)) = {
+    "help", "easteregg", "divbyzero", "invalidopcode", "zoomin", "zoomout", "time", "date", "clear", "registers",
+    "ps", "mem", "blockp", "unblockp", "killp"
+};
 
+static const char* processModes[] __attribute__((unused)) = {
+    "eliminator", "testp", "testprio", "testmem", "testsync", "loop", "cat", "wc", "filter", "phylo"
+};
 
-static const char* modes[]  __attribute__((unused)) = {
-    "shell", "idle", "help", "divbyzero", "invalidopcode", "zoomin", "zoomout", "time", "date", "eliminator", "clear", "registers", "easteregg",
-    "testp", "testprio", "ps", "testmem", "testsync", "blockp", "unblockp", "killp", "loop", "cat", "wc", "filter", "phylo", "mem"
+static const char* interactiveModes[] __attribute__((unused)) = {
+    "testp", "testprio", "testmem", "testsync", "loop", "cat", "wc", "filter", "phylo"
 };
 
 static char* helpText[]  __attribute__((unused)) = { "Command information is displayed below:\n\n",
