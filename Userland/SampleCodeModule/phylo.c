@@ -7,39 +7,40 @@
 #include <testUtil.h>
 #include <string.h>
 
-#define NUM_FILOSOFOS 5
+#define PHYLOS_QTY  5
+#define MAX_LEN     20
 
-char tenedores[NUM_FILOSOFOS][20];   // Semáforos para los tenedores
-int* estado;        // Estados de los filósofos
+char forks[PHYLOS_QTY][MAX_LEN];
+int* states;        
 
-// Estados posibles para los filósofos
-#define PENSANDO 0
-#define COMIENDO 1
+// Posisble philosophers states
+#define THINKING 0
+#define EATING 1
 
-uint64_t filosofo(uint64_t argc, char *argv[]) {
+uint64_t philosopher(uint64_t argc, char *argv[]) {
     char id = atoi(argv[1]);
 
-    int tenedor_izq = id;                        // Tenedor a la izquierda
-    int tenedor_der = (id + 1) % NUM_FILOSOFOS;  // Tenedor a la derecha
+    int leftFork = id;
+    int rightFork = (id + 1) % PHYLOS_QTY;
 
     while (1) {
-        // Filósofo pensando
-        estado[id] = PENSANDO;
-        sysSleep(0, 1); // Pensar
+        // Philosopher just thinking
+        states[id] = THINKING;
+        sysSleep(0, 1);
 
-        if (id % 2 == 0) {  // Filósofo par
-            sysWaitSem(tenedores[tenedor_der]);
-            sysWaitSem(tenedores[tenedor_izq]);
-        } else {  // Filósofo impar
-            sysWaitSem(tenedores[tenedor_izq]);
-            sysWaitSem(tenedores[tenedor_der]);
+        if (id % 2 == 0) {  // Even phylo
+            sysWaitSem(forks[rightFork]);
+            sysWaitSem(forks[leftFork]);
+        } else {  // Odd phylo
+            sysWaitSem(forks[leftFork]);
+            sysWaitSem(forks[rightFork]);
         }
 
-        // Filósofo comiendo
-        estado[id] = COMIENDO;
+        // Pilosopher just eating
+        states[id] = EATING;
 
-        for(int i = 0; i < NUM_FILOSOFOS; i++) {
-            if(estado[i] == 0){
+        for(int i = 0; i < PHYLOS_QTY; i++) {
+            if(states[i] == 0){
                 printf(" . ", 0, 0, 0);
             }
             else {
@@ -48,59 +49,47 @@ uint64_t filosofo(uint64_t argc, char *argv[]) {
         }
         printf("\n", 0, 0, 0);
 
-        //printf("Filosofo %d ha comenzado a comer.\n", id, 0, 0);
-        sysSleep(0, 1); // Comer
+        sysSleep(0, 1); // Eating time!
 
-        // Filósofo termina de comer
-        //printf("Filosofo %d ha terminado de comer.\n", id, 0, 0);
-        // Soltar los tenedores
-        sysPostSem(tenedores[tenedor_izq]);
-        sysPostSem(tenedores[tenedor_der]);
+        // Finished eating. Just leaving the forks
+        sysPostSem(forks[leftFork]);
+        sysPostSem(forks[rightFork]);
         
-        estado[id] = PENSANDO;
+        states[id] = THINKING;
         sysSleep(0, 1);
     }
 }
 
-void generar_nombre_tenedor(char *buffer, int id) {
-    char nombre_base[] = "tenedor_";
-    strcpy(buffer, nombre_base);
-    int len = strlen(buffer);
-    buffer[len] = '0' + id;
-
-    buffer[len + 1] = '\0';
+void generateForkName(char *buffer, int id) {
+    char baseName[] = "fork_";
+    int timestamp = sysGetSecs();
+    char timestampBuffer[10], idBuffer[5];
+    itoa(id, idBuffer, 10);
+    itoa(timestamp, timestampBuffer, 10);
+    strconcat(buffer, baseName, idBuffer);
+    strconcat(buffer, buffer, timestampBuffer);
 }
 
 uint64_t phylos(uint64_t argc, char *argv[]) {
     int phylos_scope = sysGetScope(sysGetCurrentPid());
-    int pids[NUM_FILOSOFOS];
+    int pids[PHYLOS_QTY];
 
-    // Inicializar semáforos (tenedores)
-    for (int i = 0; i < NUM_FILOSOFOS; i++) {
-        generar_nombre_tenedor(tenedores[i], i);
-        sysCreateSem(tenedores[i], 1);
-        estado[i] = PENSANDO; // Inicialmente, todos están pensando
+    // Initialize semaphores (forks)
+    for (int i = 0; i < PHYLOS_QTY; i++) {
+        generateForkName(forks[i], i);
+        sysCreateSem(forks[i], 1);
+        states[i] = THINKING; // Initially, they are all thinking
     }
 
-    // Crear procesos para cada filósofo
-    for (int i = 0; i < NUM_FILOSOFOS; i++) {
-        char id_string[NUM_FILOSOFOS][3];
+    for (int i = 0; i < PHYLOS_QTY; i++) {
+        char id_string[PHYLOS_QTY][3];
         itoa(i, id_string, 10);
-        char *argv[] = {"filosofo", id_string, 0};
+        char *argv[] = {"philosopher", id_string, 0};
 
-        int pid = sysCreateProcess("filosofo", 2, argv, filosofo, phylos_scope);
+        int pid = sysCreateProcess("philosopher", 2, argv, philosopher, phylos_scope);
         pids[i] = pid;
     }
 
-    sysBlockProcess(sysGetCurrentPid());
-    // // while(1) {}
-
-    // for (int i = 0; i < NUM_FILOSOFOS; i++) {
-    //     sysWaitPid(pids[i]);
-    // }
-
-    // for (int i = 0; i < NUM_FILOSOFOS; i++) {
-    //     sysCloseSem(tenedores[i]);
-    // }
+    sysBlockProcess(sysGetCurrentPid()); // Phylo process has nothing else to do
     return 0;
 }
