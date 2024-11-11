@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <stdint.h>
 #include <defs.h>
 #include <videoDriver.h>
@@ -37,7 +39,7 @@ static int (*syscall_handlers[])()={
 
 uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
     // int handlerSize = sizeof(syscall_handlers)/sizeof(syscall_handlers[0]);
-    if(rax < 0 || rax > HANDLER_SIZE)
+    if(rax >= HANDLER_SIZE)
         return -1;
 
     return syscall_handlers[rax](rdi,rsi,rdx,r10,r8);
@@ -143,8 +145,6 @@ int sys_sound(uint64_t ms, uint64_t freq){
 
 // rdi = seconds, rsi = ms
 int sys_ms_sleep(uint64_t secs, uint64_t ticks){
-    if(secs < 0 || ticks < 0)
-        return -1;
     int seconds_to_ticks = secs*18, ms_to_ticks=ticks;
     int total_ticks = seconds_to_ticks + ms_to_ticks;
     sleep(total_ticks);

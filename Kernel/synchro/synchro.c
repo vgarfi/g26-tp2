@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <string.h>
 #include <synchro/synchro.h>
 #include <memory/memoryManagerADT.h>
@@ -108,7 +110,7 @@ void post_sem(char* name) {
     acquire(&looked_semaphore->lock);
 
     if(!is_empty(looked_semaphore->waiting_processes)){
-        uint8_t first_pid = dequeue(looked_semaphore->waiting_processes);
+        uint8_t first_pid = (uint8_t)(uintptr_t)dequeue(looked_semaphore->waiting_processes);
         unblock_process(first_pid);
     } else looked_semaphore->value++;
 
@@ -126,7 +128,7 @@ void delete_sem(char* name) {
     acquire(&looked_semaphore->lock);
     while (!is_empty(looked_semaphore->waiting_processes))
     {
-        uint8_t first_pid = dequeue(looked_semaphore->waiting_processes);
+        uint8_t first_pid = (uint8_t)(uintptr_t)dequeue(looked_semaphore->waiting_processes);
         unblock_process(first_pid);
     }
 

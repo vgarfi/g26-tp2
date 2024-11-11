@@ -11,3 +11,6 @@
 testMm
 .gdb_history
 .bash_history
+PVS-Studio.log
+report.tasks
+strace_out

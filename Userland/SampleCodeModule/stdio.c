@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "include/stdio.h"
 #include "include/syscalls.h"
 #include "include/colors.h"
@@ -62,7 +64,7 @@ int printColor(char* str, uint64_t hexColor){
         c = putchar(str[i]);
     }
     hexcol = DEFAULT;
-    return c ==  EOF? EOF : i;
+    return c ==  (char)EOF? (char)EOF : i;
 }
 
 int print(char * str){

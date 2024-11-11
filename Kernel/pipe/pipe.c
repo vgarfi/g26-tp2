@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <pipe/pipe.h>
 #include <string.h>
 #include <videoDriver.h>
@@ -91,7 +93,7 @@ int read_pipe(int pipe_index, char * buf, uint64_t count) {
 
     TPipe* pipe = pipes[pipe_index];
 
-    if (pipe->eof_flag == EOF) {
+    if (pipe->eof_flag == (char)EOF) {
         buf[0] = EOF;
         return EOF;
     }
@@ -114,7 +116,7 @@ int write_pipe(int pipe_index, char * buf, uint64_t count) {
 
     TPipe* pipe = pipes[pipe_index];
 
-    if (pipe->eof_flag == EOF) {
+    if (pipe->eof_flag == (char)EOF) {
         return EOF;
     }
 
@@ -135,7 +137,7 @@ int finish_pipe(int pipe_index) {
 	}
     delete_sem(pipes[pipe_index]->sem_r->name);
     delete_sem(pipes[pipe_index]->sem_w->name);
-    pipes[pipe_index]->eof_flag = EOF;
+    pipes[pipe_index]->eof_flag = (char)EOF;
     return 0;
 }
 
@@ -177,4 +179,5 @@ int free_pipe(int pipe_index) {
 
     pipes[pipe_index] = NULL;
     available_pipes[pipe_index] = PIPE_AVAILABLE;
+    return 0;
 }

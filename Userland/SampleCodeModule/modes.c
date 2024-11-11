@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "include/modes.h"
 #include "include/shell.h"
 #include "include/eliminatorGame.h"
@@ -213,7 +215,7 @@ int loop(TScope scope) {
 }
 
 int (*get_interactive_mode(const char* mode))(int) {
-    for (int i = 0; i < sizeof(modes) / sizeof(modes[0]); i++) {
+    for (int i = 0; i < sizeof(interactive_modes) / sizeof(modes[0]); i++) {
         if (strcasecmp(mode, interactive_modes[i]) == SELECTED_MODE) {
             return mode_functions[i];
         }

@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <scheduler/scheduler.h>
 #include <kernelManagement.h>
 #include <process/process.h>
@@ -105,7 +107,7 @@ int get_process_scope(uint8_t pid) {
 }
 
 void add_pcb(char* name, uint64_t argc, char *argv[], char* stack_limit, char* stack_base, uint8_t pid, uint8_t priority, int64_t (*code)(int, char**), TScope scope) {
-    if (name == NULL || argc < 0 || argv == NULL || stack_base == NULL) {
+    if (name == NULL || argv == NULL || stack_base == NULL) {
         return;
     }
 

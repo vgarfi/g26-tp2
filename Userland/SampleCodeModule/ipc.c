@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "include/ipc.h"
 #include "include/stdio.h"
 #include "include/colors.h"
@@ -21,7 +23,7 @@ int64_t catProcess(int argc, char** argv) {
 int64_t wcProcess(int argc, char** argv) {
     char c;
     int count = 0;
-	while ((c = getchar()) != EOF) {
+	while ((c = getchar()) != (char)EOF) {
 		if (c == '\n') {
 			putchar('\n');
 			count++;
@@ -47,7 +49,7 @@ void print_buffer(int filter_vocals) {
     char c;
     int readCursor = 0;
     int writeCursor = 0;
-    while ((c = getchar()) !=  EOF) {
+    while ((c = getchar()) !=  (char)EOF) {
         if (c == '\b') {
             if (readCursor != 0) {
                 putchar('\b');
@@ -56,7 +58,7 @@ void print_buffer(int filter_vocals) {
         } else if (c == '\n') {
             putchar('\n');
             while (writeCursor < readCursor) {
-                if (!filter_vocals ||  (filter_vocals && !is_vocal(buff[writeCursor]))) {
+                if (!filter_vocals || !is_vocal(buff[writeCursor])) {
                     putchar(buff[writeCursor]);
                 }
                 writeCursor++;

@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "include/eliminatorGame.h"
 #include "include/eliminatorGameUtils.h"
 #include "include/colors.h"
@@ -114,8 +116,8 @@ void playAlone(void) {
 
 void playTwoPlayers(int player2) {
     unsigned char finishKey = UP;
-    unsigned char keyPressed;
-    unsigned char lastKeyPressed, aux;
+    unsigned char keyPressed = UP;
+    unsigned char lastKeyPressed = UP, aux;
     while (finishKey != ESC) {
 
         cleanBoard();
@@ -123,12 +125,14 @@ void playTwoPlayers(int player2) {
         
         lastDirectionP1 = UP;
         lastDirectionP2 = DOWN;
+
+        int height_2 = HEIGHT/2;
+        int height_4 = HEIGHT/4;
         
-        snakeHeadP1.x = WIDTH/2;
-        snakeHeadP1.y = HEIGHT/2 - HEIGHT/4;
+        snakeHeadP1.x = snakeHeadP2.x = WIDTH/2;
+        snakeHeadP1.y = height_2 - height_4;
         
-        snakeHeadP2.x = WIDTH/2;
-        snakeHeadP2.y = HEIGHT/2 + HEIGHT/4;
+        snakeHeadP2.y = height_2 + height_4;
         
         while (didP1Crashed != CRASHED && didP2Crashed != CRASHED) {
             sysPrintSquare(snakeHeadP1.x*SNAKE_HEAD_SIZE, snakeHeadP1.y*SNAKE_HEAD_SIZE, SNAKE_HEAD_SIZE, snakeHeadP1.color);
