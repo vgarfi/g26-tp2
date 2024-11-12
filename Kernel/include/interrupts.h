@@ -6,12 +6,12 @@
 /**
  * @brief IRQ handler for interrupt 0.
  */
-void _irq00Handler(void);
+void _irq_00_handler(void);
 
 /**
  * @brief IRQ handler for interrupt 1.
  */
-void _irq01Handler(void);
+void _irq_01_handler(void);
 
 /**
  * @brief IRQ handler for interrupt 2.
@@ -36,17 +36,17 @@ void _irq05Handler(void);
 /**
  * @brief Exception handler for exception 0.
  */
-void _exception0Handler(void);
+void _exception_0_handler(void);
 
 /**
  * @brief Exception handler for exception 6.
  */
-void _exception6Handler(void);
+void _exception_6_handler(void);
 
 /**
  * @brief System call handler.
  */
-void _syscallHandler(void);
+void _syscall_handler(void);
 
 /**
  * @brief Clears the interrupt flag (disables interrupts).

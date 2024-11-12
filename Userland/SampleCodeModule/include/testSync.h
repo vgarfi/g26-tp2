@@ -17,6 +17,6 @@
  * @param argv Argument vector.
  * @return Status code of the test.
  */
-uint64_t initialize_syncTesting(uint64_t argc, char *argv[]);
+uint64_t initializeSyncTesting(uint64_t argc, char *argv[]);
 
 #endif

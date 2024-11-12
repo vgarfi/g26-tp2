@@ -8,18 +8,18 @@ extern char endOfBinary;
 
 int main();
 
-void * my_memset(void * destiny, int32_t c, uint64_t length);
+void * myMemset(void * destiny, int32_t c, uint64_t length);
 
 int _start() {
 	//Clean BSS
-	my_memset(&bss, 0, &endOfBinary - &bss);
+	myMemset(&bss, 0, &endOfBinary - &bss);
 
 	return main();
 
 }
 
 
-void * my_memset(void * destiation, int32_t c, uint64_t length) {
+void * myMemset(void * destiation, int32_t c, uint64_t length) {
 	uint8_t chr = (uint8_t)c;
 	char * dst = (char*)destiation;
 

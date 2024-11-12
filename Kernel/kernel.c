@@ -21,33 +21,33 @@ extern uint8_t text;
 extern uint8_t rodata;
 extern uint8_t data;
 extern uint8_t bss;
-extern uint8_t endOfKernelBinary;
-extern uint8_t endOfKernel;
+extern uint8_t end_of_kernel_binary;
+extern uint8_t end_of_kernel;
 
 static const uint64_t PageSize = 0x1000;
 
-extern void * sampleCodeModuleAddress;
-extern void * sampleDataModuleAddress;
+extern void * sample_code_module_address;
+extern void * sample_data_module_address;
 
-void clearBSS(void * bssAddress, uint64_t bssSize) {
+void clear_bss(void * bssAddress, uint64_t bssSize) {
 	memset(bssAddress, 0, bssSize);
 }
 
 void * get_stack_base() {
 	return (void*)(
-		(uint64_t)&endOfKernel
+		(uint64_t)&end_of_kernel
 		+ PageSize * 8				//The size of the stack itself, 32KiB
 		- sizeof(uint64_t)			//Begin at the top of the stack
 	);
 }
 
 void * initializeKernelBinary() {
-	void * moduleAddresses[] = {
-		sampleCodeModuleAddress,
-		sampleDataModuleAddress
+	void * module_addresses[] = {
+		sample_code_module_address,
+		sample_data_module_address
 	};
-	load_modules(&endOfKernelBinary, moduleAddresses);
-	clearBSS(&bss, &endOfKernel - &bss);
+	load_modules(&end_of_kernel_binary, module_addresses);
+	clear_bss(&bss, &end_of_kernel - &bss);
 	return get_stack_base();
 }
 

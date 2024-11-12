@@ -24,15 +24,15 @@ static void setup_IDT_entry (int index, uint64_t offset);
 
 void load_idt() {
   // Exception Interrupts (00h-19h)
-  setup_IDT_entry (0x00, (uint64_t)&_exception0Handler);
-  setup_IDT_entry (0x06, (uint64_t)&_exception6Handler);
+  setup_IDT_entry (0x00, (uint64_t)&_exception_0_handler);
+  setup_IDT_entry (0x06, (uint64_t)&_exception_6_handler);
 
   // Hardware Interrupts
-  setup_IDT_entry (0x20, (uint64_t)&_irq00Handler);
-  setup_IDT_entry (0x21, (uint64_t)&_irq01Handler);
+  setup_IDT_entry (0x20, (uint64_t)&_irq_00_handler);
+  setup_IDT_entry (0x21, (uint64_t)&_irq_01_handler);
   
   // Syscall Interrupts
-  setup_IDT_entry(0x80, (uint64_t)&_syscallHandler);
+  setup_IDT_entry(0x80, (uint64_t)&_syscall_handler);
 
 	// Enable both Timer Tick and Keyboard Interrupts
 	pic_master_mask(0xFC); 

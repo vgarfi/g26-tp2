@@ -17,7 +17,7 @@ int intLength(int num, int minLen) {
         length++;
         num /= 10;
     }
-    return length<minLen?minLen:length;   
+    return length < minLen ? minLen : length;   
 }
 
 void intToString(int num, char *buf, int minLen) {

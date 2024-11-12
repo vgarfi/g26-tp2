@@ -87,8 +87,9 @@ int atoi(char *str) {
   int res = 0;
   int sign = 1;
 
-  if (!str)
+  if (!str){
     return 0;
+  }
 
   if (str[i] == '-') {
     i++;
@@ -96,8 +97,9 @@ int atoi(char *str) {
   }
 
   for (; str[i] != '\0'; ++i) {
-    if (str[i] < '0' || str[i] > '9')
+    if (str[i] < '0' || str[i] > '9'){
       return 0;
+    }
     res = res * 10 + str[i] - '0';
   }
 
@@ -129,7 +131,9 @@ void strtrim(char* str) {
     char* end;
     char* trimmed_str = str;
     char* dest = str;
-    while (*trimmed_str == ' ') trimmed_str++;
+    while (*trimmed_str == ' '){
+        trimmed_str++;
+    }
 
     if (*trimmed_str == 0) {
         *str = '\0';
@@ -137,7 +141,9 @@ void strtrim(char* str) {
     }
 
     end = trimmed_str + strlen(trimmed_str) - 1;
-    while (end > trimmed_str && *end == ' ') end--;
+    while (end > trimmed_str && *end == ' '){
+        end--;
+    }
 
     *(end + 1) = '\0';
 

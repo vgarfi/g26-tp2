@@ -51,7 +51,9 @@ uint64_t* schedule(uint64_t* rsp) {
 }
 
 uint8_t get_current_pid(void) {
-    if (running_pcb == NULL) return 0;
+    if (running_pcb == NULL) {
+        return 0;
+    }
     return running_pcb->pid;
 }
 

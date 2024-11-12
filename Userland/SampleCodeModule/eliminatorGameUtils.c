@@ -295,7 +295,9 @@ int decideSnakeDirection (int lastDirection, int sys_up_arrow_value, int sys_dow
         } else if (keyPressed == sys_right_arrow_value) {
             return RIGHT;
         }
-        else return lastDirection;
+        else {
+            return lastDirection;
+        }
     }
 }
 
@@ -303,28 +305,32 @@ int decideSnakeDirectionCPU(int lastDirectionP2, SnakeHead snakeHeadCPU, char bo
     switch (lastDirectionP2) {
         
     case UP: 
-        if (board[snakeHeadCPU.x][snakeHeadCPU.y-2] == BLOCKED_SPACE)
+        if (board[snakeHeadCPU.x][snakeHeadCPU.y-2] == BLOCKED_SPACE){
             return LEFT;
-        else
+        } else{
             return lastDirectionP2;
+        }
         break;
     case DOWN:
-        if (board[snakeHeadCPU.x][snakeHeadCPU.y+2] == BLOCKED_SPACE)
+        if (board[snakeHeadCPU.x][snakeHeadCPU.y+2] == BLOCKED_SPACE){
             return RIGHT;
-        else
+        } else{
             return lastDirectionP2;
+        }
         break;
     case LEFT:
-        if (board[snakeHeadCPU.x-2][snakeHeadCPU.y] == BLOCKED_SPACE)
+        if (board[snakeHeadCPU.x-2][snakeHeadCPU.y] == BLOCKED_SPACE){
             return DOWN;
-        else
+        } else{
             return lastDirectionP2;
+        }
         break;
     case RIGHT:
-        if (board[snakeHeadCPU.x+2][snakeHeadCPU.y] == BLOCKED_SPACE)
+        if (board[snakeHeadCPU.x+2][snakeHeadCPU.y] == BLOCKED_SPACE){
             return UP;
-        else
+        } else{
             return lastDirectionP2;
+        }
         break;
     default:
         return lastDirectionP2;
@@ -333,8 +339,7 @@ int decideSnakeDirectionCPU(int lastDirectionP2, SnakeHead snakeHeadCPU, char bo
 }
 
 void updateSnakeHead (SnakeHead * head, int direction) {
-    switch (direction)
-    {
+    switch (direction){
     case UP:
         head->y--;
         break;

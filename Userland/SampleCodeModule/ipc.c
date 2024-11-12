@@ -10,13 +10,13 @@
 #define FILTER_VOCALS       1
 #define NO_FILTER_VOCALS    0
 
-void print_buffer(int filter_vocals);
-int is_vocal(unsigned char c);
-int is_printable(unsigned char c);
+void printBuffer(int filterVocals);
+int isVocal(unsigned char c);
+int isPrintable(unsigned char c);
 
 
 int64_t catProcess(int argc, char** argv) {
-    print_buffer(NO_FILTER_VOCALS);
+    printBuffer(NO_FILTER_VOCALS);
 	return 0;
 }
 
@@ -27,7 +27,7 @@ int64_t wcProcess(int argc, char** argv) {
 		if (c == '\n') {
 			putchar('\n');
 			count++;
-		} else if (is_printable(c)) {
+		} else if (isPrintable(c)) {
 			putchar(c);
 		}
 	}
@@ -40,11 +40,11 @@ int64_t wcProcess(int argc, char** argv) {
 }
 
 int64_t filterProcess(int argc, char** argv) {
-    print_buffer(FILTER_VOCALS);
+    printBuffer(FILTER_VOCALS);
     return 0;
 }
 
-void print_buffer(int filter_vocals) {
+void printBuffer(int filterVocals) {
     char buff[MAXBUFLEN] = {0};
     char c;
     int readCursor = 0;
@@ -58,7 +58,7 @@ void print_buffer(int filter_vocals) {
         } else if (c == '\n') {
             putchar('\n');
             while (writeCursor < readCursor) {
-                if (!filter_vocals || !is_vocal(buff[writeCursor])) {
+                if (!filterVocals || !isVocal(buff[writeCursor])) {
                     putchar(buff[writeCursor]);
                 }
                 writeCursor++;
@@ -66,7 +66,7 @@ void print_buffer(int filter_vocals) {
             readCursor = 0;
             writeCursor = 0;
             putchar('\n');
-        } else if (is_printable(c) && readCursor != MAXBUFLEN) {
+        } else if (isPrintable(c) && readCursor != MAXBUFLEN) {
             buff[readCursor] = c;
             putchar(buff[readCursor++]);
             
@@ -77,12 +77,12 @@ void print_buffer(int filter_vocals) {
     }
 }
 
-int is_vocal(unsigned char c) {
+int isVocal(unsigned char c) {
     return (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' ||
             c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U' 
     );
 }
 
-int is_printable(unsigned char c) {
+int isPrintable(unsigned char c) {
     return (c>=' ' && c<='~');
 }

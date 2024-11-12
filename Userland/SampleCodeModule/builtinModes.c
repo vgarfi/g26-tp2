@@ -79,14 +79,16 @@ void registers()  {
 
 void zoomout() {
     int zoomAux = decTextSize();
-    if(zoomAux)
+    if(zoomAux){
         print("Minimum size reached.\n");
+    }
 }
 
 void zoomin() {
     int zoomAux = incTextSize();
-    if(zoomAux)
+    if(zoomAux){
         print("Maximum size reached.\n");
+    }
 }
 
 

@@ -6,13 +6,13 @@
 #include <testUtil.h>
 
 // Random
-static uint32_t m_z = 362436069;
-static uint32_t m_w = 521288629;
+static uint32_t mZ = 362436069;
+static uint32_t mW = 521288629;
 
 uint32_t GetUint() {
-  m_z = 36969 * (m_z & 65535) + (m_z >> 16);
-  m_w = 18000 * (m_w & 65535) + (m_w >> 16);
-  return (m_z << 16) + m_w;
+  mZ = 36969 * (mZ & 65535) + (mZ >> 16);
+  mW = 18000 * (mW & 65535) + (mW >> 16);
+  return (mZ << 16) + mW;
 }
 
 uint32_t GetUniform(uint32_t max) {

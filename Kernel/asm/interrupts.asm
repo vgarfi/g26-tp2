@@ -5,15 +5,15 @@ GLOBAL pic_slave_mask
 GLOBAL halt_cpu
 GLOBAL request_schedule
 GLOBAL _hlt
-GLOBAL _irq00Handler
-GLOBAL _irq01Handler
+GLOBAL _irq_00_handler
+GLOBAL _irq_01_handler
 GLOBAL _irq02Handler
 GLOBAL _irq03Handler
 GLOBAL _irq04Handler
 GLOBAL _irq05Handler
-GLOBAL _exception0Handler
-GLOBAL _exception6Handler
-GLOBAL _syscallHandler
+GLOBAL _exception_0_handler
+GLOBAL _exception_6_handler
+GLOBAL _syscall_handler
 GLOBAL get_regs
 GLOBAL save_regs_in_buffer
 EXTERN kb_get_key
@@ -42,7 +42,7 @@ SECTION .text
     mov [regs + 8*17], r15
 %endmacro
 
-%macro pushStateNoRAX 0
+%macro push_state_no_rax 0
 	push rbx
 	push rcx
 	push rdx
@@ -59,7 +59,7 @@ SECTION .text
 	push r15
 %endmacro
 
-%macro popStateNoRAX 0
+%macro pop_state_no_rax 0
 	pop r15
 	pop r14
 	pop r13
@@ -76,18 +76,18 @@ SECTION .text
 	pop rbx
 %endmacro
 
-%macro pushState 0
+%macro push_state 0
 	push rax
-	pushStateNoRAX
+	push_state_no_rax
 %endmacro
 
-%macro popState 0
-	popStateNoRAX
+%macro pop_state 0
+	pop_state_no_rax
 	pop rax
 %endmacro
 
-%macro irqHandlerMaster 1
-	pushState
+%macro irq_handler_master 1
+	push_state
 
 	mov rdi, %1 ; pasaje de parametro
 	call irq_dispatcher
@@ -96,11 +96,11 @@ SECTION .text
 	mov al, 20h
 	out 20h, al
 
-	popState
+	pop_state
 	iretq
 %endmacro
 
-%macro saveIntRegs 0
+%macro save_int_regs 0
 
 	push rax
 	mov rax, [rsp + 8]	; RIP Contexto anterior
@@ -116,7 +116,7 @@ SECTION .text
 
 %endmacro
    
-%macro exceptionHandler 1
+%macro exception_handler 1
 	mov rdi, %1 ; pasaje de parametro
 	call exception_dispatcher
 	
@@ -163,10 +163,10 @@ pic_slave_mask:
 
 
 ;8254 Timer (Timer Tick)
-_irq00Handler:
+_irq_00_handler:
 	
 	cli
-	pushState
+	push_state
 	mov rdi, 0 ; pasaje de parametro
 	call irq_dispatcher
 	
@@ -176,53 +176,53 @@ _irq00Handler:
 	mov rsp, rax ; Cambio de proceso
 	mov al, 20h ; EOI para el PIC
 	out 20h, al
-	popState
+	pop_state
 	sti
 	
 	iretq
-	;irqHandlerMaster 0
+	;irq_handler_master 0
 
 ;Keyboard
-_irq01Handler:
+_irq_01_handler:
 	push rax
 	call kb_get_key
 	cmp al, 0x38
 	pop rax
 	jne .continue
-		saveIntRegs
+		save_int_regs
 		save_regs_in_buffer
 		
 .continue:
-	irqHandlerMaster 1
+	irq_handler_master 1
 
 ;Cascade pic never called
 _irq02Handler:
-	irqHandlerMaster 2
+	irq_handler_master 2
 
 ;Serial Port 2 and 4
 _irq03Handler:
-	irqHandlerMaster 3
+	irq_handler_master 3
 
 ;Serial Port 1 and 3
 _irq04Handler:
-	irqHandlerMaster 4
+	irq_handler_master 4
 
 ;USB
 _irq05Handler:
-	irqHandlerMaster 5
+	irq_handler_master 5
 
 
 ;Zero Division Exception
-_exception0Handler:
-	saveIntRegs
+_exception_0_handler:
+	save_int_regs
 	save_regs_in_buffer
-	exceptionHandler 0
+	exception_handler 0
 
 ;Invalid OpCode Exception
-_exception6Handler:
-	saveIntRegs
+_exception_6_handler:
+	save_int_regs
 	save_regs_in_buffer
-	exceptionHandler 6
+	exception_handler 6
 
 get_regs:
 	mov rax,regs
@@ -230,19 +230,19 @@ get_regs:
 
 
 ;Syscall Handling
-; _syscallHandler receives parameters in the next order: rax rdi rsi rdx r10 r8 r9
+; _syscall_handler receives parameters in the next order: rax rdi rsi rdx r10 r8 r9
 ; syscall_dispatcher receives parameters via regs this way: rdi rsi rdx rcx r8 r9
 ; rax is the last parameters -> r9 = rax
 ; r10 is not a parameter -> rcx = r10
-_syscallHandler:
+_syscall_handler:
 	; --- ARQUI ---
-	saveIntRegs
+	save_int_regs
 	mov rcx, r10
 	mov r9, rax
 	; --- ARQUI ---
-	pushStateNoRAX
+	push_state_no_rax
 	call syscall_dispatcher
-	popStateNoRAX
+	pop_state_no_rax
 	iretq
 
 halt_cpu:

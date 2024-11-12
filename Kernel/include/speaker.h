@@ -14,17 +14,17 @@ void beep(uint64_t secs, uint64_t freq);
 /**
  * @brief Sends a byte to a specified port.
  *
- * @param memPos The port to send the byte to.
+ * @param mem_pos The port to send the byte to.
  * @param output The byte to send.
  */
-void outb(int memPos, int output);
+void outb(int mem_pos, int output);
 
 /**
  * @brief Reads a byte from a specified port.
  *
- * @param memPos The port to read the byte from.
+ * @param mem_pos The port to read the byte from.
  * @return The byte read from the port.
  */
-int inb(int memPos);
+int inb(int mem_pos);
 
 #endif

@@ -9,6 +9,9 @@
 #include <builtinModes.h>
 #include <processModes.h>
 
+#define FOUND       1
+#define NOT_FOUND   0
+
 extern int (*processFunctions[])(int);
 extern void (*builtinFunctions[])(void);
 
@@ -16,7 +19,7 @@ int init(){
     printColor("Welcome to Shell! Type HELP for command information.\n\n", YELLOW);
     char commandPrompt[32] = {0};
     while(SHELL_MODE) {
-        char found = 0;
+        char found = NOT_FOUND;
         sysClearKbEntry();
         printColor("$", GREEN);
         print("> ");
@@ -26,22 +29,22 @@ int init(){
         for(int b = 0; !found && b < sizeof(builtinModes) / sizeof(builtinModes[0]); b++) {
             if (strcasecmp(commandPrompt, builtinModes[b]) == SELECTED_MODE) {
                 builtinFunctions[b]();
-                found = 1;
+                found = FOUND;
             }
         }
         for(int p = 0; !found && p < sizeof(processModes) / sizeof(processModes[0]); p++) {
             if (strcasecmp(commandPrompt, processModes[p]) == SELECTED_MODE) {
-                found = 1;
+                found = FOUND;
                 sysWaitPid(processFunctions[p](FOREGROUND));
             }
         }
         if (!found) {
             if (contains(commandPrompt, '|')) {
                 pipeProcesses(commandPrompt);
-                found = 1;
+                found = FOUND;
             } else if (contains(commandPrompt, '&')) {
                 createBackgroundProcess(commandPrompt);
-                found = 1;
+                found = FOUND;
             } else {
                 notFound(commandPrompt);
             }

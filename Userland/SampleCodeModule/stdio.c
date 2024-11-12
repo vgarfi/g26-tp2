@@ -169,15 +169,21 @@ int scanf(char * buffer, int size){
         else{
             if(read=='\n'){
                 buffer[readSize] = 0;
-                if (readSize > 0) strcpy(inputs[inputIndex++ % MAX_INPUTS_STORE], buffer);
-                if (fd == STDIN) putchar(read);  // Newline
+                if (readSize > 0){
+                    strcpy(inputs[inputIndex++ % MAX_INPUTS_STORE], buffer);
+                }
+                if (fd == STDIN){
+                    putchar(read);  // Newline
+                }
             }
             else if(read=='\b' && readSize!=0){
                 if(readSize>=printedSize){
                     readSize--;
                     buffer[readSize]=0;
                 }
-                if (fd == STDIN) putchar(read);  // Backspace
+                if (fd == STDIN){
+                    putchar(read);  // Backspace
+                }
                 printedSize--;
             }
             else if (isVerticalArrow(read)) {
@@ -193,17 +199,21 @@ int scanf(char * buffer, int size){
                 strcpy(buffer, inputs[inputIndex % MAX_INPUTS_STORE]);
                 int commandLen = strlen(buffer);
                 if (fd == STDIN) {
-                    for(int i=0; i<printedSize; i++)
+                    for(int i=0; i<printedSize; i++){
                         putchar('\b');
+                    }
                 }
                 printedSize = commandLen;
                 readSize = commandLen;
                 print(buffer);
             }
             else if(isPrintable(read)){       // Printable Character
-                if(readSize!=size)
+                if(readSize!=size){
                     buffer[readSize++] = read;
-                if (fd == STDIN) putchar(read);
+                }
+                if (fd == STDIN){
+                    putchar(read);
+                }
                 printedSize++;
             }
         }

@@ -21,14 +21,14 @@
 static unsigned char buffer[MAXSIZE] = {0};
 static int buffer_pos = 0;
 static int shift = 0;
-static int dataStatus = 0;
+static int data_status = 0;
 static int ctrl_pressed=0;
 
 void initialize_keyboard(void){
     create_sem(KEYBOARD_SEM, 0);
 }
 
-static unsigned char scancodesChars[SHIFT_VALUES][MAX_SCANCODE] = {
+static unsigned char scancodes_chars[SHIFT_VALUES][MAX_SCANCODE] = {
     {
     0,'\x1B', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',   
     '\t', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n',    
@@ -122,8 +122,8 @@ void kb_update_buffer() {
     }
 
     if(arrow_value || (!shift_handler(scancode) && scancode < MAX_SCANCODE)) { // We add the characters, with their corresponding modification for a shift
-        dataStatus = 1;
-        char c = (arrow_value != 0)? arrow_value : scancodesChars[shift][scancode];
+        data_status = 1;
+        char c = (arrow_value != 0)? arrow_value : scancodes_chars[shift][scancode];
         buffer[buffer_pos++] = c;
         post_sem(KEYBOARD_SEM);
         if (buffer_pos >= MAXSIZE) {

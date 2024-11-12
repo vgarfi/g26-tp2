@@ -73,7 +73,7 @@ void generateForkName(char *buffer, int id) {
 }
 
 int64_t phylos(int argc, char *argv[]) {
-    int phylos_scope = sysGetScope(sysGetCurrentPid());
+    int phylosScope = sysGetScope(sysGetCurrentPid());
 
     // Initialize semaphores (forks)
     for (int i = 0; i < PHYLOS_QTY; i++) {
@@ -87,7 +87,7 @@ int64_t phylos(int argc, char *argv[]) {
         itoa(i, id_string, 10);
         char *argv[] = {"philosopher", id_string, 0};
 
-        sysCreateProcess("philosopher", 2, argv, philosopher, phylos_scope);
+        sysCreateProcess("philosopher", 2, argv, philosopher, phylosScope);
     }
 
     sysBlockProcess(sysGetCurrentPid()); // Phylo process has nothing else to do
