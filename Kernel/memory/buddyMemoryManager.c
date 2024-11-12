@@ -5,6 +5,7 @@
 #include <string.h>
 #include <math.h>
 #include <memory/memoryManagerADT.h>
+#include <videoDriver.h>
 
 #define SPLIT               2
 #define FREE                1
@@ -149,6 +150,7 @@ int calculate_offset(int looked_index, int size, int current_index, int* current
 
 void* malloc_mm(MemoryManagerADT mm, size_t size) {
     if (size == 0 || size > mm->total_size) {
+        vd_print("\nKERNEL: OUT OF MEMEORY. Possible errors may ocurr", 0x00FF0000);
         return NULL;
     }
 
@@ -160,6 +162,7 @@ void* malloc_mm(MemoryManagerADT mm, size_t size) {
     int index = 0;
     BuddyNode* node = get_free_node(mm->root, block_looked_size, mm->total_size, mm->height, &index, 0);
     if (node == NULL) {
+        vd_print("\nKERNEL: OUT OF MEMEORY. Possible errors may ocurr", 0x00FF0000);
         return NULL; // No hay bloques libres del tamaño adecuado
     }
 
@@ -168,6 +171,7 @@ void* malloc_mm(MemoryManagerADT mm, size_t size) {
     int ret = calculate_offset(index, mm->total_size, 0, &offset, mm->nodes_qty);
 
     if (ret == 0){
+        vd_print("\nKERNEL: OUT OF MEMEORY. Possible errors may ocurr", 0x00FF0000);
         return NULL;
     }
 

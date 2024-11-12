@@ -7,7 +7,16 @@ GCCFLAGS = -Wall -g
 INCLUDE = ./include
 
 SOURCES = $(wildcard *.c)
-MEMORY_SOURCES = ./memory/buddyMemoryManager.c
+
+MEMORY=bitmap
+
+ifeq ($(MEMORY), bitmap)
+    MEMORY_SOURCES += ./memory/bitmapMemoryManager.c
+else ifeq ($(MEMORY), buddy)
+    MEMORY_SOURCES += ./memory/buddyMemoryManager.c
+else
+    $(error "MEMORY_MANAGER debe ser 'bitmap' o 'buddy'")
+endif
 
 OBJECTS = $(SOURCES:.c=.o)
 KERNEL_OBJECTS = $(MEMORY_SOURCES:.c=.o)

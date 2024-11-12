@@ -36,16 +36,16 @@ uint64_t test_mm(uint64_t argc, char *argv[]) {
 
   void* memory = malloc(total_memory);
   if(memory == NULL){
-    printf("Error: no se pudo asignar memoria para el Memory Manager.\n");
+    printf("Error: could not asign memory for the Memory Manager.\n");
     return 1;
   }
 
   MemoryManagerADT memory_manager = initialize_mm(memory, total_memory, block_size);
   if(memory_manager == NULL){
-    printf("Error: no se pudo inicializar el Memory Manager.\n");
+    printf("Error: could not initialize the Memory Manager.\n");
     return -1;
   }
-  printf("Memory Manager inicializado con éxito.\n");
+  printf("Memory Manager initialized successfully.\n");
 
   while (1) {
     rq = 0;

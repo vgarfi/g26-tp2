@@ -38,6 +38,8 @@ uint64_t testMm(uint64_t argc, char *argv[]) {
     return -1;
   }
 
+  print("Memory Manager initialized successfully.\n");
+
   while (1) {
     rq = 0;
     total = 0;
