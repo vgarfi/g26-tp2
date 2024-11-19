@@ -359,6 +359,6 @@ int sys_get_write_file_descriptor(uint8_t pid) {
     return get_write_filedescriptor(pid);
 }
 
-int sys_get_shared_memory(uint8_t id) {
+void* sys_get_shared_memory(uint8_t id) {
     return get_shared_memory_block(id);
 }
