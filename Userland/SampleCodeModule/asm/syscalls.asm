@@ -57,6 +57,7 @@ GLOBAL sysSetWriteFileDescriptor
 GLOBAL sysGetReadFileDescriptor
 GLOBAL sysGetWriteFileDescriptor
 GLOBAL sysGetScope
+GLOBAL sysGetSharedMemory
 
 section .text
 
@@ -324,5 +325,10 @@ sysGetScope:
     ret
 sysReadNoBlock:
     mov rax, 52
+    int 80h
+    ret
+
+sysGetSharedMemory:
+    mov rax, 53
     int 80h
     ret

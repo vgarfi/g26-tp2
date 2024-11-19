@@ -18,7 +18,7 @@
 
 extern MemoryManagerADT memory_manager;
 
-#define HANDLER_SIZE 53
+#define HANDLER_SIZE 54
 #define MEMORY_COLUMN_WIDTH 25
 #define BLOCKS_COLUMN_WIDTH 25
 
@@ -34,7 +34,8 @@ static int (*syscall_handlers[])()={
     sys_yield, sys_create_sem, sys_get_sem, sys_post_sem, sys_wait_sem, sys_close_sem,
     (int (*)())sys_wait_pid,
     sys_create_pipe, (int (*)())sys_set_read_file_descriptor, (int (*)())sys_set_write_file_descriptor, (int (*)())sys_get_read_file_descriptor, (int (*)())sys_get_write_file_descriptor,
-    (int (*)())sys_get_scope, sys_read_no_block
+    (int (*)())sys_get_scope, sys_read_no_block,
+    sys_get_shared_memory
 };
 
 uint64_t syscall_dispatcher(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){         
@@ -356,4 +357,8 @@ int sys_get_read_file_descriptor(uint8_t pid) {
 
 int sys_get_write_file_descriptor(uint8_t pid) {
     return get_write_filedescriptor(pid);
+}
+
+int sys_get_shared_memory(uint8_t id) {
+    return get_shared_memory_block(id);
 }

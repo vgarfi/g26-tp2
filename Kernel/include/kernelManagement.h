@@ -26,4 +26,6 @@
  */
 void initialize_management(void);
 
+void* get_shared_memory_block (uint8_t id);
+
 #endif

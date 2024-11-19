@@ -25,6 +25,9 @@ int init_pid;
 int idle_pid;
 int shell_pid;
 
+void* shared_memory_blocks[10];
+
+
 void initialize_management(void){
 	memory_manager = initialize_mm(memory_base_address, MEMORY_SIZE, MEMORY_BLOCK_SIZE);
 	initialize_synchro();
@@ -34,4 +37,13 @@ void initialize_management(void){
     init_pid = create_process(INIT_PROCESS, 1, init_args, INIT_PRIORITY, (int64_t (*)(int, char**)) init_process, BACKGROUND);
     idle_pid = create_process(IDLE_PROCESS, 1, idle_args, IDLE_PRIORITY, (int64_t (*)(int, char**)) idle_process, BACKGROUND);
     shell_pid = create_process(SHELL_PROCESS, 3, shell_args, SHELL_PRIORITY, sample_code_module_address, FOREGROUND);
+}
+
+void* get_shared_memory_block (uint8_t id) {
+	if (shared_memory_blocks[id] == NULL){
+		void* pointer = malloc_mm(memory_manager, 64);
+        shared_memory_blocks[id] = pointer;
+        return pointer;
+	}
+    return shared_memory_blocks[id];
 }

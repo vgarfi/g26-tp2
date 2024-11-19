@@ -435,4 +435,7 @@ int sysGetReadFileDescriptor(uint8_t pid);
  */
 int sysGetWriteFileDescriptor(uint8_t pid);
 
+int sysGetSharedMemory(uint8_t id);
+
+
 #endif
