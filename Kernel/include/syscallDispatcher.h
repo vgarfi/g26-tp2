@@ -446,5 +446,5 @@ int sys_get_read_file_descriptor(uint8_t pid);
  * @return The write file descriptor.
  */
 int sys_get_write_file_descriptor(uint8_t pid);
-
+void* sys_get_shared_memory(uint8_t id);
 #endif
