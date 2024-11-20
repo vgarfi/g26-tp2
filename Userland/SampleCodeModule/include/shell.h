@@ -21,7 +21,7 @@ static const char* builtinModes[] __attribute__((unused)) = {
  * @brief List of process commands.
  */
 static const char* processModes[] __attribute__((unused)) = {
-    "eliminator", "testp", "testprio", "testmem", "testsync", "loop", "cat", "wc", "filter", "phylo"
+    "eliminator", "testp", "testprio", "testmem", "testsync", "loop", "cat", "wc", "filter", "phylo", "sm"
 };
 
 /**

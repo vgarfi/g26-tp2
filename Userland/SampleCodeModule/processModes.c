@@ -13,6 +13,8 @@ char * wcArgs[] = {WC, 0};
 char * filterArgs[] = {FILTER, 0};
 char * phylosArgs[] = {PHYLOS, 0};
 
+int testSharedMemory(TScope scope);
+
 int (*processFunctions[])(int) = {
     playEliminator,
     processTest,
@@ -23,7 +25,8 @@ int (*processFunctions[])(int) = {
     cat,
     wc,
     filter,
-    phylosophers
+    phylosophers,
+    testSharedMemory
 };
 
 int cat(TScope scope) {
@@ -70,4 +73,31 @@ int syncTest(TScope scope){
 
 int loop(TScope scope) {
     return sysCreateProcess(LOOP, 1, loopArgs, loopProcess, scope);
+}
+
+#define CANT_IDEN   3
+
+int ident[CANT_IDEN];
+
+uint64_t proc1(uint64_t argc, char *argv[]) {
+  int* value = (int*)sysGetSharedMemory(1);
+  while(1){
+    printf("%d\n", *value, 0, 0);
+  }
+}
+
+uint64_t proc2(uint64_t argc, char *argv[]) {
+  int* value = (int*)sysGetSharedMemory(1);
+  for (int i = 0; i < 60; i++){
+    *value = i;
+    sysSleep(1,0);
+  }
+}
+
+int testSharedMemory(TScope scope) {
+  char * argv1[] = {"proc1", 0};
+  sysCreateProcess("proc1", 1, argv1, proc1, FOREGROUND);
+
+  char * argv2[] = {"proc2", 0};
+  sysCreateProcess("proc2", 1, argv2, proc2, FOREGROUND);
 }
